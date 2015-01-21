@@ -1,0 +1,29 @@
+Competences :
+
+Quentin :
+- Algos
+
+
+Corentin :
+- Graphique
+
+
+Loïc :
+- Graphique
+
+
+Kevin :
+- Reseau
+
+
+Tianqi:
+- Algos
+
+
+Amaury :
+- Données
+
+
+Pierre :
+- Données
+
