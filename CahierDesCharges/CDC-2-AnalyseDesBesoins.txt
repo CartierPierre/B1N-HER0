@@ -1,10 +1,11 @@
 2) Analyse des besoins
 2.1) Liste des acteurs
 L'utilisateur :
-	L'utilisateur peut choisir la difficulté et la taille de la grille.
-	Il pourra faire appel à une aide 
+	L'utilisateur peut choisir la difficulté et la taille de la grille afin de résoudre un Takazu.
+	Il pourra faire appel à un conseil qui lui indiquera la règle à appliquer ou une aide qui remplira
+	une case par rapport à la solution. 
 	Il peut sauvegarder la partie et la charger plus tard.
-	L'utilisateur peut également consulter le classement du jeu (local et global).
+	L'utilisateur peut également consulter le classement du jeu (local et global) et ses statistiques.
 
 2.2) Expression des besoins
 	Le client souhaite disposer d'une application réalisée sous Ruby et l'interface
@@ -12,7 +13,9 @@ L'utilisateur :
 	
 	La résolution de grilles de Takuzu, selon les règles traditionnelles du jeu,
 	avec possibilité de demander de l'aide si le joueur est bloqué. L'application
-	doit pouvoir charger une partie précédente.
+	doit pouvoir charger une partie précédente. L'utilisateur doit pouvoir passer en
+	mode "hypothèse" permettant de formuler des hypothèses sur les cases et de restaurer
+	l'état antérieur ou de valider les hypothèses.
 
 2.3) Besoins fonctionnels
 
@@ -22,8 +25,8 @@ Résolution des grilles de Takuzu
 		taille de la grille.	
 	* Lors d'une partie, le joueur peut demander de l'aide s'il se voit bloqué.
 	  Deux niveaux d'aide sont disponibles :
-		- Aide indirecte qui énonce une régle applicable à la situation de jeu
-		- Conseil qui résoud une case par rapport à la solution
+		- Conseil qui énonce une régle applicable à la situation de jeu
+		- Aide qui résoud une case par rapport à la solution
 
 	* Sauvegarder la grille en cours
 	 	L'application doit pouvoir gérer les sauvegardes des grilles en fonction
@@ -116,7 +119,7 @@ Conséquents : L'utilisateur peut exécuter l'application
 	- L'utilisateur choisit le niveau de difficulté 
 	- L'utilisateur choisit la taille de la grille
 	- Le système sélectionne une grille
-	- Ajout d'un malus par conseil utilisé
+	- Ajout d'un malus par conseils et aides utilisés
 	- On considère que le timer est toujours mis en place
 3) Résolution du Takuzu
 	- L'utilisateur essaye de résoudre la grille
