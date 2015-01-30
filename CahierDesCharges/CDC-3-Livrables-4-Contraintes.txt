@@ -21,6 +21,6 @@
 
 4.3 - Contraintes techniques
 	Le projet se sert des moyens technique suivant:
-		- Compatibilité avec le language Ruby dans sa version 2.2.0
-		- Interface graphique avec la bibliothèque graphique GTK dans sa version 3.12.
+		- Compatibilité avec le language Ruby dans sa version 1.9.3 ou supérieur.
+		- Interface graphique avec la bibliothèque graphique GTK dans sa version 3.
 		- Mise en oeuvre de la persistance des données à l'aide de la sérialisation.
