@@ -3,7 +3,7 @@ require "sqlite3"
 
 # Variables
 pathFile = "test.txt"
-pathDb = "bdd.sqlite"
+pathDb = "./bdd.sqlite"
 tableName = "grille"
 db = false
 rq = false
@@ -42,7 +42,7 @@ end
 begin
 	
 	puts "Ouverture de la BDD ..."
-	bdd = SQLite3::Database.new(":memory:")
+	bdd = SQLite3::Database.new(pathDb)
 	
 	rescue SQLite3::Exception => err
 		puts "Erreur"
@@ -62,7 +62,7 @@ begin
 		# CREATE TABLE :tableName (
 			# id_grille INTEGER PRIMARY KEY AUTOINCREMENT,
 			# difficulte INT,
-			# dimention INT,
+			# dimension INT,
 			# probleme TEXT,
 			# solution TEXT
 		# );
