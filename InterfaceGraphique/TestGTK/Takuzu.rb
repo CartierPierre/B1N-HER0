@@ -12,7 +12,7 @@ begin
   require 'rubygems'
  rescue LoadError
 end
-require 'gtk2'
+require 'gtk3'
 Gtk.init
 def onDestroy
 	puts "Fin de l'application"
