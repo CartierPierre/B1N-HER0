@@ -1,0 +1,16 @@
+2 Présentation du projet
+
+2.1 Contexte
+
+Le projet se déroulera dans le cadre du projet lié à l'application du Génie Logiciel 2 du semestre 6 de la licence SPI informatique.
+Le groupe de travail est constitué de 7 étudiants dont un chef de projet en charge de la gestion du groupe et de la coordination du travail ainsi qu'un documentaliste qui se charge de la mise en forme des différents documents à rendre.
+
+2.2 Objectifs
+
+Le projet a pour but de mettre en place les principes de Génie Logiciel appliqués à la création d'un jeu de Takuzu (ou Binero) destinée à tous types d'utilisateurs sur tous types d'OS (compatible avec Ruby).
+
+2.3 Critères d'acceptabilité du produit
+
+L'application doit correspondre aux critères suivants :
+- Respect des contraintes du client, à savoir l'utilisation de Ruby et de GTK pour la création d'un jeu de Takuzu.
+- Validation du produit après une série de tests réalisé par le groupe ainsi que par d'autres personnes extérieures à celui-ci.
