@@ -1,10 +1,15 @@
+#
+# Script permettant l'importaion de problèmes au format texte dans une base de données sqlite
+#
+
 # Dépendances
 require "sqlite3"
 
 # Variables
-pathFile = "test.txt"
-pathDb = "./bdd.sqlite"
-tableName = "grille"
+pathFile = "./test.txt" # Chemin du fichier de problèmes
+pathDb = "./bdd-test.sqlite" # Chemin de la base de donnée à créer
+tableName = "grille" # Non de la table qui contiendra les problèmes
+
 db = false
 rq = false
 file = false
@@ -17,10 +22,10 @@ probleme = ""
 solution = ""
 
 # Test de la présence du fichier
-# if !File.exists?(pathFile)
-	# puts "Le fichier '#{pathFile}' n\'est pas présent !"
-	# abort
-# end
+if !File.exists?(pathFile)
+	puts "Le fichier '#{pathFile}' n\'est pas présent !"
+	abort
+end
 
 # Ouverture du fichier
 begin
@@ -58,26 +63,30 @@ end
 begin
 	
 	puts "Création de la table ..."
-	# bdd.prepare("
-		# CREATE TABLE :tableName (
+	
+	# req = bdd.prepare("
+		# CREATE TABLE ? (
 			# id_grille INTEGER PRIMARY KEY AUTOINCREMENT,
 			# difficulte INT,
 			# dimension INT,
 			# probleme TEXT,
 			# solution TEXT
 		# );
+		# TRUNCATE TABLE ?;
 	# ")
-	# bdd.bind_param(":tableName", tableName);
+	# stm.bind_param(1, tableName)
+	# stm.bind_param(2, tableName)
 	# bdd.execute
 	
 	bdd.execute("
-		CREATE TABLE grille (
+		CREATE TABLE IF NOT EXISTS #{tableName} (
 			id_grille INTEGER PRIMARY KEY AUTOINCREMENT,
 			difficulte INT,
 			dimention INT,
 			probleme TEXT,
 			solution TEXT
 		);
+		TRUNCATE TABLE #{tableName};
 	")
 	
 	rescue SQLite3::Exception => err
@@ -102,8 +111,24 @@ while (line = fichier.gets)
 	
 	begin
 		
+		# req = bdd.prepare("
+			# INSERT INTO grille
+			# VALUES (
+				# NULL,
+				# :difficulte,
+				# :dimention,
+				# :probleme,
+				# :solution
+			# );
+		# ")
+		# req.bind_param('difficulte', difficulte)
+		# req.bind_param('dimention', dimention)
+		# req.bind_param('probleme', probleme)
+		# req.bind_param('solution', solution)
+		# bdd.execute
+		
 		bdd.execute("
-			INSERT INTO grille
+			INSERT INTO #{tableName}
 			VALUES (
 				NULL,
 				#{difficulte},
@@ -112,11 +137,6 @@ while (line = fichier.gets)
 				'#{solution}'
 			);
 		")
-		# bdd.bind_param(':difficulte', difficulte);
-		# bdd.bind_param(':dimention', dimention);
-		# bdd.bind_param(':probleme', probleme);
-		# bdd.bind_param(':solution', solution);
-		# bdd.execute
 		
 		rescue SQLite3::Exception => err
 			puts "Erreur"
