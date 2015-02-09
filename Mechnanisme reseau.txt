@@ -1,0 +1,10 @@
+--------------------
+Création de compte :
+--------------------
+
+L'utilisateur à la possibilité de créer un compte local ou online.
+Dans tous les cas, un nom de compte ainsi qu'un mot de passe sont demandées à l'utilisateur.
+Si la machine n'est pas connecté lors de la création de compte ne peut être que local.
+Dans le cas d'un compte online, le compte est directement crée sur le serveur public.
+Dans le cas d'un compte local, le compte est uniquement accessible en local.
+L'utilisateur pourra néanmoins transformer sont compte local en online à tout moment, l'inverse est possible.
