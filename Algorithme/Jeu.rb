@@ -66,6 +66,5 @@ class Jeu
 		end
 	end
 
-	def respecteRegle1()
 
 end # Marqueur de fin de classe
