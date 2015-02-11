@@ -1,0 +1,15 @@
+class Data
+	
+	##
+	# ==== Paramètres
+	# * +pseudo+ - Pseudo de l'utilisateur (String)
+	# * +motDePasse+ - Mot de passe de l'utilisateur (String)
+	#
+	# ==== Retour
+	# Renvoi l'identifiant unique de l'utilisateur (int)
+	#
+	def AuthentifierUtilisateur(pseudo, motDePasse)
+		return idUtilisateur
+	end
+	
+end
