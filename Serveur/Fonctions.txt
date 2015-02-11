@@ -1,9 +1,12 @@
+##
+# La classe Data permet d'intéragire avec les données locales et distantes
+#
 class Data
 	
 	##
 	# ==== Paramètres
-	# * +pseudo+ - Pseudo de l'utilisateur (String)
-	# * +motDePasse+ - Mot de passe de l'utilisateur (String)
+	# * +pseudo+ - Pseudo de l'utilisateur (string)
+	# * +motDePasse+ - Mot de passe de l'utilisateur (string)
 	#
 	# ==== Retour
 	# Renvoi l'identifiant unique de l'utilisateur (int)
