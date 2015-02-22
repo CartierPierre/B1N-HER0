@@ -29,10 +29,38 @@ WHERE
 	AND mot_de_passe = var1
 LIMIT 1;
 
-/* Sélectionner un utilisateur par son uuid (voir profil autre utilisateur) */
-SELECT *
+/* Sélectionner un utilisateur par son uuid (voir profil autre utilisateur) (attention cas offline et online id/uuid)*/
+/*SELECT *
 FROM utilisateur
 WHERE uuid = var0
+LIMIT 1;/*
+
+/* Ajouter un utilisateur */
+INSERT INTO score
+VALUES (
+	null,
+	null,
+	string,
+	string,
+	int,
+	string,
+	int
+);
+
+/* Supprimer un utilisateur */
+DELETE FROM utilisateur
+WHERE id = var0
+LIMIT 1;
+
+/* CHanger le type d'utilisateur */
+UPDATE utilisateur
+SET type = (
+	CASE type
+		WHEN 0 THEN 1
+		WHEN 1 THEN 0
+	END
+)
+WHERE id = var0
 LIMIT 1;
 
 /*
@@ -75,10 +103,10 @@ WHERE id_utilisateur = var0
 LIMIT var0
 OFFSET var1;
 
-/* Sélectionner un score selon un uuid (utile ?) */
+/* Sélectionner un score selon un id (utile ?) */
 SELECT *
 FROM score
-WHERE uuid = var0
+WHERE id = var0
 lIMIT 1;
 
 /* Sélectionner un score selon l'utilisateur et la grille (utile ?) */
@@ -101,39 +129,62 @@ LIMIT 1;
 	
 	F = (g * n) / (1 + t + c + a)
 */
-SELECT SUM()
+SELECT SUM(nb_coups * )
 FROM score
 WHERE id_utilisateur = var0;
 
 /* Lire le meilleur score d'un utilisateur sur une grille */
-SELECT *
+SELECT
+	score.id,
+	score.temps_total,
+	score.nb_coups,
+	score.nb_conseils,
+	score.nb_aides,
+	grille.niveau
 FROM score
+INNER JOIN grille
+	ON grille.id = var1
 WHERE
-	id_utilisateur = var0
-	AND id_grille = var1
+	score.id_utilisateur = var0
+	AND score.id_grille = var1
 ORDER BY
-	temps_total,
-	nb_coups DESC,
-	nb_conseils DESC,
-	nb_aides DESC
+	score.temps_total,
+	score.nb_coups DESC,
+	score.nb_conseils DESC,
+	score.nb_aides DESC
 LIMIT 1;
 
 /* Lire le meilleur score d'une grille */
-SELECT *
+SELECT
+	score.id,
+	score.temps_total,
+	score.nb_coups,
+	score.nb_conseils,
+	score.nb_aides,
+	grille.niveau
 FROM score
-WHERE id_grille = var0
+INNER JOIN grille
+	ON grille.id = var0
+WHERE
+	score.id_grille = var0
 ORDER BY
-	temps_total,
-	nb_coups DESC,
-	nb_conseils DESC,
-	nb_aides DESC
+	score.temps_total,
+	score.nb_coups DESC,
+	score.nb_conseils DESC,
+	score.nb_aides DESC
 LIMIT 1;
 
 /* Ajouter un score */
 INSERT INTO score
 VALUES (
-	null
-	*
+	null,
+	null,
+	int,
+	int,
+	int,
+	int,
+	int,
+	int
 );
 
 /* Supprimer les scores d'un utilisateur (réinitialisation) */
@@ -165,13 +216,16 @@ LIMIT 1;
 /* Ajouter une sauvegarde */
 INSERT INTO sauvegarde
 VALUES (
-	null
-	*
+	null,
+	null,
+	int,
+	sting
 );
 
 /* Supprimer une sauvegarde */
 DELETE FROM sauvegarde
-WHERE uuid = var0;
+WHERE uuid = var0
+LIMIT 1;
 
 /* Supprimer les sauvegardes d'un utilisateur (réinitialisation) */
 DELETE FROM sauvegarde
@@ -191,10 +245,10 @@ FROM grille;
 SELECT *
 FROM grille;
 
-/* Lire une grille selon son uuid */
+/* Lire une grille selon son id */
 SELECT *
 FROM grille
-WHERE uuid = var0
+WHERE id = var0
 LIMIT 1;
 
 /*
@@ -203,4 +257,19 @@ LIMIT 1;
 	---
 	
 	http://www.apprendre-php.com/tutoriels/tutoriel-45-singleton-instance-unique-d-une-classe.html
+	
+	---
+	Socket :
+	---
+	
+	http://www.tutorialspoint.com/ruby/ruby_socket_programming.htm
+	http://www.thebuzzmedia.com/programming-a-simple-clientserver-with-ruby/
+	http://en.wikibooks.org/wiki/Ruby_Programming/Reference/Objects/Socket
+	http://ruby-doc.org/stdlib-2.2.0/libdoc/socket/rdoc/Socket.html#M001255
+	
+	---
+	MySQL :
+	---
+	
+	http://zetcode.com/db/mysqlrubytutorial/
 */
