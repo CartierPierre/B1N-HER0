@@ -1,31 +1,20 @@
 ##
-# La classe Data permet d'intéragir avec les données locales et distantes
+# La classe ManagerDonnes permet d'intéragir avec les données locales et distantes
 #
-# Cette classe implèmente le design patern Singleton
-#
-module Data
+class ManagerDonnes
 
-	@@bddLocal = null
-	@@serverConnect = null
+	@bddLocal = null
+	# @@connectionServer = null
 	
 	@@dbPathFile = "./test.txt"
-	@@serverIp = "b1nher0.kpw.ovh"
-	@@serverPort = "123"
+	# @@serverIp = "b1nher0.kpw.ovh"
+	# @@serverPort = "123"
 	
 	##
 	# Renvoi une instance
 	#
 	def new()
-		/*
-		if ( bddLocal == null )
-		
-		else
-		
-		end
-		
-		bddLocal = SQLite3::Database.new(pathDb);
-		connexionServeur =
-		*/
+		@bddLocal SQLite3::Database.new(@@pathDb)
 	end
 	
 	##
