@@ -1,0 +1,12 @@
+Nous metterons les grilles en RAM à chaque do : il faut sauvegarder l'état de la grille (string) dans une liste.
+
+Pour les undo, il nous suffit de remonter cette liste pour recharger l'état précédent.
+
+En ce qui concerne les hypotheses : c'est une liste d'hypotheses, et chaque case (= 1 hypothese) contient un indice vers un etat de la RAM. On bascule en mode hypothese en gardant un lien vers l'etat initial.
+
+Si on valide l'hypothese, on fait rejoindre l'indice de la partie à l'ypothese. Si on annule l'hypothese on retourne a l'indice de la partie (etat initial)
+
+Lorsqu'on sauvegarde, on propose a l'utilisateur de valider ou non son hypothese avant de sauvegarder. On ne sauvegarde que la grille (par defaut, etat initial avant hypothese)
+
+ 
+
