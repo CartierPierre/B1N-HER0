@@ -20,9 +20,9 @@ class Vuepartie < Vue
         0.upto(15) do |a|
         	tabBouton.push(Gtk::Button.new())
         	if a%2 == 0
-        		tabBouton.last.set_image(Gtk::Image.new(:file=>'./CaseBleue32.png'))
+        		tabBouton.last.set_image(Gtk::Image.new(:file=>'./img/CaseBleue32.png'))
         	else
-        		tabBouton.last.set_image(Gtk::Image.new(:file=>'./CaseRouge32.png'))
+        		tabBouton.last.set_image(Gtk::Image.new(:file=>'./img/CaseRouge32.png'))
         	end
         	tabBouton.last.set_relief(Gtk::ReliefStyle::NONE)
         	frame.attach(tabBouton.last,i,i+1,j,j+1)
