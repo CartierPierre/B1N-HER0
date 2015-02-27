@@ -5,7 +5,8 @@
 # Version 0.1 : Date : Wed Feb 11 17:43:37 CET 2015
 #
 
-load "Jeu.rb"
+require_relative './Jeu.rb'
+require_relative './Vue/Takuzu.rb'
 
 m = Jeu.creer(4,4)
 
