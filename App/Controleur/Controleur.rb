@@ -7,7 +7,7 @@ class Controleur
     public_class_method :new
 
     def initialize(jeu)
-        @jeu=jeu
+        @jeu = jeu
     end
 
     def changerControleur(controleur)
