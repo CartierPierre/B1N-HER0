@@ -3,8 +3,8 @@
 #
 class ManagerDonnes
 
-	@bddLocal = null
-	# @@connectionServer = null
+	@bddLocal = nil
+	# @@connectionServer = nil
 	
 	@@dbPathFile = "./test.txt"
 	# @@serverIp = "b1nher0.kpw.ovh"
@@ -13,8 +13,24 @@ class ManagerDonnes
 	##
 	# Renvoi une instance
 	#
-	def new()
-		@bddLocal SQLite3::Database.new(@@pathDb)
+	def initialize()
+		
+		# Ouverture de la base de données
+		begin
+			
+			puts "Ouverture de la BDD ..."
+			@bddLocal = SQLite3::Database.new(@@dbPathFile)
+			
+			rescue SQLite3::Exception => err
+				puts "Erreur"
+				puts err
+				abort
+			
+			ensure
+				puts "OK"
+			
+		end
+		
 	end
 	
 	##
