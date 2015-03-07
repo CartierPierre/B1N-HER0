@@ -1,0 +1,3 @@
+class Niveau
+
+end
