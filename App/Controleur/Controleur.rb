@@ -12,8 +12,8 @@ class Controleur
 
     def changerControleur(controleur)
 
-    	@vue.fermerFenetre
-    	@modele.fermerBdd
+    	#@vue.fermerFenetre
+    	#@modele.fermerBdd
     	@jeu.controleur = controleur
     end
 

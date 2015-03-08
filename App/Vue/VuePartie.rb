@@ -2,11 +2,10 @@ require_relative 'Vue'
 
 class Vuepartie < Vue
     def initialize
-        super(modele,"B1N-HERO")
+        super(modele,"B1N-HER0")
         @fenetre.border_width=5
         @fenetre.set_resizable(true)
         @fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
-
 
         maBoxVert=Gtk::Box.new(:vertical)
         @fenetre.add(maBoxVert)

@@ -1,4 +1,5 @@
 require_relative 'Vue.rb'
+require_relative '../Modele/Grille'
 
 class VueMenuPrincipal < Vue
 
@@ -8,20 +9,31 @@ class VueMenuPrincipal < Vue
 	@buttonProfil
 	@buttonQuitter
 
-	def initialize
-		super()
+	def initialize(modele,titre)
+		super(modele,titre)
 		vbox = Box.new(:vertical)
 		@buttonJouer = Button.new(:label => "Jouer")
 		@buttonClassement = Button.new(:label => "Classement")
 		@buttonOptions = Button.new(:label => "Options")
 		@buttonProfil = Button.new(:label => "Profil")
-		@buttonQuitter = Button.new(:stock_id => QUIT)
+		@buttonQuitter = Button.new(:stock_id => Gtk::Stock::QUIT)
+    vbox.add(@buttonJouer)
+    vbox.add(@buttonClassement)
+    vbox.add(@buttonOptions)
+    vbox.add(@buttonProfil)
+    vbox.add(@buttonQuitter)
+    @fenetre.add(vbox)
+    
+    @buttonJouer.signal_connect('clicked')  { onBtnJouerClicked }
+    @buttonQuitter.signal_connect('clicked')  { Gtk.main_quit }
+      
+    self.actualiser()
+	end
+	
+	def onBtnJouerClicked 
+	  @modele = new Grille.creer(5)
 	end
 
-	vbox.add(buttonJouer)
-	vbox.add(buttonClassement)
-	vbox.add(buttonOptions)
-	vbox.add(buttonProfil)
-	vbox.add(buttonQuitter)
+
 
 end

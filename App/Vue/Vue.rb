@@ -1,22 +1,20 @@
 require 'gtk3'
-include Gtk
 
 class Vue
     @fenetre
     @modele
 
     attr_reader :fenetre
-    private_class_method :new
 
     def initialize(modele,titre)
         @modele = modele
         @fenetre = Window.new(titre)
-		@fenetre.set_window_position(Gtk::Window::Position::CENTER)
-		@fenetre.set_resizable(false)
+    		@fenetre.set_window_position(Gtk::Window::Position::CENTER)
+    		@fenetre.set_resizable(true)
     end
 
     def actualiser()
-
+        @fenetre.show_all()
     end
 
 end
