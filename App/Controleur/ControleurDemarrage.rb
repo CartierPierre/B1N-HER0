@@ -1,11 +1,11 @@
 require_relative './Controleur'
+require_relative '../Vue/VueDemarrage'
 
-class ControleurMenuPrincipal < Controleur
-
+class ControleurDemarrage < Controleur
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
-		@vue = VueDemarrage.new(@modele,"Demarage",self)
+		@vue = VueDemarrage.new(@modele,"Demarrage",self)
 	end	
 
 end

@@ -18,7 +18,7 @@ class VueNouvellePartie < Vue
         @fenetre.add(vbox)
 
       
-    self.actualiser()
+        self.actualiser()
 	end
 	
 	def onBtnJouerClicked 
