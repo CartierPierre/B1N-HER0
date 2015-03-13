@@ -36,7 +36,6 @@ begin
 			`options`							TEXT NOT NULL,
 			`type`								INTEGER NOT NULL
 		);
-		TRUNCATE TABLE utilisateurs;
 	")
 	rescue SQLite3::Exception => err
 		puts "Erreur"
@@ -75,7 +74,6 @@ begin
 			`niveau`							INTEGER NOT NULL,
 			`dimention`							INTEGER NOT NULL
 		);
-		TRUNCATE TABLE utilisateurs;
 	")
 	rescue SQLite3::Exception => err
 		puts "Erreur"
@@ -93,6 +91,46 @@ begin
 		(NULL, NULL, '00_________1____0___11_______0_0_1__', '001011010011110100001101110010101100', 1, 6),
 		(NULL, NULL, '_1_1___0____0___0__________10__01__10____0___00__10_0__1_________0__1_1_0______0_____1__0______1_____1____0___0__11_0_________0_______1_0_______', '110110100100011001010110100101101001011010011001010101010110101010101010001011001101010100110011101011001100100101100101010010011011101100110010', 2, 12),
 		(NULL, NULL, '0___0____1__0_1_0________________1___0_1_1__1__1__0____________1', '0110011011010010001011011010110001010011011010011001011010011001', 6, 8);
+	")
+	rescue SQLite3::Exception => err
+		puts "Erreur"
+		puts err
+		abort
+	ensure
+		puts "OK"
+end
+
+# Création de la table des sauvegardes ...
+begin
+	puts "Création de la table des sauvegardes ..."
+	bdd.execute("
+		CREATE TABLE IF NOT EXISTS `sauvegarde` (
+			`id`							INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			`uuid`							INTEGER UNIQUE,
+			`date_creation`					INTEGER NOT NULL,
+			`contenu`						TEXT NOT NULL,
+			`id_utilisateur`				INTEGER NOT NULL,
+			`id_grille`						INTEGER NOT NULL,
+			FOREIGN KEY(`id_utilisateur`) REFERENCES `utilisateur`(`id`),
+			FOREIGN KEY(`id_grille`) REFERENCES `grille`(`id`)
+		);
+	")
+	rescue SQLite3::Exception => err
+		puts "Erreur"
+		puts err
+		abort
+	ensure
+		puts "OK"
+end
+
+# Insertion de sauvegardes ...
+begin
+	puts "Insertion de sauvegardes ..."
+	bdd.execute("
+		INSERT INTO sauvegarde VALUES
+		(NULL, NULL, 0, 'SERIALISATION', 1, 1),
+		(NULL, NULL, 0, 'SERIALISATION', 1, 2),
+		(NULL, NULL, 0, 'SERIALISATION', 2, 3);
 	")
 	rescue SQLite3::Exception => err
 		puts "Erreur"
