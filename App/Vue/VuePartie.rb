@@ -1,36 +1,71 @@
 require_relative 'Vue'
 
-class Vuepartie < Vue
-    def initialize
-        super(modele,"B1N-HER0")
-        @fenetre.border_width=5
-        @fenetre.set_resizable(true)
-        @fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
+class VuePartie < Vue
+    @tailleGrille
+    @temps
+    @buttonUndo
+    @buttonRedo
+    @buttonConseil
+    @buttonRestart
 
-        maBoxVert=Gtk::Box.new(:vertical)
-        @fenetre.add(maBoxVert)
-        monBoutQuitter=Gtk::Button.new(:stock_id => Gtk::Stock::QUIT)
-        monBoutNewGame=Gtk::Button.new(:label =>"Nouvelle partie")
-        frame=Gtk::Table.new(4,4,false)
+    def initialize(modele,titre)
+        super(modele,"B1N-HER0")
+
+        boxVertMain = Box.new(:vertical)
+        boxJeu = Box.new(:horizontal)
+        boxFooter = Box.new(:horizontal)
+        monBoutQuitter = Button.new(:stock_id => Gtk::Stock::QUIT)
+        monBoutNewGame = Button.new(:label =>"Nouvelle partie")
+
+        @tailleGrille = @modele.taille()
+
+        puts @tailleGrille
+
+        frame = Table.new(@tailleGrille,@tailleGrille,false)
 
         tabBouton = []
         i = 0
         j = 0
-        0.upto(15) do |a|
-        	tabBouton.push(Gtk::Button.new())
+        0.upto((@tailleGrille*@tailleGrille)-1) do |a|
+        	tabBouton.push(Button.new())
         	if a%2 == 0
-        		tabBouton.last.set_image(Gtk::Image.new(:file=>'./img/CaseBleue32.png'))
+        		tabBouton.last.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
         	else
-        		tabBouton.last.set_image(Gtk::Image.new(:file=>'./img/CaseRouge32.png'))
+        		tabBouton.last.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
         	end
-        	tabBouton.last.set_relief(Gtk::ReliefStyle::NONE)
         	frame.attach(tabBouton.last,i,i+1,j,j+1)
         	i += 1
-        	if i >= 4
+        	if i >= @tailleGrille
         		i = 0
         		j += 1
         	end
         end
+
+        @temps = Label.new("0:00")
+
+        @buttonUndo = Button.new()
+        @buttonUndo.set_image(Image.new(:file => './Vue/img/undo.png'))
+        @buttonRedo = Button.new()
+        @buttonRedo.set_image(Image.new(:file => './Vue/img/redo.png'))
+        @buttonConseil = Button.new()
+        @buttonConseil.set_image(Image.new(:file => './Vue/img/conseil.png'))
+        @buttonRestart = Button.new()
+        @buttonRestart.set_image(Image.new(:file => './Vue/img/restart.png'))
+
+        boxFooter.add(@buttonUndo)
+        boxFooter.add(@buttonRedo)
+        boxFooter.add(@buttonConseil)
+        boxFooter.add(@buttonRestart)
+
+        boxJeu.add(frame)
+        boxJeu.add(@temps)
+
+        boxVertMain.add(boxJeu)
+        boxVertMain.add(boxFooter)
+
+        @@fenetre.add(boxVertMain)
+
+        self.actualiser()
 
     end
 end
