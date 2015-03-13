@@ -9,7 +9,7 @@ class Score
     
     attr_reader :id, :uuid, :utilisateur, :tempsTotal, :nbCoups, :nbAides, :nbConseils
     
-    
+    private_class_method :new
     
     
     
