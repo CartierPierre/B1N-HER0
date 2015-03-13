@@ -6,7 +6,7 @@
 require "sqlite3"
 
 # Variables
-pathDb = "./test.db" # Chemin de la base de donnée à créer
+pathDb = "./test.sqlite" # Chemin de la base de donnée à créer
 db = false
 rq = false
 
