@@ -1,7 +1,7 @@
 require 'gtk3'
 include Gtk
 
-require_relative './Controleur/ControleurMenuPrincipal'
+require_relative './Controleur/ControleurDemarrage'
 
 class BinHero
 
@@ -11,7 +11,7 @@ class BinHero
 
 	def initialize
 		Gtk.init
-		@controleur = ControleurMenuPrincipal.new(self)
+		@controleur = ControleurDemarrage.new(self)
 		Gtk.main
 	end
 end
