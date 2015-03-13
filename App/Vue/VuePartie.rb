@@ -8,8 +8,8 @@ class VuePartie < Vue
     @buttonConseil
     @buttonRestart
 
-    def initialize(modele,titre)
-        super(modele,"B1N-HER0")
+    def initialize(modele,titre,controleur)
+        super(modele,"B1N-HER0",controleur)
 
         boxVertMain = Box.new(:vertical)
         boxJeu = Box.new(:horizontal)
@@ -19,8 +19,6 @@ class VuePartie < Vue
 
         @tailleGrille = @modele.taille()
 
-        puts @tailleGrille
-
         frame = Table.new(@tailleGrille,@tailleGrille,false)
 
         tabBouton = []
@@ -28,9 +26,9 @@ class VuePartie < Vue
         j = 0
         0.upto((@tailleGrille*@tailleGrille)-1) do |a|
         	tabBouton.push(Button.new())
-        	if a%2 == 0
+        	if @modele.getTuile(i,j).etat() == 1
         		tabBouton.last.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
-        	else
+        	elsif @modele.getTuile(i,j).etat() == 2
         		tabBouton.last.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
         	end
         	frame.attach(tabBouton.last,i,i+1,j,j+1)
