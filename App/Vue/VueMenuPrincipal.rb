@@ -27,7 +27,7 @@ class VueMenuPrincipal < Vue
         @buttonJouer.signal_connect('clicked')  { onBtnJouerClicked }
         @buttonQuitter.signal_connect('clicked')  { Gtk.main_quit }
       
-    self.actualiser()
+        self.actualiser()
 	end
 	
 	def onBtnJouerClicked
