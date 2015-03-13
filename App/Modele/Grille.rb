@@ -1,3 +1,5 @@
+load 'Tuile.rb'
+
 class Grille
     @grille
     # attr_reader :nbLigne, :nbColonne
@@ -103,4 +105,25 @@ class Grille
 
         return newColonne
     end
+
+    def charger(modele)
+        i = 0
+        j = 0
+        modele.split(//).each do |x|
+            if x != "_"
+                self.setTuile(j, i, (x.to_i + 1))
+            end
+            i += 1
+            if i >= @taille
+                i = 0
+                j += 1
+            end
+        end
+    end
+    # # Applique un couyp joue sur la grille
+    # #
+    # # === param
+    # def appliquerCoup(x, y, etat)
+    #     this.setTuile(x, y, etat)
+    # end
 end

@@ -1,5 +1,3 @@
-load 'Time.rb'
-load 'Grille.rb'
 
 class Partie
     attr_reader :grille, :niveau
@@ -17,7 +15,7 @@ class Partie
 
     def initialize(niveau)
         @niveau = niveau
-        @grille = new.Grille(@niveau.taille)
+        @grille = Grille.creer(@niveau.taille)
         @historique = Array.new()
         @dateDebutPartie = Time.new()
     end
@@ -34,5 +32,13 @@ class Partie
             @grille = @historique.pop()
         end
         self
+    end
+
+    #Permet de jouer un coup
+    def jouerCoup(x, y)#TODO signale un coup invalide
+        if @niveau.tuileValide?(x, y)
+            t = (@grille.getTuile(x, y).etat() + 1)%3
+            @grille.getTuile(x, y).etat = t
+        end
     end
 end
