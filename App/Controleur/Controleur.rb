@@ -12,14 +12,13 @@ class Controleur
 
     def changerControleur(controleur)
 
-    	#@vue.fermerFenetre
+        @vue.fermerFenetre
     	#@modele.fermerBdd
     	@jeu.controleur = controleur
     end
 
     def quitterJeu
 
-    	#@modele.sauvegarderProfil if !@modele.profil.nil?
     	Gtk.main_quit
     end
 end

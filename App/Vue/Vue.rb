@@ -3,18 +3,24 @@ require 'gtk3'
 class Vue
     @fenetre
     @modele
+    @controleur
 
-    attr_reader :fenetre
+    attr_writer :fenetre
 
-    def initialize(modele,titre)
+    def initialize(modele,titre,controleur)
         @modele = modele
         @fenetre = Window.new(titre)
-    		@fenetre.set_window_position(Gtk::Window::Position::CENTER)
-    		@fenetre.set_resizable(true)
+    	@fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
+    	@fenetre.set_resizable(true)
+        @controleur=controleur
     end
 
     def actualiser()
         @fenetre.show_all()
+    end
+
+    def fermerFenetre()
+        @fenetre.destroy()
     end
 
 end

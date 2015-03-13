@@ -62,7 +62,7 @@ class Grille
         self
     end
 
-    #Permet d'obtenir une ligne de la grille
+    # Permet d'obtenir une ligne de la grille
     #
     # === Argument
     # *x* - La coordonnée de la ligne ciblée
@@ -79,7 +79,7 @@ class Grille
         end
     end
 
-    #Permet d'obtenir une colonne de la grille
+    # Permet d'obtenir une colonne de la grille
     #
     # === Argument
     # *y* - La coordonnée de la colonne ciblée
@@ -103,4 +103,31 @@ class Grille
 
         return newColonne
     end
+
+    # Permet de charger le modèle de grille pour l'appliquer à la grille
+    #
+    # === Argument
+    # *modele* - Une string correspondant au modèle de la grille
+    def charger(modele)
+        i = 0
+        j = 0
+        modele.split(//).each do |x|
+            if x != "_"
+                self.setTuile(j, i, (x.to_i + 1))
+            end
+            i += 1
+            if i >= @taille
+                i = 0
+                j += 1
+            end
+        end
+
+        self
+    end
+    # # Applique un couyp joue sur la grille
+    # #
+    # # === param
+    # def appliquerCoup(x, y, etat)
+    #     this.setTuile(x, y, etat)
+    # end
 end
