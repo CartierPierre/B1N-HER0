@@ -1,7 +1,7 @@
 require_relative 'Controleur'
 require_relative '../Vue/VueMenuPrincipal'
 
-class ControleurDemarrage < Controleur
+class ControleurMenuPrincipal < Controleur
 
 	def initialize(jeu)
 		super(jeu)
