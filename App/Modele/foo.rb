@@ -110,9 +110,9 @@ begin
 			`date_creation`					INTEGER NOT NULL,
 			`contenu`						TEXT NOT NULL,
 			`id_utilisateur`				INTEGER NOT NULL,
-			`id_grille`						INTEGER NOT NULL,
+			`id_niveau`						INTEGER NOT NULL,
 			FOREIGN KEY(`id_utilisateur`) REFERENCES `utilisateur`(`id`),
-			FOREIGN KEY(`id_grille`) REFERENCES `grille`(`id`)
+			FOREIGN KEY(`id_niveau`) REFERENCES `grille`(`niveau`)
 		);
 	")
 	rescue SQLite3::Exception => err
@@ -131,6 +131,48 @@ begin
 		(NULL, NULL, 0, 'SERIALISATION', 1, 1),
 		(NULL, NULL, 0, 'SERIALISATION', 1, 2),
 		(NULL, NULL, 0, 'SERIALISATION', 2, 3);
+	")
+	rescue SQLite3::Exception => err
+		puts "Erreur"
+		puts err
+		abort
+	ensure
+		puts "OK"
+end
+
+# Création de la table des scores ...
+begin
+	puts "Création de la table des scores ..."
+	bdd.execute("
+		CREATE TABLE IF NOT EXISTS `score` (
+			`id`							INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			`uuid`							INTEGER UNIQUE,
+			`temps_total`					INTEGER NOT NULL,
+			`nb_coups`						INTEGER NOT NULL,
+			`nb_conseils`					INTEGER NOT NULL,
+			`nb_aides`						INTEGER NOT NULL,
+			`id_utilisateur`				INTEGER NOT NULL,
+			`id_niveau`						INTEGER NOT NULL,
+			FOREIGN KEY(`id_utilisateur`) REFERENCES `utilisateur`(`id`),
+			FOREIGN KEY(`id_niveau`) REFERENCES `niveau`(`id`)
+		);
+	")
+	rescue SQLite3::Exception => err
+		puts "Erreur"
+		puts err
+		abort
+	ensure
+		puts "OK"
+end
+
+# Insertion de scores ...
+begin
+	puts "Insertion de scores ..."
+	bdd.execute("
+		INSERT INTO score VALUES
+		(NULL, NULL, 0, 0, 0, 0, 1, 1),
+		(NULL, NULL, 0, 0, 0, 0, 1, 2),
+		(NULL, NULL, 0, 0, 0, 0, 2, 3);
 	")
 	rescue SQLite3::Exception => err
 		puts "Erreur"
