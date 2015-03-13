@@ -2,7 +2,6 @@ load 'Grille.rb'
 load 'Tuile.rb'
 load 'Niveau.rb'
 load 'Partie.rb'
-require 'time'
 
 class Jeu
     @partie
@@ -14,16 +13,11 @@ class Jeu
     end
 
     def initialize()
-        gi = Grille.creer(6)
-        gi.charger("00_________1____0___11_______0_0_1__")
-
-        gs = Grille.creer(6)
-        gs.charger("001011010011110100001101110010101100")
         niveau = Niveau.creer(
                     1,
                     2,
-                    gi,
-                    gs,
+                    Grille.creer(6).charger("00_________1____0___11_______0_0_1__"),
+                    Grille.creer(6).charger("001011010011110100001101110010101100"),
                     6
                 )
         @partie = Partie.creer(niveau)
@@ -47,9 +41,5 @@ end
 
 n = Jeu.creer()
 puts n
-n.jouerEn(0,1)
-n.jouerEn(1,0)
-n.jouerEn(0,2)
-n.jouerEn(0,2)
-n.jouerEn(0,2)
+n.jouerEn(2,3)
 puts n

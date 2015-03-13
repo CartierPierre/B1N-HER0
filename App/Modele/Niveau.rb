@@ -11,6 +11,10 @@ class Niveau
         @id, @uuid, @grilleInitial, @grilleSolution, @taille = id, uuid, grilleInitial, grilleSolution, taille
     end
 
+    # Test si la grille est une grille valide
+    #
+    # === Arguments
+    # *x* - 
     def tuileValide?(x, y)
         return @grilleInitial.getTuile(x, y).etat == 0
     end

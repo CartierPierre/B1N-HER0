@@ -1,3 +1,4 @@
+require 'time'
 
 class Partie
     attr_reader :grille, :niveau
