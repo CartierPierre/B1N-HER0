@@ -12,6 +12,21 @@ class VueDemarrage < Vue
         hbox.add(@buttonInscription)
         vbox.add(hbox)
         @fenetre.add(vbox)
+
+        @buttonConnexion.signal_connect('clicked')  { onBtnConnexionClicked }
+        @buttonInscription.signal_connect('clicked')  { onBtnInscriptionClicked }
+
         self.actualiser()
+
+
+
+	def onBtnConnexionClicked
+        @controleur.connexion()
+	end
+
+	def onBtnInscriptionClicked
+        @controleur.inscription()
+	end
+
     end
 end
