@@ -2,7 +2,6 @@
 require "sqlite3"
 require "./GestionnaireUtilisateur.rb"
 require "./Utilisateur.rb"
-require "singleton"
 
 # gestionnaireUtilisateur = GestionnaireUtilisateur.new()
 gestionnaireUtilisateur = GestionnaireUtilisateur.instance()

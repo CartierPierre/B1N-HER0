@@ -1,4 +1,5 @@
 class ControleurInscription < Controleur
+
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
@@ -7,7 +8,7 @@ class ControleurInscription < Controleur
 
 
     def valider()
-
+        @gestionnaireUtilisateur.insert(@utilisateur)
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 

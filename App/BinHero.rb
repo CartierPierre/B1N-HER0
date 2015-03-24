@@ -20,6 +20,7 @@ require_relative './Vue/VueNouvellePartie'
 
 require_relative './Modele/Grille'
 require_relative './Modele/Tuile'
+require_relative './Modele/Utilisateur'
 require_relative './Modele/GestionnaireUtilisateur'
 class BinHero
 

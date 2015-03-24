@@ -1,8 +1,5 @@
 class ControleurConnexion < Controleur
-    @utilisateur
-    @gestionnaireUtilisateur
 	def initialize(jeu)
-        @gestionnaireUtilisateur =GestionnaireUtilisateur.new()
 		super(jeu)
 		@modele = nil
 		@vue = VueConnexion.new(@modele,"Connexion",self)
