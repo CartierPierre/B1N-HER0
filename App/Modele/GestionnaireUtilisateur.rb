@@ -7,7 +7,7 @@ class GestionnaireUtilisateur
 	@bddLocal = nil
 	
 	# Attributs de classe
-	@@dbPathFile = "./test.sqlite"
+	@@dbPathFile = "./bdd-test.sqlite"
 	
 	##
 	# Renvoi une instance
@@ -65,17 +65,17 @@ class GestionnaireUtilisateur
 	# * +limit+ - (int) Fin de la liste
 	#
 	# ==== Retour
-	# Renvoi un tableau d'objets utilisateurs
+	# Renvoi un liste d'objets utilisateurs
 	#
-	def getAll(offset, limit)
-		resultat = self.execute ("
-			SELECT *
-			FROM utilisateur
-			LIMIT #{limit}
-			OFFSET #{offset};
-		")
-		return resultat;
-	end
+	# def getAll(offset, limit)
+		# resultat = self.execute ("
+			# SELECT *
+			# FROM utilisateur
+			# LIMIT #{limit}
+			# OFFSET #{offset};
+		# ")
+		# return resultat;
+	# end
 	
 	# def FindById(id)
 		# return nil;
@@ -123,7 +123,8 @@ class GestionnaireUtilisateur
 			return nil
 		end
 		
-		return Utilisateur.new(resultat[0], resultat[1], resultat[2], resultat[3], resultat[4], resultat[5], resultat[6], resultat[7], resultat[8])
+		resultat = resultat[0]
+		return Utilisateur.creer(resultat[0], resultat[1], resultat[2], resultat[3], resultat[4], resultat[5], resultat[6], resultat[7], resultat[8])
 	end
 	
 end
