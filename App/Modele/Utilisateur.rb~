@@ -8,6 +8,5 @@ class Utilisateur
     end
 
     def initialize(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
-	@id,@uuid,@nom,@motDePasse,@dateInscription,@dateDerniereSync,@type,@statistique,@option = id,uuid,nom,motDePasse,dateInscription,dateDerniereSync, type, statistique, option
     end
 end
