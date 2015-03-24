@@ -1,5 +1,5 @@
 ##
-# Crée une base de test
+# Crée une base de test utilisable
 #
 
 # Dépendances
