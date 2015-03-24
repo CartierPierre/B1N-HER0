@@ -16,7 +16,7 @@ class Partie
 
     def initialize(niveau)
         @niveau = niveau
-        @grille = Grille.creer(@niveau.taille)
+        @grille = Grille.creer(niveau.grilleInitial.taille).copier(niveau.grilleInitial)
         @historique = Array.new()
         @dateDebutPartie = Time.new()
     end
