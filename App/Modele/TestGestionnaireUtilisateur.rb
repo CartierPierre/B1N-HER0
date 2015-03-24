@@ -6,16 +6,16 @@ require "./Utilisateur.rb"
 gestionnaireUtilisateur = GestionnaireUtilisateur.new()
 
 
-# resultat = gestionnaireUtilisateur.count()
-# puts "Il y a #{resultat} utilisateur(s)"
+resultat = gestionnaireUtilisateur.count()
+puts "Il y a #{resultat} utilisateur(s)"
 
 
-# client = gestionnaireUtilisateur.getForAuthentication('toto0', 'azerty')
-# if ( client == nil )
-	# puts "Les identifiants ne sont pas correctes"
-# else
-	# puts "Bonjour #{ client.nom }"
-# end
+client = gestionnaireUtilisateur.getForAuthentication('toto0', 'azerty')
+if ( client == nil )
+	puts "Les identifiants ne sont pas correctes"
+else
+	puts "Bonjour #{ client.nom }, votre id est #{ client.id }"
+end
 
 
 # puts "Ces derniers sont :"
@@ -23,4 +23,4 @@ gestionnaireUtilisateur = GestionnaireUtilisateur.new()
 # puts resultat
 
 
-Utilisateur.new(1, 1, 'Toto', 'azerty', 1, 1, 1, 1, 1)
+Utilisateur.creer(1, 1, 'Toto', 'azerty', 1, 1, 1, 1, 1)
