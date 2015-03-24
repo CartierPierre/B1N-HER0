@@ -1,4 +1,5 @@
 require 'gtk3'
+require "sqlite3"
 include Gtk
 
 require_relative './Controleur/Controleur'
@@ -19,6 +20,7 @@ require_relative './Vue/VueNouvellePartie'
 
 require_relative './Modele/Grille'
 require_relative './Modele/Tuile'
+require_relative './Modele/GestionnaireUtilisateur'
 class BinHero
 
     @controleur

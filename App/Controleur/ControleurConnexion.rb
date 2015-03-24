@@ -1,6 +1,8 @@
 class ControleurConnexion < Controleur
     @utilisateur
+    @gestionnaireUtilisateur
 	def initialize(jeu)
+        @gestionnaireUtilisateur =GestionnaireUtilisateur.new()
 		super(jeu)
 		@modele = nil
 		@vue = VueConnexion.new(@modele,"Connexion",self)
@@ -8,8 +10,11 @@ class ControleurConnexion < Controleur
 
 
     def valider(pseudo,password)
-        if GU.getForAuthentication(pseudo,password)
-        changerControleur(ControleurMenuPrincipal.new(@jeu))
+        if (@utilisateur = @gestionnaireUtilisateur.getForAuthentication(pseudo,password)) == nil
+            @vue.mauvaisIdentifiants()
+        else
+            changerControleur(ControleurMenuPrincipal.new(@jeu))
+        end
     end
 
     def annuler()
