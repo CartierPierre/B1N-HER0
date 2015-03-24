@@ -1,8 +1,3 @@
-require_relative '../Vue/VueDemarrage'
-require_relative './Controleur'
-require_relative './ControleurConnexion'
-require_relative './ControleurInscription'
-
 class ControleurDemarrage < Controleur
 	def initialize(jeu)
 		super(jeu)

@@ -1,8 +1,3 @@
-require_relative './Controleur'
-require_relative './ControleurDemarrage'
-require_relative './ControleurMenuPrincipal'
-require_relative '../Vue/VueConnexion'
-
 class ControleurConnexion < Controleur
     @utilisateur
 	def initialize(jeu)
