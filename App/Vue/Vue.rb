@@ -11,7 +11,7 @@ class Vue
         @modele = modele
         @fenetre = Window.new(titre)
     	@fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
-    	@fenetre.set_resizable(true)
+    	@fenetre.set_resizable(false)
         @controleur=controleur
     end
 

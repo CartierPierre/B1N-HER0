@@ -10,4 +10,8 @@ class ControleurNouvellePartie < Controleur
 	end	
 
 
+    def annuler()
+        changerControleur(ControleurMenuPrincipal.new(@jeu))
+    end
+
 end
