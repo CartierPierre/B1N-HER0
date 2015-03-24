@@ -1,21 +1,39 @@
 ##
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
+# Utilise le DP Singleton
 #
 class GestionnaireUtilisateur
 	
-	# Attributs d'instance
+	### Attributs de classe
+	@@instance = nil
+	
+	
+	### Attributs d'instances (à remplacer par un object partagé)
 	@bddLocal = nil
 	
-	# Attributs de classe
-	@@dbPathFile = "./bdd-test.sqlite"
+	
+	### Méthodes de classe
 	
 	##
-	# Renvoi une instance
+	# Renvoi l'instance
 	#
+	def GestionnaireUtilisateur.instance()
+		if(@@instance == nil)
+			@@instance = new()
+		end
+		
+		return @@instance;
+	end
+	
+	
+	### Méthodes d'instances
+	
+	# Constructeur
+	private_class_method :new
 	def initialize()
 		begin
 			puts "Ouverture de la BDD ..."
-			@bddLocal = SQLite3::Database.new(@@dbPathFile)
+			@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
 			rescue SQLite3::Exception => err
 				puts "Erreur"
 				puts err
@@ -81,8 +99,41 @@ class GestionnaireUtilisateur
 		# return nil;
 	# end
 	
-	# def persist(Utilisateur)
-	# end
+	##
+	# Fait persister les données d'un utilisateur
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont il faut faire persister les informations
+	#
+	def insert(u)
+		self.execute ("
+			INSERT INTO score
+			VALUES (
+				#{ u.id() },
+				#{ u.uuid() }',
+				'#{ u.nom() }',
+				'#{ u.motDePasse() }',
+				#{ u.dateInscription() },
+				#{ u.dateDerniereSync() },
+				'#{ u.option() }',
+				#{ u.type() }
+			);
+		")
+	end
+	
+	##
+	# Met à jour un utilisateur
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont il faut mettre à jour les informations
+	#
+	def insert(u)
+		self.execute ("
+			DELETE FROM utilisateur
+			WHERE id = #{ u.getId() }
+			LIMIT 1;
+		")
+	end
 	
 	##
 	# Supprime un utilisateur
