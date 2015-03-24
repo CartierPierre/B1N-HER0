@@ -1,12 +1,16 @@
 require_relative 'Vue'
 
 class VuePartie < Vue
+
     @tailleGrille
     @temps
+
     @buttonUndo
     @buttonRedo
     @buttonConseil
     @buttonRestart
+
+    @buttonsJeu
 
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
@@ -21,17 +25,19 @@ class VuePartie < Vue
 
         frame = Table.new(@tailleGrille,@tailleGrille,false)
 
-        tabBouton = []
+        @buttonsJeu = []
         i = 0
         j = 0
+        colonne = 0
         0.upto((@tailleGrille*@tailleGrille)-1) do |a|
-        	tabBouton.push(Button.new())
-        	if @modele.getTuile(i,j).etat() == 1
-        		tabBouton.last.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
-        	elsif @modele.getTuile(i,j).etat() == 2
-        		tabBouton.last.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
+        	@buttonsJeu.push(Button.new())
+            @buttonsJeu.last.set_size_request(32, 32)
+        	if @modele.getTuile(j,i).etat() == 1
+        		@buttonsJeu.last.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+        	elsif @modele.getTuile(j,i).etat() == 2
+        		@buttonsJeu.last.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
         	end
-        	frame.attach(tabBouton.last,i,i+1,j,j+1)
+        	frame.attach(@buttonsJeu.last,i,i+1,j,j+1)
         	i += 1
         	if i >= @tailleGrille
         		i = 0
@@ -50,20 +56,41 @@ class VuePartie < Vue
         @buttonRestart = Button.new()
         @buttonRestart.set_image(Image.new(:file => './Vue/img/restart.png'))
 
-        boxFooter.add(@buttonUndo)
-        boxFooter.add(@buttonRedo)
-        boxFooter.add(@buttonConseil)
-        boxFooter.add(@buttonRestart)
+        boxFooter.pack_start(@buttonUndo, :expand => true, :fill => false, :padding => 5)
+        boxFooter.pack_start(@buttonRedo, :expand => true, :fill => false, :padding => 5)
+        boxFooter.pack_start(@buttonConseil, :expand => true, :fill => false, :padding => 5)
+        boxFooter.pack_start(@buttonRestart, :expand => true, :fill => false, :padding => 5)
 
         boxJeu.add(frame)
-        boxJeu.add(@temps)
+        boxJeu.pack_end(@temps, :expand => true, :fill => false)
 
         boxVertMain.add(boxJeu)
-        boxVertMain.add(boxFooter)
+        boxVertMain.pack_end(boxFooter, :expand => true, :fill => false)
 
-        @@fenetre.add(boxVertMain)
+        @fenetre.add(boxVertMain)
+
+        @buttonUndo.signal_connect('clicked')  { onBtnUndoClicked }
+        @buttonRedo.signal_connect('clicked')  { onBtnRedoClicked }
+        @buttonConseil.signal_connect('clicked')  { onBtnConseilClicked }
+        @buttonRestart.signal_connect('clicked')  { onBtnRestartClicked }
 
         self.actualiser()
+    end
+
+    def onBtnUndoClicked
 
     end
+
+    def onBtnRedoClicked
+
+    end
+
+    def onBtnConseilClicked
+
+    end
+
+    def onBtnRestartClicked
+
+    end
+
 end
