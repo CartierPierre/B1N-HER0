@@ -12,9 +12,6 @@ class Grille
     def Grille.creer(taille)
         new(taille)
     end
-    # def Grille.creer(nbLigne, nbColonne)
-    #     new(nbLigne, nbColonne)
-    # end
 
     def initialize(taille)
         @taille = taille
@@ -22,12 +19,6 @@ class Grille
         #Création d'un tableau de tableau de tuile
         @grille =   Array.new(@taille) { Array.new(@taille) { Tuile.creer() } }
     end
-    # def initialize(nbLigne, nbColonne)
-    #     @nbLigne, @nbColonne = nbLigne, nbColonne
-
-    #     #Création d'un tableau de tableau de tuile
-    #     @grille =   Array.new(@nbLigne) { Array.new(@nbColonne) { Tuile.creer() } }
-    # end
 
     # Permet d'obtenir une tuile à des coordonnées données
     #
@@ -130,4 +121,15 @@ class Grille
     # def appliquerCoup(x, y, etat)
     #     this.setTuile(x, y, etat)
     # end
+
+    def copier(grille)
+        0.upto(self.taille() - 1) do |i|
+            0.upto(self.taille() - 1) do |j|
+                self.setTuile(i, j, grille.getTuile(i, j).etat)
+            end
+            print "\n"
+        end
+
+        self
+    end
 end

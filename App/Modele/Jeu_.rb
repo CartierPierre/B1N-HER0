@@ -28,7 +28,7 @@ class Jeu
     end
 
     def to_s()
-        puts "Voici le takuzu de #{@nbL}*#{@nbC}: "
+        puts "Voici le takuzu: "
         0.upto(@partie.grille.taille() - 1) do |i|
             0.upto(@partie.grille.taille() - 1) do |j|
                 print "#{@partie.grille.getTuile(i, j).etat}"
@@ -41,5 +41,6 @@ end
 
 n = Jeu.creer()
 puts n
+n.jouerEn(2,3)
 n.jouerEn(2,3)
 puts n
