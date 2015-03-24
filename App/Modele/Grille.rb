@@ -115,12 +115,13 @@ class Grille
 
         self
     end
-    # # Applique un couyp joue sur la grille
-    # #
-    # # === param
-    # def appliquerCoup(x, y, etat)
-    #     this.setTuile(x, y, etat)
-    # end
+
+    # Applique un couyp joue sur la grille
+    #
+    # === param
+    def appliquerCoup(x, y, etat)
+        self.setTuile(x, y, etat)
+    end
 
     def copier(grille)
         0.upto(self.taille() - 1) do |i|
