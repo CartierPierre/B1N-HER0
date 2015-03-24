@@ -1,0 +1,68 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.LogType=0
+DefaultDir=C:\GitHub\B1N-HER0\App
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=1
+Extensions=.rb
+[Project tree]
+Nouveau projet
+	+App
+		-Modele
+			Modele\Utilisateur.rb
+			Modele\Tuile.rb
+			Modele\test.sqlite
+			Modele\test.rb
+			Modele\Score.rb
+			Modele\Partie.rb
+			Modele\Niveau.rb
+			Modele\ManagerDonnes.rb
+			Modele\Jeu_.rb
+			Modele\Grille.rb
+			Modele\GestionnaireUtilisateur.rb
+			Modele\GestionnaireAbstrait.rb
+			Modele\foo.rb
+		+Vue
+			-img
+				Vue\img\undo.png
+				Vue\img\restart.png
+				Vue\img\redo.png
+				Vue\img\conseil.png
+				Vue\img\CaseRouge32.png
+				Vue\img\CaseBleue32.png
+			Vue\VuePartie.rb
+			Vue\VueNouvellePartie.rb
+			Vue\VueMenuPrincipal.rb
+			Vue\VueInscription.rb
+			Vue\VueDemarrage.rb
+			Vue\VueConnexion.rb
+			Vue\Vue.rb
+		+Controleur
+			Controleur\ControleurPartie.rb
+			Controleur\ControleurNouvellePartie.rb
+			Controleur\ControleurMenuPrincipal.rb
+			Controleur\ControleurInscription.rb
+			Controleur\ControleurDemarrage.rb
+			Controleur\ControleurConnexion.rb
+			Controleur\Controleur.rb
+		BinHero.rb
+[Open project files]
+0=BinHero.rb
+1=Vue\VueInscription.rb
+2=Vue\VueConnexion.rb
+3=Vue\VuePartie.rb
+4=Controleur\ControleurMenuPrincipal.rb
+5=Controleur\ControleurNouvellePartie.rb
+6=Vue\VueMenuPrincipal.rb
+7=Vue\Vue.rb
+8=Vue\VueNouvellePartie.rb
+9=Controleur\ControleurInscription.rb
+[Selected Project Files]
+Main=
+Selected=Vue\VueNouvellePartie.rb

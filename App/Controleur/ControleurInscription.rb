@@ -7,7 +7,7 @@ class ControleurInscription < Controleur
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
-		@vue = VueInscription.new(@modele,"Connexion",self)
+		@vue = VueInscription.new(@modele,"Inscription",self)
 	end
 
 

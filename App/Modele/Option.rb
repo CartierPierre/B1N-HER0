@@ -1,4 +1,5 @@
 class Option
+<<<<<<< HEAD
     @tuile0 #chemin du fichier en string
     @tuile1
     @langue
@@ -38,3 +39,17 @@ class Option
         end
     end
 end
+=======
+	attr_accessor :tuileZero, :tuileUn, :langue	
+	
+	private_class_method :new
+
+	def Option.creer(tuileZero,tuileUn,langue)
+        	new(tuileZero,tuileUn,langue)
+    	end
+
+	def initialize(tuileZero,tuileUn,langue)
+		@tuileZero, @tuileUn, @langue = tuileZero,tuileUn,langue
+	end
+end
+>>>>>>> origin/master
