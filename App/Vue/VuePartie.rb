@@ -8,7 +8,15 @@ class VuePartie < Vue
     @buttonConseil
     @buttonRestart
 
-    @buttonsJeu
+    @casesJeu
+
+    class CaseJeu < Gtk::Button
+        attr_accessor :x, :y
+
+        def initialize(x,y)
+            @x,@y = x,y
+        end
+    end
 
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
@@ -19,23 +27,24 @@ class VuePartie < Vue
         monBoutQuitter = Button.new(:stock_id => Gtk::Stock::QUIT)
         monBoutNewGame = Button.new(:label =>"Nouvelle partie")
 
-        @tailleGrille = @modele.taille()
+        @tailleGrille = @modele.grille().taille()
 
         frame = Table.new(@tailleGrille,@tailleGrille,false)
 
-        @buttonsJeu = []
+        @casesJeu = []
         i = 0
         j = 0
         colonne = 0
         0.upto((@tailleGrille*@tailleGrille)-1) do |a|
-        	@buttonsJeu.push(Button.new())
-            @buttonsJeu.last.set_size_request(32, 32)
-        	if @modele.getTuile(j,i).etat() == 1
-        		@buttonsJeu.last.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
-        	elsif @modele.getTuile(j,i).etat() == 2
-        		@buttonsJeu.last.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
+        	@casesJeu.push(CaseJeu.new(j,i))
+            @casesJeu.last.set_size_request(32, 32)
+        	if @modele.grille().getTuile(j,i).etat() == 1
+        		@casesJeu.last.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+        	elsif @modele.grille().getTuile(j,i).etat() == 2
+        		@casesJeu.last.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
         	end
-        	frame.attach(@buttonsJeu.last,i,i+1,j,j+1)
+            @casesJeu.last.signal_connect('clicked') { onBtnCaseClicked(@casesJeu.last) }
+        	frame.attach(@casesJeu.last,i,i+1,j,j+1)
         	i += 1
         	if i >= @tailleGrille
         		i = 0
@@ -89,6 +98,16 @@ class VuePartie < Vue
 
     def onBtnRestartClicked
 
+    end
+
+    def onBtnCaseClicked(caseJeu)
+        @modele.jouerCoup(caseJeu.x,caseJeu.y)
+        if @modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 1
+            button.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+        elsif @modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 2
+            button.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
+        end
+        self.actualiser()
     end
 
 end
