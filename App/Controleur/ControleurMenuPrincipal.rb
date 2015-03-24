@@ -1,7 +1,3 @@
-require_relative 'Controleur'
-require_relative '../Vue/VueMenuPrincipal'
-require_relative 'ControleurNouvellePartie'
-
 class ControleurMenuPrincipal < Controleur
 
 	def initialize(jeu)

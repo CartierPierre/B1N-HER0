@@ -1,5 +1,3 @@
-require_relative 'Vue'
-
 class VueInscription < Vue
 
     def initialize(modele,titre,controleur)
@@ -40,4 +38,5 @@ class VueInscription < Vue
 	def onBtnAnnulerClicked
         @controleur.annuler()
 	end
+
 end

@@ -4,6 +4,7 @@ require_relative './ControleurMenuPrincipal'
 require_relative '../Vue/VueConnexion'
 
 class ControleurConnexion < Controleur
+    @utilisateur
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
@@ -11,7 +12,8 @@ class ControleurConnexion < Controleur
 	end
 
 
-    def valider()
+    def valider(pseudo,password)
+        if GU.getForAuthentication(pseudo,password)
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 

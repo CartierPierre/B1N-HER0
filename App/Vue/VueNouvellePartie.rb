@@ -1,6 +1,3 @@
-require_relative 'Vue.rb'
-require_relative '../Modele/Grille'
-
 class VueNouvellePartie < Vue
 
 	@buttonJouer

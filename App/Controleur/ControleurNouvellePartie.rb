@@ -1,6 +1,3 @@
-require_relative 'Controleur'
-require_relative '../Vue/VueNouvellePartie'
-
 class ControleurNouvellePartie < Controleur
 
 	def initialize(jeu)
@@ -9,6 +6,9 @@ class ControleurNouvellePartie < Controleur
 		@vue = VueNouvellePartie.new(@modele,"NouvellePartie",self)
 	end	
 
+    def jouer
+        changerControleur(ControleurPartie.new(@jeu))
+    end
 
     def annuler()
         changerControleur(ControleurMenuPrincipal.new(@jeu))

@@ -1,8 +1,3 @@
-require_relative './Controleur'
-require_relative './ControleurDemarrage'
-require_relative './ControleurMenuPrincipal'
-require_relative '../Vue/VueInscription'
-
 class ControleurInscription < Controleur
 	def initialize(jeu)
 		super(jeu)
@@ -12,6 +7,7 @@ class ControleurInscription < Controleur
 
 
     def valider()
+
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 

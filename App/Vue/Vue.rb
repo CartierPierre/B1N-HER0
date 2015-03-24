@@ -1,5 +1,3 @@
-require 'gtk3'
-
 class Vue
     @fenetre
     @modele

@@ -1,5 +1,3 @@
-require_relative 'Vue'
-
 class VuePartie < Vue
 
     @tailleGrille
