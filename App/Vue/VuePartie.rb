@@ -14,7 +14,20 @@ class VuePartie < Vue
         attr_accessor :x, :y
 
         def initialize(x,y)
+            super()
             @x,@y = x,y
+        end
+
+        def setImageTuile1()
+            self.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
+        end
+
+        def setImageTuile2()
+            self.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+        end
+
+        def setImageTuileVide()
+            self.set_image(Image.new())
         end
     end
 
@@ -32,24 +45,24 @@ class VuePartie < Vue
         frame = Table.new(@tailleGrille,@tailleGrille,false)
 
         @casesJeu = []
-        i = 0
-        j = 0
-        colonne = 0
-        0.upto((@tailleGrille*@tailleGrille)-1) do |a|
-        	@casesJeu.push(CaseJeu.new(j,i))
-            @casesJeu.last.set_size_request(32, 32)
-        	if @modele.grille().getTuile(j,i).etat() == 1
-        		@casesJeu.last.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
-        	elsif @modele.grille().getTuile(j,i).etat() == 2
-        		@casesJeu.last.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
-        	end
-            @casesJeu.last.signal_connect('clicked') { onBtnCaseClicked(@casesJeu.last) }
-        	frame.attach(@casesJeu.last,i,i+1,j,j+1)
-        	i += 1
-        	if i >= @tailleGrille
-        		i = 0
-        		j += 1
-        	end
+
+        0.upto(@tailleGrille-1) do |ligne|
+            0.upto(@tailleGrille-1) do |colonne|
+                caseTemp = CaseJeu.new(colonne,ligne)
+            	
+                caseTemp.set_size_request(32, 32)
+
+            	if @modele.grille().getTuile(colonne,ligne).etat() == 1
+            		caseTemp.setImageTuile1()
+            	elsif @modele.grille().getTuile(colonne,ligne).etat() == 2
+            		caseTemp.setImageTuile2()
+            	end
+
+                caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
+            	frame.attach(caseTemp,ligne,ligne+1,colonne,colonne+1)
+
+                @casesJeu.push(caseTemp)
+            end
         end
 
         @temps = Label.new("0:00")
@@ -100,13 +113,17 @@ class VuePartie < Vue
 
     end
 
-    def onBtnCaseClicked(caseJeu)
+    def onCaseJeuClicked(caseJeu)
         @modele.jouerCoup(caseJeu.x,caseJeu.y)
+
         if @modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 1
-            button.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+            caseJeu.setImageTuile1()
         elsif @modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 2
-            button.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
+            caseJeu.setImageTuile2()
+        else
+            caseJeu.setImageTuileVide()
         end
+
         self.actualiser()
     end
 
