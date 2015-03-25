@@ -26,6 +26,14 @@ class VuePartie < Vue
             self.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
         end
 
+        def setImageTuile1Lock()
+            self.set_image(Image.new(:file => './Vue/img/CaseRouge32Lock.png'))
+        end
+
+        def setImageTuile2Lock()
+            self.set_image(Image.new(:file => './Vue/img/CaseBleue32Lock.png'))
+        end
+
         def setImageTuileVide()
             self.set_image(Image.new())
         end
@@ -53,9 +61,9 @@ class VuePartie < Vue
                 caseTemp.set_size_request(32, 32)
 
             	if @modele.grille().getTuile(colonne,ligne).etat() == 1
-            		caseTemp.setImageTuile1()
+            		caseTemp.setImageTuile1Lock()
             	elsif @modele.grille().getTuile(colonne,ligne).etat() == 2
-            		caseTemp.setImageTuile2()
+            		caseTemp.setImageTuile2Lock()
             	end
 
                 caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
@@ -114,17 +122,21 @@ class VuePartie < Vue
     end
 
     def onCaseJeuClicked(caseJeu)
-        @modele.jouerCoup(caseJeu.x,caseJeu.y)
+        if @modele.niveau().tuileValide?(caseJeu.x,caseJeu.y)
 
-        if @modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 1
-            caseJeu.setImageTuile1()
-        elsif @modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 2
-            caseJeu.setImageTuile2()
-        else
-            caseJeu.setImageTuileVide()
+            @modele.jouerCoup(caseJeu.x,caseJeu.y)
+
+            if (@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 1)
+                caseJeu.setImageTuile1()
+            elsif (@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 2)
+                caseJeu.setImageTuile2()
+            else
+                caseJeu.setImageTuileVide()
+            end      
+
+            self.actualiser()
+            
         end
-
-        self.actualiser()
     end
 
 end
