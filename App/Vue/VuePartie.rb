@@ -3,12 +3,24 @@ class VuePartie < Vue
     @tailleGrille
     @temps
 
+    # Boutons du menu de navigation
+    @buttonMenu
+
+    # Boutons du menu en haut
+    @buttonHypothese
+    @buttonValiderHypo
+    @buttonAnnulerHypo
+
+    # Boutons du menu en bas
     @buttonUndo
     @buttonRedo
     @buttonConseil
     @buttonRestart
 
     @casesJeu
+
+    @imageTuile1
+    @imageTuile2
 
     class CaseJeu < Gtk::Button
         attr_accessor :x, :y
@@ -43,15 +55,35 @@ class VuePartie < Vue
         super(modele,"B1N-HER0",controleur)
 
         boxVertMain = Box.new(:vertical)
-        boxJeu = Box.new(:horizontal)
-        boxFooter = Box.new(:horizontal)
-        monBoutQuitter = Button.new(:stock_id => Gtk::Stock::QUIT)
-        monBoutNewGame = Button.new(:label =>"Nouvelle partie")
 
         @tailleGrille = @modele.grille().taille()
 
-        frame = Table.new(@tailleGrille,@tailleGrille,false)
+        # Navigation
+        boxNav = Box.new(:horizontal)
+        @buttonMenu = Button.new()
+        @buttonMenu.set_image(Image.new(:file => './Vue/img/menu.png'))
+        boxNav.add(@buttonMenu)
+        boxNav.add(Label.new("<strong>Niveau 1" + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s() + "</strong>"))
 
+        # Menu du haut
+        boxHeader = Box.new(:horizontal)
+        @buttonHypothese = Button.new(:label => "Hypothèse", :mnemonic => "H")
+        @buttonHypothese.set_image(Image.new(:file => './Vue/img/hypothese.png'))
+        @buttonValiderHypo = Button.new(:label => "Valider", :mnemonic => nil)
+        @buttonValiderHypo.set_image(Image.new(:file => './Vue/img/valider.png'))
+        @buttonAnnulerHypo = Button.new(:label => "Annuler", :mnemonic => nil)
+        @buttonAnnulerHypo.set_image(Image.new(:file => './Vue/img/annuler.png'))
+
+        boxHeader.pack_start(@buttonHypothese, :expand => true, :fill => false, :padding => 5)
+        boxHeader.pack_start(@buttonValiderHypo, :expand => true, :fill => false, :padding => 5)
+        boxHeader.pack_start(@buttonAnnulerHypo, :expand => true, :fill => false, :padding => 5)
+
+        @imageTuile1 = Image.new(:file => './Vue/img/CaseRouge32.png')
+        @imageTuile2 = Image.new(:file => './Vue/img/CaseBleue32.png')
+
+        # Création de la grille
+        boxJeu = Box.new(:horizontal)
+        frame = Table.new(@tailleGrille,@tailleGrille,false)
         @casesJeu = []
 
         0.upto(@tailleGrille-1) do |ligne|
@@ -75,32 +107,37 @@ class VuePartie < Vue
 
         @temps = Label.new("0:00")
 
-        @buttonUndo = Button.new()
+        boxJeu.add(frame)
+        boxJeu.pack_end(@temps, :expand => true, :fill => false)
+
+        # Menu du bas
+        boxFooter = Box.new(:horizontal)
+        @buttonUndo = Button.new(:label => "Annuler", :mnemonic => "Z")
         @buttonUndo.set_image(Image.new(:file => './Vue/img/undo.png'))
-        @buttonRedo = Button.new()
+        @buttonRedo = Button.new(:label => "Répéter", :mnemonic => "Y")
         @buttonRedo.set_image(Image.new(:file => './Vue/img/redo.png'))
-        @buttonConseil = Button.new()
+        @buttonConseil = Button.new(:label => "Conseil", :mnemonic => "C")
         @buttonConseil.set_image(Image.new(:file => './Vue/img/conseil.png'))
-        @buttonRestart = Button.new()
+        @buttonRestart = Button.new(:label => "Recommencer", :mnemonic => "R")
         @buttonRestart.set_image(Image.new(:file => './Vue/img/restart.png'))
+
+        @buttonUndo.signal_connect('clicked')  { onBtnUndoClicked }
+        @buttonRedo.signal_connect('clicked')  { onBtnRedoClicked }
+        @buttonConseil.signal_connect('clicked')  { onBtnConseilClicked }
+        @buttonRestart.signal_connect('clicked')  { onBtnRestartClicked }
 
         boxFooter.pack_start(@buttonUndo, :expand => true, :fill => false, :padding => 5)
         boxFooter.pack_start(@buttonRedo, :expand => true, :fill => false, :padding => 5)
         boxFooter.pack_start(@buttonConseil, :expand => true, :fill => false, :padding => 5)
         boxFooter.pack_start(@buttonRestart, :expand => true, :fill => false, :padding => 5)
 
-        boxJeu.add(frame)
-        boxJeu.pack_end(@temps, :expand => true, :fill => false)
-
+        # Ajout dans la box principal des éléments
+        boxVertMain.add(boxNav)
+        boxVertMain.add(boxHeader)
         boxVertMain.add(boxJeu)
         boxVertMain.pack_end(boxFooter, :expand => true, :fill => false)
 
         @fenetre.add(boxVertMain)
-
-        @buttonUndo.signal_connect('clicked')  { onBtnUndoClicked }
-        @buttonRedo.signal_connect('clicked')  { onBtnRedoClicked }
-        @buttonConseil.signal_connect('clicked')  { onBtnConseilClicked }
-        @buttonRestart.signal_connect('clicked')  { onBtnRestartClicked }
 
         self.actualiser()
     end
