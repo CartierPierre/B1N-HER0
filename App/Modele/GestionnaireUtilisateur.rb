@@ -5,17 +5,19 @@
 class GestionnaireUtilisateur
 	
 	### Attributs de classe
+	
 	@@instance = nil
 	
 	
-	### Attributs d'instances (à remplacer par un object partagé)
+	### Attributs d'instances
+	
 	@bddLocal = nil
 	
 	
 	### Méthodes de classe
 	
 	##
-	# Renvoi l'instance
+	# Renvoi l'instance unique de la classe
 	#
 	def GestionnaireUtilisateur.instance()
 		if(@@instance == nil)
@@ -28,7 +30,9 @@ class GestionnaireUtilisateur
 	
 	### Méthodes d'instances
 	
+	##
 	# Constructeur
+	#
 	private_class_method :new
 	def initialize()
 		begin
@@ -44,7 +48,7 @@ class GestionnaireUtilisateur
 	end
 	
 	##
-	# Exécute une requête
+	# Exécute une requête SQL
 	#
 	def execute(requete)
 		resultat = nil
@@ -60,6 +64,7 @@ class GestionnaireUtilisateur
 		end
 		return resultat
 	end
+	# private_class_method :execute
 	
 	##
 	# Compte le nombre d'utilisateurs
@@ -85,19 +90,48 @@ class GestionnaireUtilisateur
 	# ==== Retour
 	# Renvoi un liste d'objets utilisateurs
 	#
-	# def getAll(offset, limit)
-		# resultat = self.execute ("
-			# SELECT *
-			# FROM utilisateur
-			# LIMIT #{limit}
-			# OFFSET #{offset};
-		# ")
-		# return resultat;
-	# end
+	def getAll(offset, limit)
 	
-	# def FindById(id)
-		# return nil;
-	# end
+		resultat = self.execute ("
+			SELECT *
+			FROM utilisateur
+			LIMIT #{limit}
+			OFFSET #{offset};
+		")
+		
+		liste = Array.new()
+		resultat.each do |el|
+			liste.push(Utilisateur.creer(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8]))
+		end
+		
+		return liste;
+	end
+	
+	##
+	# Recherch un utilisateur selon selon son id
+	#
+	# ==== Paramètres
+	# * +id+ - (int) Id de l'utilisateur
+	#
+	# ==== Retour
+	# Renvoi un objets utilisateur si se dernier a été trouvé. Nil si non
+	#
+	def findById(id)
+		resultat = self.execute ("
+			SELECT *
+			FROM utilisateur
+			WHERE id = #{id}
+			LIMIT 1;
+		")
+		
+		# Si l'utilisateur n'a pas été trouvé
+		if ( resultat.count() == 0 )
+			return nil
+		end
+		
+		resultat = resultat[0]
+		return Utilisateur.creer(resultat[0], resultat[1], resultat[2], resultat[3], resultat[4], resultat[5], resultat[6], resultat[7], resultat[8])
+	end
 	
 	##
 	# Fait persister les données d'un utilisateur
@@ -105,12 +139,13 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut faire persister les informations
 	#
+	# private_class_method :insert
 	def insert(u)
 		self.execute ("
-			INSERT INTO score
+			INSERT INTO utilisateur
 			VALUES (
-				#{ u.id() },
-				#{ u.uuid() }',
+				null,
+				null,
 				'#{ u.nom() }',
 				'#{ u.motDePasse() }',
 				#{ u.dateInscription() },
@@ -122,17 +157,41 @@ class GestionnaireUtilisateur
 	end
 	
 	##
+	# Fait persister les données d'un utilisateur
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont il faut faire persister les informations
+	#
+	# private_class_method :update
+	def update(u)
+		self.execute ("
+			UPDATE utilisateur
+			SET (
+				uuid = #{ u.uuid() }',
+				nom = '#{ u.nom() }',
+				mot_de_passe = '#{ u.motDePasse() }',
+				date_inscription = #{ u.dateInscription() },
+				date_derniere_synchronisation = #{ u.dateDerniereSync() },
+				options = '#{ u.option() }',
+				type = #{ u.type() }
+			)
+			WHERE id = #{ u.getId() }
+			LIMIT 1;
+		")
+	end
+	
+	##
 	# Met à jour un utilisateur
 	#
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut mettre à jour les informations
 	#
-	def insert(u)
-		self.execute ("
-			DELETE FROM utilisateur
-			WHERE id = #{ u.getId() }
-			LIMIT 1;
-		")
+	def persist(u)
+		if (u.id == nil)
+			self.insert(u)
+		else
+			self.update(u)
+		end
 	end
 	
 	##
