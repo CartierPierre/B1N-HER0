@@ -19,12 +19,20 @@ end
 
 # Test ajout d'un utilisateur
 me = Utilisateur.creer('Buddies', 'azerty', Utilisateur::OFFLINE)
-gestionnaireUtilisateur.persist(me)
+begin
+	gestionnaireUtilisateur.persist(me)
+	rescue SQLite3::ConstraintException => err
+		puts "L'utilisateur Buddies existe déjà !"
+end
 
-# Test de connexion
-# client = gestionnaireUtilisateur.getForAuthentication('toto0', 'azerty')
-# if ( client == nil )
-	# puts "Les identifiants ne sont pas correctes"
-# else
-	# puts "Bonjour #{ client.nom }, votre id est #{ client.id }"
-# end
+# Test de connexion d'un client
+client = gestionnaireUtilisateur.getForAuthentication('toto0', 'azerty')
+if ( client == nil )
+	puts "Les identifiants ne sont pas correctes"
+else
+	puts "Bonjour #{ client.nom }, votre id est #{ client.id }"
+end
+
+# Test mise à jour client
+# client.type = 0
+# gestionnaireUtilisateur.persist(me)

@@ -35,34 +35,22 @@ class GestionnaireUtilisateur
 	#
 	private_class_method :new
 	def initialize()
-		begin
-			puts "Ouverture de la BDD ..."
+		# begin
+			# puts "Ouverture de la BDD ..."
 			@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
-			rescue SQLite3::Exception => err
-				puts "Erreur"
-				puts err
-				abort
-			ensure
-				puts "OK"
-		end
+			# rescue SQLite3::Exception => err
+				# puts "Erreur BDD"
+				# puts err
+				# abort
+		# end
+		# puts "BDD OK"
 	end
 	
 	##
 	# Exécute une requête SQL
 	#
 	def execute(requete)
-		resultat = nil
-		begin
-			puts "Execution de la requete : #{requete}"
-			resultat = @bddLocal.execute(requete)
-			rescue SQLite3::Exception => err
-				puts "Erreur"
-				puts err
-				abort
-			ensure
-				puts "OK"
-		end
-		return resultat
+		return @bddLocal.execute(requete)
 	end
 	# private_class_method :execute
 	
