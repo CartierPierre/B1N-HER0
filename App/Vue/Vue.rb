@@ -11,6 +11,9 @@ class Vue
     	@fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
     	@fenetre.set_resizable(false)
         @controleur=controleur
+        # @fenetre.signal_connect('destroy') {
+            # Gtk.main_quit
+        # }
     end
 
     def actualiser()

@@ -75,6 +75,12 @@ class VuePartie < Vue
         @buttonQuitter = Button.new(:label => "Quitter", :mnemonic => nil)
         @buttonQuitter.set_image(Image.new(:file => './Vue/img/exit.png'))
 
+        @buttonSave.signal_connect('clicked')  { onBtnSaveClicked }
+        @buttonLoad.signal_connect('clicked')  { onBtnLoadClicked }
+        @buttonOptions.signal_connect('clicked')  { onBtnOptionsClicked }
+        @buttonRegles.signal_connect('clicked')  { onBtnReglesClicked }
+        @buttonQuitter.signal_connect('clicked')  { onBtnQuitterClicked }
+
         boxNav.add(@buttonSave)
         boxNav.add(@buttonLoad)
         boxNav.add(@buttonOptions)
@@ -158,23 +164,20 @@ class VuePartie < Vue
         self.actualiser()
     end
 
-    def onBtnUndoClicked
-        tabCoord = @modele.historiqueUndo()
-        @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[1],tabCoord[0]).etat())
-        self.actualiser()  
-    end
-
-    def onBtnRedoClicked
-        tabCoord = @modele.historiqueRedo()
-        @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[1],tabCoord[0]).etat())
-        self.actualiser() 
-    end
-
-    def onBtnConseilClicked
+    # Signaux des boutons de navigation
+    def onBtnSaveClicked 
 
     end
+    def onBtnLoadClicked 
 
-    def onBtnRestartClicked
+    end
+    def onBtnOptionsClicked
+
+    end
+    def onBtnReglesClicked 
+
+    end
+    def onBtnQuitterClicked
 
     end
 
@@ -187,6 +190,31 @@ class VuePartie < Vue
 
             self.actualiser()            
         end
+    end
+
+    # Boutons du footer
+    def onBtnUndoClicked
+        tabCoord = @modele.historiqueUndo()
+        if(tabCoord)
+            @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[1],tabCoord[0]).etat())
+            self.actualiser() 
+        end 
+    end
+
+    def onBtnRedoClicked
+        tabCoord = @modele.historiqueRedo()
+        if(tabCoord)
+            @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[1],tabCoord[0]).etat())
+            self.actualiser() 
+        end
+    end
+
+    def onBtnConseilClicked
+
+    end
+
+    def onBtnRestartClicked
+
     end
 
 end
