@@ -31,10 +31,12 @@ class Partie
     # === Argument
     # *coup* - Le coup joué.
     def historiqueAdd(coup)
-        @historique.push(coup)
+        0.upto((@historique.size()-2) - @historiqueCurseur) do
+            @historique.pop()
+        end
         @doneRedo = false
+        @historique.push(coup)
         @historiqueCurseur = @historique.size() - 1
-        print "PileSize = #{@historique.size()} et Cursor = #{@historiqueCurseur}\n"
         self
     end
 
@@ -53,21 +55,25 @@ class Partie
             end
 
             @grille.appliquerCoup(coup.x, coup.y, coup.etat)
+
+            return Array[ coup.x, coup.y ]
         end
-        
-        return [ coup.x, coup.y ]
+
+        return nil
     end
 
     # Efface un coup jouer
     def historiqueRedo()
-        if(@historique.size > 0 && @historiqueCurseur < @historique.size() - 1)
+        if(@historique.size > 0 && @historiqueCurseur < (@historique.size() - 1))
             @historiqueCurseur += 1
             coup = @historique[@historiqueCurseur]
             @grille.appliquerCoup(coup.x, coup.y, coup.etat)
             @doneRedo = true
-        end
         
-        return [ coup.x, coup.y ]
+           return Array[ coup.x, coup.y ]
+        end
+
+        return nil
     end
 
     #Permet de jouer un coup

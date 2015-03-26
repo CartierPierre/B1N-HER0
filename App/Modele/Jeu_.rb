@@ -44,11 +44,11 @@ class Jeu
         @partie.historiqueRedo()
         print "Redo :\n"
         to_s
-        @partie.historiqueUndo()
-        print "Undo :\n"
+        jouerEn(2,2)
         to_s
-        @partie.historiqueUndo()
-        print "Undo :\n"
+        @partie.historiqueRedo()
+        print "Redo :\n"
+        to_s
     end
 
     def to_s()
