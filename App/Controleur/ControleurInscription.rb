@@ -7,8 +7,8 @@ class ControleurInscription < Controleur
 	end
 
 
-    def valider()
-        @gestionnaireUtilisateur.insert(@utilisateur)
+    def valider(pseudo,password)
+        @utilisateur = Utilisateur.creer(pseudo,password,Utilisateur::ONLINE)
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 

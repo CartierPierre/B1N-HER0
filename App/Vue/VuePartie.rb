@@ -63,7 +63,7 @@ class VuePartie < Vue
         @buttonMenu = Button.new()
         @buttonMenu.set_image(Image.new(:file => './Vue/img/menu.png'))
         boxNav.add(@buttonMenu)
-        boxNav.add(Label.new("<strong>Niveau 1" + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s() + "</strong>"))
+        boxNav.add(Label.new("Niveau 1" + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s()))
 
         # Menu du haut
         boxHeader = Box.new(:horizontal)
