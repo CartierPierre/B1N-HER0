@@ -4,7 +4,11 @@ class VuePartie < Vue
     @temps
 
     # Boutons du menu de navigation
-    @buttonMenu
+    @buttonSave
+    @buttonLoad
+    @buttonOptions
+    @buttonRegles
+    @buttonQuitter
 
     # Boutons du menu en haut
     @buttonHypothese
@@ -28,14 +32,17 @@ class VuePartie < Vue
         def initialize(x,y)
             super()
             @x,@y = x,y
+            self.set_size_request(32, 32)
         end
 
-        def setImageTuile1()
-            self.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
-        end
-
-        def setImageTuile2()
-            self.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+        def setImageTuile(etat)
+            if (etat == 1)
+                self.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
+            elsif (etat == 2)
+                self.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+            else
+                self.set_image(Image.new())
+            end    
         end
 
         def setImageTuile1Lock()
@@ -44,10 +51,6 @@ class VuePartie < Vue
 
         def setImageTuile2Lock()
             self.set_image(Image.new(:file => './Vue/img/CaseBleue32Lock.png'))
-        end
-
-        def setImageTuileVide()
-            self.set_image(Image.new())
         end
     end
 
@@ -60,10 +63,25 @@ class VuePartie < Vue
 
         # Navigation
         boxNav = Box.new(:horizontal)
-        @buttonMenu = Button.new()
-        @buttonMenu.set_image(Image.new(:file => './Vue/img/menu.png'))
-        boxNav.add(@buttonMenu)
-        boxNav.add(Label.new("Niveau 1" + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s()))
+
+        @buttonSave = Button.new(:label => "Sauvegarder", :mnemonic => nil)
+        @buttonSave.set_image(Image.new(:file => './Vue/img/save.png'))
+        @buttonLoad = Button.new(:label => "Charger", :mnemonic => nil)
+        @buttonLoad.set_image(Image.new(:file => './Vue/img/load.png'))
+        @buttonOptions = Button.new(:label => "Options", :mnemonic => nil)
+        @buttonOptions.set_image(Image.new(:file => './Vue/img/options.png'))
+        @buttonRegles = Button.new(:label => "Règles du jeu", :mnemonic => nil)
+        @buttonRegles.set_image(Image.new(:file => './Vue/img/regles.png'))
+        @buttonQuitter = Button.new(:label => "Quitter", :mnemonic => nil)
+        @buttonQuitter.set_image(Image.new(:file => './Vue/img/exit.png'))
+
+        boxNav.add(@buttonSave)
+        boxNav.add(@buttonLoad)
+        boxNav.add(@buttonOptions)
+        boxNav.add(@buttonRegles)
+        boxNav.add(@buttonQuitter)
+
+        # boxNav.add(Label.new("Niveau " + @modele.niveau().difficulte().to_s() + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s()))
 
         # Menu du haut
         boxHeader = Box.new(:horizontal)
@@ -74,9 +92,9 @@ class VuePartie < Vue
         @buttonAnnulerHypo = Button.new(:label => "Annuler", :mnemonic => nil)
         @buttonAnnulerHypo.set_image(Image.new(:file => './Vue/img/annuler.png'))
 
-        boxHeader.pack_start(@buttonHypothese, :expand => true, :fill => false, :padding => 5)
-        boxHeader.pack_start(@buttonValiderHypo, :expand => true, :fill => false, :padding => 5)
-        boxHeader.pack_start(@buttonAnnulerHypo, :expand => true, :fill => false, :padding => 5)
+        boxHeader.add(@buttonHypothese)
+        boxHeader.add(@buttonValiderHypo)
+        boxHeader.add(@buttonAnnulerHypo)
 
         @imageTuile1 = Image.new(:file => './Vue/img/CaseRouge32.png')
         @imageTuile2 = Image.new(:file => './Vue/img/CaseBleue32.png')
@@ -84,13 +102,11 @@ class VuePartie < Vue
         # Création de la grille
         boxJeu = Box.new(:horizontal)
         frame = Table.new(@tailleGrille,@tailleGrille,false)
-        @casesJeu = []
+        @casesJeu = Array.new(@tailleGrille) { Array.new(@tailleGrille) }
 
         0.upto(@tailleGrille-1) do |ligne|
             0.upto(@tailleGrille-1) do |colonne|
                 caseTemp = CaseJeu.new(colonne,ligne)
-            	
-                caseTemp.set_size_request(32, 32)
 
             	if @modele.grille().getTuile(colonne,ligne).etat() == 1
             		caseTemp.setImageTuile1Lock()
@@ -101,7 +117,7 @@ class VuePartie < Vue
                 caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
             	frame.attach(caseTemp,ligne,ligne+1,colonne,colonne+1)
 
-                @casesJeu.push(caseTemp)
+                @casesJeu[ligne][colonne] = caseTemp
             end
         end
 
@@ -143,11 +159,15 @@ class VuePartie < Vue
     end
 
     def onBtnUndoClicked
-
+        tabCoord = @modele.historiqueUndo()
+        @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[1],tabCoord[0]).etat())
+        self.actualiser()  
     end
 
     def onBtnRedoClicked
-
+        tabCoord = @modele.historiqueRedo()
+        @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[1],tabCoord[0]).etat())
+        self.actualiser() 
     end
 
     def onBtnConseilClicked
@@ -163,16 +183,9 @@ class VuePartie < Vue
 
             @modele.jouerCoup(caseJeu.x,caseJeu.y)
 
-            if (@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 1)
-                caseJeu.setImageTuile1()
-            elsif (@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat() == 2)
-                caseJeu.setImageTuile2()
-            else
-                caseJeu.setImageTuileVide()
-            end      
+            caseJeu.setImageTuile(@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat())
 
-            self.actualiser()
-            
+            self.actualiser()            
         end
     end
 
