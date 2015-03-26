@@ -127,12 +127,12 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut mettre à jour les informations
 	#
-	def insert(u)
-		self.execute ("
-			DELETE FROM utilisateur
-			WHERE id = #{ u.getId() }
-			LIMIT 1;
-		")
+	def update(u)
+		# self.execute ("
+			# DELETE FROM utilisateur
+			# WHERE id = #{ u.getId() }
+			# LIMIT 1;
+		# ")
 	end
 	
 	##
