@@ -118,19 +118,36 @@ class Grille
 
     # Applique un couyp joue sur la grille
     #
-    # === param
+    # === Arguments
+    # *x* - La coordonnée x du coup.
+    # *y* - La coordonnée y du coup.
+    # *etat* - Le nouvel état de la grille.
     def appliquerCoup(x, y, etat)
         self.setTuile(x, y, etat)
     end
 
+    # Créer une nouvelle grille en ce basant sur la grille donnée en paramètre.
+    #
+    # === Argument
+    # *grille* - La grille à copier.
     def copier(grille)
         0.upto(self.taille() - 1) do |i|
             0.upto(self.taille() - 1) do |j|
                 self.setTuile(i, j, grille.getTuile(i, j).etat)
             end
-            print "\n"
         end
 
         self
+    end
+
+    def Grille.dupliquer(grille)
+        nouvelleGrille = Grille.creer(grille.taille())
+        0.upto(grille.taille() - 1) do |i|
+            0.upto(grille.taille() - 1) do |j|
+                nouvelleGrille.setTuile(i, j, grille.getTuile(i, j).etat)
+            end
+        end
+
+        return nouvelleGrille;
     end
 end

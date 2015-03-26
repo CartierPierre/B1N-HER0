@@ -42,3 +42,4 @@ class Score
     def scoreFinal(tailleGrille, diffGrille)
         return ((tailleGrille**diffGrille)/(1+tempsTotal+(2**nbConseils)*10+(2**nbAides)*30+(nbCoups/10)**2))
     end
+end
