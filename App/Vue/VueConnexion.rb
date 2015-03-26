@@ -42,8 +42,9 @@ class VueConnexion < Vue
         @controleur.annuler()
 	end
 
-    def mauvaisIdentifiants()
-        popup=Window.new(Gtk::Window::POPUP)
-        popup.add(Button.new(:label => "test"))
+    def mauvaisIdentifiants
+        popup = Gtk::MessageDialog.new(:parent => @fenetre,:flags => :destroy_with_parent,:type => :info,:buttons_type => :close, :message => "Il n'existe pas de compte associé à ce pseudo. Voulez-vous créer un compte avec ce pseudo ?")
+        popup.run
+        popup.destroy
     end
 end

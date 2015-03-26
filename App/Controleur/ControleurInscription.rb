@@ -9,7 +9,12 @@ class ControleurInscription < Controleur
 
     def valider(pseudo,password)
         @utilisateur = Utilisateur.creer(pseudo,password,Utilisateur::ONLINE)
-        changerControleur(ControleurMenuPrincipal.new(@jeu))
+        begin
+            @gestionnaireUtilisateur.persist(@utilisateur)
+            rescue SQLite3::ConstraintException => erreur
+                @vue.utilisateurExistant(pseudo)
+        end
+                changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 
     def annuler()

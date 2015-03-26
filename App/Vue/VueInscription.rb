@@ -7,6 +7,7 @@ class VueInscription < Vue
         vbox3 = Box.new(:vertical)
         hbox1 = Box.new(:horizontal)
         hbox2 = Box.new(:horizontal)
+        hbox3 = Box.new(:horizontal)
 		buttonValider = Button.new(:stock_id => Stock::APPLY)
 		buttonAnnuler = Button.new(:stock_id => Stock::CANCEL)
         @entryPseudo = Entry.new
@@ -40,5 +41,9 @@ class VueInscription < Vue
 	def onBtnAnnulerClicked
         @controleur.annuler()
 	end
+
+    def utilisateurExistant(pseudo)
+
+    end
 
 end
