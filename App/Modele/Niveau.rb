@@ -3,12 +3,12 @@ class Niveau
 
     private_class_method :new
 
-    def Niveau.creer(id, uuid, grilleInitial, grilleSolution, taille)
-        new(id, uuid, grilleInitial, grilleSolution, taille)
+    def Niveau.creer(id, uuid, grilleInitial, grilleSolution, difficulte, taille)
+        new(id, uuid, grilleInitial, grilleSolution, difficulte, taille)
     end
 
-    def initialize(id, uuid, grilleInitial, grilleSolution, taille)
-        @id, @uuid, @grilleInitial, @grilleSolution, @taille = id, uuid, grilleInitial, grilleSolution, taille
+    def initialize(id, uuid, grilleInitial, grilleSolution, difficulte, taille)
+        @id, @uuid, @grilleInitial, @grilleSolution, @difficulte, @taille = id, uuid, grilleInitial, grilleSolution, difficulte, taille
     end
 
     # Test si la grille est une grille valide
