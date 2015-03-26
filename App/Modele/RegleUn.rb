@@ -1,9 +1,9 @@
 load 'Grille.rb'
 class RegleUn
 		
-		attr_reader:ligne, :colonne, :grille
+	attr_reader:ligne, :colonne, :grille
 		
-		private_class_method :new
+	private_class_method :new
     	def RegleUn.creer(grille)
         	new(grille)
     	end
