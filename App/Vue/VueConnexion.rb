@@ -44,5 +44,6 @@ class VueConnexion < Vue
 
     def mauvaisIdentifiants()
         popup=Window.new(Gtk::Window::POPUP)
+        popup.add(Button.new(:label => "test"))
     end
 end

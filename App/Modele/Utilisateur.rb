@@ -11,17 +11,19 @@ class Utilisateur
 	
 	### Méthodes de classe
 	
-	def Utilisateur.creer()
-        new(nil, nil, nil, nil, nil, nil, nil, nil, nil)
+#	def Utilisateur.creer()
+#        new(nil, nil, nil, nil, nil, nil, nil, nil, nil)
+#    end
+	
+    def Utilisateur.creer(*arguments)
+        if arguments.length() == 3
+            new(nil, nil, arguments[0], arguments[1], nil, nil, arguments[2], nil, nil)
+        end
     end
 	
-    def Utilisateur.creer(nom, motDePasse, type)
-        new(nil, nil, nom, motDePasse, nil, nil, type, nil, nil)
-    end
-	
-	def Utilisateur.creer(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
-        new(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
-    end
+#	def Utilisateur.creer(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
+#        new(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
+#    end
 	
 	### Méthodes d'instances
 	
