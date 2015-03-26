@@ -6,8 +6,8 @@ class RegleUn
 	attr_reader:ligne, :colonne, :grille
 		
 	private_class_method :new
-    	def RegleUn.creer(grille)
-        	new(grille)
+    	def RegleUn.creer()
+        	new()
     	end
     	
     	def initialize()
