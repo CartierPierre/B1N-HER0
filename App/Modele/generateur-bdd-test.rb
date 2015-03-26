@@ -29,7 +29,7 @@ begin
 		CREATE TABLE IF NOT EXISTS `utilisateur` (
 			`id`								INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			`uuid`								INTEGER UNIQUE,
-			`nom`								TEXT NOT NULL,
+			`nom`								TEXT NOT NULL UNIQUE,
 			`mot_de_passe`						TEXT NOT NULL,
 			`date_inscription`					INTEGER NOT NULL,
 			`date_derniere_synchronisation`		INTEGER NOT NULL,
