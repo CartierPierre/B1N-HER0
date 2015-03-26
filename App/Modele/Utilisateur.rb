@@ -12,33 +12,30 @@ class Utilisateur
 	### Méthodes de classe
 	
 	def Utilisateur.creer()
-        new()
+        new(nil, nil, nil, nil, nil, nil, nil, nil, nil)
     end
 	
     def Utilisateur.creer(nom, motDePasse, type)
-        new(nom, motDePasse, type)
+        new(nil, nil, nom, motDePasse, nil, nil, type, nil, nil)
+    end
+	
+	def Utilisateur.creer(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
+        new(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
     end
 	
 	### Méthodes d'instances
 	
 	private_class_method :new
-    def initialize()
-		@id = nil
-		@uuid = nil
-		@nom = ""
-		@motDePasse = ""
-		@dateInscription = ""
-		@dateDerniereSync = nil
-		@type = 0
-		@statistique = nil
-		@option = nil
-    end
-	
-	def initialize(nom, motDePasse, type)
-		self.initialize()
+    def initialize(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
+		@id = id
+		@uuid = uuid
 		@nom = nom
 		@motDePasse = motDePasse
+		@dateInscription = dateInscription
+		@dateDerniereSync = dateDerniereSync
 		@type = type
+		@statistique = statistique
+		@option = option
     end
 	
 end
