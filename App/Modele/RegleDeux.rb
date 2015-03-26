@@ -24,7 +24,7 @@ class RegleDeux
     	j = 0
 		while i < @ligne do
     		while j < @colonne do
- 				if grille.getTuile(i,j).etat() == 1 && grille.getTuile(i,j+1).etat() == 1 && grille.getTuile(i,j+2).etat() == 1
+ 			if grille.getTuile(i,j).etat() == 1 && grille.getTuile(i,j+1).etat() == 1 && grille.getTuile(i,j+2).etat() == 1
  				#Meme si plus que trois, il retourne faux 
  					return false
     			end
