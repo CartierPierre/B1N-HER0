@@ -24,7 +24,7 @@ class Jeu
                     1,
                     6
                 )
-        @partie = Partie.creer( Utilisateur.creer(1, 1, "Mr Test", "root", Time.new(), Time.new(), 1, 2, 3), niveau)
+        @partie = Partie.creer( "lol", niveau)#Utilisateur.creer("Mr Test", "root", 3), niveau)
     end
 
     def jouerEn(x, y)
@@ -33,10 +33,25 @@ class Jeu
 
     def test()
         @partie.historiqueUndo()
+        print "Undo :\n"
+        to_s
+        @partie.historiqueUndo()
+        print "Undo :\n"
+        to_s
+        @partie.historiqueRedo()
+        print "Redo :\n"
+        to_s
+        @partie.historiqueRedo()
+        print "Redo :\n"
+        to_s
+        @partie.historiqueUndo()
+        print "Undo :\n"
+        to_s
+        @partie.historiqueUndo()
+        print "Undo :\n"
     end
 
     def to_s()
-        puts "Voici le takuzu: "
         0.upto(@partie.grille.taille() - 1) do |i|
             0.upto(@partie.grille.taille() - 1) do |j|
                 print "#{@partie.grille.getTuile(i, j).etat}"

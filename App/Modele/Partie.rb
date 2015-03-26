@@ -4,6 +4,8 @@ class Partie
     attr_reader :grille, :niveau, :score, :utilisateur
     @historique
     @dateDebutPartie
+    @historiqueCurseur
+    @doneRedo
 
     # Méthode de création d'une partie
     #
@@ -21,6 +23,7 @@ class Partie
         @historique = Array.new()
         @dateDebutPartie = Time.new()
         @score = Score.creer(@utilisateur)
+        @historiqueCurseur = 0
     end
 
     # Enregistre un coup est l'état de la tuile avant ce coup
@@ -29,16 +32,42 @@ class Partie
     # *coup* - Le coup joué.
     def historiqueAdd(coup)
         @historique.push(coup)
+        @doneRedo = false
+        @historiqueCurseur = @historique.size() - 1
+        print "PileSize = #{@historique.size()} et Cursor = #{@historiqueCurseur}\n"
         self
     end
 
     # Efface un coup jouer
     def historiqueUndo()
-        if(@historique.size > 0)
-            coup = @historique.pop()
+        if(@historique.size > 0 && @historiqueCurseur >= 0)
+            coup = @historique[@historiqueCurseur]
+
+            # Sauvegarde le 
+            if(@historiqueCurseur == @historique.size() - 1 && !@doneRedo)
+                @historique.push(Coup.creer(coup.x, coup.y, @grille.getTuile(coup.x, coup.y).etat()))
+            end
+
+            if(@historiqueCurseur > 0)
+                @historiqueCurseur -= 1
+            end
+
             @grille.appliquerCoup(coup.x, coup.y, coup.etat)
         end
-        self
+        
+        return [ coup.x, coup.y ]
+    end
+
+    # Efface un coup jouer
+    def historiqueRedo()
+        if(@historique.size > 0 && @historiqueCurseur < @historique.size() - 1)
+            @historiqueCurseur += 1
+            coup = @historique[@historiqueCurseur]
+            @grille.appliquerCoup(coup.x, coup.y, coup.etat)
+            @doneRedo = true
+        end
+        
+        return [ coup.x, coup.y ]
     end
 
     #Permet de jouer un coup
