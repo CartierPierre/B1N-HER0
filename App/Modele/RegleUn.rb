@@ -12,7 +12,7 @@ class RegleUn
     		new()
     	end
 	
-	    def appliquer(grille)
+	def appliquer(grille)
 		@grille = grille
     		@ligne = grille.ligne()
     		@colonne = grille.colonne()
