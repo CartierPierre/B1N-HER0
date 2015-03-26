@@ -17,10 +17,14 @@ users.each do |u|
 	puts " - #{u.nom}"
 end
 
+# Test ajout d'un utilisateur
+me = Utilisateur.creer('Buddies', 'azerty', Utilisateur::OFFLINE)
+gestionnaireUtilisateur.persist(me)
+
 # Test de connexion
-client = gestionnaireUtilisateur.getForAuthentication('toto0', 'azerty')
-if ( client == nil )
-	puts "Les identifiants ne sont pas correctes"
-else
-	puts "Bonjour #{ client.nom }, votre id est #{ client.id }"
-end
+# client = gestionnaireUtilisateur.getForAuthentication('toto0', 'azerty')
+# if ( client == nil )
+	# puts "Les identifiants ne sont pas correctes"
+# else
+	# puts "Bonjour #{ client.nom }, votre id est #{ client.id }"
+# end

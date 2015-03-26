@@ -144,8 +144,8 @@ class GestionnaireUtilisateur
 		self.execute ("
 			INSERT INTO utilisateur
 			VALUES (
-				#{ u.id() },
-				#{ u.uuid() }',
+				null,
+				null,
 				'#{ u.nom() }',
 				'#{ u.motDePasse() }',
 				#{ u.dateInscription() },
