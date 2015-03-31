@@ -11,6 +11,7 @@ require_relative './Controleur/ControleurNouvellePartie'
 require_relative './Controleur/ControleurPartie'
 
 require_relative './Vue/Vue'
+require_relative './Vue/Langue'
 require_relative './Vue/VueConnexion'
 require_relative './Vue/VueDemarrage'
 require_relative './Vue/VueInscription'

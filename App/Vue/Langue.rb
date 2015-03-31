@@ -19,7 +19,13 @@ class Langue
             annuler: "Annuler",
             repeter: "Répéter",
             conseil: "Conseil",
-            recommencer: "Recommencer"
+            recommencer: "Recommencer",
+            pseudo: "Pseudo",
+            motDePasse: "Mot de passe",
+            inscription: "Inscription",
+            connexion: "Connexion",
+            oui: "Oui",
+            non: "Non"
         }
 
         @langueEn = {
@@ -33,9 +39,15 @@ class Langue
             annuler: "Undo",
             repeter: "Redo",
             conseil: "Advice",
-            recommencer: "Restart"
+            recommencer: "Restart",
+            pseudo: "Pseudo",
+            motDePasse: "Password",
+            inscription: "Sign up",
+            connexion: "Login",
+            oui: "Yes",
+            non: "No"
         }
-        @langueActuelle = @langueEn
+        @langueActuelle = @langueFr
 	end
 
 	def setLangueFr()
