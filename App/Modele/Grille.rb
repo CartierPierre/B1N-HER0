@@ -150,4 +150,13 @@ class Grille
 
         return nouvelleGrille;
     end
+
+    def afficher()
+        0.upto(self.taille() - 1) do |i|
+            0.upto(self.taille() - 1) do |j|
+                print "#{@grille[i][j].etat}"
+            end
+            print "\n"
+        end
+    end
 end
