@@ -5,12 +5,14 @@ class Controleur
     @modele
     @gestionnaireUtilisateur
     @utilisateur
+    @options
 
     public_class_method :new
 
     def initialize(jeu)
         @jeu = jeu
         @gestionnaireUtilisateur =GestionnaireUtilisateur.instance()
+        @options = Option.creer()
     end
 
     def changerControleur(controleur)
