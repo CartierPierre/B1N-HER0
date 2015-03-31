@@ -1,5 +1,6 @@
 class Coup
-    attr_reader :x, :y, :etat
+    attr_reader :x, :y
+    attr_accessor :etat
 
     private_class_method :new
     def Coup.creer(x, y, etat)
