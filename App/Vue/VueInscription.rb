@@ -1,6 +1,6 @@
 class VueInscription < Vue
 
-    def initialize(modele,titre,controleur)
+    def initialize(modele,titre,controleur,pseudo)
         super(modele,titre,controleur)
         vbox1 = Box.new(:vertical)
         vbox2 = Box.new(:vertical)
@@ -11,6 +11,7 @@ class VueInscription < Vue
 		buttonValider = Button.new(:stock_id => Stock::APPLY)
 		buttonAnnuler = Button.new(:stock_id => Stock::CANCEL)
         @entryPseudo = Entry.new
+        @entryPseudo.text = pseudo
         @entryPassword = Entry.new
         vbox2.pack_start(Label.new("Pseudo",true))
         vbox2.pack_end(Label.new("Mot De Passe",true))

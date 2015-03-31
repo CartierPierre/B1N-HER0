@@ -8,14 +8,22 @@ class ControleurConnexion < Controleur
 
     def valider(pseudo,password)
         if (@utilisateur = @gestionnaireUtilisateur.getForAuthentication(pseudo,password)) == nil
-            @vue.mauvaisIdentifiants()
+            @vue.utilisateurInexistant()
         else
-            changerControleur(ControleurMenuPrincipal.new(@jeu))
+            changerControleur(ControleurMenuPrincipal.new(@jeu,@utilisateur))
         end
     end
 
     def annuler()
         changerControleur(ControleurDemarrage.new(@jeu))
+    end
+
+    def oui(pseudo)
+        changerControleur(ControleurInscription.new(@jeu,pseudo))
+    end
+
+    def non()
+        changerControleur(ControleurConnexion.new(@jeu))
     end
 
 
