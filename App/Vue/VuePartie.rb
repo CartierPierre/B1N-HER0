@@ -64,15 +64,15 @@ class VuePartie < Vue
         # Navigation
         boxNav = Box.new(:horizontal)
 
-        @buttonSave = Button.new(:label => "Sauvegarder", :mnemonic => nil)
+        @buttonSave = Button.new(:label => @langue.langueActuelle[:sauvegarder], :mnemonic => nil)
         @buttonSave.set_image(Image.new(:file => './Vue/img/save.png'))
-        @buttonLoad = Button.new(:label => "Charger", :mnemonic => nil)
+        @buttonLoad = Button.new(:label => @langue.langueActuelle[:charger], :mnemonic => nil)
         @buttonLoad.set_image(Image.new(:file => './Vue/img/load.png'))
-        @buttonOptions = Button.new(:label => "Options", :mnemonic => nil)
+        @buttonOptions = Button.new(:label => @langue.langueActuelle[:options], :mnemonic => nil)
         @buttonOptions.set_image(Image.new(:file => './Vue/img/options.png'))
-        @buttonRegles = Button.new(:label => "Règles du jeu", :mnemonic => nil)
+        @buttonRegles = Button.new(:label => @langue.langueActuelle[:regles], :mnemonic => nil)
         @buttonRegles.set_image(Image.new(:file => './Vue/img/regles.png'))
-        @buttonQuitter = Button.new(:label => "Quitter", :mnemonic => nil)
+        @buttonQuitter = Button.new(:label => @langue.langueActuelle[:quitter], :mnemonic => nil)
         @buttonQuitter.set_image(Image.new(:file => './Vue/img/exit.png'))
 
         @buttonSave.signal_connect('clicked')  { onBtnSaveClicked }
@@ -91,11 +91,11 @@ class VuePartie < Vue
 
         # Menu du haut
         boxHeader = Box.new(:horizontal)
-        @buttonHypothese = Button.new(:label => "Hypothèse", :mnemonic => "H")
+        @buttonHypothese = Button.new(:label => @langue.langueActuelle[:hypothese], :mnemonic => "H")
         @buttonHypothese.set_image(Image.new(:file => './Vue/img/hypothese.png'))
-        @buttonValiderHypo = Button.new(:label => "Valider", :mnemonic => nil)
+        @buttonValiderHypo = Button.new(:label => @langue.langueActuelle[:valider], :mnemonic => nil)
         @buttonValiderHypo.set_image(Image.new(:file => './Vue/img/valider.png'))
-        @buttonAnnulerHypo = Button.new(:label => "Annuler", :mnemonic => nil)
+        @buttonAnnulerHypo = Button.new(:label => @langue.langueActuelle[:annuler], :mnemonic => nil)
         @buttonAnnulerHypo.set_image(Image.new(:file => './Vue/img/annuler.png'))
 
         boxHeader.add(@buttonHypothese)
@@ -134,13 +134,13 @@ class VuePartie < Vue
 
         # Menu du bas
         boxFooter = Box.new(:horizontal)
-        @buttonUndo = Button.new(:label => "Annuler", :mnemonic => "Z")
+        @buttonUndo = Button.new(:label => @langue.langueActuelle[:annuler], :mnemonic => "Z")
         @buttonUndo.set_image(Image.new(:file => './Vue/img/undo.png'))
-        @buttonRedo = Button.new(:label => "Répéter", :mnemonic => "Y")
+        @buttonRedo = Button.new(:label => @langue.langueActuelle[:repeter], :mnemonic => "Y")
         @buttonRedo.set_image(Image.new(:file => './Vue/img/redo.png'))
-        @buttonConseil = Button.new(:label => "Conseil", :mnemonic => "C")
+        @buttonConseil = Button.new(:label => @langue.langueActuelle[:conseil], :mnemonic => "C")
         @buttonConseil.set_image(Image.new(:file => './Vue/img/conseil.png'))
-        @buttonRestart = Button.new(:label => "Recommencer", :mnemonic => "R")
+        @buttonRestart = Button.new(:label => @langue.langueActuelle[:recommencer], :mnemonic => "R")
         @buttonRestart.set_image(Image.new(:file => './Vue/img/restart.png'))
 
         @buttonUndo.signal_connect('clicked')  { onBtnUndoClicked }
