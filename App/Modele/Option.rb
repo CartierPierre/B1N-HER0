@@ -19,8 +19,10 @@ class Option
     def initialize()
         @tuile1=@tuileBleue
         @tuile2=@tuileRouge
-        #@langue='Vue/img/langue.lang'
+        @langue='fr'
     end
+    
+    #Deuxieme constructeur si on charge le profil
     
     def changerTuile1(couleur)# couleur est une tuile choisie par clic
         if(couleur==@tuile2)
