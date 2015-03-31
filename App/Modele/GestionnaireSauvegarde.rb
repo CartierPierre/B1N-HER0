@@ -2,10 +2,11 @@
 # La classe GestionnaireSauvegarde permet d'intéragir avec entitées Sauvegarde
 # Utilise le DP Singleton
 #
-# Version 1
+# Version 2
 #
 # Résoudre le problème des private_class_method
 # Passer la connexion BDD par une instance unique
+# Repenser attributs (insert/update non opérationnels)
 #
 class GestionnaireSauvegarde
 	
@@ -87,6 +88,105 @@ class GestionnaireSauvegarde
 		end
 		
 		return liste;
+	end
+	
+	##
+	# Recherche une sauvegarde selon son id
+	#
+	# ==== Paramètres
+	# * +id+ - (int) Id de la sauvegarde
+	#
+	# ==== Retour
+	# Renvoi un objets sauvegarde si se dernier a été trouvé. Nil si non
+	#
+	def recupererSauvegarde(id)
+		resultat = @bddLocal.execute("
+			SELECT *
+			FROM sauvegarde
+			WHERE id = #{ id }
+			LIMIT 1;
+		")
+		
+		if ( resultat.count == 0 )
+			return nil
+		end
+		
+		resultat = resultat[0]
+		return Sauvegarde.creer( resultat[0], resultat[1], resultat[2], resultat[3], resultat[4], resultat[5] )
+		
+	end
+	
+	##
+	# Fait persister les données d'un sauvegarde
+	#
+	# ==== Paramètres
+	# * +u+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
+	#
+	# private_class_method :insert
+	def insert(s)
+		# @bddLocal.execute("
+			# INSERT INTO sauvegarde
+			# VALUES (
+				# null,
+				# null,
+				# '#{ u.nom }',
+				# '#{ u.motDePasse }',
+				# { u.dateInscription },
+				# { u.dateDerniereSync },
+				# '#{ u.option }',
+				# { u.type }
+			# );
+		# ")
+		s.id = @bddLocal.last_insert_row_id
+	end
+	
+	##
+	# Fait persister les données d'une sauvegarde
+	#
+	# ==== Paramètres
+	# * +s+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
+	#
+	# private_class_method :update
+	def update(s)
+		# @bddLocal.execute("
+			# UPDATE sauvegarde
+			# SET
+				# uuid = #{ (u.uuid==nil)?"null":u.uuid },
+				# nom = '#{ u.nom }',
+				# mot_de_passe = '#{ u.motDePasse }',
+				# date_inscription = #{ u.dateInscription },
+				# date_derniere_synchronisation = #{ u.dateDerniereSync },
+				# options = '#{ u.option }',
+				# type = #{ u.type }
+			# WHERE id = #{ u.id };
+		# ")
+	end
+	
+	##
+	# Met à jour une sauvegarde
+	#
+	# ==== Paramètres
+	# * +s+ - (Sauvegarde) Sauvegarde dont il faut mettre à jour les informations
+	#
+	def persist(s)
+		if (s.id == nil)
+			self.insert(s)
+		else
+			self.update(s)
+		end
+	end
+	
+	##
+	# Supprime une sauvegarde
+	#
+	# ==== Paramètres
+	# * +s+ - (Sauvegarde) sauvegarde à supprimer
+	#
+	def delete(s)
+		@bddLocal.execute("
+			DELETE FROM sauvegarde
+			WHERE id = #{ u.id };
+		")
 	end
 	
 end

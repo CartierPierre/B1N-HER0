@@ -107,6 +107,7 @@ begin
 		CREATE TABLE IF NOT EXISTS `sauvegarde` (
 			`id`							INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			`uuid`							INTEGER UNIQUE,
+			`description`					TEXT NOT NULL,
 			`date_creation`					INTEGER NOT NULL,
 			`contenu`						TEXT NOT NULL,
 			`id_utilisateur`				INTEGER NOT NULL,
@@ -128,9 +129,9 @@ begin
 	puts "Insertion de sauvegardes ..."
 	bdd.execute("
 		INSERT INTO sauvegarde VALUES
-		(NULL, NULL, 0, 'SERIALISATION', 1, 1),
-		(NULL, NULL, 0, 'SERIALISATION', 1, 2),
-		(NULL, NULL, 0, 'SERIALISATION', 2, 3);
+		(NULL, NULL, 'Description 0', 0, 'SERIALISATION_CONTENU', 1, 1),
+		(NULL, NULL, 'Description 1', 0, 'SERIALISATION_CONTENU', 1, 2),
+		(NULL, NULL, 'Description 2', 0, 'SERIALISATION_CONTENU', 2, 3);
 	")
 	rescue SQLite3::Exception => err
 		puts "Erreur"

@@ -27,5 +27,9 @@ puts "L'utilisateur #{ utilisateur.nom } à #{nbSauvegardes} sauvegarde(s)"
 # Lister les sauvegardes d'un utilisateur
 listeSauvegardes = gs.recupererSauvegardeUtilisateur(utilisateur, 0, 10)
 listeSauvegardes.each do |sauvegarde|
-	puts " - #{sauvegarde.titre}"
+	puts " - #{sauvegarde.description}"
 end
+
+# Récupèrer une sauvegarde
+sauvegarde = gs.recupererSauvegarde(1)
+puts "La sauvegarde avec l'id 1 a pour description : #{ sauvegarde.description }"

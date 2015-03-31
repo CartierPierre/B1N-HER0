@@ -1,13 +1,13 @@
 ##
 # Classe Sauvegarde
 #
-# Version 2
+# Version 3
 #
 class Sauvegarde
 
 	### Attributs d'instances
 	
-    attr_reader :id, :uuid, :utilisateur, :titre, :dateCreation, :partie
+    attr_reader :id, :uuid, :utilisateur, :description, :dateCreation, :partie
 	
 	### Méthodes de classe
 	
@@ -31,11 +31,11 @@ class Sauvegarde
 	# Constructeur
 	#
 	private_class_method :new
-    def initialize(id, uuid, utilisateur, titre, dateCreation, partie)
+    def initialize(id, uuid, utilisateur, description, dateCreation, partie)
         @id = id
 		@uuid = uuid
 		@utilisateur = utilisateur
-		@titre = titre
+		@description = description
 		@dateCreation = dateCreation
 		@partie = id
     end
