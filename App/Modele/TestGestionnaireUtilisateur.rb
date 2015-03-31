@@ -1,3 +1,9 @@
+##
+# Script de test pour la classe GestionnaireUtilisateur
+#
+# Version 4
+#
+
 # Dépendances
 require "sqlite3"
 require "./GestionnaireUtilisateur.rb"
