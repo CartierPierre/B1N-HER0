@@ -22,6 +22,7 @@ class VueMenuPrincipal < Vue
         @fenetre.add(vbox)
 
         @buttonJouer.signal_connect('clicked')  { onBtnJouerClicked }
+        @buttonOptions.signal_connect('clicked')  { onBtnOptionsClicked }
         @buttonQuitter.signal_connect('clicked')  { Gtk.main_quit }
       
         self.actualiser()
@@ -31,6 +32,8 @@ class VueMenuPrincipal < Vue
         @controleur.jouer()
 	end
 
-
+	def onBtnOptionsClicked
+		@controleur.options()
+	end
 
 end

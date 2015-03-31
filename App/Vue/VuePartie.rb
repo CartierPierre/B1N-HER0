@@ -196,7 +196,7 @@ class VuePartie < Vue
     def onBtnUndoClicked
         tabCoord = @modele.historiqueUndo()
         if(tabCoord)
-            @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[1],tabCoord[0]).etat())
+            @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.actualiser() 
         end 
     end
@@ -204,7 +204,7 @@ class VuePartie < Vue
     def onBtnRedoClicked
         tabCoord = @modele.historiqueRedo()
         if(tabCoord)
-            @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[1],tabCoord[0]).etat())
+            @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.actualiser() 
         end
     end

@@ -25,7 +25,11 @@ class Langue
             inscription: "Inscription",
             connexion: "Connexion",
             oui: "Oui",
-            non: "Non"
+            non: "Non",
+            langue: "Langue",
+            francais: "Français",
+            anglais: "Anglais",
+            retour: "Retour"
         }
 
         @langueEn = {
@@ -45,7 +49,11 @@ class Langue
             inscription: "Sign up",
             connexion: "Login",
             oui: "Yes",
-            non: "No"
+            non: "No",
+            langue: "Language",
+            francais: "French",
+            anglais: "English",
+            retour: "Back"
         }
         @langueActuelle = @langueFr
 	end

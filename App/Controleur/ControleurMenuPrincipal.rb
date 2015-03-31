@@ -10,4 +10,8 @@ class ControleurMenuPrincipal < Controleur
         changerControleur(ControleurNouvellePartie.new(@jeu))
     end
 
+    def options()
+    	changerControleur(ControleurOptions.new(@jeu))
+    end
+
 end
