@@ -1,3 +1,6 @@
+##
+# Classe Utilisateur
+#
 class Utilisateur
 	
 	### Constantes de classe
@@ -11,6 +14,9 @@ class Utilisateur
 	
 	### Méthodes de classe
 	
+	##
+	# Instancie un utilisateur
+	#
     def Utilisateur.creer(*args)
 		case args.size
 			when 0

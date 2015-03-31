@@ -2,6 +2,11 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
+# Version 4
+#
+# Résoudre le problème des private_class_method
+# Passer la connexion BDD par une instance unique
+#
 class GestionnaireUtilisateur
 	
 	### Attributs de classe
@@ -19,9 +24,9 @@ class GestionnaireUtilisateur
 	##
 	# Renvoi l'instance unique de la classe
 	#
-	def GestionnaireUtilisateur.instance()
+	def GestionnaireUtilisateur.instance
 		if(@@instance == nil)
-			@@instance = new()
+			@@instance = new
 		end
 		
 		return @@instance;
@@ -34,7 +39,7 @@ class GestionnaireUtilisateur
 	# Constructeur
 	#
 	private_class_method :new
-	def initialize()
+	def initialize
 		# begin
 			# puts "Ouverture de la BDD ..."
 			@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
@@ -47,21 +52,13 @@ class GestionnaireUtilisateur
 	end
 	
 	##
-	# Exécute une requête SQL
-	#
-	def execute(requete)
-		return @bddLocal.execute(requete)
-	end
-	# private_class_method :execute
-	
-	##
 	# Compte le nombre d'utilisateurs
 	#
 	# ==== Retour
 	# Renvoi le nombre l'utilisateurs
 	#
-	def count()
-		resultat = self.execute ("
+	def count
+		resultat = @bddLocal.execute("
 			SELECT COUNT(id)
 			FROM utilisateur;
 		")
@@ -69,7 +66,7 @@ class GestionnaireUtilisateur
 	end
 	
 	##
-	# Liste les utilisateurs (wip)
+	# Liste les utilisateurs
 	#
 	# ==== Paramètres
 	# * +offset+ - (int) Début de la liste
@@ -80,23 +77,23 @@ class GestionnaireUtilisateur
 	#
 	def getAll(offset, limit)
 	
-		resultat = self.execute ("
+		resultat = @bddLocal.execute("
 			SELECT *
 			FROM utilisateur
-			LIMIT #{limit}
-			OFFSET #{offset};
+			LIMIT #{ limit }
+			OFFSET #{ offset };
 		")
 		
-		liste = Array.new()
+		liste = Array.new
 		resultat.each do |el|
-			liste.push(Utilisateur.creer(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8]))
+			liste.push( Utilisateur.creer( el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8] ) )
 		end
 		
 		return liste;
 	end
 	
 	##
-	# Recherch un utilisateur selon selon son id
+	# Recherche un utilisateur selon son id
 	#
 	# ==== Paramètres
 	# * +id+ - (int) Id de l'utilisateur
@@ -105,15 +102,14 @@ class GestionnaireUtilisateur
 	# Renvoi un objets utilisateur si se dernier a été trouvé. Nil si non
 	#
 	def findById(id)
-		resultat = self.execute ("
+		resultat = @bddLocal.execute("
 			SELECT *
 			FROM utilisateur
 			WHERE id = #{id}
 			LIMIT 1;
 		")
 		
-		# Si l'utilisateur n'a pas été trouvé
-		if ( resultat.count() == 0 )
+		if ( resultat.count == 0 )
 			return nil
 		end
 		
@@ -129,19 +125,20 @@ class GestionnaireUtilisateur
 	#
 	# private_class_method :insert
 	def insert(u)
-		self.execute ("
+		@bddLocal.execute("
 			INSERT INTO utilisateur
 			VALUES (
 				null,
 				null,
-				'#{ u.nom() }',
-				'#{ u.motDePasse() }',
-				#{ u.dateInscription() },
-				#{ u.dateDerniereSync() },
-				'#{ u.option() }',
-				#{ u.type() }
+				'#{ u.nom }',
+				'#{ u.motDePasse }',
+				#{ u.dateInscription },
+				#{ u.dateDerniereSync },
+				'#{ u.option }',
+				#{ u.type }
 			);
 		")
+		u.id = @bddLocal.last_insert_row_id
 	end
 	
 	##
@@ -152,19 +149,17 @@ class GestionnaireUtilisateur
 	#
 	# private_class_method :update
 	def update(u)
-		self.execute ("
+		@bddLocal.execute("
 			UPDATE utilisateur
-			SET (
-				uuid = #{ u.uuid() }',
-				nom = '#{ u.nom() }',
-				mot_de_passe = '#{ u.motDePasse() }',
-				date_inscription = #{ u.dateInscription() },
-				date_derniere_synchronisation = #{ u.dateDerniereSync() },
-				options = '#{ u.option() }',
-				type = #{ u.type() }
-			)
-			WHERE id = #{ u.getId() }
-			LIMIT 1;
+			SET
+				uuid = #{ (u.uuid==nil)?"null":u.uuid },
+				nom = '#{ u.nom }',
+				mot_de_passe = '#{ u.motDePasse }',
+				date_inscription = #{ u.dateInscription },
+				date_derniere_synchronisation = #{ u.dateDerniereSync },
+				options = '#{ u.option }',
+				type = #{ u.type }
+			WHERE id = #{ u.id };
 		")
 	end
 	
@@ -189,10 +184,9 @@ class GestionnaireUtilisateur
 	# * +u+ - (Utilisateur) Utilisateur à supprimer
 	#
 	def delete(u)
-		self.execute ("
+		@bddLocal.execute("
 			DELETE FROM utilisateur
-			WHERE id = #{ u.getId() }
-			LIMIT 1;
+			WHERE id = #{ u.id };
 		")
 	end
 	
@@ -207,7 +201,7 @@ class GestionnaireUtilisateur
 	# Renvoi un object utilisateur si ce dernier à été trouvé, nil si non
 	#
 	def getForAuthentication(n, m)
-		resultat = self.execute ("
+		resultat = @bddLocal.execute("
 			SELECT *
 			FROM utilisateur
 			WHERE
@@ -216,8 +210,7 @@ class GestionnaireUtilisateur
 			LIMIT 1;
 		")
 		
-		# Si l'utilisateur n'a pas été trouvé
-		if ( resultat.count() == 0 )
+		if ( resultat.count == 0 )
 			return nil
 		end
 		

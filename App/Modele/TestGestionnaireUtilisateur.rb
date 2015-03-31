@@ -3,7 +3,7 @@ require "sqlite3"
 require "./GestionnaireUtilisateur.rb"
 require "./Utilisateur.rb"
 
-
+# On récupère l'instance du gestionnaire d'utilisateur
 gestionnaireUtilisateur = GestionnaireUtilisateur.instance()
 
 # Nombre d'utilisateurs
@@ -18,12 +18,17 @@ users.each do |u|
 end
 
 # Test ajout d'un utilisateur
-me = Utilisateur.creer('Buddies', 'azerty', Utilisateur::OFFLINE)
+testUser = Utilisateur.creer('Buddies', 'azerty', Utilisateur::OFFLINE)
+puts "Création d'un utilisateur de test #{ testUser.nom } (id:#{ testUser.id })"
 begin
-	gestionnaireUtilisateur.persist(me)
+	gestionnaireUtilisateur.persist(testUser)
 	rescue SQLite3::ConstraintException => err
-		puts "L'utilisateur Buddies existe déjà !"
+		puts "L'utilisateur #{ testUser.nom } (id:#{ testUser.id }) existe déjà !"
 end
+
+# Test de suppression de l'utilisateur
+puts "Suppression de l'utilisateur de test #{ testUser.nom } (id:#{ testUser.id })"
+gestionnaireUtilisateur.delete(testUser)
 
 # Test de connexion d'un client
 client = gestionnaireUtilisateur.getForAuthentication('toto0', 'azerty')
@@ -34,5 +39,5 @@ else
 end
 
 # Test mise à jour client
-# client.type = 0
-# gestionnaireUtilisateur.persist(me)
+client.type = 0
+gestionnaireUtilisateur.persist(client)
