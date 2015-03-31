@@ -1,9 +1,10 @@
 class ControleurMenuPrincipal < Controleur
 
-	def initialize(jeu)
+	def initialize(jeu,utilisateur)
 		super(jeu)
 		@modele = nil
 		@vue = VueMenuPrincipal.new(@modele,"Menu principal",self)
+        @utilisateur
 	end	
 
     def jouer()

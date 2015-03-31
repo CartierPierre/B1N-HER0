@@ -7,8 +7,8 @@ class VueConnexion < Vue
         vbox3 = Box.new(:vertical)
         hbox1 = Box.new(:horizontal)
         hbox2 = Box.new(:horizontal)
-		buttonValider = Button.new(:stock_id => Stock::APPLY)
-		buttonAnnuler = Button.new(:stock_id => Stock::CANCEL)
+		bouttonValider = Button.new(:stock_id => Stock::APPLY)
+		bouttonAnnuler = Button.new(:stock_id => Stock::CANCEL)
         @entryPseudo = Entry.new
         @entryPassword = Entry.new
         @entryPassword.visibility=(false)
@@ -19,17 +19,17 @@ class VueConnexion < Vue
         vbox3.pack_end(@entryPassword)
         hbox1.add(vbox2)
         hbox1.add(vbox3)
-        hbox2.pack_start(buttonValider)
-        hbox2.pack_end(buttonAnnuler)
+        hbox2.pack_start(bouttonValider)
+        hbox2.pack_end(bouttonAnnuler)
         vbox1.add(hbox1)
         vbox1.add(hbox2)
         @fenetre.add(vbox1)
 
 
-        buttonValider.signal_connect('clicked')  { onBtnValiderClicked }
-        buttonAnnuler.signal_connect('clicked')  { onBtnAnnulerClicked }
-        @entryPseudo.signal_connect('activate') {onBtnValiderClicked}
-        @entryPassword.signal_connect('activate') {onBtnValiderClicked}
+        bouttonValider.signal_connect('clicked')     {onBtnValiderClicked}
+        bouttonAnnuler.signal_connect('clicked')     {onBtnAnnulerClicked}
+        @entryPseudo.signal_connect('activate')     {onBtnValiderClicked}
+        @entryPassword.signal_connect('activate')   {onBtnValiderClicked}
 
         self.actualiser()
     end
@@ -42,9 +42,39 @@ class VueConnexion < Vue
         @controleur.annuler()
 	end
 
-    def mauvaisIdentifiants
-        popup = Gtk::MessageDialog.new(:parent => @fenetre,:flags => :destroy_with_parent,:type => :info,:buttons_type => :close, :message => "Il n'existe pas de compte associé à ce pseudo. Voulez-vous créer un compte avec ce pseudo ?")
-        popup.run
-        popup.destroy
+	def onBtnOuiClicked
+        @popup.destroy
+        @controleur.oui(@entryPseudo.text())
+
+	end
+
+	def onBtnNonClicked
+        @popup.destroy
+        @controleur.non()
+	end
+
+    def utilisateurInexistant
+        @popup = Window.new("Utilisateur Inexistant")
+    	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
+    	@popup.set_resizable(false)
+        @popup.set_size_request(500,100)
+
+		bouttonOui = Button.new(:label => "Oui")
+		bouttonNon = Button.new(:label => "Non")
+
+        hbox = Box.new(:horizontal)
+        hbox.pack_start(bouttonOui)
+        hbox.pack_start(bouttonNon)
+
+        vbox = Box.new(:vertical)
+        vbox.pack_start(Label.new("Il n'existe pas de compte associé à ce pseudo."))
+        vbox.pack_start(Label.new("Voulez-vous créer un compte avec ce pseudo ?"))
+        vbox.pack_end(hbox)
+
+        bouttonOui.signal_connect('clicked')     {onBtnOuiClicked}
+        bouttonNon.signal_connect('clicked')     {onBtnNonClicked}
+
+        @popup.add(vbox)
+        @popup.show_all()
     end
 end

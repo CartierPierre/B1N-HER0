@@ -1,10 +1,11 @@
 class ControleurInscription < Controleur
 
-	def initialize(jeu)
+	def initialize(jeu,pseudo)
 		super(jeu)
 		@modele = nil
-		@vue = VueInscription.new(@modele,"Inscription",self)
+		@vue = VueInscription.new(@modele,"Inscription",self,pseudo)
 	end
+
 
 
     def valider(pseudo,password)
