@@ -1,6 +1,8 @@
 ##
 # Classe Utilisateur
 #
+# Version 2
+#
 class Utilisateur
 	
 	### Constantes de classe
