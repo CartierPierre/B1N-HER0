@@ -1,4 +1,5 @@
 class ControleurDemarrage < Controleur
+    
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil

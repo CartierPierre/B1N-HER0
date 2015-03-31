@@ -64,15 +64,15 @@ class VuePartie < Vue
         # Navigation
         boxNav = Box.new(:horizontal)
 
-        @buttonSave = Button.new(:label => @langue.langueActuelle[:sauvegarder], :mnemonic => nil)
+        @buttonSave = Button.new(:label => @controleur.options.langue.langueActuelle[:sauvegarder])
         @buttonSave.set_image(Image.new(:file => './Vue/img/save.png'))
-        @buttonLoad = Button.new(:label => @langue.langueActuelle[:charger], :mnemonic => nil)
+        @buttonLoad = Button.new(:label => @controleur.options.langue.langueActuelle[:charger])
         @buttonLoad.set_image(Image.new(:file => './Vue/img/load.png'))
-        @buttonOptions = Button.new(:label => @langue.langueActuelle[:options], :mnemonic => nil)
+        @buttonOptions = Button.new(:label => @controleur.options.langue.langueActuelle[:options])
         @buttonOptions.set_image(Image.new(:file => './Vue/img/options.png'))
-        @buttonRegles = Button.new(:label => @langue.langueActuelle[:regles], :mnemonic => nil)
+        @buttonRegles = Button.new(:label => @controleur.options.langue.langueActuelle[:regles])
         @buttonRegles.set_image(Image.new(:file => './Vue/img/regles.png'))
-        @buttonQuitter = Button.new(:label => @langue.langueActuelle[:quitter], :mnemonic => nil)
+        @buttonQuitter = Button.new(:label => @controleur.options.langue.langueActuelle[:quitter])
         @buttonQuitter.set_image(Image.new(:file => './Vue/img/exit.png'))
 
         @buttonSave.signal_connect('clicked')  { onBtnSaveClicked }
@@ -91,11 +91,11 @@ class VuePartie < Vue
 
         # Menu du haut
         boxHeader = Box.new(:horizontal)
-        @buttonHypothese = Button.new(:label => @langue.langueActuelle[:hypothese], :mnemonic => "H")
+        @buttonHypothese = Button.new(:label => @controleur.options.langue.langueActuelle[:hypothese], :mnemonic => "H")
         @buttonHypothese.set_image(Image.new(:file => './Vue/img/hypothese.png'))
-        @buttonValiderHypo = Button.new(:label => @langue.langueActuelle[:valider], :mnemonic => nil)
+        @buttonValiderHypo = Button.new(:label => @controleur.options.langue.langueActuelle[:valider])
         @buttonValiderHypo.set_image(Image.new(:file => './Vue/img/valider.png'))
-        @buttonAnnulerHypo = Button.new(:label => @langue.langueActuelle[:annuler], :mnemonic => nil)
+        @buttonAnnulerHypo = Button.new(:label => @controleur.options.langue.langueActuelle[:annuler])
         @buttonAnnulerHypo.set_image(Image.new(:file => './Vue/img/annuler.png'))
 
         boxHeader.add(@buttonHypothese)
@@ -110,20 +110,20 @@ class VuePartie < Vue
         frame = Table.new(@tailleGrille,@tailleGrille,false)
         @casesJeu = Array.new(@tailleGrille) { Array.new(@tailleGrille) }
 
-        0.upto(@tailleGrille-1) do |ligne|
-            0.upto(@tailleGrille-1) do |colonne|
-                caseTemp = CaseJeu.new(colonne,ligne)
+        0.upto(@tailleGrille-1) do |x|
+            0.upto(@tailleGrille-1) do |y|
+                caseTemp = CaseJeu.new(x,y)
 
-            	if @modele.grille().getTuile(colonne,ligne).etat() == 1
+            	if @modele.grille().getTuile(x,y).etat() == 1
             		caseTemp.setImageTuile1Lock()
-            	elsif @modele.grille().getTuile(colonne,ligne).etat() == 2
+            	elsif @modele.grille().getTuile(x,y).etat() == 2
             		caseTemp.setImageTuile2Lock()
             	end
 
                 caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
-            	frame.attach(caseTemp,ligne,ligne+1,colonne,colonne+1)
+            	frame.attach(caseTemp,y,y+1,x,x+1)
 
-                @casesJeu[ligne][colonne] = caseTemp
+                @casesJeu[x][y] = caseTemp
             end
         end
 
@@ -134,13 +134,13 @@ class VuePartie < Vue
 
         # Menu du bas
         boxFooter = Box.new(:horizontal)
-        @buttonUndo = Button.new(:label => @langue.langueActuelle[:annuler], :mnemonic => "Z")
+        @buttonUndo = Button.new(:label => @controleur.options.langue.langueActuelle[:annuler], :mnemonic => "Z")
         @buttonUndo.set_image(Image.new(:file => './Vue/img/undo.png'))
-        @buttonRedo = Button.new(:label => @langue.langueActuelle[:repeter], :mnemonic => "Y")
+        @buttonRedo = Button.new(:label => @controleur.options.langue.langueActuelle[:repeter], :mnemonic => "Y")
         @buttonRedo.set_image(Image.new(:file => './Vue/img/redo.png'))
-        @buttonConseil = Button.new(:label => @langue.langueActuelle[:conseil], :mnemonic => "C")
+        @buttonConseil = Button.new(:label => @controleur.options.langue.langueActuelle[:conseil], :mnemonic => "C")
         @buttonConseil.set_image(Image.new(:file => './Vue/img/conseil.png'))
-        @buttonRestart = Button.new(:label => @langue.langueActuelle[:recommencer], :mnemonic => "R")
+        @buttonRestart = Button.new(:label => @controleur.options.langue.langueActuelle[:recommencer], :mnemonic => "R")
         @buttonRestart.set_image(Image.new(:file => './Vue/img/restart.png'))
 
         @buttonUndo.signal_connect('clicked')  { onBtnUndoClicked }
@@ -196,7 +196,7 @@ class VuePartie < Vue
     def onBtnUndoClicked
         tabCoord = @modele.historiqueUndo()
         if(tabCoord)
-            @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
+            @casesJeu[tabCoord[0]][tabCoord[1]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.actualiser() 
         end 
     end
@@ -204,7 +204,7 @@ class VuePartie < Vue
     def onBtnRedoClicked
         tabCoord = @modele.historiqueRedo()
         if(tabCoord)
-            @casesJeu[tabCoord[1]][tabCoord[0]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
+            @casesJeu[tabCoord[0]][tabCoord[1]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.actualiser() 
         end
     end

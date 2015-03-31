@@ -7,10 +7,9 @@ class Option
     @tuileVerte='Vue/img/CaseVerte32.png'
     @tuileJaune='Vue/img/CaseJaune32.png'
     
-    attr_accessor :tuile1, :tuile2, :langue
+    attr_reader :langue
     
     private_class_method :new
-    
     
     def Option.creer()
         new()
@@ -19,7 +18,7 @@ class Option
     def initialize()
         @tuile1=@tuileBleue
         @tuile2=@tuileRouge
-        @langue='fr'
+        @langue = Langue.new() 
     end
     
     #Deuxieme constructeur si on charge le profil
@@ -38,5 +37,13 @@ class Option
         else
             @tuile2=couleur
         end
+    end
+
+    def setLangueFr()
+        @langue.setLangueFr()
+    end
+
+    def setLangueEn()
+        @langue.setLangueEn()
     end
 end
