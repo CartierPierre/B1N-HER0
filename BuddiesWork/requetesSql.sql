@@ -5,6 +5,9 @@
 	WIP : les requêtes de calcul de scores
 */
 
+
+
+
 /*
 	---
 	Utilisateurs
@@ -62,6 +65,9 @@ SET type = (
 )
 WHERE id = var0
 LIMIT 1;
+
+
+
 
 /*
 	---
@@ -190,6 +196,9 @@ VALUES (
 /* Supprimer les scores d'un utilisateur (réinitialisation) */
 DELETE FROM score
 WHERE id_utilisateur = var0;
+
+
+
 
 /*
 	---
