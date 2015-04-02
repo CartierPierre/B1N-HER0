@@ -1,1 +1,2 @@
-ruby .\BinHero.rb
+ruby BinHero.rb
+pause

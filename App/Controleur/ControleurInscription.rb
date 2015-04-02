@@ -15,7 +15,7 @@ class ControleurInscription < Controleur
             rescue SQLite3::ConstraintException => erreur
                 @vue.utilisateurExistant(pseudo)
         end
-                changerControleur(ControleurMenuPrincipal.new(@jeu))
+                changerControleur(ControleurMenuPrincipal.new(@jeu,nil))
     end
 
     def annuler()

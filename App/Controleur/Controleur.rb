@@ -5,21 +5,21 @@ class Controleur
     @modele
     @gestionnaireUtilisateur
     @utilisateur
-    @options
-
-    attr_reader :options
-
-    public_class_method :new
+    @@options
 
     def initialize(jeu)
         @jeu = jeu
         @gestionnaireUtilisateur =GestionnaireUtilisateur.instance()
-        @options = Option.creer()
+        @@options = Option.creer()
     end
 
     def changerControleur(controleur)
         @vue.fermerFenetre
     	@jeu.controleur = controleur
+    end
+
+    def options()
+        return @@options
     end
 
     def quitterJeu

@@ -2,20 +2,20 @@ class ControleurOptions < Controleur
 
 	def initialize(jeu)
 		super(jeu)
-		@modele = @options
+		@modele = @@options
 		@vue = VueOptions.new(@modele,"Options",self)
 	end
 
     def retour()
-        changerControleur(ControleurMenuPrincipal.new(@jeu))
+        changerControleur(ControleurMenuPrincipal.new(@jeu,nil))
     end
 
     def setLangueFr()
-        @options.setLangueFr()
+        @@options.setLangueFr()
     end
 
     def setLangueEn()
-        @options.setLangueEn()
+        @@options.setLangueEn()
     end
 
 end

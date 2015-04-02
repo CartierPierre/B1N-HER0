@@ -21,6 +21,7 @@ require_relative './Vue/VueNouvellePartie'
 require_relative './Vue/VueOptions'
 require_relative './Vue/VuePartie'
 
+require_relative './Modele/Chrono'
 require_relative './Modele/Coup'
 require_relative './Modele/Grille'
 require_relative './Modele/Niveau'

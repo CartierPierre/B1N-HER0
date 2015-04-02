@@ -1,13 +1,7 @@
 class Chrono
     @debut
     @fin
-    
-    private_class_method :new
-    
-    def Chrono.nouveau()
-        new()
-    end
-    
+       
     def initialize()
         @debut=Time.now
     end
@@ -20,7 +14,12 @@ class Chrono
         @fin=Time.now-@debut
         return @fin
     end
-    
-    
-    # http://www.tutorialspoint.com/ruby/ruby_multithreading.htm
+
+    def to_s()
+        temps = Time.now()-@debut
+        minutes = sprintf('%02i', ((temps.to_i % 3600) / 60))
+        secondes = sprintf('%02i', (temps.to_i % 60))   
+        return "#{minutes}:#{secondes}"
+    end
+
 end
