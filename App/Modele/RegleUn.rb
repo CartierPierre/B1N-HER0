@@ -25,6 +25,9 @@ class RegleUn
     		nbCouleurUn = 0
     		nbCouleurDeux = 0
     		while i < @ligne do
+    			nbCouleurUn = 0
+    			nbCouleurDeux = 0
+    			j = 0
     			while j < @colonne do
     				if grille.getTuile(i,j).etat() == 1 then
     					nbCouleurUn += 1
@@ -46,6 +49,9 @@ class RegleUn
     		nbCouleurUn = 0
     		nbCouleurDeux = 0
     		while j < @colonne do
+    			nbCouleurUn = 0
+    			nbCouleurDeux = 0
+    			i = 0
     			while i < @ligne do
     				if grille.getTuile(i,j).etat() == 1 then
     					nbCouleurUn += 1;
