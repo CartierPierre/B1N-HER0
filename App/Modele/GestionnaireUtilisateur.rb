@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 6
+# Version 7
 #
 # Passer la connexion BDD par une instance unique
 #
@@ -42,6 +42,20 @@ class GestionnaireUtilisateur
 	### Méthodes d'instances
 	
 	##
+	# Crée un object utilisateur selon un tableau de paramètres
+	#
+	# ==== Paramètres
+	# * +args+ - (tab) Tableau de paramètres (voir classe Utilisateur)
+	#
+	# === Retour
+	# Renvoi un object utilisateur hydraté selon les paramètres
+	#
+	def hydraterUtilisateur(args)
+		return Utilisateur.creer( args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8] )
+	end
+	private :hydraterUtilisateur
+	
+	##
 	# Compte le nombre d'utilisateurs
 	#
 	# ==== Retour
@@ -76,7 +90,7 @@ class GestionnaireUtilisateur
 		
 		liste = Array.new
 		resultat.each do |el|
-			liste.push( Utilisateur.creer( el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8] ) )
+			liste.push( hydraterUtilisateur( el ) )
 		end
 		
 		return liste;
@@ -103,8 +117,7 @@ class GestionnaireUtilisateur
 			return nil
 		end
 		
-		resultat = resultat[0]
-		return Utilisateur.creer(resultat[0], resultat[1], resultat[2], resultat[3], resultat[4], resultat[5], resultat[6], resultat[7], resultat[8])
+		return hydraterUtilisateur( resultat[0] )
 	end
 	
 	##
@@ -206,8 +219,7 @@ class GestionnaireUtilisateur
 			return nil
 		end
 		
-		resultat = resultat[0]
-		return Utilisateur.creer(resultat[0], resultat[1], resultat[2], resultat[3], resultat[4], resultat[5], resultat[6], resultat[7], resultat[8])
+		return hydraterUtilisateur( resultat[0] )
 	end
 	
 end

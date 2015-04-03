@@ -2,7 +2,7 @@
 # La classe GestionnaireNiveau permet d'intéragir avec entitées Niveau
 # Utilise le DP Singleton
 #
-# Version 1
+# Version 2
 #
 # Passer la connexion BDD par une instance unique
 #
@@ -42,6 +42,20 @@ class GestionnaireNiveau
 	### Méthodes d'instances
 	
 	##
+	# Crée un object niveau selon un tableau de paramètres
+	#
+	# ==== Paramètres
+	# * +args+ - (tab) Tableau de paramètres (voir classe Niveau)
+	#
+	# === Retour
+	# Renvoi un object niveau hydraté selon les paramètres
+	#
+	def hydraterNiveau(args)
+		return Niveau.creer( args[0], args[1], args[2], args[3], args[4], args[5] )
+	end
+	private :hydraterNiveau
+	
+	##
 	# Compte le nombre de niveau
 	#
 	# ==== Retour
@@ -75,7 +89,7 @@ class GestionnaireNiveau
 		
 		liste = Array.new
 		resultat.each do |el|
-			liste.push( Niveau.creer( el[0], el[1], el[2], el[3], el[4], el[5] ) )
+			liste.push( hydraterNiveau( el ) )
 		end
 		
 		return liste;
@@ -102,9 +116,7 @@ class GestionnaireNiveau
 			return nil
 		end
 		
-		resultat = resultat[0]
-		return Niveau.creer( resultat[0], resultat[1], resultat[2], resultat[3], resultat[4], resultat[5] )
-		
+		return hydraterNiveau( resultat[0] )
 	end
 	
 end

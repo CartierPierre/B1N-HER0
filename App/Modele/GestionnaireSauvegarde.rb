@@ -2,7 +2,7 @@
 # La classe GestionnaireSauvegarde permet d'intéragir avec entitées Sauvegarde
 # Utilise le DP Singleton
 #
-# Version 2
+# Version 3
 #
 # Passer la connexion BDD par une instance unique
 # Repenser attributs (insert/update non opérationnels)
@@ -41,6 +41,20 @@ class GestionnaireSauvegarde
 	end
 	
 	### Méthodes d'instances
+	
+	##
+	# Crée un object sauvegarde selon un tableau de paramètres
+	#
+	# ==== Paramètres
+	# * +args+ - (tab) Tableau de paramètres (voir classe Sauvegarde)
+	#
+	# === Retour
+	# Renvoi un object sauvegarde hydraté selon les paramètres
+	#
+	def hydraterSauvegarde(args)
+		return Sauvegarde.creer( args[0], args[1], args[2], args[3], args[4], args[5] )
+	end
+	private :hydraterSauvegarde
 	
 	##
 	# Compte le nombre de sauvegardes d'un utilisateur
@@ -82,7 +96,7 @@ class GestionnaireSauvegarde
 		
 		liste = Array.new
 		resultat.each do |el|
-			liste.push( Sauvegarde.creer( el[0], el[1], el[2], el[3], el[4], el[5] ) )
+			liste.push( hydraterSauvegarde( el ) )
 		end
 		
 		return liste;
@@ -109,9 +123,7 @@ class GestionnaireSauvegarde
 			return nil
 		end
 		
-		resultat = resultat[0]
-		return Sauvegarde.creer( resultat[0], resultat[1], resultat[2], resultat[3], resultat[4], resultat[5] )
-		
+		return hydraterSauvegarde( resultat[0] )
 	end
 	
 	##
@@ -121,7 +133,7 @@ class GestionnaireSauvegarde
 	# * +u+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
 	#
 	# private_class_method :insert
-	def insert(s)
+	# def insert(s)
 		# @bddLocal.execute("
 			# INSERT INTO sauvegarde
 			# VALUES (
@@ -135,9 +147,9 @@ class GestionnaireSauvegarde
 				# { u.type }
 			# );
 		# ")
-		s.id = @bddLocal.last_insert_row_id
-	end
-	private :insert
+		# s.id = @bddLocal.last_insert_row_id
+	# end
+	# private :insert
 	
 	##
 	# Fait persister les données d'une sauvegarde
@@ -146,7 +158,7 @@ class GestionnaireSauvegarde
 	# * +s+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
 	#
 	# private_class_method :update
-	def update(s)
+	# def update(s)
 		# @bddLocal.execute("
 			# UPDATE sauvegarde
 			# SET
@@ -159,8 +171,8 @@ class GestionnaireSauvegarde
 				# type = #{ u.type }
 			# WHERE id = #{ u.id };
 		# ")
-	end
-	private :update
+	# end
+	# private :update
 	
 	##
 	# Met à jour une sauvegarde
