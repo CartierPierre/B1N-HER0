@@ -208,8 +208,8 @@ class VuePartie < Vue
     def onBtnUndoClicked
         tabCoord = @modele.historiqueUndo()
         if(tabCoord)
-            @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0]+1,tabCoord[1]+1).etat())
-            self.nbLigneColonne(tabCoord[0]+1,tabCoord[1]+1)
+            @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
+            self.nbLigneColonne(tabCoord[0],tabCoord[1])
             self.actualiser() 
         end 
     end
@@ -217,8 +217,8 @@ class VuePartie < Vue
     def onBtnRedoClicked
         tabCoord = @modele.historiqueRedo()
         if(tabCoord)
-            @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0]+1,tabCoord[1]+1).etat())
-            self.nbLigneColonne(tabCoord[0]+1,tabCoord[1]+1)
+            @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
+            self.nbLigneColonne(tabCoord[0],tabCoord[1])
             self.actualiser() 
         end
     end
@@ -231,7 +231,17 @@ class VuePartie < Vue
         @modele.recommencer
         0.upto(@tailleGrille) do |x|
             0.upto(@tailleGrille) do |y|
-                @grille[x+1][y+1].setImageTuile(@modele.grille().getTuile(x,y).etat())
+                if(x == 0 && y == 0)
+                    
+                elsif(x == 0)
+                    nb = @modele.compterCasesColonne(y-1)
+                    @grille[x][y].set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
+                elsif(y == 0)
+                    nb = @modele.compterCasesLigne(x-1)
+                    @grille[x][y].set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
+                else
+                    @grille[x][y].setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
+                end
             end
         end
         self.actualiser()

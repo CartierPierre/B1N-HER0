@@ -1,10 +1,9 @@
 #Règle 2: pas plus de 2 chiffres identiques côte à côte 
 
 load 'Grille.rb'
+load "Partie.rb"
 
 class RegleDeux
-		
-    attr_reader:ligne, :colonne, :grille
 		
     private_class_method :new
 	
@@ -16,47 +15,35 @@ class RegleDeux
     	new()
     end
     
-    def appliquer(grille)
+    def RegleDeux.appliquer(partie)
     
-    	@grille = grille
-    	@ligne = grille.ligne()
-    	@colonne = grille.colonne()
-    		
-    	i = 0
-    	j = 0
-	while i < @ligne do
-		j = 0
-    		while j < @colonne -2 do
- 			if grille.getTuile(i,j).etat() == 1 && grille.getTuile(i,j+1).etat() == 1 && grille.getTuile(i,j+2).etat() == 1
- 				#Meme si plus que trois, il retourne faux 
+    	ligne = partie.grille().ligne()
+    	colonne = partie.grille().colonne()
+
+		0.upto(ligne - 1) do |x|
+			0.upto(colonne - 2) do |y|
+ 				if grille.getTuile(x,y).etat() == 1 && grille.getTuile(x,y+1).etat() == 1 && grille.getTuile(x,y+2).etat() == 1
+ 					#Meme si plus que trois, il retourne faux 
  					return false
     			end
     			
-    			if grille.getTuile(i,j).etat() == 2 && grille.getTuile(i,j+1).etat() == 2 && grille.getTuile(i,j+2).etat() == 2
+    			if grille.getTuile(x,y).etat() == 2 && grille.getTuile(x,y+1).etat() == 2 && grille.getTuile(x,y+2).etat() == 2
  					return false
     			end
-    			
-    			j += 1
     		end
-    		i += 1
     	end
 
-	i = 0
-    	j = 0
-    	while j < @colonne do
-    		i = 0
-    		while i < @ligne - 2 do
-    			if grille.getTuile(i,j).etat() == 1 && grille.getTuile(i+1,j).etat() == 1 && grille.getTuile(i+2,j).etat() == 1
- 				#Meme si plus que trois, il retourne faux 
+		0.upto(colonne - 1) do |y|
+			0.upto(ligne - 2) do |x|
+    			if grille.getTuile(x,y).etat() == 1 && grille.getTuile(x+1,y).etat() == 1 && grille.getTuile(x+2,y).etat() == 1
+ 					#Meme si plus que trois, il retourne faux 
  					return false
     			end
     			
-    			if grille.getTuile(i,j).etat() == 2 && grille.getTuile(i+2,j).etat() == 2 && grille.getTuile(i+2,j).etat() == 2
+    			if grille.getTuile(x,y).etat() == 2 && grille.getTuile(x+1,y).etat() == 2 && grille.getTuile(x+2,y).etat() == 2
  					return false
     			end			
-    			i += 1
     		end
-    		j += 1
     	end
     	return true
     end

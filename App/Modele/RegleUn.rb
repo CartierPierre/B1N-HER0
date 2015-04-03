@@ -4,31 +4,28 @@ load "Partie.rb"
 
 class RegleUn
 		
-	attr_reader:ligne, :colonne, :partie
-		
 	private_class_method :new
     
-    	def RegleUn.creer()
-        	new()
-    	end
+    def RegleUn.creer()
+        new()
+    end
     	
-    	def initialize()
-    		new()
+    def initialize()
+    	new()
 	end
 	
-	def appliquer(partie)
-		@partie = partie
-    		@ligne = @partie.grille().ligne()
-    		@colonne = @partie.grille().colonne()
+	def RegleUn.appliquer(partie)
+    		ligne = Math.sqrt(partie.grille().taille())
+    		colonne = Math.sqrt(partie.grille().taille())
     		
-    		0.upto(@ligne - 1) do |x|
+    		0.upto(ligne - 1) do |x|
     			tab = compterCasesLigne(x)
     			if  tab[0] != tab[1] then
     				return false
     			end
     		end
     		
-    		0.upto(@colonne - 1) do |y|
+    		0.upto(colonne - 1) do |y|
     			tab = compterCasesColonne(y)
     			if  tab[0] != tab[1] then
     				return false
