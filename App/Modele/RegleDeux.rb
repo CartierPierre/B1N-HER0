@@ -4,9 +4,9 @@ load 'Grille.rb'
 
 class RegleDeux
 		
-	attr_reader:ligne, :colonne, :grille
+    attr_reader:ligne, :colonne, :grille
 		
-	private_class_method :new
+    private_class_method :new
 	
     def RegleDeux.creer()
         new()
