@@ -4,7 +4,6 @@
 #
 # Version 2
 #
-# Résoudre le problème des private_class_method
 # Passer la connexion BDD par une instance unique
 # Repenser attributs (insert/update non opérationnels)
 #
@@ -138,6 +137,7 @@ class GestionnaireSauvegarde
 		# ")
 		s.id = @bddLocal.last_insert_row_id
 	end
+	private :insert
 	
 	##
 	# Fait persister les données d'une sauvegarde
@@ -160,6 +160,7 @@ class GestionnaireSauvegarde
 			# WHERE id = #{ u.id };
 		# ")
 	end
+	private :update
 	
 	##
 	# Met à jour une sauvegarde
@@ -167,13 +168,13 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +s+ - (Sauvegarde) Sauvegarde dont il faut mettre à jour les informations
 	#
-	def persist(s)
-		if (s.id == nil)
-			self.insert(s)
-		else
-			self.update(s)
-		end
-	end
+	# def sauvegarder(s)
+		# if (s.id == nil)
+			# insert(s)
+		# else
+			# update(s)
+		# end
+	# end
 	
 	##
 	# Supprime une sauvegarde
@@ -181,7 +182,7 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +s+ - (Sauvegarde) sauvegarde à supprimer
 	#
-	def delete(s)
+	def supprimer(s)
 		@bddLocal.execute("
 			DELETE FROM sauvegarde
 			WHERE id = #{ u.id };

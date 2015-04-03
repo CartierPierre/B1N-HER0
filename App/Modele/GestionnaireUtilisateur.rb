@@ -2,9 +2,8 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 4
+# Version 6
 #
-# Résoudre le problème des private_class_method
 # Passer la connexion BDD par une instance unique
 #
 class GestionnaireUtilisateur
@@ -48,7 +47,7 @@ class GestionnaireUtilisateur
 	# ==== Retour
 	# Renvoi le nombre l'utilisateurs
 	#
-	def count
+	def recupererNombreUtilisateur
 		resultat = @bddLocal.execute("
 			SELECT COUNT(id)
 			FROM utilisateur;
@@ -66,7 +65,7 @@ class GestionnaireUtilisateur
 	# ==== Retour
 	# Renvoi un liste d'objets utilisateurs
 	#
-	def getAll(offset, limit)
+	def recupererListeUtilisateur(offset, limit)
 	
 		resultat = @bddLocal.execute("
 			SELECT *
@@ -92,7 +91,7 @@ class GestionnaireUtilisateur
 	# ==== Retour
 	# Renvoi un objets utilisateur si se dernier a été trouvé. Nil si non
 	#
-	def findById(id)
+	def recupererUtilisateur(id)
 		resultat = @bddLocal.execute("
 			SELECT *
 			FROM utilisateur
@@ -131,6 +130,7 @@ class GestionnaireUtilisateur
 		")
 		u.id = @bddLocal.last_insert_row_id
 	end
+	private :insert
 	
 	##
 	# Fait persister les données d'un utilisateur
@@ -153,6 +153,7 @@ class GestionnaireUtilisateur
 			WHERE id = #{ u.id };
 		")
 	end
+	private :update
 	
 	##
 	# Met à jour un utilisateur
@@ -160,11 +161,11 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut mettre à jour les informations
 	#
-	def persist(u)
+	def sauvegarder(u)
 		if (u.id == nil)
-			self.insert(u)
+			insert(u)
 		else
-			self.update(u)
+			update(u)
 		end
 	end
 	
@@ -174,7 +175,7 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur à supprimer
 	#
-	def delete(u)
+	def supprimer(u)
 		@bddLocal.execute("
 			DELETE FROM utilisateur
 			WHERE id = #{ u.id };
@@ -191,7 +192,7 @@ class GestionnaireUtilisateur
 	# ==== Retour
 	# Renvoi un object utilisateur si ce dernier à été trouvé, nil si non
 	#
-	def getForAuthentication(n, m)
+	def connexion(n, m)
 		resultat = @bddLocal.execute("
 			SELECT *
 			FROM utilisateur

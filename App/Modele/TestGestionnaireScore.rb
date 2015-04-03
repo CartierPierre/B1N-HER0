@@ -1,7 +1,7 @@
 ##
 # Script de test pour la classe GestionnaireScore
 #
-# Version 1
+# Version 2
 #
 
 # Dépendances
@@ -23,7 +23,7 @@ gu = GestionnaireUtilisateur.instance()
 gn = GestionnaireNiveau.instance()
 
 # On récupère un utilisateur
-utilisateur = gu.findById(1)
+utilisateur = gu.recupererUtilisateur(1)
 
 # On récupère un niveau
 niveau = gn.recupererNiveau(1)

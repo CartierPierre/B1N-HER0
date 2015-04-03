@@ -19,7 +19,7 @@ gu = GestionnaireUtilisateur.instance()
 gs = GestionnaireSauvegarde.instance()
 
 # On récupère un utilisateur
-utilisateur = gu.findById(1)
+utilisateur = gu.recupererUtilisateur(1)
 
 # Nombre de sauvegardes
 nbSauvegardes = gs.recupererNombreSauvegardeUtilisateur(utilisateur)

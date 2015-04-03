@@ -4,7 +4,6 @@
 #
 # Version 1
 #
-# Résoudre le problème des private_class_method
 # Passer la connexion BDD par une instance unique
 #
 class GestionnaireScore
