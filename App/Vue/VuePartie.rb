@@ -180,10 +180,6 @@ class VuePartie < Vue
 
     end
 
-    def onBtnOptionsClicked
-
-    end
-
     def onBtnReglesClicked 
         regles = @controleur.options.langue.langueActuelle[:regles]
         regles += "\n\n"
@@ -212,7 +208,8 @@ class VuePartie < Vue
     def onBtnUndoClicked
         tabCoord = @modele.historiqueUndo()
         if(tabCoord)
-            @grille[tabCoord[0]][tabCoord[1]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
+            @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0]+1,tabCoord[1]+1).etat())
+            self.nbLigneColonne(tabCoord[0]+1,tabCoord[1]+1)
             self.actualiser() 
         end 
     end
@@ -220,7 +217,8 @@ class VuePartie < Vue
     def onBtnRedoClicked
         tabCoord = @modele.historiqueRedo()
         if(tabCoord)
-            @grille[tabCoord[0]][tabCoord[1]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
+            @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0]+1,tabCoord[1]+1).etat())
+            self.nbLigneColonne(tabCoord[0]+1,tabCoord[1]+1)
             self.actualiser() 
         end
     end
@@ -231,9 +229,9 @@ class VuePartie < Vue
 
     def onBtnRestartClicked
         @modele.recommencer
-        0.upto(@tailleGrille-1) do |x|
-            0.upto(@tailleGrille-1) do |y|
-                @grille[x][y].setImageTuile(@modele.grille().getTuile(x,y).etat())
+        0.upto(@tailleGrille) do |x|
+            0.upto(@tailleGrille) do |y|
+                @grille[x+1][y+1].setImageTuile(@modele.grille().getTuile(x,y).etat())
             end
         end
         self.actualiser()
