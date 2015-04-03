@@ -53,6 +53,13 @@ class VuePartie < Vue
 
     end
 
+    def nbLigneColonne(x,y)
+        nbCasesColonne = @modele.compterCasesColonne(y)
+        nbCasesLigne = @modele.compterCasesLigne(x)
+        @grille[0][y+1].set_markup(%Q[ <span foreground="red">#{nbCasesColonne[0]}</span> - <span foreground="blue">#{nbCasesColonne[1]}</span> ])
+        @grille[x+1][0].set_markup(%Q[ <span foreground="red">#{nbCasesLigne[0]}</span> - <span foreground="blue">#{nbCasesLigne[1]}</span> ])
+    end
+
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
 
@@ -194,11 +201,9 @@ class VuePartie < Vue
 
     def onCaseJeuClicked(caseJeu)
         if @modele.niveau().tuileValide?(caseJeu.x,caseJeu.y)
-
             @modele.jouerCoup(caseJeu.x,caseJeu.y)
-
             caseJeu.setImageTuile(@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat())
-
+            self.nbLigneColonne(caseJeu.x,caseJeu.y)
             self.actualiser()            
         end
     end
