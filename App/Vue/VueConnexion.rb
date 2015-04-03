@@ -71,12 +71,12 @@ class VueConnexion < Vue
     	@popup.set_resizable(false)
         @popup.set_size_request(500,100)
 
-		bouttonOui = Button.new(:label => "Oui")
-		bouttonNon = Button.new(:label => "Non")
+		boutonOui = Button.new(:label => "Oui")
+		boutonNon = Button.new(:label => "Non")
 
         hbox = Box.new(:horizontal)
-        hbox.pack_start(bouttonOui)
-        hbox.pack_start(bouttonNon)
+        hbox.pack_start(boutonOui)
+        hbox.pack_start(boutonNon)
 
         vbox = Box.new(:vertical)
         vbox.pack_start(Label.new("Il n'existe pas de compte associé à ce pseudo."))

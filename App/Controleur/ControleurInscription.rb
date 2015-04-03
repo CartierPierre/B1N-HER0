@@ -22,5 +22,9 @@ class ControleurInscription < Controleur
         changerControleur(ControleurDemarrage.new(@jeu))
     end
 
+    def retour(pseudo)
+        changerControleur(ControleurInscription.new(@jeu,pseudo))
+    end
+
 
 end

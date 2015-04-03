@@ -11,7 +11,7 @@ class ControleurDemarrage < Controleur
     end
 
     def inscription()
-        changerControleur(ControleurInscription.new(@jeu,nil))
+        changerControleur(ControleurInscription.new(@jeu,""))
     end
 
     def jeu()
