@@ -1,6 +1,7 @@
 #Règle 2: pas plus de 2 chiffres identiques côte à côte 
 
 load 'Grille.rb'
+load "Partie.rb"
 
 class RegleDeux
 		
