@@ -6,12 +6,12 @@ class RegleUn
 		
 	private_class_method :new
     
-    def RegleUn.creer()
-        new()
-    end
+    	def RegleUn.creer()
+        	new()
+	end
     	
-    def initialize()
-    	new()
+    	def initialize()
+    		new()
 	end
 	
 	def RegleUn.appliquer(partie)
