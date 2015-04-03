@@ -1,5 +1,7 @@
 class VueOptions < Vue
 
+    @labelLangue
+
     @boutonLangueFr
     @boutonLangueEn
 
@@ -11,7 +13,8 @@ class VueOptions < Vue
         boxPrincipale = Box.new(:vertical)
         boxLangue = Box.new(:horizontal)
 
-        boxLangue.add(Label.new(@controleur.options.langue.langueActuelle[:langue]))
+        @labelLangue = Label.new(@controleur.options.langue.langueActuelle[:langue])
+        boxLangue.add(@labelLangue)
         @boutonLangueFr = Button.new(:label => @controleur.options.langue.langueActuelle[:francais])
         @boutonLangueFr.signal_connect('clicked')  { onBtnLangueFrClicked }
         @boutonLangueEn = Button.new(:label => @controleur.options.langue.langueActuelle[:anglais])
@@ -30,12 +33,21 @@ class VueOptions < Vue
         self.actualiser()
     end
 
+    def actualiserLangue() 
+        @boutonLangueFr.set_label(@controleur.options.langue.langueActuelle[:francais])
+        @boutonLangueEn.set_label(@controleur.options.langue.langueActuelle[:anglais])
+        @boutonRetour.set_label(@controleur.options.langue.langueActuelle[:retour])
+        @labelLangue.set_label(@controleur.options.langue.langueActuelle[:langue])
+    end
+
     def onBtnLangueFrClicked
         @controleur.setLangueFr()
+        self.actualiserLangue()
     end
 
     def onBtnLangueEnClicked
         @controleur.setLangueEn()
+        self.actualiserLangue()
     end
 
     def onBtnRetourClicked

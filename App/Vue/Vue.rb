@@ -24,4 +24,12 @@ class Vue
         @fenetre.destroy()
     end
 
+    def nouveauBouton(labelBouton,image)
+        bouton = Button.new(:label => @controleur.options.langue.langueActuelle[labelBouton])
+        bouton.set_always_show_image(true)
+        bouton.set_image_position(:top)
+        bouton.set_image(Image.new(:file => './Vue/img/' + image + '.png'))
+        return bouton
+    end
+
 end

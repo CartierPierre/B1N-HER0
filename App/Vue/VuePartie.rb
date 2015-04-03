@@ -56,14 +56,6 @@ class VuePartie < Vue
         end
     end
 
-    def nouveauBouton(labelBouton,image)
-        bouton = Button.new(:label => @controleur.options.langue.langueActuelle[labelBouton])
-        bouton.set_always_show_image(true)
-        bouton.set_image_position(:top)
-        bouton.set_image(Image.new(:file => './Vue/img/' + image + '.png'))
-        return bouton
-    end
-
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
 
@@ -154,10 +146,12 @@ class VuePartie < Vue
         @buttonConseil.signal_connect('clicked')  { onBtnConseilClicked }
         @buttonRestart.signal_connect('clicked')  { onBtnRestartClicked }
 
-        boxFooter.pack_start(@buttonUndo, :expand => true, :fill => false, :padding => 5)
-        boxFooter.pack_start(@buttonRedo, :expand => true, :fill => false, :padding => 5)
-        boxFooter.pack_start(@buttonConseil, :expand => true, :fill => false, :padding => 5)
-        boxFooter.pack_start(@buttonRestart, :expand => true, :fill => false, :padding => 5)
+        boxFooter.pack_start(Label.new(), :expand => true, :fill => true)        
+        boxFooter.add(@buttonUndo)
+        boxFooter.add(@buttonRedo)
+        boxFooter.add(@buttonConseil)
+        boxFooter.add(@buttonRestart)
+        boxFooter.pack_end(Label.new(), :expand => true, :fill => true) 
 
         # Ajout dans la box principal des éléments
         boxVertMain.add(boxNav)
@@ -177,9 +171,11 @@ class VuePartie < Vue
     def onBtnLoadClicked 
 
     end
+
     def onBtnOptionsClicked
 
     end
+
     def onBtnReglesClicked 
 
     end
