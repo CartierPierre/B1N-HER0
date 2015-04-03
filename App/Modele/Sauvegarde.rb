@@ -30,11 +30,30 @@ class Sauvegarde
 	#
 	private_class_method :new
     def initialize(id, uuid, utilisateur, description, dateCreation, partie)
+	
+		# int
+		# Identifiant locale de la sauvegarde
         @id = id
+		
+		# uuid
+		# Identifiant universel unique de la sauvegarde
 		@uuid = uuid
+		
+		# Utilisateur
+		# Utilisateur a qui appartient la sauvegarde
 		@utilisateur = utilisateur
+		
+		# string
+		# Description de la sauvegarde
 		@description = description
+		
+		# ???
+		# Date de création de cette sauvegarde
 		@dateCreation = dateCreation
+		
+		# Partie
+		# Toutes les informations de la partie sauvegardé
 		@partie = id
+		
     end
 end
