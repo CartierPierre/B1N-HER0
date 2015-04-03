@@ -17,13 +17,15 @@ class RegleDeux
     end
     
     def appliquer(grille)
+    
+    	@grille = grille
     	@ligne = grille.ligne()
     	@colonne = grille.colonne()
     		
     	i = 0
     	j = 0
-	while i < @ligne do
-    		while j < @colonne do
+		while i < @ligne do
+    		while j < @colonne -2 do
  			if grille.getTuile(i,j).etat() == 1 && grille.getTuile(i,j+1).etat() == 1 && grille.getTuile(i,j+2).etat() == 1
  				#Meme si plus que trois, il retourne faux 
  					return false
@@ -35,12 +37,13 @@ class RegleDeux
     			
     			j += 1
     		end
+    		i += 1
     	end
 
 		i = 0
     	j = 0
     	while j < @colonne do
-    		while i < @ligne do
+    		while i < @ligne - 2 do
     			if grille.getTuile(i,j).etat() == 1 && grille.getTuile(i+1,j).etat() == 1 && grille.getTuile(i+2,j).etat() == 1
  				#Meme si plus que trois, il retourne faux 
  					return false
@@ -51,6 +54,7 @@ class RegleDeux
     			end			
     			i += 1
     		end
+    		j += 1
     	end
     	return true
     end
