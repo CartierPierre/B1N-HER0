@@ -1,9 +1,10 @@
 #Règle 1: autant de 1 et de 0 sur chaque ligne et sur chaque colonne 
 load 'Grille.rb'
+load "Partie.rb"
 
 class RegleUn
 		
-	attr_reader:ligne, :colonne, :grille
+	attr_reader:ligne, :colonne, :partie
 		
 	private_class_method :new
     
@@ -15,59 +16,24 @@ class RegleUn
     		new()
 	end
 	
-	def appliquer(grille)
-		@grille = grille
-    		@ligne = grille.ligne()
-    		@colonne = grille.colonne()
+	def appliquer(partie)
+			@partie = partie
+    		@ligne = @partie.grille().ligne()
+    		@colonne = @partie.grille().colonne()
     		
-    		i = 0
-    		j = 0
-    		nbCouleurUn = 0
-    		nbCouleurDeux = 0
-    		while i < @ligne do
-    			nbCouleurUn = 0
-    			nbCouleurDeux = 0
-    			j = 0
-    			while j < @colonne do
-    				if grille.getTuile(i,j).etat() == 1 then
-    					nbCouleurUn += 1
-    				
-    				elsif grille.getTuile(i,j).etat() == 2 then
-    					nbCouleurDeux += 1
-    				else
-    				end
-    				j += 1
-    			end
-    			if nbCouleurUn != nbCouleurDeux then
+    		0.upto(@ligne - 1) do |x|
+    			tab = compterCasesLigne(x)
+    			if  tab[0] != tab[1] then
     				return false
     			end
-    			i += 1
     		end
     		
-    		i = 0
-    		j = 0
-    		nbCouleurUn = 0
-    		nbCouleurDeux = 0
-    		while j < @colonne do
-    			nbCouleurUn = 0
-    			nbCouleurDeux = 0
-    			i = 0
-    			while i < @ligne do
-    				if grille.getTuile(i,j).etat() == 1 then
-    					nbCouleurUn += 1;
-    				
-    				elsif grille.getTuile(i,j).etat() == 2 then
-    					nbCouleurDeux += 1;
-    				
-    				else
-    				end
-    				i += 1
-    			end
-    			if nbCouleurUn != nbCouleurDeux then
+    		0.upto(@colonne - 1) do |y|
+    			tab = compterCasesColonne(y)
+    			if  tab[0] != tab[1] then
     				return false
     			end
-    			j += 1
     		end
     		return true
-    	end
+    end
 end
