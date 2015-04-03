@@ -6,13 +6,14 @@ class RegleUn
 	attr_reader:ligne, :colonne, :grille
 		
 	private_class_method :new
-    	def RegleUn.creer()
-        	new()
-    	end
+    
+    def RegleUn.creer()
+        new()
+    end
     	
-    	def initialize()
-    		new()
-    	end
+    def initialize()
+    	new()
+    end
 	
 	def appliquer(grille)
 		@grille = grille
@@ -34,9 +35,10 @@ class RegleUn
     			end
     			j += 1
     		end
-    			if nbCouleurUn != nbCouleurDeux then
-    				return false
-    			end
+    		if nbCouleurUn != nbCouleurDeux then
+    			return false
+    		end
+    		i += 1
     	end
     		
     	i = 0
@@ -58,6 +60,7 @@ class RegleUn
     		if nbCouleurUn != nbCouleurDeux then
     			return false
     		end
+    		j += 1
     	end
     	return true
     end
