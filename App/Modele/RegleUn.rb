@@ -17,7 +17,7 @@ class RegleUn
 	end
 	
 	def appliquer(partie)
-			@partie = partie
+		@partie = partie
     		@ligne = @partie.grille().ligne()
     		@colonne = @partie.grille().colonne()
     		
