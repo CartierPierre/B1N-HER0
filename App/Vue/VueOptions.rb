@@ -24,12 +24,15 @@ class VueOptions < Vue
         boxLangue.add(@boutonLangueEn)
 
         @boutonRetour = Button.new(:label => @controleur.options.langue.langueActuelle[:retour])
-        @boutonRetour.signal_connect('clicked')  { onBtnRetourClicked }
+        @boutonRetour.signal_connect('clicked')  {
+            fermerCadre()
+            onBtnRetourClicked
+        }
 
         boxPrincipale.add(boxLangue)
         boxPrincipale.add(@boutonRetour)
 
-        @fenetre.add(boxPrincipale)
+        @cadre.add(boxPrincipale)
         self.actualiser()
     end
 

@@ -19,11 +19,20 @@ class VueMenuPrincipal < Vue
         vbox.add(@buttonOptions)
         vbox.add(@buttonProfil)
         vbox.add(@buttonQuitter)
-        @fenetre.add(vbox)
+        @cadre.add(vbox)
 
-        @buttonJouer.signal_connect('clicked')  { onBtnJouerClicked }
-        @buttonOptions.signal_connect('clicked')  { onBtnOptionsClicked }
-        @buttonQuitter.signal_connect('clicked')  { Gtk.main_quit }
+        @buttonJouer.signal_connect('clicked')  {
+            fermerCadre()
+            onBtnJouerClicked
+        }
+        @buttonOptions.signal_connect('clicked')  {
+            fermerCadre()
+            onBtnOptionsClicked
+        }
+        @buttonQuitter.signal_connect('clicked')  {
+            fermerCadre()
+            Gtk.main_quit
+        }
       
         self.actualiser()
 	end

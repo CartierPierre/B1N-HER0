@@ -24,19 +24,31 @@ class VueInscription < Vue
         hbox2.pack_end(buttonAnnuler)
         vbox1.add(hbox1)
         vbox1.add(hbox2)
-        @fenetre.add(vbox1)
+        @cadre.add(vbox1)
 
 
-        buttonValider.signal_connect('clicked')    {onBtnValiderClicked}
-        buttonAnnuler.signal_connect('clicked')    {onBtnAnnulerClicked}
-        @entryPseudo.signal_connect('activate')     {onBtnValiderClicked}
-        @entryPassword.signal_connect('activate')   {onBtnValiderClicked}
+        buttonValider.signal_connect('clicked')    {
+            fermerCadre()
+            onBtnValiderClicked
+        }
+        buttonAnnuler.signal_connect('clicked')    {
+            fermerCadre()
+            onBtnAnnulerClicked
+        }
+        @entryPseudo.signal_connect('activate')     {
+            fermerCadre()
+            onBtnValiderClicked
+        }
+        @entryPassword.signal_connect('activate')   {
+            fermerCadre()
+            onBtnValiderClicked
+        }
 
         self.actualiser()
     end
 
 	def onBtnValiderClicked
-        @controleur.valider(@entryPseudo.text(),@entryPassword.text())
+        @controleur.valider(@entryPseudo.text(),@entryPassword.text(),Utilisateur::ONLINE)
 	end
 
 	def onBtnAnnulerClicked

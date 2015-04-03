@@ -23,13 +23,25 @@ class VueConnexion < Vue
         hbox2.pack_end(bouttonAnnuler)
         vbox1.add(hbox1)
         vbox1.add(hbox2)
-        @fenetre.add(vbox1)
+        @cadre.add(vbox1)
 
 
-        bouttonValider.signal_connect('clicked')     {onBtnValiderClicked}
-        bouttonAnnuler.signal_connect('clicked')     {onBtnAnnulerClicked}
-        @entryPseudo.signal_connect('activate')     {onBtnValiderClicked}
-        @entryPassword.signal_connect('activate')   {onBtnValiderClicked}
+        bouttonValider.signal_connect('clicked')     {
+            fermerCadre()
+            onBtnValiderClicked
+        }
+        bouttonAnnuler.signal_connect('clicked')     {
+            fermerCadre()
+            onBtnAnnulerClicked
+        }
+        @entryPseudo.signal_connect('activate')     {
+            fermerCadre()
+            onBtnValiderClicked
+        }
+        @entryPassword.signal_connect('activate')   {
+            fermerCadre()
+            onBtnValiderClicked
+        }
 
         self.actualiser()
     end

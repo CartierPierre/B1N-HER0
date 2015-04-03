@@ -14,7 +14,7 @@ class VueNouvellePartie < Vue
 		@buttonQuitter = Button.new(:stock_id => Gtk::Stock::QUIT)
         vbox.add(@buttonJouer)
         vbox.add(@buttonAnnuler)
-        @fenetre.add(vbox)
+        @cadre.add(vbox)
 
         @buttonJouer.signal_connect('clicked')  { onBtnJouerClicked }
         @buttonAnnuler.signal_connect('clicked')  { onBtnAnnulerClicked }

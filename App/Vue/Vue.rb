@@ -1,27 +1,31 @@
 class Vue
-    @fenetre
+    @@fenetre = Window.new("BinHero")
+    @cadre
     @modele
     @controleur
 
     attr_writer :fenetre
 
     def initialize(modele,titre,controleur)
+        @cadre = Frame.new()
+        @@fenetre.add(@cadre)
         @modele = modele
-        @fenetre = Window.new(titre)
-    	@fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
-    	@fenetre.set_resizable(false)
+        @@fenetre.title = titre
+    	@@fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
+    	@@fenetre.set_resizable(false)
         @controleur=controleur
-        # @fenetre.signal_connect('destroy') {
-            # Gtk.main_quit
-        # }
+
+        @@fenetre.signal_connect('destroy') {
+            Gtk.main_quit
+        }
     end
 
     def actualiser()
-        @fenetre.show_all()
+        @@fenetre.show_all()
     end
 
-    def fermerFenetre()
-        @fenetre.destroy()
+    def fermerCadre()
+        @@fenetre.remove(@cadre)
     end
 
     def nouveauBouton(labelBouton,image)

@@ -15,11 +15,21 @@ class VueDemarrage < Vue
         hbox.add(buttonInscription)
         hbox.add(buttonJeu)
         vbox.add(hbox)
-        @fenetre.add(vbox)
+        @cadre.add(vbox)
 
-        buttonConnexion.signal_connect('clicked')  { onBtnConnexionClicked }
-        buttonInscription.signal_connect('clicked')  { onBtnInscriptionClicked }
-        buttonJeu.signal_connect('clicked')  { onBtnJeuClicked }
+        buttonConnexion.signal_connect('clicked')  {
+            fermerCadre()
+            onBtnConnexionClicked
+        }
+        buttonInscription.signal_connect('clicked')  {
+            fermerCadre()
+            onBtnInscriptionClicked
+        }
+
+        buttonJeu.signal_connect('clicked')  {
+            fermerCadre()
+            onBtnJeuClicked
+        }
 
         self.actualiser()
     end

@@ -14,7 +14,6 @@ class Controleur
     end
 
     def changerControleur(controleur)
-        @vue.fermerFenetre
     	@jeu.controleur = controleur
     end
 

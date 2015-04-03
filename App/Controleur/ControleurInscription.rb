@@ -8,8 +8,8 @@ class ControleurInscription < Controleur
 
 
 
-    def valider(pseudo,password)
-        @utilisateur = Utilisateur.creer(pseudo,password,Utilisateur::ONLINE)
+    def valider(pseudo,password,statut)
+        @utilisateur = Utilisateur.creer(pseudo,password,statut)
         begin
             @gestionnaireUtilisateur.persist(@utilisateur)
             rescue SQLite3::ConstraintException => erreur
