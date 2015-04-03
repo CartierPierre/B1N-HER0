@@ -11,34 +11,30 @@ class VueDemarrage < Vue
         buttonInscription = Button.new(:label => "Inscription")
         buttonJeu = Button.new(:label => "Test jeu")
 
-        hbox.add(buttonConnexion)
-        hbox.add(buttonInscription)
-        hbox.add(buttonJeu)
-        vbox.add(hbox)
-        @cadre.add(vbox)
+        vbox.add(buttonConnexion)
+        vbox.add(buttonInscription)
+        vbox.add(buttonJeu)
+        pb = Gdk::Pixbuf.new(:file => './Vue/img/Hero.png', :width => 400, :height => 400)
+        imgHero = Image.new(:pixbuf => pb)
+        #imgHero.scale(50,50)
+        hbox.add(imgHero)
+        hbox.add(vbox)
+        @cadre.add(hbox)
 
-        buttonConnexion.signal_connect('clicked')  {
-            fermerCadre()
-            onBtnConnexionClicked
-        }
-        buttonInscription.signal_connect('clicked')  {
-            fermerCadre()
-            onBtnInscriptionClicked
-        }
-
-        buttonJeu.signal_connect('clicked')  {
-            fermerCadre()
-            onBtnJeuClicked
-        }
+        buttonConnexion.signal_connect('clicked')  {onBtnConnexionClicked}
+        buttonInscription.signal_connect('clicked')  {onBtnInscriptionClicked}
+        buttonJeu.signal_connect('clicked')  {onBtnJeuClicked}
 
         self.actualiser()
     end
 
 	def onBtnConnexionClicked
+        fermerCadre()
         @controleur.connexion()
 	end
 
 	def onBtnInscriptionClicked
+        fermerCadre()
         @controleur.inscription()
 	end
 
