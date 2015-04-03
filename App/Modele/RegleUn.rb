@@ -8,18 +8,18 @@ class RegleUn
 		
 	private_class_method :new
     
-    	def RegleUn.creer()
-        	new()
-    	end
+    def RegleUn.creer()
+        new()
+    end
     	
-    	def initialize()
-    		new()
+    def initialize()
+    	new()
 	end
 	
-	def appliquer(partie)
-		@partie = partie
-    		@ligne = @partie.grille().ligne()
-    		@colonne = @partie.grille().colonne()
+	def RegleUn.appliquer(partie)
+			@partie = partie
+    		@ligne = Math.sqrt(@partie.grille().taille())
+    		@colonne = Math.sqrt(@partie.grille().taille())
     		
     		0.upto(@ligne - 1) do |x|
     			tab = compterCasesLigne(x)
