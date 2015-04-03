@@ -34,9 +34,13 @@ class Partie
     # *coup* - Le coup joué.
     def historiqueAdd(coup)
         # Vide l'historique si pour coller avec les undo
-        puts (@historique.size() - @historiqueCurseur)-1
-        1.upto((@historique.size() - @historiqueCurseur)-1) do
-            @historique.pop()
+        puts (@historique.size() - @historiqueCurseur)
+        if(@historiqueCurseur == 0 && @historique.size() != 1)
+            @historique.clear()
+        else
+            1.upto((@historique.size() - @historiqueCurseur)-1) do
+                @historique.pop()
+            end
         end
 
         # Ajoute le nouveau coup à l'historique
