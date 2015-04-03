@@ -1,7 +1,7 @@
 ##
 # Script de test pour la classe GestionnaireScore
 #
-# Version 3
+# Version 4
 #
 
 # Dépendances
@@ -29,7 +29,7 @@ utilisateur = gu.recupererUtilisateur(1)
 niveau = gn.recupererNiveau(1)
 
 # Récupérer un score
-score = gsc.recupererSauvegarde(2)
+score = gsc.recupererScore(2)
 if( score != nil )
 	puts "Le score avec l'id 2 existe"
 end

@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 7
+# Version 8
 #
 # Passer la connexion BDD par une instance unique
 #
@@ -126,7 +126,6 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut faire persister les informations
 	#
-	# private_class_method :insert
 	def insert(u)
 		@bddLocal.execute("
 			INSERT INTO utilisateur
@@ -151,7 +150,6 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut faire persister les informations
 	#
-	# private_class_method :update
 	def update(u)
 		@bddLocal.execute("
 			UPDATE utilisateur
@@ -174,7 +172,7 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut mettre à jour les informations
 	#
-	def sauvegarder(u)
+	def sauvegarderUtilisateur(u)
 		if (u.id == nil)
 			insert(u)
 		else
@@ -188,7 +186,7 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur à supprimer
 	#
-	def supprimer(u)
+	def supprimerUtilisateur(u)
 		@bddLocal.execute("
 			DELETE FROM utilisateur
 			WHERE id = #{ u.id };
@@ -205,7 +203,7 @@ class GestionnaireUtilisateur
 	# ==== Retour
 	# Renvoi un object utilisateur si ce dernier à été trouvé, nil si non
 	#
-	def connexion(n, m)
+	def connexionUtilisateur(n, m)
 		resultat = @bddLocal.execute("
 			SELECT *
 			FROM utilisateur

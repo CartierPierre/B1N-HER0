@@ -27,17 +27,17 @@ end
 testUser = Utilisateur.creer('Buddies', 'azerty', Utilisateur::OFFLINE)
 puts "Création d'un utilisateur de test #{ testUser.nom } (id:#{ testUser.id })"
 begin
-	gestionnaireUtilisateur.sauvegarder(testUser)
+	gestionnaireUtilisateur.sauvegarderUtilisateur(testUser)
 	rescue SQLite3::ConstraintException => err
 		puts "L'utilisateur #{ testUser.nom } (id:#{ testUser.id }) existe déjà !"
 end
 
 # Test de suppression de l'utilisateur
 puts "Suppression de l'utilisateur de test #{ testUser.nom } (id:#{ testUser.id })"
-gestionnaireUtilisateur.supprimer(testUser)
+gestionnaireUtilisateur.supprimerUtilisateur(testUser)
 
 # Test de connexion d'un client
-client = gestionnaireUtilisateur.connexion('toto0', 'azerty')
+client = gestionnaireUtilisateur.connexionUtilisateur('toto0', 'azerty')
 if ( client == nil )
 	puts "Les identifiants ne sont pas correctes"
 else
@@ -46,4 +46,4 @@ end
 
 # Test mise à jour client
 client.type = 0
-gestionnaireUtilisateur.sauvegarder(client)
+gestionnaireUtilisateur.sauvegarderUtilisateur(client)

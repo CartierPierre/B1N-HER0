@@ -132,7 +132,6 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +u+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
 	#
-	# private_class_method :insert
 	# def insert(s)
 		# @bddLocal.execute("
 			# INSERT INTO sauvegarde
@@ -157,7 +156,6 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +s+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
 	#
-	# private_class_method :update
 	# def update(s)
 		# @bddLocal.execute("
 			# UPDATE sauvegarde
@@ -180,7 +178,7 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +s+ - (Sauvegarde) Sauvegarde dont il faut mettre à jour les informations
 	#
-	# def sauvegarder(s)
+	# def sauvegarderSauvegarde(s)
 		# if (s.id == nil)
 			# insert(s)
 		# else
@@ -194,7 +192,7 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +s+ - (Sauvegarde) sauvegarde à supprimer
 	#
-	def supprimer(s)
+	def supprimerSauvegarde(s)
 		@bddLocal.execute("
 			DELETE FROM sauvegarde
 			WHERE id = #{ u.id };

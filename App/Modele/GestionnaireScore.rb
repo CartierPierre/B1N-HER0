@@ -2,7 +2,7 @@
 # La classe GestionnaireScore permet d'intéragir avec entitées Score
 # Utilise le DP Singleton
 #
-# Version 3
+# Version 4
 #
 # Passer la connexion BDD par une instance unique
 #
@@ -64,7 +64,7 @@ class GestionnaireScore
 	# ==== Retour
 	# Renvoi un objets score si se dernier a été trouvé. Nil si non
 	#
-	def recupererSauvegarde(id)
+	def recupererScore(id)
 		resultat = @bddLocal.execute("
 			SELECT *
 			FROM score
@@ -322,7 +322,7 @@ class GestionnaireScore
 	# ==== Paramètres
 	# * +s+ - (Score) Score dont il faut mettre à jour les informations
 	#
-	def sauvegarder(s)
+	def sauvegarderScore(s)
 		if (s.id == nil)
 			insert(s)
 		else
