@@ -131,6 +131,34 @@ class Partie
         return true
     end
 
+    # Donne le nombre de case de chaque état du une colonne
+    def compterCasesColonne(x)
+        nbEtat = Array[0, 0]
+        @grille.getColonne(x).each do |tuile|
+            if(tuile.etat == Etat.etat_1 || tuile.etat == Etat.lock_1)
+                nbEtat[0] += 1
+            elsif(tuile.etat == Etat.etat_2 || tuile.etat == Etat.lock_2)
+                nbEtat[1] += 1
+            end
+        end
+
+        return nbEtat
+    end
+
+    # Donne le nombre de case de chaque état du une colonne
+    def compterCasesLigne(x)
+        nbEtat = Array[0, 0]
+        @grille.getLigne(x).each do |tuile|
+            if(tuile.etat == Etat.etat_1 || tuile.etat == Etat.lock_1)
+                nbEtat[0] += 1
+            elsif(tuile.etat == Etat.etat_2 || tuile.etat == Etat.lock_2)
+                nbEtat[1] += 1
+            end
+        end
+
+        return nbEtat
+    end
+
     @cpttest
     def monitor
         @cpttest += 1

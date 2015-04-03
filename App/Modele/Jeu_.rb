@@ -33,23 +33,9 @@ class Jeu
     end
 
     def test()
-        @partie.historiqueUndo()
-        print "Undo :\n"
-        to_s
-        @partie.historiqueUndo()
-        print "Undo :\n"
-        to_s
-        @partie.historiqueRedo()
-        print "Redo :\n"
-        to_s
-        @partie.historiqueRedo()
-        print "Redo :\n"
-        to_s
-        jouerEn(2,2)
-        to_s
-        @partie.historiqueRedo()
-        print "Redo :\n"
-        to_s
+        p @partie.compterCasesLigne(0)
+        p @partie.compterCasesLigne(1)
+        p @partie.compterCasesColonne(5)
     end
 
     def to_s()
@@ -65,6 +51,7 @@ end
 
 n = Jeu.creer()
 puts n
+n.test
 # n.jouerEn(1,1)
 # n.jouerEn(1,1)
 # puts n

@@ -80,12 +80,10 @@ class Grille
     def getColonne(y) #TODO Générer une execption
         # if(0 <= y && y < @nbColonne)
         if(0 <= y && y < @taille)
-            # newColonne = Array.new(@nbLigne)
             newColonne = Array.new(@taille)
 
-            # 0.upto(@nbLigne -1) do |i|
             0.upto(@taille -1) do |i|
-                newColonne[i] = this.getTuile(i, y)
+                newColonne[i] = self.getTuile(i, y)
             end
         else
             # newColonne = Array.new(@nbLigne) { Tuile.creer() }
