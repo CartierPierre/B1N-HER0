@@ -71,7 +71,7 @@ begin
 			`uuid`								INTEGER UNIQUE,
 			`probleme`							TEXT NOT NULL,
 			`solution`							TEXT NOT NULL,
-			`niveau`							INTEGER NOT NULL,
+			`difficulte`						INTEGER NOT NULL,
 			`dimention`							INTEGER NOT NULL
 		);
 	")

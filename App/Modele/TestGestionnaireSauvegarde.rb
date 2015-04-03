@@ -1,7 +1,7 @@
 ##
 # Script de test pour la classe GestionnaireSauvegarde
 #
-# Version 4
+# Version 5
 #
 
 # Dépendances
@@ -10,6 +10,7 @@ require "./GestionnaireSauvegarde.rb"
 require "./GestionnaireUtilisateur.rb"
 require "./Utilisateur.rb"
 require "./Sauvegarde.rb"
+# require "./Partie.rb"
 
 # On récupère l'instance du gestionnaire d'utilisateur
 gu = GestionnaireUtilisateur.instance()

@@ -24,8 +24,6 @@ class Sauvegarde
 				puts "Sauvegarde.creer n'accepte que O ou 6 arguments"
         end
     end
-
-	### Méthodes d'instances
 	
 	##
 	# Constructeur

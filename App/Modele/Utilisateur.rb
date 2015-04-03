@@ -32,8 +32,6 @@ class Utilisateur
         end
     end
 	
-	### Méthodes d'instances
-	
 	##
 	# Constructeur
 	#
