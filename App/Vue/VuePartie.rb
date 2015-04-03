@@ -216,7 +216,13 @@ class VuePartie < Vue
     end
 
     def onBtnRestartClicked
-
+        @modele.recommencer
+        0.upto(@tailleGrille-1) do |x|
+            0.upto(@tailleGrille-1) do |y|
+                @casesJeu[x][y].setImageTuile(@modele.grille().getTuile(x,y).etat())
+            end
+        end
+        self.actualiser()
     end
 
 end

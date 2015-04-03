@@ -24,6 +24,8 @@ class Partie
         @dateDebutPartie = Time.new()
         @score = Score.creer(@utilisateur)
         @historiqueCurseur = 0
+
+        @cpttest = 0
     end
 
     # Enregistre un coup est l'état de la tuile avant ce coup
@@ -31,20 +33,31 @@ class Partie
     # === Argument
     # *coup* - Le coup joué.
     def historiqueAdd(coup)
-        #TODO mettre a jour pour nouveau coup
-        # 0.upto(@historique.size() - @historiqueCurseur) do
-        #     @historique.pop()
-        # end
+        # Vide l'historique si pour coller avec les undo
+        puts (@historique.size() - @historiqueCurseur)-1
+        1.upto((@historique.size() - @historiqueCurseur)-1) do
+            @historique.pop()
+        end
+
+        # Ajoute le nouveau coup à l'historique
+            # S'il est au même endroit que le précédent
         if((@historique.size > 0) && (@historique.last().x == coup.x && @historique.last().y == coup.y))
-            if(coup.etat != 2)
-                @historique.last().etat = coup.etat
-            else
+            # Si son état précédent est à 2 = on revient au point de départ
+            if(coup.etat == 2)
+                # On pop les deux dernier état qui ne sont plus utiles
                 @historique.pop()
+                @historique.pop()
+            else
+                # Si l'état précedent est différent de 2 (aka la case est de nouveau vide on push)
+                @historique.push(coup)
             end
         else
+            # Sinon on ajoute le nouveau coup à l'historique
             @historique.push(coup)
-            @historiqueCurseur = @historique.size() - 1
         end
+
+        # On recalcule le curseur d'historique pour être sur de ne pas sortir des bornes de l'historique
+        @historiqueCurseur = @historique.size() - 1
 
         self
     end
@@ -83,6 +96,13 @@ class Partie
         return nil
     end
 
+    #Recommence la grille
+    def recommencer()
+        @grille = Grille.creer(niveau.grilleInitial.taille).copier(niveau.grilleInitial)
+        @historique = Array.new()
+        @historiqueCurseur = 0
+    end
+
     #Permet de jouer un coup
     def jouerCoup(x, y)#TODO signale un coup invalide
         if @niveau.tuileValide?(x, y)
@@ -95,11 +115,13 @@ class Partie
         end
     end
 
+    @cpttest
     def monitor
+        @cpttest += 1
+        print "\nN° ", @cpttest, "\n"
         @grille.afficher()
-        p @historique
+        puts @historique
         print "Cursor = ", @historiqueCurseur, "| Size = ", @historique.size(), " | Next : ", @historique[@historiqueCurseur], "\n"
-        puts
     end
 
     #TODO reset grille
