@@ -38,22 +38,19 @@ class VuePartie < Vue
         end
 
         def setImageTuile(etat)
-            if (etat == 1)
+            if (etat == Etat.etat_1)
                 self.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
-            elsif (etat == 2)
+            elsif (etat == Etat.etat_2)
                 self.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+            elsif (etat == Etat.lock_1)
+                self.set_image(Image.new(:file => './Vue/img/CaseRouge32Lock.png'))
+            elsif (etat == Etat.lock_1)
+                self.set_image(Image.new(:file => './Vue/img/CaseBleue32Lock.png'))
             else
                 self.set_image(Image.new())
             end    
         end
 
-        def setImageTuile1Lock()
-            self.set_image(Image.new(:file => './Vue/img/CaseRouge32Lock.png'))
-        end
-
-        def setImageTuile2Lock()
-            self.set_image(Image.new(:file => './Vue/img/CaseBleue32Lock.png'))
-        end
     end
 
     def initialize(modele,titre,controleur)
@@ -116,14 +113,9 @@ class VuePartie < Vue
 
         0.upto(@tailleGrille-1) do |x|
             0.upto(@tailleGrille-1) do |y|
+                
                 caseTemp = CaseJeu.new(x,y)
-
-            	if @modele.grille().getTuile(x,y).etat() == 1
-            		caseTemp.setImageTuile1Lock()
-            	elsif @modele.grille().getTuile(x,y).etat() == 2
-            		caseTemp.setImageTuile2Lock()
-            	end
-
+                caseTemp.setImageTuile(@modele.grille().getTuile(x,y).etat())
                 caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
             	frame.attach(caseTemp,y,y+1,x,x+1)
 
