@@ -1,7 +1,7 @@
 ##
 # Script de test pour la classe GestionnaireScore
 #
-# Version 2
+# Version 3
 #
 
 # Dépendances
@@ -27,6 +27,12 @@ utilisateur = gu.recupererUtilisateur(1)
 
 # On récupère un niveau
 niveau = gn.recupererNiveau(1)
+
+# Récupérer un score
+score = gsc.recupererSauvegarde(2)
+if( score != nil )
+	puts "Le score avec l'id 2 existe"
+end
 
 # Nombre de scores
 nbScores = gsc.recupererNombreScore()
@@ -54,6 +60,17 @@ puts "Le niveau #{ niveau.id } à #{ nbScores } score(s)"
 
 # Lister les scores d'un niveau
 scores = gsc.recupererListeScoreNiveau(niveau, 0, 10)
+scores.each do |score|
+	puts " - #{ score } "
+end
+
+# Nombre de scores d'un utilisateur sur un niveau
+nbScores = gsc.recupererNombreScoreUtilisateurNiveau(utilisateur, niveau)
+puts "L'utilisateur #{ utilisateur.nom } à #{ nbScores } score(s) sur le niveau #{ niveau.id }"
+
+# Lister les scores d'un utilisateur sur un niveau
+scores = gsc.recupererListeScoreUtilisateurNiveau(utilisateur, niveau, 0, 10)
+puts "Les scores de l'utilisateur #{ utilisateur.nom } sur le niveau #{ niveau.id } sont :"
 scores.each do |score|
 	puts " - #{ score } "
 end
