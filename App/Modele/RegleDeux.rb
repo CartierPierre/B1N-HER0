@@ -17,7 +17,7 @@ class RegleDeux
     	new()
     end
     
-    def appliquer(partie)
+    def RegleDeux.appliquer(partie)
     
     	@partie = partie
     	@ligne = @partie.grille().ligne()
