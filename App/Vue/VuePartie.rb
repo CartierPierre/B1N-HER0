@@ -44,7 +44,7 @@ class VuePartie < Vue
                 self.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
             elsif (etat == Etat.lock_1)
                 self.set_image(Image.new(:file => './Vue/img/CaseRouge32Lock.png'))
-            elsif (etat == Etat.lock_1)
+            elsif (etat == Etat.lock_2)
                 self.set_image(Image.new(:file => './Vue/img/CaseBleue32Lock.png'))
             else
                 self.set_image(Image.new())
@@ -116,8 +116,12 @@ class VuePartie < Vue
                 
                 if(x == 0 && y == 0)
                     caseTemp = Label.new()
-                elsif(x == 0 || y == 0)
-                    caseTemp = Label.new("1")
+                elsif(x == 0)
+                    nb = @modele.compterCasesColonne(y-1)
+                    caseTemp = Label.new.set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
+                elsif(y == 0)
+                    nb = @modele.compterCasesLigne(x-1)
+                    caseTemp = Label.new.set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
                 else
                     caseTemp = CaseJeu.new(x-1,y-1)
                     caseTemp.setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
@@ -156,7 +160,7 @@ class VuePartie < Vue
         boxVertMain.add(boxJeu)
         boxVertMain.pack_end(boxFooter, :expand => true, :fill => false)
 
-        @fenetre.add(boxVertMain)
+        @cadre.add(boxVertMain)
 
         self.actualiser()
     end
