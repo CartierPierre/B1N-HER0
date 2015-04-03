@@ -19,7 +19,7 @@ class Partie
     def initialize(utilisateur, niveau)
         @utilisateur = utilisateur
         @niveau = niveau
-        @grille = Grille.creer(niveau.grilleInitial.taille).copier(niveau.grilleInitial)
+        @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
         @historique = Array.new()
         @dateDebutPartie = Time.new()
         @score = Score.creer(@utilisateur)
@@ -98,7 +98,7 @@ class Partie
 
     #Recommence la grille
     def recommencer()
-        @grille = Grille.creer(niveau.grilleInitial.taille).copier(niveau.grilleInitial)
+        @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
         @historique = Array.new()
         @historiqueCurseur = 0
     end
@@ -122,7 +122,7 @@ class Partie
     def valider()
         0.upto(@grille.taille() - 1) do |x|
             0.upto(@grille.taille() - 1) do |y|
-                if(Etat.egale?(@grille.getTuile(x, y).etat, @niveau.grilleSolution.getTuile(x, y).etat))
+                if(Etat.egale?(@grille.getTuile(x, y).etat, @niveau.solution.getTuile(x, y).etat))
                     return false
                 end
             end
@@ -131,10 +131,10 @@ class Partie
         return true
     end
 
-    # Donne le nombre de case de chaque état du une colonne
-    def compterCasesColonne(x)
+    # Donne le nombre de case de chaque état d'une ligne
+    def compterCasesLigne(x)
         nbEtat = Array[0, 0]
-        @grille.getColonne(x).each do |tuile|
+        @grille.getLigne(x).each do |tuile|
             if(tuile.etat == Etat.etat_1 || tuile.etat == Etat.lock_1)
                 nbEtat[0] += 1
             elsif(tuile.etat == Etat.etat_2 || tuile.etat == Etat.lock_2)
@@ -145,10 +145,10 @@ class Partie
         return nbEtat
     end
 
-    # Donne le nombre de case de chaque état du une colonne
-    def compterCasesLigne(x)
+    # Donne le nombre de case de chaque état d'une colonne
+    def compterCasesColonne(y)
         nbEtat = Array[0, 0]
-        @grille.getLigne(x).each do |tuile|
+        @grille.getColonne(y).each do |tuile|
             if(tuile.etat == Etat.etat_1 || tuile.etat == Etat.lock_1)
                 nbEtat[0] += 1
             elsif(tuile.etat == Etat.etat_2 || tuile.etat == Etat.lock_2)

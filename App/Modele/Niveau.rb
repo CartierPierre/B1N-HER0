@@ -67,8 +67,8 @@ class Niveau
     #
     # === Arguments
     # *x* - 
-    # def tuileValide?(x, y)
-        # return @grilleInitial.getTuile(x, y).etat == 0
-    # end
+    def tuileValide?(x, y)
+        return @probleme.getTuile(x, y).etat == 0
+    end
 	
 end
