@@ -43,17 +43,17 @@ nbScores = gsc.recupererNombreScoreUtilisateur(utilisateur)
 puts "L'utilisateur #{ utilisateur.nom } à #{ nbScores } score(s)"
 
 # Lister les scores d'un utilisateur
-scores = gsc.recupererScoreUtilisateur(utilisateur, 0, 10)
+scores = gsc.recupererListeScoreUtilisateur(utilisateur, 0, 10)
 scores.each do |score|
 	puts " - #{ score } "
 end
 
 # Nombre de scores sur un niveau
-nbScores = gsc.recupererNombreScoreUtilisateur(utilisateur)
+nbScores = gsc.recupererNombreScoreNiveau(niveau)
 puts "Le niveau #{ niveau.id } à #{ nbScores } score(s)"
 
-# Lister les scores sur un utilisateur
-scores = gsc.recupererScoreUtilisateur(niveau, 0, 10)
+# Lister les scores d'un niveau
+scores = gsc.recupererListeScoreNiveau(niveau, 0, 10)
 scores.each do |score|
 	puts " - #{ score } "
 end

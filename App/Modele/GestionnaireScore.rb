@@ -126,7 +126,7 @@ class GestionnaireScore
 	# ==== Retour
 	# Renvoi une liste d'objets score d'un utilisateur
 	#
-	def recupererScoreUtilisateur(u, o, l)
+	def recupererListeScoreUtilisateur(u, o, l)
 		resultat = @bddLocal.execute("
 			SELECT *
 			FROM score
@@ -155,7 +155,7 @@ class GestionnaireScore
 	def recupererNombreScoreNiveau(n)
 		resultat = @bddLocal.execute("
 			SELECT COUNT(id)
-			FROM niveau
+			FROM score
 			WHERE id_niveau = #{ n.id };
 		")
 		return resultat[0][0];
@@ -172,7 +172,7 @@ class GestionnaireScore
 	# ==== Retour
 	# Renvoi une liste d'objets score d'un utilisateur
 	#
-	def recupererScoreNiveau(n, o, l)
+	def recupererListeScoreNiveau(n, o, l)
 		resultat = @bddLocal.execute("
 			SELECT *
 			FROM score
