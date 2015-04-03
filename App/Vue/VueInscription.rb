@@ -27,36 +27,36 @@ class VueInscription < Vue
         @cadre.add(vbox1)
 
 
-        buttonValider.signal_connect('clicked')    {
-            fermerCadre()
-            onBtnValiderClicked
-        }
-        buttonAnnuler.signal_connect('clicked')    {
-            fermerCadre()
-            onBtnAnnulerClicked
-        }
-        @entryPseudo.signal_connect('activate')     {
-            fermerCadre()
-            onBtnValiderClicked
-        }
-        @entryPassword.signal_connect('activate')   {
-            fermerCadre()
-            onBtnValiderClicked
-        }
+        buttonValider.signal_connect('clicked')    {onBtnValiderClicked}
+        buttonAnnuler.signal_connect('clicked')    {onBtnAnnulerClicked}
+        @entryPseudo.signal_connect('activate')     {onBtnValiderClicked}
+        @entryPassword.signal_connect('activate')   {onBtnValiderClicked}
 
         self.actualiser()
     end
 
 	def onBtnValiderClicked
+        fermerCadre()
         @controleur.valider(@entryPseudo.text(),@entryPassword.text(),Utilisateur::ONLINE)
 	end
 
 	def onBtnAnnulerClicked
+        fermerCadre()
         @controleur.annuler()
 	end
 
-    def utilisateurExistant(pseudo)
+	def onBtnRetourClicked
+        fermerCadre()
+        @controleur.retour()
+	end
 
+    def utilisateurExistant(pseudo)
+        @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => "L'utilisateur "+pseudo+" existe déja.")
+
+        @popup.run
+        fermerCadre()
+        @popup.destroy
+        @controleur.retour(pseudo)
     end
 
 end

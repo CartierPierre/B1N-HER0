@@ -22,12 +22,14 @@ class VueNouvellePartie < Vue
         self.actualiser()
 	end
 	
-	def onBtnJouerClicked 
-	  @controleur.jouer
+	def onBtnJouerClicked
+        fermerCadre()
+        @controleur.jouer
 	end
 
 	def onBtnAnnulerClicked
-	  @controleur.annuler
+        fermerCadre()
+        @controleur.annuler
 	end
 
 
