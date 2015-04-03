@@ -8,6 +8,6 @@ class Tuile
     end
 
     def initialize()
-        @etat = 0
+        @etat = Etat.vide
     end
 end
