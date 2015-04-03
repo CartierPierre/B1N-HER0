@@ -32,9 +32,6 @@ class GestionnaireNiveau
 		return @@instance;
 	end
 	
-	
-	### Méthodes d'instances
-	
 	##
 	# Constructeur
 	#
@@ -42,6 +39,8 @@ class GestionnaireNiveau
 	def initialize
 		@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
 	end
+	
+	### Méthodes d'instances
 	
 	##
 	# Compte le nombre de niveau

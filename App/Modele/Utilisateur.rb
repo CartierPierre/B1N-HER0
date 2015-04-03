@@ -1,7 +1,9 @@
 ##
 # Classe Utilisateur
 #
-# Version 2
+# Version 3
+#
+# Voir attribut statistique et option
 #
 class Utilisateur
 	
@@ -37,15 +39,43 @@ class Utilisateur
 	#
 	private_class_method :new
     def initialize(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
+		
+		# int
+		# Identifiant local de l'utilisateur
 		@id = id
+		
+		# int
+		# Identifiant universel unique du niveau
 		@uuid = uuid
+		
+		# string
+		# Nom de l'utilisateur
 		@nom = nom
+		
+		# string
+		# Mot de passe de l'utilisateur
 		@motDePasse = motDePasse
+		
+		# ???
+		# Date à laquelle l'utilisateur c'est inscrit
 		@dateInscription = dateInscription
+		
+		# ???
+		# Date de la dernière syncronisation entre les données local et le serveur
 		@dateDerniereSync = dateDerniereSync
+		
+		# int
+		# Type de compte (online/offline)
 		@type = type
+		
+		# Statistique
+		# Object statistiques permettant d'accèder aux statistiques de l'utilisateur
 		@statistique = statistique
+		
+		# Option
+		# Object option permettant d'accèder aux options de l'utilisateur
 		@option = option
+		
     end
 	
 end

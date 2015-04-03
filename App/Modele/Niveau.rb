@@ -4,6 +4,7 @@
 # Version 1
 #
 # La dimention ne pourrait elle pas être lu depuis l'attribut problème ?
+# Voir attributs probleme et solution
 #
 class Niveau
 
@@ -52,7 +53,7 @@ class Niveau
 		@solution = solution
 		
 		# int
-		# Difficulté du Problème
+		# Difficulté du problème
 		@difficulte = difficulte
 		
 		# int

@@ -33,9 +33,6 @@ class GestionnaireSauvegarde
 		return @@instance;
 	end
 	
-	
-	### Méthodes d'instances
-	
 	##
 	# Constructeur
 	#
@@ -43,6 +40,8 @@ class GestionnaireSauvegarde
 	def initialize
 		@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
 	end
+	
+	### Méthodes d'instances
 	
 	##
 	# Compte le nombre de sauvegardes d'un utilisateur

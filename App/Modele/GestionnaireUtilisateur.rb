@@ -32,24 +32,15 @@ class GestionnaireUtilisateur
 		return @@instance;
 	end
 	
-	
-	### Méthodes d'instances
-	
 	##
 	# Constructeur
 	#
 	private_class_method :new
 	def initialize
-		# begin
-			# puts "Ouverture de la BDD ..."
-			@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
-			# rescue SQLite3::Exception => err
-				# puts "Erreur BDD"
-				# puts err
-				# abort
-		# end
-		# puts "BDD OK"
+		@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
 	end
+	
+	### Méthodes d'instances
 	
 	##
 	# Compte le nombre d'utilisateurs
