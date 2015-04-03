@@ -152,11 +152,19 @@ class Grille
     end
 
     def afficher()
+        print "   │ "
         0.upto(self.taille() - 1) do |i|
+            print i, " │ "
+        end
+        print "\n"
+        0.upto(self.taille() - 1) do |i|
+            print "───┼"*(self.taille() + 1), "\n"
+            print " ", i, " │ "
             0.upto(self.taille() - 1) do |j|
-                print "#{@grille[i][j].etat}"
+                print "#{(@grille[i][j].etat==1)?'O':((@grille[i][j].etat==2)?'X':' ')} │ "
             end
             print "\n"
         end
+        print "───┴"*(self.taille() + 1), "\n"
     end
 end

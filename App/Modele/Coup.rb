@@ -10,4 +10,8 @@ class Coup
     def initialize(x, y, etat)
         @x, @y, @etat = x, y, etat
     end
+
+    def to_s
+        return "Coup x = #{@x} y = #{@y} etat = #{@etat}"
+    end
 end
