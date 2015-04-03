@@ -63,15 +63,10 @@ class Jeu
     end
 end
 
-# n = Jeu.creer()
-# puts n
+n = Jeu.creer()
+puts n
 # n.jouerEn(1,1)
 # n.jouerEn(1,1)
 # puts n
 # n.test()
 # puts n
-
-print Etat.etat_1, "\n"
-p = Etat.etat_1
-p += 1
-print Etat.etat_1, p, "\n"

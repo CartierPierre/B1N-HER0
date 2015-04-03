@@ -104,7 +104,7 @@ class Grille
         j = 0
         modele.split(//).each do |x|
             if x != "_"
-                self.setTuile(j, i, (x.to_i + 1))
+                self.setTuile(j, i, (x.to_i == 0?Etat.lock_1():(x.to_i == 1?Etat.lock_2():Etat.vide())))
             end
             i += 1
             if i >= @taille
@@ -112,6 +112,12 @@ class Grille
                 j += 1
             end
         end
+
+        #         0.upto(self.taille()) do |x|
+        #     0.upto(self.taille()) do |y|
+        #         self.setTuile(x, y, (x.to_i == 1?Etat.lock_1():(x.to_i == 2?Etat.lock_2():Etat.vide())))
+        #     end
+        # end
 
         self
     end
@@ -140,6 +146,13 @@ class Grille
         self
     end
 
+    # Permet de dupliquer la grille
+    #
+    # === Argument
+    # *grille* - La grille à dupliquer
+    #
+    # === Retourne
+    # Une nouvelle grille basée sur la première
     def Grille.dupliquer(grille)
         nouvelleGrille = Grille.creer(grille.taille())
         0.upto(grille.taille() - 1) do |i|

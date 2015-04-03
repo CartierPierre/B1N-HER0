@@ -115,6 +115,22 @@ class Partie
         end
     end
 
+    # Vérifie si la grille est comforme à la grille solution.
+    #
+    # === Retourne
+    # Un booléen indiquant si la grille est valide.
+    def valider()
+        0.upto(@grille.taille() - 1) do |x|
+            0.upto(@grille.taille() - 1) do |y|
+                if(Etat.egale?(@grille.getTuile(x, y).etat, @niveau.grilleSolution.getTuile(x, y).etat))
+                    return false
+                end
+            end
+        end
+
+        return true
+    end
+
     @cpttest
     def monitor
         @cpttest += 1
