@@ -21,7 +21,7 @@ class VuePartie < Vue
     @buttonConseil
     @buttonRestart
 
-    @casesJeu
+    @grille
 
     @imageTuile1
     @imageTuile2
@@ -109,17 +109,22 @@ class VuePartie < Vue
         # Création de la grille
         boxJeu = Box.new(:horizontal)
         frame = Table.new(@tailleGrille,@tailleGrille,false)
-        @casesJeu = Array.new(@tailleGrille) { Array.new(@tailleGrille) }
+        @grille = Array.new(@tailleGrille+1) { Array.new(@tailleGrille+1) }
 
-        0.upto(@tailleGrille-1) do |x|
-            0.upto(@tailleGrille-1) do |y|
+        0.upto(@tailleGrille) do |x|
+            0.upto(@tailleGrille) do |y|
                 
-                caseTemp = CaseJeu.new(x,y)
-                caseTemp.setImageTuile(@modele.grille().getTuile(x,y).etat())
-                caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
-            	frame.attach(caseTemp,y,y+1,x,x+1)
-
-                @casesJeu[x][y] = caseTemp
+                if(x == 0 && y == 0)
+                    caseTemp = Label.new()
+                elsif(x == 0 || y == 0)
+                    caseTemp = Label.new("1")
+                else
+                    caseTemp = CaseJeu.new(x-1,y-1)
+                    caseTemp.setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
+                    caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
+                end
+                frame.attach(caseTemp,y,y+1,x,x+1)
+                @grille[x][y] = caseTemp
             end
         end
 
@@ -198,7 +203,7 @@ class VuePartie < Vue
     def onBtnUndoClicked
         tabCoord = @modele.historiqueUndo()
         if(tabCoord)
-            @casesJeu[tabCoord[0]][tabCoord[1]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
+            @grille[tabCoord[0]][tabCoord[1]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.actualiser() 
         end 
     end
@@ -206,7 +211,7 @@ class VuePartie < Vue
     def onBtnRedoClicked
         tabCoord = @modele.historiqueRedo()
         if(tabCoord)
-            @casesJeu[tabCoord[0]][tabCoord[1]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
+            @grille[tabCoord[0]][tabCoord[1]].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.actualiser() 
         end
     end
@@ -219,7 +224,7 @@ class VuePartie < Vue
         @modele.recommencer
         0.upto(@tailleGrille-1) do |x|
             0.upto(@tailleGrille-1) do |y|
-                @casesJeu[x][y].setImageTuile(@modele.grille().getTuile(x,y).etat())
+                @grille[x][y].setImageTuile(@modele.grille().getTuile(x,y).etat())
             end
         end
         self.actualiser()
