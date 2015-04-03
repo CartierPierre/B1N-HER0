@@ -177,8 +177,16 @@ class VuePartie < Vue
     end
 
     def onBtnReglesClicked 
-
+        regles = @controleur.options.langue.langueActuelle[:regles]
+        regles += "\n\n"
+        regles += @controleur.options.langue.langueActuelle[:regles1]
+        regles += @controleur.options.langue.langueActuelle[:regles2]
+        regles += @controleur.options.langue.langueActuelle[:regles3]
+        dialogRegles = MessageDialog.new(:parent => @fenetre, :type => :question, :buttons_type => :close, :message => regles)
+        dialogRegles.run()
+        dialogRegles.destroy()
     end
+
     def onBtnQuitterClicked
 
     end
