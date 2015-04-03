@@ -43,7 +43,7 @@ class Partie
             # S'il est au même endroit que le précédent
         if((@historique.size > 0) && (@historique.last().x == coup.x && @historique.last().y == coup.y))
             # Si son état précédent est à 2 = on revient au point de départ
-            if(coup.etat == 2)
+            if(coup.etat == Etat.etat_2)
                 # On pop les deux dernier état qui ne sont plus utiles
                 @historique.pop()
                 @historique.pop()
@@ -83,7 +83,7 @@ class Partie
     def historiqueRedo()
         if(@historique.size > 0 && @historiqueCurseur < @historique.size())
             coup = @historique[@historiqueCurseur]
-            @grille.appliquerCoup(coup.x, coup.y, (coup.etat+1)%3)
+            @grille.appliquerCoup(coup.x, coup.y, Etat.suivant(coup.etat))
             if(@historiqueCurseur < @historique.size()-1)
                 @historiqueCurseur += 1
             end
@@ -107,7 +107,7 @@ class Partie
     def jouerCoup(x, y)#TODO signale un coup invalide
         if @niveau.tuileValide?(x, y)
             historiqueAdd(Coup.creer(x, y, @grille.getTuile(x, y).etat()))
-            t = (@grille.getTuile(x, y).etat() + 1)%3
+            t = Etat.suivant(@grille.getTuile(x, y).etat())
             @grille.appliquerCoup(x, y, t)
             @score.incNbCoups()
 
