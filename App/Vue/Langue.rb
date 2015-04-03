@@ -32,7 +32,7 @@ class Langue
             retour: "Retour",
             regles1: "Règle n°1 : Il ne peut y avoir plus de deux cases possédant le même état à la suite.\n\n",
             regles2: "Règle n°2 : Chaque ligne et colonne possède autant de cases à l’état n°1 et à l’état n°2.\n\n",
-            regles3: "Règle n°3 : Il ne peut y avoir deux lignes ou deux colonnes identiques."
+            regles3: "Règle n°3 : Il ne peut y avoir deux lignes ou deux colonnes identiques.",
         }
 
         @langueEn = {
