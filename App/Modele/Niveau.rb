@@ -3,8 +3,7 @@
 #
 # Version 1
 #
-# La dimention ne pourrait elle pas être récupèré depuis l'attribut problème ?
-# Ajouter une methode pour sérialiser/de-sérialiser les problèmes et les solutions
+# La dimention ne pourrait elle pas être lu depuis l'attribut problème ?
 #
 class Niveau
 

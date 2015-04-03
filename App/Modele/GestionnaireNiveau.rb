@@ -6,7 +6,6 @@
 #
 # Résoudre le problème des private_class_method
 # Passer la connexion BDD par une instance unique
-# Penser à la sérialisation/dé-sérialisation
 #
 class GestionnaireNiveau
 	
