@@ -1,7 +1,7 @@
 ##
 # Classe Utilisateur
 #
-# Version 3
+# Version 4
 #
 # Voir attribut statistique et option
 #
@@ -14,7 +14,7 @@ class Utilisateur
 	
 	### Attributs d'instances
 	
-	attr_accessor :id, :uuid, :nom, :motDePasse, :dateInscription, :dateDerniereSync, :type, :statistique, :option
+	attr_accessor :id, :uuid, :nom, :motDePasse, :dateInscription, :dateDerniereSync, :option, :type, :statistique
 	
 	### Méthodes de classe
 	
@@ -24,9 +24,9 @@ class Utilisateur
     def Utilisateur.creer(*args)
 		case args.size
 			when 0
-				new(nil, nil, nil, nil, Time.now.to_i, Time.now.to_i, nil, nil, nil)
+				new(nil, nil, nil, nil, Time.now, Time.now, nil, nil, nil)
 			when 3
-				new(nil, nil, args[0], args[1], Time.now.to_i, Time.now.to_i, args[2], nil, nil)
+				new(nil, nil, args[0], args[1], Time.now, Time.now, nil, args[2], nil)
 			when 9
 				new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
 			else
@@ -38,7 +38,7 @@ class Utilisateur
 	# Constructeur
 	#
 	private_class_method :new
-    def initialize(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, type, statistique, option)
+    def initialize(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, option, type, statistique)
 		
 		# int
 		# Identifiant local de l'utilisateur
@@ -56,13 +56,17 @@ class Utilisateur
 		# Mot de passe de l'utilisateur
 		@motDePasse = motDePasse
 		
-		# ???
+		# Time
 		# Date à laquelle l'utilisateur c'est inscrit
 		@dateInscription = dateInscription
 		
-		# ???
+		# Time
 		# Date de la dernière syncronisation entre les données local et le serveur
 		@dateDerniereSync = dateDerniereSync
+		
+		# Option
+		# Object option permettant d'accèder aux options de l'utilisateur
+		@option = option
 		
 		# int
 		# Type de compte (online/offline)
@@ -71,10 +75,6 @@ class Utilisateur
 		# Statistique
 		# Object statistiques permettant d'accèder aux statistiques de l'utilisateur
 		@statistique = statistique
-		
-		# Option
-		# Object option permettant d'accèder aux options de l'utilisateur
-		@option = option
 		
     end
 	

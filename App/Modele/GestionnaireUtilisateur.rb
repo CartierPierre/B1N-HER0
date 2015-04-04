@@ -2,9 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 8
-#
-# Passer la connexion BDD par une instance unique
+# Version 9
 #
 class GestionnaireUtilisateur
 	
@@ -15,7 +13,7 @@ class GestionnaireUtilisateur
 	
 	### Attributs d'instances
 	
-	@bddLocal = nil
+	@stockage = nil
 	
 	
 	### Méthodes de classe
@@ -36,7 +34,7 @@ class GestionnaireUtilisateur
 	#
 	private_class_method :new
 	def initialize
-		@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
+		@stockage = Stockage.instance()
 	end
 	
 	### Méthodes d'instances
@@ -51,7 +49,8 @@ class GestionnaireUtilisateur
 	# Renvoi un object utilisateur hydraté selon les paramètres
 	#
 	def hydraterUtilisateur(args)
-		return Utilisateur.creer( args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8] )
+		puts args
+		return Utilisateur.creer( args[0], args[1], args[2], args[3], Time.at(args[4]), Time.at(args[5]), args[6], args[7], args[8] )
 	end
 	private :hydraterUtilisateur
 	
@@ -62,7 +61,7 @@ class GestionnaireUtilisateur
 	# Renvoi le nombre l'utilisateurs
 	#
 	def recupererNombreUtilisateur
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT COUNT(id)
 			FROM utilisateur;
 		")
@@ -81,7 +80,7 @@ class GestionnaireUtilisateur
 	#
 	def recupererListeUtilisateur(offset, limit)
 	
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM utilisateur
 			LIMIT #{ limit }
@@ -106,7 +105,7 @@ class GestionnaireUtilisateur
 	# Renvoi un objets utilisateur si se dernier a été trouvé. Nil si non
 	#
 	def recupererUtilisateur(id)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM utilisateur
 			WHERE id = #{id}
@@ -127,20 +126,20 @@ class GestionnaireUtilisateur
 	# * +u+ - (Utilisateur) Utilisateur dont il faut faire persister les informations
 	#
 	def insert(u)
-		@bddLocal.execute("
+		@stockage.executer("
 			INSERT INTO utilisateur
 			VALUES (
 				null,
 				null,
 				'#{ u.nom }',
 				'#{ u.motDePasse }',
-				#{ u.dateInscription },
-				#{ u.dateDerniereSync },
+				#{ u.dateInscription.to_i },
+				#{ u.dateDerniereSync.to_i },
 				'#{ u.option }',
 				#{ u.type }
 			);
 		")
-		u.id = @bddLocal.last_insert_row_id
+		u.id = @stockage.dernierId()
 	end
 	private :insert
 	
@@ -151,14 +150,14 @@ class GestionnaireUtilisateur
 	# * +u+ - (Utilisateur) Utilisateur dont il faut faire persister les informations
 	#
 	def update(u)
-		@bddLocal.execute("
+		@stockage.executer("
 			UPDATE utilisateur
 			SET
 				uuid = #{ (u.uuid==nil)?"null":u.uuid },
 				nom = '#{ u.nom }',
 				mot_de_passe = '#{ u.motDePasse }',
-				date_inscription = #{ u.dateInscription },
-				date_derniere_synchronisation = #{ u.dateDerniereSync },
+				date_inscription = #{ u.dateInscription.to_i },
+				date_derniere_synchronisation = #{ u.dateDerniereSync.to_i },
 				options = '#{ u.option }',
 				type = #{ u.type }
 			WHERE id = #{ u.id };
@@ -187,7 +186,7 @@ class GestionnaireUtilisateur
 	# * +u+ - (Utilisateur) Utilisateur à supprimer
 	#
 	def supprimerUtilisateur(u)
-		@bddLocal.execute("
+		@stockage.executer("
 			DELETE FROM utilisateur
 			WHERE id = #{ u.id };
 		")
@@ -204,7 +203,7 @@ class GestionnaireUtilisateur
 	# Renvoi un object utilisateur si ce dernier à été trouvé, nil si non
 	#
 	def connexionUtilisateur(n, m)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM utilisateur
 			WHERE

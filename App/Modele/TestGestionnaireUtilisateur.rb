@@ -1,23 +1,24 @@
 ##
 # Script de test pour la classe GestionnaireUtilisateur
 #
-# Version 5
+# Version 6
 #
 
 # Dépendances
 require "sqlite3"
+require "./Stockage.rb"
 require "./GestionnaireUtilisateur.rb"
 require "./Utilisateur.rb"
 
 # On récupère l'instance du gestionnaire d'utilisateur
-gestionnaireUtilisateur = GestionnaireUtilisateur.instance()
+gu = GestionnaireUtilisateur.instance()
 
 # Nombre d'utilisateurs
-resultat = gestionnaireUtilisateur.recupererNombreUtilisateur()
+resultat = gu.recupererNombreUtilisateur()
 puts "Il y a #{resultat} utilisateur(s)"
 
 # Liste des utilisateurs
-users = gestionnaireUtilisateur.recupererListeUtilisateur(0, 10)
+users = gu.recupererListeUtilisateur(0, 10)
 puts "Les 10 premiers utilisateurs sont :"
 users.each do |u|
 	puts " - #{u.nom}"
@@ -27,17 +28,17 @@ end
 testUser = Utilisateur.creer('Buddies', 'azerty', Utilisateur::OFFLINE)
 puts "Création d'un utilisateur de test #{ testUser.nom } (id:#{ testUser.id })"
 begin
-	gestionnaireUtilisateur.sauvegarderUtilisateur(testUser)
+	gu.sauvegarderUtilisateur(testUser)
 	rescue SQLite3::ConstraintException => err
 		puts "L'utilisateur #{ testUser.nom } (id:#{ testUser.id }) existe déjà !"
 end
 
 # Test de suppression de l'utilisateur
 puts "Suppression de l'utilisateur de test #{ testUser.nom } (id:#{ testUser.id })"
-gestionnaireUtilisateur.supprimerUtilisateur(testUser)
+gu.supprimerUtilisateur(testUser)
 
 # Test de connexion d'un client
-client = gestionnaireUtilisateur.connexionUtilisateur('toto0', 'azerty')
+client = gu.connexionUtilisateur('toto0', 'azerty')
 if ( client == nil )
 	puts "Les identifiants ne sont pas correctes"
 else
@@ -45,5 +46,5 @@ else
 end
 
 # Test mise à jour client
-client.type = 0
-gestionnaireUtilisateur.sauvegarderUtilisateur(client)
+client.dateDerniereSync = Time.now
+gu.sauvegarderUtilisateur(client)
