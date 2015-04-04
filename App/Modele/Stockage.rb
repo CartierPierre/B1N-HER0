@@ -34,7 +34,7 @@ class Stockage
 	#
 	private_class_method :new
 	def initialize
-		puts "Ouverture de la base de données ..."
+		# puts "Ouverture de la base de données ..."
 		begin
 			@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
 			rescue SQLite3::Exception => err
@@ -42,7 +42,7 @@ class Stockage
 				puts err
 				abort
 		end
-		puts "OK"
+		# puts "OK"
 	end
 	
 	### Méthodes d'instances
@@ -51,7 +51,7 @@ class Stockage
 	# Execute une requête SQL sur la base de données locale
 	#
 	def executer(requete)
-		puts requete
+		# puts requete
 		return @bddLocal.execute(requete)
 	end
 	

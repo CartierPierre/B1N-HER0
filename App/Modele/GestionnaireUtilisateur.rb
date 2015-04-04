@@ -49,7 +49,6 @@ class GestionnaireUtilisateur
 	# Renvoi un object utilisateur hydraté selon les paramètres
 	#
 	def hydraterUtilisateur(args)
-		puts args
 		return Utilisateur.creer( args[0], args[1], args[2], args[3], Time.at(args[4]), Time.at(args[5]), args[6], args[7], args[8] )
 	end
 	private :hydraterUtilisateur
