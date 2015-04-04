@@ -1,7 +1,7 @@
 ##
 # Classe Niveau
 #
-# Version 1
+# Version 2
 #
 # La dimention ne pourrait elle pas être lu depuis l'attribut problème ?
 # Voir attributs probleme et solution

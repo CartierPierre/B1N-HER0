@@ -2,7 +2,7 @@
 # La classe GestionnaireNiveau permet d'intéragir avec entitées Niveau
 # Utilise le DP Singleton
 #
-# Version 3
+# Version 4
 #
 class GestionnaireNiveau
 	
@@ -49,7 +49,14 @@ class GestionnaireNiveau
 	# Renvoi un object niveau hydraté selon les paramètres
 	#
 	def hydraterNiveau(args)
-		return Niveau.creer( args[0], args[1], args[2], args[3], args[4], args[5] )
+		return Niveau.creer(
+			args[0], # id
+			args[1], # uuid
+			Grille.creer( args[5] ).charger( args[2] ), # probleme
+			Grille.creer( args[5] ).charger( args[3] ), # solution
+			args[4], # difficulte
+			args[5] # dimention
+		)
 	end
 	private :hydraterNiveau
 	

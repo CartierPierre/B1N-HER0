@@ -44,7 +44,7 @@ class Sauvegarde
 		# Description de la sauvegarde
 		@description = description
 		
-		# ???
+		# Time
 		# Date de création de cette sauvegarde
 		@dateCreation = dateCreation
 		

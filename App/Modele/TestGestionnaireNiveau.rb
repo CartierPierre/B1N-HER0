@@ -1,21 +1,26 @@
 ##
 # Script de test pour la classe GestionnaireNiveau
 #
-# Version 2
+# Version 3
 #
 
 # Dépendances
 require "sqlite3"
 require "./Stockage.rb"
+
 require "./GestionnaireNiveau.rb"
 require "./Niveau.rb"
+
+require "./Grille.rb"
+require "./Tuile.rb"
+require "./Etat.rb"
 
 # On récupère l'instance du gestionnaire de niveau
 gn = GestionnaireNiveau.instance()
 
 # Nombre de niveaux
 nbNiveaux = gn.recupererNombreNiveau()
-puts "Il y a #{ nbNiveaux } niveau(x)"
+puts "Il y a #{ nbNiveaux } niveau(x) :"
 
 # Lister les niveaux
 niveaux = gn.recupererListeNiveau(0, 10)
