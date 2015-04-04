@@ -1,3 +1,10 @@
+# Heu ... ba quand je sérialise les option pour un utilisateur, je me dis cela va
+# juste stocker 2 ou 3 variable et en fait je me retrouve avec un ***** de dico
+# anglais/francais !!!
+#
+# Je pense qu'il serai préférable d'utiliser des constantes de classe ou je sais pas quoi ^^
+#
+
 class Langue
 
 	@langueFr

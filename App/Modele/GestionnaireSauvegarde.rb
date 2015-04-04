@@ -2,9 +2,8 @@
 # La classe GestionnaireSauvegarde permet d'intéragir avec entitées Sauvegarde
 # Utilise le DP Singleton
 #
-# Version 3
+# Version 4
 #
-# Passer la connexion BDD par une instance unique
 # Repenser attributs (insert/update non opérationnels)
 #
 class GestionnaireSauvegarde
@@ -16,7 +15,7 @@ class GestionnaireSauvegarde
 	
 	### Attributs d'instances
 	
-	@bddLocal = nil
+	@stockage = nil
 	
 	
 	### Méthodes de classe
@@ -37,7 +36,7 @@ class GestionnaireSauvegarde
 	#
 	private_class_method :new
 	def initialize
-		@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
+		@stockage = Stockage.instance()
 	end
 	
 	### Méthodes d'instances
@@ -66,7 +65,7 @@ class GestionnaireSauvegarde
 	# Renvoi le nombre de sauvegardes d'un utilisateur
 	#
 	def recupererNombreSauvegardeUtilisateur(u)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT COUNT(id)
 			FROM sauvegarde
 			WHERE id_utilisateur = #{ u.id };
@@ -86,7 +85,7 @@ class GestionnaireSauvegarde
 	# Renvoi une liste d'objets sauvegarde d'un utilisateur
 	#
 	def recupererSauvegardeUtilisateur(u, o, l)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM sauvegarde
 			WHERE id_utilisateur = #{ u.id }
@@ -112,7 +111,7 @@ class GestionnaireSauvegarde
 	# Renvoi un objets sauvegarde si se dernier a été trouvé. Nil si non
 	#
 	def recupererSauvegarde(id)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM sauvegarde
 			WHERE id = #{ id }
@@ -133,7 +132,7 @@ class GestionnaireSauvegarde
 	# * +u+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
 	#
 	# def insert(s)
-		# @bddLocal.execute("
+		# @stockage.executer("
 			# INSERT INTO sauvegarde
 			# VALUES (
 				# null,
@@ -146,7 +145,7 @@ class GestionnaireSauvegarde
 				# { u.type }
 			# );
 		# ")
-		# s.id = @bddLocal.last_insert_row_id
+		# s.id = @stockage.dernierId()
 	# end
 	# private :insert
 	
@@ -157,7 +156,7 @@ class GestionnaireSauvegarde
 	# * +s+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
 	#
 	# def update(s)
-		# @bddLocal.execute("
+		# @stockage.executer("
 			# UPDATE sauvegarde
 			# SET
 				# uuid = #{ (u.uuid==nil)?"null":u.uuid },
@@ -193,9 +192,9 @@ class GestionnaireSauvegarde
 	# * +s+ - (Sauvegarde) sauvegarde à supprimer
 	#
 	def supprimerSauvegarde(s)
-		@bddLocal.execute("
+		@stockage.executer("
 			DELETE FROM sauvegarde
-			WHERE id = #{ u.id };
+			WHERE id = #{ s.id };
 		")
 	end
 	

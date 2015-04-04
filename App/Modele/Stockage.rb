@@ -2,7 +2,7 @@
 # La classe Stockage permet d'utiliser le base de données local et de la syncroniser avec la base de données distante
 # Utilise le DP Singleton
 #
-# Version 1
+# Version 3
 #
 class Stockage
 	
@@ -36,7 +36,8 @@ class Stockage
 	def initialize
 		# puts "Ouverture de la base de données ..."
 		begin
-			@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
+			# @bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
+			@bddLocal = SQLite3::Database.new( File.dirname(__FILE__) + "/../Ressources/bdd.sqlite" )
 			rescue SQLite3::Exception => err
 				puts "Erreur"
 				puts err

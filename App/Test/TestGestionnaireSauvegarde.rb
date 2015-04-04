@@ -5,12 +5,7 @@
 #
 
 # Dépendances
-require "sqlite3"
-require "./GestionnaireSauvegarde.rb"
-require "./GestionnaireUtilisateur.rb"
-require "./Utilisateur.rb"
-require "./Sauvegarde.rb"
-# require "./Partie.rb"
+require_relative "../requireTout.rb"
 
 # On récupère l'instance du gestionnaire d'utilisateur
 gu = GestionnaireUtilisateur.instance()

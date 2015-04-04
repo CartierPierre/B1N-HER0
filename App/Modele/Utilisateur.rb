@@ -24,7 +24,7 @@ class Utilisateur
     def Utilisateur.creer(*args)
 		case args.size
 			when 0
-				new(nil, nil, nil, nil, Time.now.to_i, Time.now.to_i, nil, nil, nil)
+				new(nil, nil, nil, nil, Time.now.to_i, Time.now.to_i, Option.creer, nil, nil)
 			when 3
 				new(nil, nil, args[0], args[1], Time.now.to_i, Time.now.to_i, nil, args[2], nil)
 			when 9
@@ -65,7 +65,7 @@ class Utilisateur
 		@dateDerniereSync = dateDerniereSync
 		
 		# Option
-		# Object option permettant d'accèder aux options de l'utilisateur
+		# Options de l'utilisateur
 		@option = option
 		
 		# int
@@ -73,7 +73,7 @@ class Utilisateur
 		@type = type
 		
 		# Statistique
-		# Object statistiques permettant d'accèder aux statistiques de l'utilisateur
+		# Statistiques de l'utilisateur
 		@statistique = statistique
 		
     end

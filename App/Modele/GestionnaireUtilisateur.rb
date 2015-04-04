@@ -49,7 +49,18 @@ class GestionnaireUtilisateur
 	# Renvoi un object utilisateur hydraté selon les paramètres
 	#
 	def hydraterUtilisateur(args)
-		return Utilisateur.creer( args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8] )
+		return Utilisateur.creer(
+			args[0], # id
+			args[1], # uuid
+			args[2], # nom
+			args[3], # motDePasse
+			args[4], # dateInscription
+			args[5], # dateDerniereSync
+			# Marshal.load( args[6] ), # option
+			args[6], # option
+			args[7], # type
+			args[8] # statistique
+		)
 	end
 	private :hydraterUtilisateur
 	
@@ -134,7 +145,7 @@ class GestionnaireUtilisateur
 				'#{ u.motDePasse }',
 				#{ u.dateInscription },
 				#{ u.dateDerniereSync },
-				'#{ u.option }',
+				'#{ Marshal.dump( u.option ) }',
 				#{ u.type }
 			);
 		")
@@ -157,7 +168,7 @@ class GestionnaireUtilisateur
 				mot_de_passe = '#{ u.motDePasse }',
 				date_inscription = #{ u.dateInscription },
 				date_derniere_synchronisation = #{ u.dateDerniereSync },
-				options = '#{ u.option }',
+				options = '#{ Marshal.dump( u.option ) }',
 				type = #{ u.type }
 			WHERE id = #{ u.id };
 		")

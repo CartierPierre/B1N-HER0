@@ -3,9 +3,6 @@
 #
 # Version 2
 #
-# La dimention ne pourrait elle pas être lu depuis l'attribut problème ?
-# Voir attributs probleme et solution
-#
 class Niveau
 
 	### Attributs d'instances

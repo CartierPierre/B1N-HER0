@@ -5,7 +5,7 @@
 #
 
 # Dépendances
-require "./requireModele"
+require_relative "../requireTout.rb"
 
 # On récupère l'instance du gestionnaire d'utilisateur
 gu = GestionnaireUtilisateur.instance()

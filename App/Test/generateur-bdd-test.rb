@@ -1,12 +1,17 @@
 ##
-# Crée une base de test utilisable
+# Crée une base de test
 #
 
 # Dépendances
-require "sqlite3"
+require_relative "../requireTout.rb"
+
+# Test sérialisation marshall
+# puts Option.creer()
+# puts Marshal.dump( Option.creer() )
+# abort
 
 # Variables
-pathDb = "./bdd-test.sqlite" # Chemin de la base de donnée à créer
+pathDb = File.dirname(__FILE__) + "/../Ressources/bdd.sqlite" # Chemin de la base de donnée à créer
 db = false
 rq = false
 
@@ -46,8 +51,8 @@ begin
 end
 
 # Insertion d'utilisateurs ...
+puts "Insertion d'utilisateurs ..."
 begin
-	puts "Insertion d'utilisateurs ..."
 	bdd.execute("
 		INSERT INTO utilisateur VALUES
 		(NULL, NULL, 'toto0', 'azerty', 0, 0, 'SERIALISATION', 0),
@@ -58,9 +63,10 @@ begin
 		puts "Erreur"
 		puts err
 		abort
-	ensure
-		puts "OK"
 end
+puts "OK"
+# (NULL, NULL, 'toto0', 'azerty', 0, 0, 'SERIALISATION', 0),
+# (NULL, NULL, 'toto0', 'azerty', 0, 0, '#{ Marshal.dump( Option.creer() ) }', 0),
 
 # Création de la table des niveaux ...
 begin
