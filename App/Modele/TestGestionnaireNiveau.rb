@@ -5,15 +5,7 @@
 #
 
 # Dépendances
-require "sqlite3"
-require "./Stockage.rb"
-
-require "./GestionnaireNiveau.rb"
-require "./Niveau.rb"
-
-require "./Grille.rb"
-require "./Tuile.rb"
-require "./Etat.rb"
+require "./requireModele"
 
 # On récupère l'instance du gestionnaire de niveau
 gn = GestionnaireNiveau.instance()
