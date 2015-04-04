@@ -1,18 +1,11 @@
 ##
 # Script de test pour la classe GestionnaireScore
 #
-# Version 4
+# Version 5
 #
 
 # Dépendances
-require "sqlite3"
-require "./Stockage.rb"
-require "./GestionnaireScore.rb"
-require "./GestionnaireUtilisateur.rb"
-require "./GestionnaireNiveau.rb"
-require "./Score.rb"
-require "./Utilisateur.rb"
-require "./Niveau.rb"
+require "./requireModele"
 
 # On récupère l'instance du gestionnaire de score
 gsc= GestionnaireScore.instance()
@@ -43,7 +36,7 @@ puts "Il y à #{ nbScores } score(s) en tout"
 scores = gsc.recupererListeScore(0, 10)
 puts "Les scores sont :"
 scores.each do |score|
-	puts " - #{ score } "
+	puts " - score #{ score.id }, sur le niveau #{ score.idNiveau }, avec l'utilisateur #{ score.idUtilisateur }"
 end
 
 # Nombre de scores d'un utilisateur
@@ -53,7 +46,7 @@ puts "L'utilisateur #{ utilisateur.nom } à #{ nbScores } score(s)"
 # Lister les scores d'un utilisateur
 scores = gsc.recupererListeScoreUtilisateur(utilisateur, 0, 10)
 scores.each do |score|
-	puts " - #{ score } "
+	puts " - score #{ score.id }, sur le niveau #{ score.idNiveau }, avec l'utilisateur #{ score.idUtilisateur }"
 end
 
 # Nombre de scores sur un niveau
@@ -63,7 +56,7 @@ puts "Le niveau #{ niveau.id } à #{ nbScores } score(s)"
 # Lister les scores d'un niveau
 scores = gsc.recupererListeScoreNiveau(niveau, 0, 10)
 scores.each do |score|
-	puts " - #{ score } "
+	puts " - score #{ score.id }, sur le niveau #{ score.idNiveau }, avec l'utilisateur #{ score.idUtilisateur }, #{ score.nbPoints(niveau) } point(s)"
 end
 
 # Nombre de scores d'un utilisateur sur un niveau
@@ -74,5 +67,5 @@ puts "L'utilisateur #{ utilisateur.nom } à #{ nbScores } score(s) sur le niveau
 scores = gsc.recupererListeScoreUtilisateurNiveau(utilisateur, niveau, 0, 10)
 puts "Les scores de l'utilisateur #{ utilisateur.nom } sur le niveau #{ niveau.id } sont :"
 scores.each do |score|
-	puts " - #{ score } "
+	puts " - score #{ score.id }, sur le niveau #{ score.idNiveau }, avec l'utilisateur #{ score.idUtilisateur }"
 end

@@ -1,13 +1,13 @@
 ##
 # Classe Score
 #
-# Version 3
+# Version 4
 #
 class Score
 
 	### Attributs d'instances
 	
-	attr_reader :id, :uuid, :utilisateur, :niveau, :tempsTotal, :nbCoups, :nbAides, :nbConseils
+	attr_reader :id, :uuid, :tempsTotal, :nbCoups, :nbConseils, :nbAides, :idUtilisateur, :idNiveau
 	
 	### Méthodes de classe
 	
@@ -31,25 +31,17 @@ class Score
 	# Constructeur
 	#
 	private_class_method :new
-    def initialize(id, uuid, utilisateur, niveau, tempsTotal, nbCoups, nbAides, nbConseils)
+    def initialize(id, uuid, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau)
 	
 		# int
 		# Identifiant du score
         @id = id
 		
-		# uuid
+		# int
 		# Identifiant universel unique du score
 		@uuid = uuid
 		
-		# Utilisateur
-		# Object utilisateur du score
-		@utilisateur = utilisateur
-		
-		# Niveau
-		# Object niveau de se score
-		@niveau = niveau
-		
-		# Time
+		# int
 		# Temps qu'il a fallut au joueur pour résoudre le problème
 		@tempsTotal = tempsTotal
 		
@@ -58,12 +50,20 @@ class Score
 		@nbCoups = nbCoups
 		
 		# int
+		# Nombre de conseils demandées lors de la partie
+		@nbConseils = nbConseils
+		
+		# int
 		# Nombre d'aides demandées lors de la partie
 		@nbAides = nbAides
 		
 		# int
-		# Nombre de conseils demandées lors de la partie
-		@nbConseils = nbConseils
+		# Identifiant de l'utilisateur à qui appartient se score
+		@idUtilisateur = idUtilisateur
+		
+		# int
+		# Identifiant du niveau sur lequel porte le score
+		@idNiveau = idNiveau
 		
     end
 	
@@ -72,8 +72,10 @@ class Score
 	##
 	# Renvoi le nombre de point du score
 	#
-	def nbPoints()
-        return ((niveau.dimention**niveau.difficulte)/(1+tempsTotal+(2**nbConseils)*10+(2**nbAides)*30+(nbCoups/10)**2))
+	def nbPoints(niveau)
+        return (
+			( niveau.dimention ** niveau.difficulte ) / ( 1 + @tempsTotal + ( 2 ** @nbConseils) * 10 + ( 2 ** @nbAides ) * 30 + ( @nbCoups / 10 ) ** 2 )
+		)
     end
 	
 end

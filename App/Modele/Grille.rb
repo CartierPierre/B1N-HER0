@@ -1,3 +1,5 @@
+# ajouter sérialisation !!!
+
 class Grille
     @grille
     # attr_reader :nbLigne, :nbColonne

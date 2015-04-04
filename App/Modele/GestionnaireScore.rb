@@ -2,9 +2,7 @@
 # La classe GestionnaireScore permet d'intéragir avec entitées Score
 # Utilise le DP Singleton
 #
-# Version 5
-#
-# Passer la connexion BDD par une instance unique
+# Version 6
 #
 class GestionnaireScore
 	
@@ -286,8 +284,8 @@ class GestionnaireScore
 				#{ s.nbCoups },
 				#{ s.nbConseils },
 				#{ s.nbAides },
-				#{ s.utilisateur.id },
-				#{ s.niveau.id }
+				#{ s.idUtilisateur },
+				#{ s.idNiveau }
 			);
 		")
 		s.id = @stockage.dernierId()
@@ -309,9 +307,9 @@ class GestionnaireScore
 				nb_coups = #{ s.nbCoups },
 				nb_conseils = #{ s.nbConseils },
 				nb_aides = #{ s.nbAides },
-				id_utilisateur = #{ s.tempsTotal },
-				id_niveau = #{ s.utilisateur.id }
-			WHERE id = #{ s.niveau.id };
+				id_utilisateur = #{ s.idUtilisateur },
+				id_niveau = #{ s.idNiveau }
+			WHERE id = #{ s.id };
 		")
 	end
 	private :update
