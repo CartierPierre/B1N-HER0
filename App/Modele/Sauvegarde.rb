@@ -7,7 +7,8 @@ class Sauvegarde
 
 	### Attributs d'instances
 	
-    attr_reader :id, :uuid, :utilisateur, :description, :dateCreation, :partie
+    attr_reader :id, :uuid, :description, :dateCreation, :contenu, :utilisateur, :niveau, :partie
+	# Contenu, Utilisateur et Niveau ne devrait pas être accessibles, ils sont déduits de partie et utilisées seulement pour la persistance des données
 	
 	### Méthodes de classe
 	
@@ -39,10 +40,6 @@ class Sauvegarde
 		# Identifiant universel unique de la sauvegarde
 		@uuid = uuid
 		
-		# Utilisateur
-		# Utilisateur a qui appartient la sauvegarde
-		@utilisateur = utilisateur
-		
 		# string
 		# Description de la sauvegarde
 		@description = description
@@ -51,9 +48,21 @@ class Sauvegarde
 		# Date de création de cette sauvegarde
 		@dateCreation = dateCreation
 		
+		# string
+		# Informations sérialisées de la sauvegarde
+		@contenu = contenu
+		
+		# Utilisateur
+		# Utilisateur a qui appartient la sauvegarde
+		@utilisateur = utilisateur
+		
+		# Niveau
+		# Niveau sur lequel porte cette sauvegarde
+		@niveau = niveau
+		
 		# Partie
-		# Toutes les informations de la partie sauvegardé
-		@partie = id
+		# Référence vers l'object partie déduits des informations de l'object sauvegarde
+		@partie = nil
 		
     end
 end
