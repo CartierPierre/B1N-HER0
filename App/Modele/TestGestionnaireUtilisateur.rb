@@ -5,10 +5,7 @@
 #
 
 # Dépendances
-require "sqlite3"
-require "./Stockage.rb"
-require "./GestionnaireUtilisateur.rb"
-require "./Utilisateur.rb"
+require "./requireModele"
 
 # On récupère l'instance du gestionnaire d'utilisateur
 gu = GestionnaireUtilisateur.instance()
@@ -46,5 +43,5 @@ else
 end
 
 # Test mise à jour client
-client.dateDerniereSync = Time.now
+client.dateDerniereSync = Time.now.to_i
 gu.sauvegarderUtilisateur(client)

@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 9
+# Version 10
 #
 class GestionnaireUtilisateur
 	
@@ -49,7 +49,7 @@ class GestionnaireUtilisateur
 	# Renvoi un object utilisateur hydraté selon les paramètres
 	#
 	def hydraterUtilisateur(args)
-		return Utilisateur.creer( args[0], args[1], args[2], args[3], Time.at(args[4]), Time.at(args[5]), args[6], args[7], args[8] )
+		return Utilisateur.creer( args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8] )
 	end
 	private :hydraterUtilisateur
 	
@@ -132,8 +132,8 @@ class GestionnaireUtilisateur
 				null,
 				'#{ u.nom }',
 				'#{ u.motDePasse }',
-				#{ u.dateInscription.to_i },
-				#{ u.dateDerniereSync.to_i },
+				#{ u.dateInscription },
+				#{ u.dateDerniereSync },
 				'#{ u.option }',
 				#{ u.type }
 			);
@@ -155,8 +155,8 @@ class GestionnaireUtilisateur
 				uuid = #{ (u.uuid==nil)?"null":u.uuid },
 				nom = '#{ u.nom }',
 				mot_de_passe = '#{ u.motDePasse }',
-				date_inscription = #{ u.dateInscription.to_i },
-				date_derniere_synchronisation = #{ u.dateDerniereSync.to_i },
+				date_inscription = #{ u.dateInscription },
+				date_derniere_synchronisation = #{ u.dateDerniereSync },
 				options = '#{ u.option }',
 				type = #{ u.type }
 			WHERE id = #{ u.id };
