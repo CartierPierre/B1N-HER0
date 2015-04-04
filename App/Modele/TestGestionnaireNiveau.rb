@@ -1,11 +1,12 @@
 ##
 # Script de test pour la classe GestionnaireNiveau
 #
-# Version 1
+# Version 2
 #
 
 # Dépendances
 require "sqlite3"
+require "./Stockage.rb"
 require "./GestionnaireNiveau.rb"
 require "./Niveau.rb"
 

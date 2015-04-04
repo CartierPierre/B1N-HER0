@@ -2,9 +2,7 @@
 # La classe GestionnaireNiveau permet d'intéragir avec entitées Niveau
 # Utilise le DP Singleton
 #
-# Version 2
-#
-# Passer la connexion BDD par une instance unique
+# Version 3
 #
 class GestionnaireNiveau
 	
@@ -15,7 +13,7 @@ class GestionnaireNiveau
 	
 	### Attributs d'instances
 	
-	@bddLocal = nil
+	@stockage = nil
 	
 	
 	### Méthodes de classe
@@ -36,7 +34,7 @@ class GestionnaireNiveau
 	#
 	private_class_method :new
 	def initialize
-		@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
+		@stockage = Stockage.instance()
 	end
 	
 	### Méthodes d'instances
@@ -62,7 +60,7 @@ class GestionnaireNiveau
 	# Renvoi le nombre de niveau
 	#
 	def recupererNombreNiveau()
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT COUNT(id)
 			FROM niveau;
 		")
@@ -80,7 +78,7 @@ class GestionnaireNiveau
 	# Renvoi une liste d'objets niveau
 	#
 	def recupererListeNiveau(o, l)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM niveau
 			LIMIT #{ l }
@@ -105,7 +103,7 @@ class GestionnaireNiveau
 	# Renvoi un objets niveau si se dernier a été trouvé. Nil si non
 	#
 	def recupererNiveau(id)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM niveau
 			WHERE id = #{ id }
