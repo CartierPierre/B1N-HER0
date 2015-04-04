@@ -1,7 +1,7 @@
 ##
 # Classe Score
 #
-# Version 2
+# Version 3
 #
 class Score
 
@@ -49,7 +49,7 @@ class Score
 		# Object niveau de se score
 		@niveau = niveau
 		
-		# Grille
+		# Time
 		# Temps qu'il a fallut au joueur pour résoudre le problème
 		@tempsTotal = tempsTotal
 		
@@ -68,9 +68,12 @@ class Score
     end
 	
 	### Méthodes d'instances
-    
-    def nbPoints(tailleGrille, diffGrille)
-        return ((tailleGrille**diffGrille)/(1+tempsTotal+(2**nbConseils)*10+(2**nbAides)*30+(nbCoups/10)**2))
+	
+	##
+	# Renvoi le nombre de point du score
+	#
+	def nbPoints()
+        return ((niveau.dimention**niveau.difficulte)/(1+tempsTotal+(2**nbConseils)*10+(2**nbAides)*30+(nbCoups/10)**2))
     end
 	
 end

@@ -2,7 +2,7 @@
 # La classe GestionnaireScore permet d'intéragir avec entitées Score
 # Utilise le DP Singleton
 #
-# Version 4
+# Version 5
 #
 # Passer la connexion BDD par une instance unique
 #
@@ -15,7 +15,7 @@ class GestionnaireScore
 	
 	### Attributs d'instances
 	
-	@bddLocal = nil
+	@stockage = nil
 	
 	
 	### Méthodes de classe
@@ -36,7 +36,7 @@ class GestionnaireScore
 	#
 	private_class_method :new
 	def initialize
-		@bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
+		@stockage = Stockage.instance()
 	end
 	
 	### Méthodes d'instances
@@ -65,7 +65,7 @@ class GestionnaireScore
 	# Renvoi un objets score si se dernier a été trouvé. Nil si non
 	#
 	def recupererScore(id)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM score
 			WHERE id = #{ id }
@@ -86,7 +86,7 @@ class GestionnaireScore
 	# Renvoi le nombre de score
 	#
 	def recupererNombreScore
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT COUNT(id)
 			FROM score;
 		")
@@ -105,7 +105,7 @@ class GestionnaireScore
 	#
 	def recupererListeScore(o, l)
 	
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM score
 			LIMIT #{ l }
@@ -130,7 +130,7 @@ class GestionnaireScore
 	# Renvoi le nombre de score d'un utilisateur
 	#
 	def recupererNombreScoreUtilisateur(u)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT COUNT(id)
 			FROM score
 			WHERE id_utilisateur = #{ u.id };
@@ -150,7 +150,7 @@ class GestionnaireScore
 	# Renvoi une liste d'objets score d'un utilisateur
 	#
 	def recupererListeScoreUtilisateur(u, o, l)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM score
 			WHERE id_utilisateur = #{ u.id }
@@ -177,7 +177,7 @@ class GestionnaireScore
 	# Renvoi le nombre de score d'un utilisateur sur le niveau
 	#
 	def recupererNombreScoreUtilisateurNiveau(u, n)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT COUNT(id)
 			FROM score
 			WHERE
@@ -200,7 +200,7 @@ class GestionnaireScore
 	# Renvoi une liste d'objets score d'un utilisateur sur le niveau
 	#
 	def recupererListeScoreUtilisateurNiveau(u, n, o, l)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM score
 			WHERE
@@ -228,7 +228,7 @@ class GestionnaireScore
 	# Renvoi le nombre de score d'un niveau
 	#
 	def recupererNombreScoreNiveau(n)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT COUNT(id)
 			FROM score
 			WHERE id_niveau = #{ n.id };
@@ -248,7 +248,7 @@ class GestionnaireScore
 	# Renvoi une liste d'objets score d'un utilisateur
 	#
 	def recupererListeScoreNiveau(n, o, l)
-		resultat = @bddLocal.execute("
+		resultat = @stockage.executer("
 			SELECT *
 			FROM score
 			WHERE
@@ -277,7 +277,7 @@ class GestionnaireScore
 	# * +s+ - (Score) Score dont il faut faire persister les informations
 	#
 	def insert(s)
-		@bddLocal.execute("
+		@stockage.executer("
 			INSERT INTO score
 			VALUES (
 				null,
@@ -290,7 +290,7 @@ class GestionnaireScore
 				#{ s.niveau.id }
 			);
 		")
-		s.id = @bddLocal.last_insert_row_id
+		s.id = @stockage.dernierId()
 	end
 	private :insert
 	
@@ -301,7 +301,7 @@ class GestionnaireScore
 	# * +s+ - (Score) Score dont il faut faire persister les informations
 	#
 	def update(s)
-		@bddLocal.execute("
+		@stockage.executer("
 			UPDATE score
 			SET
 				uuid = #{ (s.uuid==nil)?"null":s.uuid },
@@ -337,7 +337,7 @@ class GestionnaireScore
 	# * +s+ - (Score) Score à supprimer
 	#
 	def supprimerScore(s)
-		@bddLocal.execute("
+		@stockage.executer("
 			DELETE FROM score
 			WHERE id = #{ s.id };
 		")
@@ -350,7 +350,7 @@ class GestionnaireScore
 	# * +u+ - (Utilisateur) Utilisateur dont il faut supprimer tous les scores
 	#
 	def supprimerScoreUtilisateur(u)
-		@bddLocal.execute("
+		@stockage.executer("
 			DELETE FROM score
 			WHERE id_utilisateur = #{ u.id };
 		")

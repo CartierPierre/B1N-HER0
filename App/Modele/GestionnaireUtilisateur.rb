@@ -71,19 +71,19 @@ class GestionnaireUtilisateur
 	# Liste les utilisateurs
 	#
 	# ==== Paramètres
-	# * +offset+ - (int) Début de la liste
-	# * +limit+ - (int) Fin de la liste
+	# * +o+ - (int) Début de la liste
+	# * +l+ - (int) Fin de la liste
 	#
 	# ==== Retour
 	# Renvoi un liste d'objets utilisateurs
 	#
-	def recupererListeUtilisateur(offset, limit)
+	def recupererListeUtilisateur(o, l)
 	
 		resultat = @stockage.executer("
 			SELECT *
 			FROM utilisateur
-			LIMIT #{ limit }
-			OFFSET #{ offset };
+			LIMIT #{ l }
+			OFFSET #{ o };
 		")
 		
 		liste = Array.new

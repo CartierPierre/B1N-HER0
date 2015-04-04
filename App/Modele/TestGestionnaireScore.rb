@@ -6,6 +6,7 @@
 
 # Dépendances
 require "sqlite3"
+require "./Stockage.rb"
 require "./GestionnaireScore.rb"
 require "./GestionnaireUtilisateur.rb"
 require "./GestionnaireNiveau.rb"
@@ -36,10 +37,11 @@ end
 
 # Nombre de scores
 nbScores = gsc.recupererNombreScore()
-puts "Il y à #{ nbScores } score(s)"
+puts "Il y à #{ nbScores } score(s) en tout"
 
 # Lister les scores
 scores = gsc.recupererListeScore(0, 10)
+puts "Les scores sont :"
 scores.each do |score|
 	puts " - #{ score } "
 end
