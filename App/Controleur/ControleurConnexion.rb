@@ -7,7 +7,7 @@ class ControleurConnexion < Controleur
 
 
     def valider(pseudo,password)
-        if (@utilisateur = @gestionnaireUtilisateur.getForAuthentication(pseudo,password)) == nil
+        if (@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,password)) == nil
             @vue.utilisateurInexistant()
         else
             changerControleur(ControleurMenuPrincipal.new(@jeu,@utilisateur))
