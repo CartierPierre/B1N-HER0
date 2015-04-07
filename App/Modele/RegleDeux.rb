@@ -17,9 +17,9 @@ class RegleDeux
     
     def RegleDeux.appliquer(partie)
 
-		0.upto Math.sqrt(partie.grille().taille() - 1) do |x|
-			0.upto Math.sqrt(partie.grille().taille() - 2) do |y|
- 				if partie.grille().getTuile(x,y).etat() == 1 && partie.grille().getTuile(x,y+1).etat() == 1 && partie.grille().getTuile(x,y+2).etat() == 1 then
+	0.upto Math.sqrt(partie.grille().taille() - 1) do |x|
+		0.upto Math.sqrt(partie.grille().taille() - 2) do |y|
+ 			if partie.grille().getTuile(x,y).etat() == 1 && partie.grille().getTuile(x,y+1).etat() == 1 && partie.grille().getTuile(x,y+2).etat() == 1 then
  					#Meme si plus que trois, il retourne faux 
  					return false
  					
