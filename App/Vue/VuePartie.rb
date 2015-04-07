@@ -150,11 +150,10 @@ class VuePartie < Vue
         end
 
         boxJeu.add(@boxHypo)
+        boxJeu.add(Label.new())
         boxJeu.add(frame)
-        boxJeu.pack_end(@temps, :expand => true, :fill => false)
-
-        @buttonValiderHypo.hide()
-        @buttonAnnulerHypo.hide()  
+        boxJeu.add(Label.new())
+        boxJeu.pack_end(@temps, :expand => true, :fill => false) 
 
         # Menu du bas
         boxFooter = Box.new(:horizontal)
@@ -177,12 +176,16 @@ class VuePartie < Vue
 
         # Ajout dans la box principal des éléments
         boxVertMain.add(boxNav)
+        boxVertMain.add(Label.new())
         boxVertMain.add(boxJeu)
+        boxVertMain.add(Label.new())
         boxVertMain.pack_end(boxFooter, :expand => true, :fill => false)
 
         @cadre.add(boxVertMain)
 
         self.actualiser()
+        @buttonValiderHypo.hide()
+        @buttonAnnulerHypo.hide() 
     end
 
     # Signaux des boutons de navigation
