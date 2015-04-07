@@ -1,23 +1,24 @@
 # Require
 require 'socket'
 
-server = TCPServer.new( 'localhost', 12345 )
+server = TCPServer.new('localhost', 12345)
 
 loop do
+
 	Thread.start(server.accept) do |client|
-	
+		
+		# Debug
 		puts client
 		
-		# while line = client.gets
-			# puts line
-		# end
+		# Reception data
+		puts client.gets
 		
-		client.puts "Hello !"
-		client.puts "Time is #{ Time.now }"
+		# Envoi data
+		client.puts "Hello World!"
 		
+		# Fin connexion
 		client.close
 		
 	end
+	
 end
-
-serveur.close

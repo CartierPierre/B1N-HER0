@@ -15,4 +15,8 @@ class ControleurPartie < Controleur
 		@vue = VuePartie.new(@modele,"Jeu",self)
 	end	
 
+    def options()
+        #changerControleur(ControleurOptions.new(@jeu))
+    end
+
 end

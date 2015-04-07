@@ -14,12 +14,7 @@ class VueDemarrage < Vue
         buttonInscription = Button.new(:label => "Inscription")
         buttonJeu = Button.new(:label => "Test jeu")
 
-        color=Gdk::RGBA::new(1.0,0.3,0.3,1.0)
-        buttonConnexion.override_background_color(0,color)
 
-        colorBlue = Gdk::Color.parse("#6E6F71")
-
-        colorRed = Gdk::Color.parse("#75CAF4")
 
         pixbufHero = Gdk::Pixbuf.new(:file => './Ressources/Hero.png', :width => 400, :height => 400)
         pixbufTitre = Gdk::Pixbuf.new(:file => './Ressources/Titre.png')

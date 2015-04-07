@@ -33,6 +33,7 @@ class VueInscription < Vue
         @entryPassword.signal_connect('activate')   {onBtnValiderClicked}
 
         self.actualiser()
+        buttonValider.set_sensitive(false)
     end
 
 	def onBtnValiderClicked
