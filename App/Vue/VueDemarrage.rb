@@ -4,6 +4,7 @@ class VueDemarrage < Vue
 
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
+
         vbox = Box.new(:vertical)
         hbox = Box.new(:horizontal)
 
@@ -11,14 +12,20 @@ class VueDemarrage < Vue
         buttonInscription = Button.new(:label => "Inscription")
         buttonJeu = Button.new(:label => "Test jeu")
 
+        pixbufHero = Gdk::Pixbuf.new(:file => './Ressources/Hero.png', :width => 400, :height => 400)
+        pixbufTitre = Gdk::Pixbuf.new(:file => './Ressources/Titre.png')
+
+        imgHero = Image.new(:pixbuf => pixbufHero)
+        imgTitre = Image.new(:pixbuf => pixbufTitre)
+
+        vbox.add(imgTitre)
         vbox.add(buttonConnexion)
         vbox.add(buttonInscription)
         vbox.add(buttonJeu)
-        pb = Gdk::Pixbuf.new(:file => './Vue/img/Hero.png', :width => 400, :height => 400)
-        imgHero = Image.new(:pixbuf => pb)
-        #imgHero.scale(50,50)
+
         hbox.add(imgHero)
         hbox.add(vbox)
+
         @cadre.add(hbox)
 
         buttonConnexion.signal_connect('clicked')  {onBtnConnexionClicked}
@@ -39,6 +46,7 @@ class VueDemarrage < Vue
 	end
 
     def onBtnJeuClicked
+        fermerCadre()
         @controleur.jeu()
     end
 

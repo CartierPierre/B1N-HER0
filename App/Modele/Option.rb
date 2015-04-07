@@ -7,15 +7,18 @@
 #
 class Option
 
+	### Constante de classe
+	
+	TUILE_ROUGE = 'Vue/img/CaseRouge32.png'
+    TUILE_BLEUE = 'Vue/img/CaseBleue32.png'
+    TUILE_VERTE = 'Vue/img/CaseVerte32.png'
+    TUILE_JAUNE = 'Vue/img/CaseJaune32.png'
+
 	### Attributs d'instances
 	
-    @tuile1 #chemin du fichier en string
+    @tuile1
     @tuile2
     @langue
-    @tuileRouge = 'Vue/img/CaseRouge32.png'
-    @tuileBleue = 'Vue/img/CaseBleue32.png'
-    @tuileVerte = 'Vue/img/CaseVerte32.png'
-    @tuileJaune = 'Vue/img/CaseJaune32.png'
     
     attr_reader :langue
 	
@@ -33,8 +36,8 @@ class Option
 	#
     private_class_method :new
     def initialize()
-        @tuile1 = @tuileBleue
-        @tuile2 = @tuileRouge
+        @tuile1 = Option.TUILE_BLEUE
+        @tuile2 = Option.TUILE_ROUGE
         @langue = Langue.new() 
     end
 	

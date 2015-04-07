@@ -39,13 +39,13 @@ class VuePartie < Vue
 
         def setImageTuile(etat)
             if (etat == Etat.etat_1)
-                self.set_image(Image.new(:file => './Vue/img/CaseRouge32.png'))
+                self.set_image(Image.new(:file => './Ressources/CaseRouge32.png'))
             elsif (etat == Etat.etat_2)
-                self.set_image(Image.new(:file => './Vue/img/CaseBleue32.png'))
+                self.set_image(Image.new(:file => './Ressources/CaseBleue32.png'))
             elsif (etat == Etat.lock_1)
-                self.set_image(Image.new(:file => './Vue/img/CaseRouge32Lock.png'))
+                self.set_image(Image.new(:file => './Ressources/CaseRouge32Lock.png'))
             elsif (etat == Etat.lock_2)
-                self.set_image(Image.new(:file => './Vue/img/CaseBleue32Lock.png'))
+                self.set_image(Image.new(:file => './Ressources/CaseBleue32Lock.png'))
             else
                 self.set_image(Image.new())
             end    
@@ -70,9 +70,10 @@ class VuePartie < Vue
         @temps = Label.new("00:00")
 
         @threadChrono = Thread.new {
-            chrono = Chrono.new()
+            attr_reader :chrono
+            @chrono = Chrono.new()
             while(true)
-                @temps.set_label(chrono.to_s)
+                @temps.set_label(@chrono.to_s)
                 sleep(0.1)
             end
         }
@@ -110,8 +111,8 @@ class VuePartie < Vue
         boxHeader.add(@buttonValiderHypo)
         boxHeader.add(@buttonAnnulerHypo)
 
-        @imageTuile1 = Image.new(:file => './Vue/img/CaseRouge32.png')
-        @imageTuile2 = Image.new(:file => './Vue/img/CaseBleue32.png')
+        @imageTuile1 = Image.new(:file => './Ressources/CaseRouge32.png')
+        @imageTuile2 = Image.new(:file => './Ressources/CaseBleue32.png')
 
         # Création de la grille
         boxJeu = Box.new(:horizontal)
@@ -181,6 +182,7 @@ class VuePartie < Vue
     end
 
     def onBtnReglesClicked 
+        @threadChrono.chrono.pause()
         regles = @controleur.options.langue.langueActuelle[:regles]
         regles += "\n\n"
         regles += @controleur.options.langue.langueActuelle[:regles1]
@@ -189,6 +191,7 @@ class VuePartie < Vue
         dialogRegles = MessageDialog.new(:parent => @fenetre, :type => :question, :buttons_type => :close, :message => regles)
         dialogRegles.run()
         dialogRegles.destroy()
+        @threadChrono.chrono.finPause()
     end
 
     def onBtnQuitterClicked
