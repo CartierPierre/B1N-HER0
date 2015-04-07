@@ -8,7 +8,7 @@ class Score
     ### Attributs d'instances
 
     attr_reader :id, :uuid, :idUtilisateur, :idNiveau
-    attr_accessor :tempsTotal, :nbCoups, :nbConseils, :nbAides,
+    attr_accessor :tempsTotal, :nbCoups, :nbConseils, :nbAides
 
     ### Méthodes de classe
 
