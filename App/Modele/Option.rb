@@ -36,8 +36,8 @@ class Option
 	#
     private_class_method :new
     def initialize()
-        @tuile1 = Option.TUILE_BLEUE
-        @tuile2 = Option.TUILE_ROUGE
+        @tuile1 = TUILE_BLEUE
+        @tuile2 = TUILE_ROUGE
         @langue = Langue.new() 
     end
 	
