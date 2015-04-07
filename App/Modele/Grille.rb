@@ -122,6 +122,10 @@ class Grille
         self
     end
 
+    def sauvegarder(grille)
+
+    end
+
     # Applique un couyp joue sur la grille
     #
     # === Arguments
@@ -171,13 +175,13 @@ class Grille
         end
         print "\n"
         0.upto(self.taille() - 1) do |i|
-            print "───┼"*(self.taille() + 1), "\n"
+            print "───┼"*(self.taille()), "───┤\n"
             print " ", i, " │ "
             0.upto(self.taille() - 1) do |j|
-                print "#{(@grille[i][j].etat==1)?'O':((@grille[i][j].etat==2)?'X':' ')} │ "
+                print "#{(@grille[i][j].etat==Etat.etat_1)?'O':((@grille[i][j].etat==Etat.etat_2)?'X':((@grille[i][j].etat==Etat.lock_1)?'Ⓞ':((@grille[i][j].etat==Etat.lock_2)?'Ⓧ':' ')))} │ "
             end
             print "\n"
         end
-        print "───┴"*(self.taille() + 1), "\n"
+        print "───┴"*(self.taille()), "───┘\n"
     end
 end

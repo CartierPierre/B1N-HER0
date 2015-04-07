@@ -4,7 +4,8 @@ class Partie
     attr_reader :grille, :niveau, :score, :utilisateur
     @historique
     @dateDebutPartie
-    @historiqueCurseur
+    @listeUndo
+    @listeRedo
     @doneRedo
 
     # Méthode de création d'une partie
@@ -20,10 +21,11 @@ class Partie
         @utilisateur = utilisateur
         @niveau = niveau
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
-        @historique = Array.new()
         @dateDebutPartie = Time.new()
         @score = Score.creer(@utilisateur)
-        @historiqueCurseur = 0
+
+        @listeUndo = Array.new()
+        @listeRedo = Array.new()
 
         @cpttest = 0
     end
@@ -34,47 +36,37 @@ class Partie
     # *coup* - Le coup joué.
     def historiqueAdd(coup)
         # Vide l'historique si pour coller avec les undo
-        puts (@historique.size() - @historiqueCurseur)
-        if(@historiqueCurseur == 0 && @historique.size() != 1)
-            @historique.clear()
-        else
-            1.upto((@historique.size() - @historiqueCurseur)-1) do
-                @historique.pop()
-            end
-        end
+       @listeRedo.clear()
 
         # Ajoute le nouveau coup à l'historique
             # S'il est au même endroit que le précédent
-        if((@historique.size > 0) && (@historique.last().x == coup.x && @historique.last().y == coup.y))
+        if((@listeUndo.size > 0) && (@listeUndo.last().x == coup.x && @listeUndo.last().y == coup.y))
             # Si son état précédent est à 2 = on revient au point de départ
             if(coup.etat == Etat.etat_2)
                 # On pop les deux dernier état qui ne sont plus utiles
-                @historique.pop()
-                @historique.pop()
+                @listeUndo.pop()
+                @listeUndo.pop()
             else
                 # Si l'état précedent est différent de 2 (aka la case est de nouveau vide on push)
-                @historique.push(coup)
+                @listeUndo.push(coup)
             end
         else
             # Sinon on ajoute le nouveau coup à l'historique
-            @historique.push(coup)
+            @listeUndo.push(coup)
         end
 
         # On recalcule le curseur d'historique pour être sur de ne pas sortir des bornes de l'historique
-        @historiqueCurseur = @historique.size() - 1
+        @historiqueCurseur = @listeUndo.size() - 1
 
         self
     end
 
     # Efface un coup jouer
     def historiqueUndo()
-        if(@historique.size > 0)
-            coup = @historique[@historiqueCurseur]
+        if(@listeUndo.size > 0)
+            coup = @listeUndo.pop()
+            @listeRedo.push(coup)
             @grille.appliquerCoup(coup.x, coup.y, coup.etat)
-
-            if(@historiqueCurseur > 0)
-                @historiqueCurseur -= 1
-            end
 
             monitor
             return Array[ coup.x, coup.y ]
@@ -85,13 +77,10 @@ class Partie
 
     # Efface un coup jouer
     def historiqueRedo()
-        if(@historique.size > 0 && @historiqueCurseur < @historique.size())
-            coup = @historique[@historiqueCurseur]
+        if(@listeRedo.size > 0)
+            coup = @listeRedo.pop()
+            @listeUndo.push(coup)
             @grille.appliquerCoup(coup.x, coup.y, Etat.suivant(coup.etat))
-            if(@historiqueCurseur < @historique.size()-1)
-                @historiqueCurseur += 1
-            end
-            # @doneRedo = true
 
             monitor
            return Array[ coup.x, coup.y ]
@@ -168,8 +157,9 @@ class Partie
         @cpttest += 1
         print "\nN° ", @cpttest, "\n"
         @grille.afficher()
-        puts @historique
-        print "Cursor = ", @historiqueCurseur, "| Size = ", @historique.size(), " | Next : ", @historique[@historiqueCurseur], "\n"
+        puts "Liste des undo :", @listeUndo, "\n"
+        puts "Liste des redo :", listeRedo, "\n"
+        print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n"
     end
 
     #TODO reset grille
