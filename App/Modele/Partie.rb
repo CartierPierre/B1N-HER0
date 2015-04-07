@@ -7,6 +7,7 @@ class Partie
     @listeUndo
     @listeRedo
     @doneRedo
+    @modeHypo
 
     # Méthode de création d'une partie
     #
@@ -26,6 +27,8 @@ class Partie
 
         @listeUndo = Array.new()
         @listeRedo = Array.new()
+        
+        @modeHypo=0
 
         @cpttest = 0
     end
