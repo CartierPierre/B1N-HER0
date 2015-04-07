@@ -5,3 +5,4 @@ InterfaceGraphique/TestGTK/doc/created.rid
 *.odt#
 doc/
 *.ppr
+*.sqlite
