@@ -1,14 +1,13 @@
 ##
 # Classe Sauvegarde
 #
-# Version 3
+# Version 4
 #
 class Sauvegarde
 
 	### Attributs d'instances
 	
-    attr_reader :id, :uuid, :description, :dateCreation, :contenu, :utilisateur, :niveau, :partie
-	# Contenu, Utilisateur et Niveau ne devrait pas être accessibles, ils sont déduits de partie et utilisées seulement pour la persistance des données
+    attr_reader :id, :uuid, :description, :dateCreation, :contenu, :idUtilisateur, :idNiveau
 	
 	### Méthodes de classe
 	
@@ -17,12 +16,14 @@ class Sauvegarde
 	#
     def Sauvegarde.creer(*args)
 		case args.size
-			when 0
-				new(nil, nil, nil, nil, Time.now.to_i, nil)
-			when 6
-				new(args[0], args[1], args[2], args[3], args[4], args[5])
+			# args[0] (string) description
+			# args[1] (Partie) partie
+			when 2
+				new( nil, nil, args[0], Time.now.to_i, "SERIALISATION", args[1].utilisateur.id, args[1].niveau.id ) # Pour les développeurs
+			when 7
+				new( args[0], args[1], args[2], args[3], args[4], args[5], args[6] ) # Pour la classe GestionnaireSauvegarde
 			else
-				puts "Sauvegarde.creer n'accepte que O ou 6 arguments"
+				puts "Sauvegarde.creer n'accepte que 2 ou 7 arguments"
         end
     end
 	
@@ -30,13 +31,13 @@ class Sauvegarde
 	# Constructeur
 	#
 	private_class_method :new
-    def initialize(id, uuid, utilisateur, description, dateCreation, partie)
+    def initialize( id, uuid, description, dateCreation, contenu, idUtilisateur, idNiveau )
 	
 		# int
 		# Identifiant locale de la sauvegarde
         @id = id
 		
-		# uuid
+		# int
 		# Identifiant universel unique de la sauvegarde
 		@uuid = uuid
 		
@@ -44,25 +45,21 @@ class Sauvegarde
 		# Description de la sauvegarde
 		@description = description
 		
-		# Time
+		# int
 		# Date de création de cette sauvegarde
 		@dateCreation = dateCreation
 		
 		# string
-		# Informations sérialisées de la sauvegarde
+		# Informations sérialisées de la partie
 		@contenu = contenu
 		
-		# Utilisateur
-		# Utilisateur a qui appartient la sauvegarde
-		@utilisateur = utilisateur
+		# int
+		# Identifiant de l'utilisateur a qui appartient la sauvegarde
+		@idUtilisateur = idUtilisateur
 		
-		# Niveau
-		# Niveau sur lequel porte cette sauvegarde
-		@niveau = niveau
-		
-		# Partie
-		# Référence vers l'object partie déduits des informations de l'object sauvegarde
-		@partie = nil
+		# int
+		# Identifiant du niveau sur lequel porte cette sauvegarde
+		@idNiveau = idNiveau
 		
     end
 end

@@ -57,3 +57,13 @@ n.test
 # puts n
 # n.test()
 # puts n
+
+g = Grille.creer(6).charger("00_________1____0___11_______0_0_1__")
+g.setTuile(1,1, 2)
+g.setTuile(3,1, 1)
+g.setTuile(0,4, 2)
+data = Marshal::dump(g)
+p data
+j = Marshal::load(data)
+g.afficher()
+j.afficher()

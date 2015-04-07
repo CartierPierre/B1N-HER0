@@ -51,7 +51,15 @@ class GestionnaireSauvegarde
 	# Renvoi un object sauvegarde hydraté selon les paramètres
 	#
 	def hydraterSauvegarde(args)
-		return Sauvegarde.creer( args[0], args[1], args[2], args[3], args[4], args[5] )
+		return Sauvegarde.creer(
+			args[0], # id
+			args[1], # uuid
+			args[2], # description
+			args[3], # date création
+			args[4], # contenu
+			args[5], # identifiant utilisateur
+			args[6] # identifiant niveau
+		)
 	end
 	private :hydraterSauvegarde
 	
@@ -125,51 +133,49 @@ class GestionnaireSauvegarde
 		return hydraterSauvegarde( resultat[0] )
 	end
 	
-	##
+	
 	# Fait persister les données d'un sauvegarde
-	#
+	
 	# ==== Paramètres
 	# * +u+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
-	#
-	# def insert(s)
-		# @stockage.executer("
-			# INSERT INTO sauvegarde
-			# VALUES (
-				# null,
-				# null,
-				# '#{ u.nom }',
-				# '#{ u.motDePasse }',
-				# { u.dateInscription },
-				# { u.dateDerniereSync },
-				# '#{ u.option }',
-				# { u.type }
-			# );
-		# ")
-		# s.id = @stockage.dernierId()
-	# end
-	# private :insert
+	
+	def insert(s)
+		@stockage.executer("
+			INSERT INTO sauvegarde
+			VALUES (
+				null,
+				null,
+				'#{ s.description }',
+				#{ s.dateCreation },
+				'#{ s.contenu }',
+				#{ s.idUtilisateur },
+				#{ s.idNiveau }
+			);
+		")
+		s.id = @stockage.dernierId()
+	end
+	private :insert
 	
 	##
 	# Fait persister les données d'une sauvegarde
 	#
 	# ==== Paramètres
 	# * +s+ - (Sauvegarde) Sauvegarde dont il faut faire persister les informations
-	#
-	# def update(s)
-		# @stockage.executer("
-			# UPDATE sauvegarde
-			# SET
-				# uuid = #{ (u.uuid==nil)?"null":u.uuid },
-				# nom = '#{ u.nom }',
-				# mot_de_passe = '#{ u.motDePasse }',
-				# date_inscription = #{ u.dateInscription },
-				# date_derniere_synchronisation = #{ u.dateDerniereSync },
-				# options = '#{ u.option }',
-				# type = #{ u.type }
-			# WHERE id = #{ u.id };
-		# ")
-	# end
-	# private :update
+	
+	def update(s)
+		@stockage.executer("
+			UPDATE sauvegarde
+			SET
+				uuid = #{ (s.uuid==nil)?"null":u.uuid },
+				description = '#{ s.description }',
+				date_creation = #{ s.dateCreation },
+				contenu = #{ s.contenu },
+				id_utilisateur = '#{ s.idUtilisateur }',
+				id_niveau = #{ s.idNiveau }
+			WHERE id = #{ s.id };
+		")
+	end
+	private :update
 	
 	##
 	# Met à jour une sauvegarde
@@ -177,13 +183,13 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +s+ - (Sauvegarde) Sauvegarde dont il faut mettre à jour les informations
 	#
-	# def sauvegarderSauvegarde(s)
-		# if (s.id == nil)
-			# insert(s)
-		# else
-			# update(s)
-		# end
-	# end
+	def sauvegarderSauvegarde(s)
+		if (s.id == nil)
+			insert(s)
+		else
+			update(s)
+		end
+	end
 	
 	##
 	# Supprime une sauvegarde
