@@ -6,7 +6,6 @@ class Partie
     @dateDebutPartie
     @listeUndo
     @listeRedo
-    @doneRedo
     @modeHypo
 
     # Méthode de création d'une partie
