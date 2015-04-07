@@ -16,7 +16,7 @@ class RegleTrois
     end
     
     def RegleTrois.appliquer(partie)
-    	#Pour la ligne
+    	#Pour chaque ligne
     	0.upto Math.sqrt(partie.grille().taille() - 1) do |x|
 			x.upto Math.sqrt(partie.grille().taille() - 1) do |z|
 				if !(getLigne(x) & getLigne(z).empty?) && (getLigne(x) & getLigne(z)).size == partie.grille().taille()
@@ -25,7 +25,7 @@ class RegleTrois
     			end
     		end
     	end
-    	#Pour la colonne
+    	#Pour chaque colonne
     	0.upto Math.sqrt(partie.grille().taille() - 1) do |y|
     		tab = getColonne(y)
 			x.upto Math.sqrt(partie.grille().taille() - 1) do |z|
