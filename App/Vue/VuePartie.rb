@@ -69,14 +69,8 @@ class VuePartie < Vue
 
         @temps = Label.new("00:00")
 
-        @threadChrono = Thread.new {
-            attr_reader :chrono
-            @chrono = Chrono.new()
-            while(true)
-                @temps.set_label(@chrono.to_s)
-                sleep(0.1)
-            end
-        }
+        #@threadChrono = ThreadChrono.new()
+        #@threadChrono.start()
 
         # Navigation
         boxNav = Box.new(:horizontal)
@@ -182,7 +176,7 @@ class VuePartie < Vue
     end
 
     def onBtnReglesClicked 
-        @threadChrono.chrono.pause()
+        #@threadChrono.chrono.pause()
         regles = @controleur.options.langue.langueActuelle[:regles]
         regles += "\n\n"
         regles += @controleur.options.langue.langueActuelle[:regles1]
@@ -191,7 +185,7 @@ class VuePartie < Vue
         dialogRegles = MessageDialog.new(:parent => @fenetre, :type => :question, :buttons_type => :close, :message => regles)
         dialogRegles.run()
         dialogRegles.destroy()
-        @threadChrono.chrono.finPause()
+        #@threadChrono.chrono.finPause()
     end
 
     def onBtnQuitterClicked

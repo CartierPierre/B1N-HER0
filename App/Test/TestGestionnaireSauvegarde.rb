@@ -1,7 +1,7 @@
 ##
 # Script de test pour la classe GestionnaireSauvegarde
 #
-# Version 6
+# Version 7
 #
 
 # Dépendances
@@ -23,11 +23,11 @@ puts "L'utilisateur #{ utilisateur.nom } à #{ nbSauvegardes } sauvegarde(s)"
 # Lister les sauvegardes d'un utilisateur
 listeSauvegardes = gs.recupererSauvegardeUtilisateur(utilisateur, 0, 10)
 listeSauvegardes.each do |sauvegarde|
-	puts " - #{ sauvegarde.id }"
+	puts " - id : #{ sauvegarde.id }, description : #{ sauvegarde.description }"
 end
 
 # Récupèrer une sauvegarde
 sauvegarde = gs.recupererSauvegarde(1)
 if ( sauvegarde != nil )
-	puts "La sauvegarde avec l'id 1 existe"
+	puts "La sauvegarde avec l'id 1 existe, description : #{ sauvegarde.description }"
 end

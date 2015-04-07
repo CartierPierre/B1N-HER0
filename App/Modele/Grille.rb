@@ -103,8 +103,17 @@ class Grille
         i = 0
         j = 0
         modele.split(//).each do |x|
-            if x != "_"
-                self.setTuile(j, i, (x.to_i == 0?Etat.lock_1():(x.to_i == 1?Etat.lock_2():Etat.vide())))
+            case x
+                when "0"
+                    self.setTuile(j, i, Etat.lock_1())
+                when "1"
+                    self.setTuile(j, i, Etat.lock_2())
+                when "2"
+                    self.setTuile(j, i, Etat.etat_1())
+                when "3"
+                    self.setTuile(j, i, Etat.etat_2())
+                else
+                    self.setTuile(j, i, Etat.vide())
             end
             i += 1
             if i >= @taille
@@ -122,8 +131,28 @@ class Grille
         self
     end
 
-    def sauvegarder(grille)
+    def sauvegarder()
+        modele = String.new()
+        0.upto(taille-1) do |x|
+            0.upto(taille-1) do |y|
+                case @grille[x][y].etat
+                    when Etat.vide
+                        modele += "_"
+                    when Etat.lock_1
+                        modele += "0"
+                    when Etat.lock_2
+                        modele += "1"
+                    when Etat.etat_1
+                        modele += "2"
+                    when Etat.etat_2
+                        modele += "3"
+                    else
+                        modele += "_"
+                end
+            end
+        end
 
+        return modele
     end
 
     # Applique un couyp joue sur la grille
@@ -169,7 +198,7 @@ class Grille
     end
 
     def afficher()
-        print "   │ "
+        print "X\\Y│ "
         0.upto(self.taille() - 1) do |i|
             print i, " │ "
         end
