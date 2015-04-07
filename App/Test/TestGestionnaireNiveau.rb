@@ -25,3 +25,10 @@ niveau = gn.recupererNiveau(1)
 if ( niveau != nil )
 	puts "Le niveau 1 existe : difficulte #{ niveau.difficulte }, dimention #{ niveau.dimention }"
 end
+
+# Liste les difficulté dipsonibles sur une dimention de niveau donnée
+puts "Les difficultées dipsonibles pour une grille de taille 12 sont :"
+difficultes = gn.recupererListeDifficulte(12)
+difficultes.each do |difficulte|
+	puts " - difficulte #{ difficulte }"
+end
