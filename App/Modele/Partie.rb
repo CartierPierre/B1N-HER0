@@ -2,11 +2,9 @@ require 'time'
 
 class Partie
     attr_reader :grille, :niveau, :score, :utilisateur
-    @historique
     @dateDebutPartie
     @listeUndo
     @listeRedo
-    @modeHypo
 
     # Méthode de création d'une partie
     #
@@ -30,6 +28,48 @@ class Partie
         @modeHypo=0
 
         @cpttest = 0
+    end
+
+    def charger(data)
+        tabData = data.split("|")
+        @grille.charger(tabData[0])
+
+        @listeUndo.clear()
+        tabData[1].split(";").each do |coupData|
+            tabCoup = coupData.split(",")
+            coup = Coup.creer(tabCoup[0], tabCoup[1], tabCoup[2])
+            @listeUndo.push(coup)
+        end
+
+        @listeRedo.clear()
+        tabData[2].split(";").each do |coupData|
+            tabCoup = coupData.split(",")
+            coup = Coup.creer(tabCoup[0], tabCoup[1], tabCoup[2])
+            @listeRedo.push(coup)
+        end
+    end
+
+    def sauvegarder()
+        data = String.new()
+        data += grille.sauvegarder()
+        data += "|"
+        0.upto(@listeUndo.size() - 1) do |i|
+            coup = @listeUndo[i]
+            data += "#{coup.x},#{coup.y},#{coup.etat}"
+            if(i != (@listeUndo.size() - 1))
+                data += ";"
+            end
+        end
+        data += "|"
+        0.upto(@listeRedo.size() - 1) do |i|
+            coup = @listeUndo[i]
+            data += "#{coup.x},#{coup.y},#{coup.etat}"
+            if(i != (@listeUndo.size() - 1))
+                data += ";"
+            end
+        end
+
+        return data
     end
 
     # Enregistre un coup est l'état de la tuile avant ce coup
@@ -56,9 +96,6 @@ class Partie
             # Sinon on ajoute le nouveau coup à l'historique
             @listeUndo.push(coup)
         end
-
-        # On recalcule le curseur d'historique pour être sur de ne pas sortir des bornes de l'historique
-        @historiqueCurseur = @listeUndo.size() - 1
 
         self
     end
@@ -94,8 +131,8 @@ class Partie
     #Recommence la grille
     def recommencer()
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
-        @historique = Array.new()
-        @historiqueCurseur = 0
+        @listeUndo = Array.new()
+        @listeRedo = Array.new()
     end
 
     #Permet de jouer un coup
