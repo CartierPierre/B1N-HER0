@@ -4,7 +4,4 @@
 - Sauvegardes, options, scores (Kevin))
 - Mise en ligne avec serveur (Kevin)
 - DDC (Quentin)
-- Do undo a paufiner (Amaury)
 - Mode hypothese code et vue (Pierre, Amaury, Corentin)
-- Afficher le nb de bleu/rouge sur les lignes/col (avec couleur si possibles) (Corentin)
-- Faire un installateur (Inno setup et ocra) (Pierre)

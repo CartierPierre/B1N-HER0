@@ -5,16 +5,11 @@ require 'socket'
 socket = TCPSocket.new( 'localhost', 12345 )
 
 # Envoi de données
-# socket.print( "Salut c'est toto !" )
-# socket.close_write
+socket.print( "Salut c'est toto !" )
+socket.close_write
 
 # Reception de données
-response = socket.read
-puts response
-
-# while line = socket.gets
-	# puts line
-# end
+puts socket.read
 
 # Fermture connexion au serveur
 socket.close
