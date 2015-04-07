@@ -11,6 +11,8 @@ class VuePartie < Vue
     @buttonQuitter
 
     # Boutons du menu en haut
+    @boxHypo
+    @labelHypothese
     @buttonHypothese
     @buttonValiderHypo
     @buttonAnnulerHypo
@@ -87,23 +89,36 @@ class VuePartie < Vue
         @buttonRegles.signal_connect('clicked')  { onBtnReglesClicked }
         @buttonQuitter.signal_connect('clicked')  { onBtnQuitterClicked }
 
-        boxNav.add(@buttonSave)
-        boxNav.add(@buttonLoad)
-        boxNav.add(@buttonOptions)
-        boxNav.add(@buttonRegles)
-        boxNav.add(@buttonQuitter)
+        boxNav.pack_start(@buttonSave, :expand => true, :fill => true)
+        boxNav.pack_start(@buttonLoad)
+        boxNav.pack_start(@buttonOptions)
+        boxNav.pack_start(@buttonRegles)
+        boxNav.pack_start(@buttonQuitter)
 
         # boxNav.add(Label.new("Niveau " + @modele.niveau().difficulte().to_s() + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s()))
 
-        # Menu du haut
-        boxHeader = Box.new(:horizontal)
-        @buttonHypothese = nouveauBouton(:hypothese,"hypothese")
-        @buttonValiderHypo = nouveauBouton(:valider,"valider")
-        @buttonAnnulerHypo = nouveauBouton(:annuler,"annuler")
+        # Menu hypothèse
+        @boxHypo = Box.new(:vertical)
+        @labelHypothese = Label.new("")
 
-        boxHeader.add(@buttonHypothese)
-        boxHeader.add(@buttonValiderHypo)
-        boxHeader.add(@buttonAnnulerHypo)
+        @buttonHypothese = nouveauBouton(:hypothese,"hypothese")
+        @buttonHypothese.signal_connect('clicked') { onBtnHypoClicked }
+        @buttonHypothese.set_size_request(100,64)
+
+        @buttonValiderHypo = nouveauBouton(:valider,"valider")
+        @buttonValiderHypo.signal_connect('clicked') { onBtnHypoValiderClicked }
+        @buttonValiderHypo.set_size_request(100,64)
+
+        @buttonAnnulerHypo = nouveauBouton(:annuler,"annuler")
+        @buttonAnnulerHypo.signal_connect('clicked') { onBtnHypoAnnulerClicked }
+        @buttonAnnulerHypo.set_size_request(100,64)
+
+        @boxHypo.pack_start(Label.new(), :expand => true, :fill => true)   
+        @boxHypo.add(@labelHypothese)     
+        @boxHypo.add(@buttonHypothese)
+        @boxHypo.add(@buttonValiderHypo)
+        @boxHypo.add(@buttonAnnulerHypo)
+        @boxHypo.pack_end(Label.new(), :expand => true, :fill => true)     
 
         @imageTuile1 = Image.new(:file => './Ressources/CaseRouge32.png')
         @imageTuile2 = Image.new(:file => './Ressources/CaseBleue32.png')
@@ -134,8 +149,12 @@ class VuePartie < Vue
             end
         end
 
+        boxJeu.add(@boxHypo)
         boxJeu.add(frame)
         boxJeu.pack_end(@temps, :expand => true, :fill => false)
+
+        @buttonValiderHypo.hide()
+        @buttonAnnulerHypo.hide()  
 
         # Menu du bas
         boxFooter = Box.new(:horizontal)
@@ -158,7 +177,6 @@ class VuePartie < Vue
 
         # Ajout dans la box principal des éléments
         boxVertMain.add(boxNav)
-        boxVertMain.add(boxHeader)
         boxVertMain.add(boxJeu)
         boxVertMain.pack_end(boxFooter, :expand => true, :fill => false)
 
@@ -171,6 +189,7 @@ class VuePartie < Vue
     def onBtnSaveClicked 
 
     end
+
     def onBtnLoadClicked 
 
     end
@@ -192,6 +211,29 @@ class VuePartie < Vue
 
     end
 
+    # Hypothèse
+    def onBtnHypoClicked
+        @labelHypothese.set_label(" Mode\n hypothèse\n activé")
+        @buttonValiderHypo.show()
+        @buttonAnnulerHypo.show()
+        @buttonHypothese.hide()
+    end
+
+    def onBtnHypoValiderClicked
+        @labelHypothese.set_label("")
+        @buttonValiderHypo.hide()
+        @buttonAnnulerHypo.hide()
+        @buttonHypothese.show()
+    end
+
+    def onBtnHypoAnnulerClicked
+        @labelHypothese.set_label("")
+        @buttonValiderHypo.hide()
+        @buttonAnnulerHypo.hide()
+        @buttonHypothese.show()
+    end
+
+    # Grille
     def onCaseJeuClicked(caseJeu)
         if @modele.niveau().tuileValide?(caseJeu.x,caseJeu.y)
             @modele.jouerCoup(caseJeu.x,caseJeu.y)
