@@ -2,7 +2,7 @@
 # La classe GestionnaireNiveau permet d'intéragir avec entitées Niveau
 # Utilise le DP Singleton
 #
-# Version 4
+# Version 5
 #
 class GestionnaireNiveau
 	
@@ -122,6 +122,31 @@ class GestionnaireNiveau
 		end
 		
 		return hydraterNiveau( resultat[0] )
+	end
+	
+	##
+	# Liste les difficulté disponibles sur les grilles d'une dimention donnée
+	#
+	# ==== Paramètres
+	# * +dim+ - (int) Dimention du niveau
+	#
+	# ==== Retour
+	# Renvoi un tableau de int
+	#
+	def recupererListeDifficulte(dim)
+		resultat = @stockage.executer("
+			SELECT DISTINCT difficulte
+			FROM niveau
+			WHERE dimention = #{ dim }
+			ORDER BY difficulte DESC;
+		")
+		
+		liste = Array.new
+		resultat.each do |el|
+			liste.push( el[0] )
+		end
+		
+		return liste;
 	end
 	
 end

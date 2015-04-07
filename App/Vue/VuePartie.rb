@@ -197,6 +197,11 @@ class VuePartie < Vue
 
     end
 
+    def onBtnOptionsClicked
+        #fermerCadre()
+        #@controleur.options()
+    end
+
     def onBtnReglesClicked 
         #@threadChrono.chrono.pause()
         regles = @controleur.options.langue.langueActuelle[:regles]

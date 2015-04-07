@@ -1,3 +1,5 @@
+require_relative '../Modele/Option'
+
 class Controleur
 
     @jeu
@@ -5,12 +7,11 @@ class Controleur
     @modele
     @gestionnaireUtilisateur
     @utilisateur
-    @@options
+    @@options = Option.creer()
 
     def initialize(jeu)
         @jeu = jeu
-        @gestionnaireUtilisateur =GestionnaireUtilisateur.instance()
-        @@options = Option.creer()
+        @gestionnaireUtilisateur = GestionnaireUtilisateur.instance()
     end
 
     def changerControleur(controleur)

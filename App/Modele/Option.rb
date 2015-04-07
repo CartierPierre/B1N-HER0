@@ -1,3 +1,5 @@
+require_relative '../Vue/Langue'
+
 ##
 # Classe Option
 #
