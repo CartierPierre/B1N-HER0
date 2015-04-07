@@ -104,7 +104,6 @@ class Partie
             historiqueAdd(Coup.creer(x, y, @grille.getTuile(x, y).etat()))
             t = Etat.suivant(@grille.getTuile(x, y).etat())
             @grille.appliquerCoup(x, y, t)
-            @score.incNbCoups()
 
             monitor
         end
@@ -160,7 +159,7 @@ class Partie
         print "\nN° ", @cpttest, "\n"
         @grille.afficher()
         puts "Liste des undo :", @listeUndo, "\n"
-        puts "Liste des redo :", listeRedo, "\n"
+        puts "Liste des redo :", @listeRedo, "\n"
         print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n"
     end
 
