@@ -149,4 +149,45 @@ class GestionnaireNiveau
 		return liste;
 	end
 	
+	##
+	# Recherche un niveau selon une dimention et une difficultée
+	#
+	# ==== Paramètres
+	# * +dim+ - (int) Dimention du niveau
+	# * +dif+ - (int) Difficultée du niveau
+	#
+	# ==== Retour
+	# Renvoi un objets niveau si se dernier a été trouvé. Nil si non
+	#
+	def recupererNiveauAleaSelonDimDiff(dim, dif)
+	
+		resultat = @stockage.executer("
+			SELECT COUNT(id)
+			FROM niveau
+			WHERE
+				dimention = #{ dim }
+				AND difficulte = #{ dif };
+		")
+		nb = resultat[0][0];
+		
+		offset = Random.rand(nb)
+		puts offset
+		
+		resultat = @stockage.executer("
+			SELECT *
+			FROM niveau
+			WHERE
+				dimention = #{ dim }
+				AND difficulte = #{ dif }
+			LIMIT 1
+			OFFSET #{ offset };
+		")
+		
+		if ( resultat.count == 0 )
+			return nil
+		end
+		
+		return hydraterNiveau( resultat[0] )
+	end
+	
 end
