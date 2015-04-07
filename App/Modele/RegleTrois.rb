@@ -6,7 +6,7 @@ load "Partie.rb"
 
 class RegleTrois
 		
-	private_class_method :new
+    private_class_method :new
     	
     def RegleTrois.creer()
         new()
