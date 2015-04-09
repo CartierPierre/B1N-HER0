@@ -95,8 +95,6 @@ class VuePartie < Vue
         boxNav.pack_start(@buttonRegles)
         boxNav.pack_start(@buttonQuitter)
 
-        # boxNav.add(Label.new("Niveau " + @modele.niveau().difficulte().to_s() + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s()))
-
         # Menu hypothèse
         @boxHypo = Box.new(:vertical)
         @labelHypothese = Label.new("")
@@ -177,6 +175,10 @@ class VuePartie < Vue
         # Ajout dans la box principal des éléments
         boxVertMain.add(boxNav)
         boxVertMain.add(Label.new())
+        labelNiveau = Label.new()
+        labelNiveau.set_markup("<big>" + "Niveau " + @modele.niveau().difficulte().to_s() + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s() + "</big>")
+        boxVertMain.add(labelNiveau)
+        boxVertMain.add(Label.new())
         boxVertMain.add(boxJeu)
         boxVertMain.add(Label.new())
         boxVertMain.pack_end(boxFooter, :expand => true, :fill => false)
@@ -198,25 +200,26 @@ class VuePartie < Vue
     end
 
     def onBtnOptionsClicked
-        #fermerCadre()
-        #@controleur.options()
+        fermerCadre()
+        @controleur.options()
     end
 
     def onBtnReglesClicked 
         #@threadChrono.chrono.pause()
-        regles = @controleur.options.langue.langueActuelle[:regles]
+        regles = @controleur.getLangue[:regles]
         regles += "\n\n"
-        regles += @controleur.options.langue.langueActuelle[:regles1]
-        regles += @controleur.options.langue.langueActuelle[:regles2]
-        regles += @controleur.options.langue.langueActuelle[:regles3]
-        dialogRegles = MessageDialog.new(:parent => @fenetre, :type => :question, :buttons_type => :close, :message => regles)
+        regles += @controleur.getLangue[:regles1]
+        regles += @controleur.getLangue[:regles2]
+        regles += @controleur.getLangue[:regles3]
+        dialogRegles = MessageDialog.new(:parent => @@fenetre, :type => :question, :buttons_type => :close, :message => regles)
         dialogRegles.run()
         dialogRegles.destroy()
         #@threadChrono.chrono.finPause()
     end
 
     def onBtnQuitterClicked
-
+        fermerCadre()
+        @controleur.quitter()
     end
 
     # Hypothèse

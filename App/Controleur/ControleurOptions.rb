@@ -7,7 +7,7 @@ class ControleurOptions < Controleur
 	end
 
     def retour()
-        changerControleur(ControleurMenuPrincipal.new(@jeu,nil))
+        changerControleur(ControleurPartie.new(@jeu))
     end
 
     def setLangueFr()

@@ -16,7 +16,11 @@ class ControleurPartie < Controleur
 	end	
 
     def options()
-        #changerControleur(ControleurOptions.new(@jeu))
+        changerControleur(ControleurOptions.new(@jeu))
+    end
+
+    def quitter()
+        changerControleur(ControleurMenuPrincipal.new(@jeu,@utilisateur))
     end
 
 end

@@ -13,17 +13,17 @@ class VueOptions < Vue
         boxPrincipale = Box.new(:vertical)
         boxLangue = Box.new(:horizontal)
 
-        @labelLangue = Label.new(@controleur.options.langue.langueActuelle[:langue])
+        @labelLangue = Label.new(@controleur.getLangue[:langue])
         boxLangue.add(@labelLangue)
-        @boutonLangueFr = Button.new(:label => @controleur.options.langue.langueActuelle[:francais])
+        @boutonLangueFr = Button.new(:label => @controleur.getLangue[:francais])
         @boutonLangueFr.signal_connect('clicked')  { onBtnLangueFrClicked }
-        @boutonLangueEn = Button.new(:label => @controleur.options.langue.langueActuelle[:anglais])
+        @boutonLangueEn = Button.new(:label => @controleur.getLangue[:anglais])
         @boutonLangueEn.signal_connect('clicked')  { onBtnLangueEnClicked }
 
         boxLangue.add(@boutonLangueFr)
         boxLangue.add(@boutonLangueEn)
 
-        @boutonRetour = Button.new(:label => @controleur.options.langue.langueActuelle[:retour])
+        @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
         @boutonRetour.signal_connect('clicked')  {onBtnRetourClicked}
 
         boxPrincipale.add(boxLangue)
@@ -34,10 +34,10 @@ class VueOptions < Vue
     end
 
     def actualiserLangue() 
-        @boutonLangueFr.set_label(@controleur.options.langue.langueActuelle[:francais])
-        @boutonLangueEn.set_label(@controleur.options.langue.langueActuelle[:anglais])
-        @boutonRetour.set_label(@controleur.options.langue.langueActuelle[:retour])
-        @labelLangue.set_label(@controleur.options.langue.langueActuelle[:langue])
+        @boutonLangueFr.set_label(@controleur.getLangue[:francais])
+        @boutonLangueEn.set_label(@controleur.getLangue[:anglais])
+        @boutonRetour.set_label(@controleur.getLangue[:retour])
+        @labelLangue.set_label(@controleur.getLangue[:langue])
     end
 
     def onBtnLangueFrClicked
