@@ -33,21 +33,27 @@ class VuePartie < Vue
     class CaseJeu < Gtk::Button
         attr_accessor :x, :y
 
+        @@imgEtat1 = Gdk::Pixbuf.new(:file => './Ressources/CaseRouge32.png')
+        @@imgEtat2 = Gdk::Pixbuf.new(:file => './Ressources/CaseBleue32.png')
+        @@imgEtatLock1 = Gdk::Pixbuf.new(:file => './Ressources/CaseRouge32Lock.png')
+        @@imgEtatLock2 = Gdk::Pixbuf.new(:file => './Ressources/CaseBleue32Lock.png')
+
         def initialize(x,y)
             super()
             @x,@y = x,y
-            self.set_size_request(32, 32)
+            #self.set_size_request(32, 32)
+            self.set_border_width(0)
         end
 
         def setImageTuile(etat)
             if (etat == Etat.etat_1)
-                self.set_image(Image.new(:file => './Ressources/CaseRouge32.png'))
+                self.set_image(Image.new(:pixbuf => @@imgEtat1))
             elsif (etat == Etat.etat_2)
-                self.set_image(Image.new(:file => './Ressources/CaseBleue32.png'))
+                self.set_image(Image.new(:pixbuf => @@imgEtat2))
             elsif (etat == Etat.lock_1)
-                self.set_image(Image.new(:file => './Ressources/CaseRouge32Lock.png'))
+                self.set_image(Image.new(:pixbuf => @@imgEtatLock1))
             elsif (etat == Etat.lock_2)
-                self.set_image(Image.new(:file => './Ressources/CaseBleue32Lock.png'))
+                self.set_image(Image.new(:pixbuf => @@imgEtatLock2))
             else
                 self.set_image(Image.new())
             end    
@@ -250,7 +256,7 @@ class VuePartie < Vue
             @modele.jouerCoup(caseJeu.x,caseJeu.y)
             caseJeu.setImageTuile(@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat())
             self.nbLigneColonne(caseJeu.x,caseJeu.y)
-            self.actualiser()            
+            #self.actualiser()            
         end
     end
 
