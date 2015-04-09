@@ -6,8 +6,9 @@ class ControleurNouvellePartie < Controleur
 		@vue = VueNouvellePartie.new(@modele,"NouvellePartie",self)
 	end	
 
-    def jouer
-        changerControleur(ControleurPartie.new(@jeu))
+    def jouer(taille,difficulte)
+        niveau = GestionnaireNiveau.instance.recupererNiveauAleaSelonDimDiff(taille, difficulte)
+        changerControleur(ControleurPartie.new(@jeu,niveau))
     end
 
     def annuler()

@@ -170,7 +170,7 @@ class GestionnaireNiveau
 		")
 		nb = resultat[0][0];
 		
-		offset = Random.rand(nb)
+		offset = Random.rand(0..nb)
 		puts offset
 		
 		resultat = @stockage.executer("
