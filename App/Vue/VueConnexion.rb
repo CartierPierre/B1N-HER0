@@ -2,38 +2,75 @@ class VueConnexion < Vue
 
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
+
         vbox1 = Box.new(:vertical)
         vbox2 = Box.new(:vertical)
         vbox3 = Box.new(:vertical)
+
         hbox1 = Box.new(:horizontal)
         hbox2 = Box.new(:horizontal)
-		bouttonValider = Button.new(:stock_id => Stock::APPLY)
-		bouttonAnnuler = Button.new(:stock_id => Stock::CANCEL)
+
+		boutonValider = Button.new(:stock_id => Stock::APPLY)
+        boutonValider.set_sensitive(false)
+
+		boutonAnnuler = Button.new(:stock_id => Stock::CANCEL)
+
         @entryPseudo = Entry.new
         @entryPassword = Entry.new
         @entryPassword.visibility=(false)
+
         vbox2.pack_start(Label.new("Pseudo",true))
         vbox2.pack_end(Label.new("Mot De Passe",true))
         vbox2.set_homogeneous(true);
+
         vbox3.pack_start(@entryPseudo)
         vbox3.pack_end(@entryPassword)
+
         hbox1.add(vbox2)
         hbox1.add(vbox3)
-        hbox2.pack_start(bouttonValider)
-        hbox2.pack_end(bouttonAnnuler)
+
+        hbox2.pack_start(boutonValider)
+        hbox2.pack_end(boutonAnnuler)
+
         vbox1.add(hbox1)
         vbox1.add(hbox2)
+
         @cadre.add(vbox1)
 
 
-        bouttonValider.signal_connect('clicked')     {
+        boutonValider.signal_connect('clicked')     {
             fermerCadre()
             onBtnValiderClicked
         }
-        bouttonAnnuler.signal_connect('clicked')     {
+        boutonAnnuler.signal_connect('clicked')     {
             fermerCadre()
             onBtnAnnulerClicked
         }
+        @entryPseudo.signal_connect("key-release-event")     {
+            if @entryPseudo.text() == "" || @entryPseudo.text() =~ /\W/
+                    boutonValider.set_sensitive(false)
+            else
+                if @entryPassword.text() == "" || @entryPassword.text() =~ /\W/
+                    boutonValider.set_sensitive(false)
+                else
+                    boutonValider.set_sensitive(true)
+                end
+            end
+        }
+        @entryPseudo.signal_connect('activate')     {onBtnValiderClicked}
+
+        @entryPassword.signal_connect("key-release-event")     {
+            if @entryPassword.text() == "" || @entryPassword.text() =~ /\W/
+                    boutonValider.set_sensitive(false)
+            else
+                if @entryPseudo.text() == "" || @entryPseudo.text() =~ /\W/
+                    boutonValider.set_sensitive(false)
+                else
+                    boutonValider.set_sensitive(true)
+                end
+            end
+        }
+
         @entryPseudo.signal_connect('activate')     {
             fermerCadre()
             onBtnValiderClicked
@@ -83,8 +120,8 @@ class VueConnexion < Vue
         vbox.pack_start(Label.new("Voulez-vous créer un compte avec ce pseudo ?"))
         vbox.pack_end(hbox)
 
-        bouttonOui.signal_connect('clicked')     {onBtnOuiClicked}
-        bouttonNon.signal_connect('clicked')     {onBtnNonClicked}
+        boutonOui.signal_connect('clicked')     {onBtnOuiClicked}
+        boutonNon.signal_connect('clicked')     {onBtnNonClicked}
 
         @popup.add(vbox)
         @popup.show_all()

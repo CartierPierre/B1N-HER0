@@ -98,37 +98,9 @@ class Grille
     # Permet de charger le modèle de grille pour l'appliquer à la grille
     #
     # === Argument
-    # *modele* - Une string correspondant au modèle de la grille
-    def charger(modele)
-        i = 0
-        j = 0
-        modele.split(//).each do |x|
-            case x
-                when "0"
-                    self.setTuile(j, i, Etat.lock_1())
-                when "1"
-                    self.setTuile(j, i, Etat.lock_2())
-                when "2"
-                    self.setTuile(j, i, Etat.etat_1())
-                when "3"
-                    self.setTuile(j, i, Etat.etat_2())
-                else
-                    self.setTuile(j, i, Etat.vide())
-            end
-            i += 1
-            if i >= @taille
-                i = 0
-                j += 1
-            end
-        end
-
-        #         0.upto(self.taille()) do |x|
-        #     0.upto(self.taille()) do |y|
-        #         self.setTuile(x, y, (x.to_i == 1?Etat.lock_1():(x.to_i == 2?Etat.lock_2():Etat.vide())))
-        #     end
-        # end
-
-        self
+    # *data* - Une string correspondant au modèle de la grille
+    def Grille.charger(data)
+        return Grille.creer(Math.sqrt(data.size)).initFrom(data)
     end
 
     def sauvegarder()
@@ -155,7 +127,33 @@ class Grille
         return modele
     end
 
-    # Applique un couyp joue sur la grille
+    def initFrom(data)
+        i = 0
+        j = 0
+        data.split(//).each do |x|
+            case x
+                when "0"
+                    self.setTuile(j, i, Etat.lock_1())
+                when "1"
+                    self.setTuile(j, i, Etat.lock_2())
+                when "2"
+                    self.setTuile(j, i, Etat.etat_1())
+                when "3"
+                    self.setTuile(j, i, Etat.etat_2())
+                else
+                    self.setTuile(j, i, Etat.vide())
+            end
+            i += 1
+            if i >= @taille
+                i = 0
+                j += 1
+            end
+        end
+
+        self
+    end
+
+    # Applique un coup joué sur la grille
     #
     # === Arguments
     # *x* - La coordonnée x du coup.

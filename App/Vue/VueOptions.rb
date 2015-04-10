@@ -40,43 +40,43 @@ class VueOptions < Vue
         boxImgTuile = Box.new(:horizontal)
 
         @boutonImgTuileRouge = ToggleButton.new()
-        @boutonImgTuileRouge.set_image(Image.new(:pixbuf => Option::TUILE_ROUGE))
+        @boutonImgTuileRouge.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_ROUGE]))
         @boutonImgTuileBleue = ToggleButton.new()
-        @boutonImgTuileBleue.set_image(Image.new(:pixbuf => Option::TUILE_BLEUE))
+        @boutonImgTuileBleue.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_BLEUE]))
         @boutonImgTuileJaune = ToggleButton.new()
-        @boutonImgTuileJaune.set_image(Image.new(:pixbuf => Option::TUILE_JAUNE))
+        @boutonImgTuileJaune.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_JAUNE]))
         @boutonImgTuileVerte = ToggleButton.new()
-        @boutonImgTuileVerte.set_image(Image.new(:pixbuf => Option::TUILE_VERTE))
+        @boutonImgTuileVerte.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_VERTE]))
 
-        if(@modele.couleurTuile1 == "Rouge")
+        if(@modele.couleurTuile1 == Option::TUILE_ROUGE)
             @boutonImgTuile1Actif = @boutonImgTuileRouge
             @boutonImgTuile1Actif.active = true
         end
-        if(@modele.couleurTuile1 == "Bleue")
+        if(@modele.couleurTuile1 == Option::TUILE_BLEUE)
             @boutonImgTuile1Actif = @boutonImgTuileBleue
             @boutonImgTuile1Actif.active = true
         end  
-        if(@modele.couleurTuile1 == "Jaune")
+        if(@modele.couleurTuile1 == Option::TUILE_JAUNE)
             @boutonImgTuile1Actif = @boutonImgTuileJaune
             @boutonImgTuile1Actif.active = true
         end
-        if(@modele.couleurTuile1 == "Verte")
+        if(@modele.couleurTuile1 == Option::TUILE_VERTE)
             @boutonImgTuile1Actif = @boutonImgTuileVerte
             @boutonImgTuile1Actif.active = true
         end
-        if(@modele.couleurTuile2 == "Rouge")
+        if(@modele.couleurTuile2 == Option::TUILE_ROUGE)
             @boutonImgTuile2Actif = @boutonImgTuileRouge
             @boutonImgTuile2Actif.active = true
         end
-        if(@modele.couleurTuile2 == "Bleue")
+        if(@modele.couleurTuile2 == Option::TUILE_BLEUE)
             @boutonImgTuile2Actif = @boutonImgTuileBleue
             @boutonImgTuile2Actif.active = true
         end
-        if(@modele.couleurTuile2 == "Jaune")
+        if(@modele.couleurTuile2 == Option::TUILE_JAUNE)
             @boutonImgTuile2Actif = @boutonImgTuileJaune
             @boutonImgTuile2Actif.active = true
         end
-        if(@modele.couleurTuile2 == "Verte")
+        if(@modele.couleurTuile2 == Option::TUILE_VERTE)
             @boutonImgTuile2Actif = @boutonImgTuileVerte
             @boutonImgTuile2Actif.active = true
         end 
