@@ -21,7 +21,8 @@ class Vue
     end
 
     def actualiser()
-        @@fenetre.show_all()
+        @@fenetre.set_default_size(500, 500).show_all()
+        #@@fenetre.show_all()
     end
 
     def fermerCadre()
@@ -32,7 +33,7 @@ class Vue
         bouton = Button.new(:label => @controleur.getLangue[labelBouton])
         bouton.set_always_show_image(true)
         bouton.set_image_position(:top)
-        bouton.set_image(Image.new(:file => './Vue/img/' + image + '.png'))
+        bouton.set_image(Image.new(:file => './Ressources/' + image + '.png'))
         return bouton
     end
 

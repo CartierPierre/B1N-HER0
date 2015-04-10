@@ -13,3 +13,5 @@
 - Reprendre la derniere partie (Kevin et Corentin)
 - Charger une partie (Kevin et Corentin)
 - Sauvegarder la partie (Kevin, Amaury et Corentin)
+- Choix dans les options pour laisser ou non l'aide en temps reel ( check si une regle est enfreinte ) (Tianqi)
+- SUCCES URGENT (Kevin, Corentin, Pierre)

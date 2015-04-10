@@ -92,7 +92,7 @@ class VueNouvellePartie < Vue
       	@cadre.add(vboxPrincipale)
         self.actualiser()
 
-        @buttonValider.hide()
+        @buttonValider.set_sensitive(false)
         @labelDiff.hide()
         @buttonDiff1.hide()
         @buttonDiff2.hide()
@@ -116,7 +116,7 @@ class VueNouvellePartie < Vue
 
     	if(@difficulte)
     		@difficulte = nil
-    		@buttonValider.hide()
+    		@buttonValider.set_sensitive(false)
     		@labelDiff.hide()
     		@buttonDiff1.active = false
 	        @buttonDiff2.active = false
@@ -191,7 +191,7 @@ class VueNouvellePartie < Vue
 		if(bouton != @buttonDiff7)
 			@buttonDiff7.active = false
 		end
-		@buttonValider.show()
+		@buttonValider.set_sensitive(true)
 	end
 	
 	def onBtnValiderClicked

@@ -7,13 +7,16 @@
 
 class Langue
 
+      EN = 0
+      FR = 1
+
 	@langueFr
 	@langueEn
 	@langueActuelle
 
 	attr_reader :langueActuelle
 
-	def initialize() 
+	def initialize(langue) 
 
         @langueFr = {
             sauvegarder: "Sauvegarder",
@@ -68,7 +71,11 @@ class Langue
             regles2: "Rule n°2 : Rows and columns have an equal number of each color.\n\n",
             regles3: "Rule n°3 : No two rows and no two columns are the same."
         }
-        @langueActuelle = @langueFr
+            if(langue == FR)
+                  @langueActuelle = @langueFr
+            else
+                  @langueActuelle = @langueEn
+            end
 	end
 
 	def setLangueFr()
