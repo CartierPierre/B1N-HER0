@@ -18,6 +18,22 @@ class Controleur
         return @@options.langue.langueActuelle
     end
 
+    def getImgTuile1
+        return @@options.imgTuile1
+    end
+
+    def getImgTuile2
+        return @@options.imgTuile2
+    end
+
+    def getImgTuileLock1
+        return @@options.imgTuileLock1
+    end
+
+    def getImgTuileLock2
+        return @@options.imgTuileLock2
+    end
+
     def changerControleur(controleur)
     	@jeu.controleur = controleur
     end

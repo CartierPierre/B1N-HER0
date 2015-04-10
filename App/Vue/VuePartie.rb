@@ -25,35 +25,30 @@ class VuePartie < Vue
 
     @grille
 
-    @imageTuile1
-    @imageTuile2
-
     @threadChrono
 
     class CaseJeu < Gtk::Button
         attr_accessor :x, :y
 
-        @@imgEtat1 = Gdk::Pixbuf.new(:file => './Ressources/CaseRouge32.png')
-        @@imgEtat2 = Gdk::Pixbuf.new(:file => './Ressources/CaseBleue32.png')
-        @@imgEtatLock1 = Gdk::Pixbuf.new(:file => './Ressources/CaseRouge32Lock.png')
-        @@imgEtatLock2 = Gdk::Pixbuf.new(:file => './Ressources/CaseBleue32Lock.png')
+        @controleur
 
-        def initialize(x,y)
+        def initialize(x,y,controleur)
             super()
             @x,@y = x,y
+            @controleur = controleur
             #self.set_size_request(32, 32)
             self.set_border_width(0)
         end
 
         def setImageTuile(etat)
             if (etat == Etat.etat_1)
-                self.set_image(Image.new(:pixbuf => @@imgEtat1))
+                self.set_image(Image.new(:pixbuf => @controleur.getImgTuile1))
             elsif (etat == Etat.etat_2)
-                self.set_image(Image.new(:pixbuf => @@imgEtat2))
+                self.set_image(Image.new(:pixbuf => @controleur.getImgTuile2))
             elsif (etat == Etat.lock_1)
-                self.set_image(Image.new(:pixbuf => @@imgEtatLock1))
+                self.set_image(Image.new(:pixbuf => @controleur.getImgTuileLock1))
             elsif (etat == Etat.lock_2)
-                self.set_image(Image.new(:pixbuf => @@imgEtatLock2))
+                self.set_image(Image.new(:pixbuf => @controleur.getImgTuileLock2))
             else
                 self.set_image(Image.new())
             end    
@@ -144,7 +139,7 @@ class VuePartie < Vue
                     nb = @modele.compterCasesLigne(x-1)
                     caseTemp = Label.new.set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
                 else
-                    caseTemp = CaseJeu.new(x-1,y-1)
+                    caseTemp = CaseJeu.new(x-1,y-1,@controleur)
                     caseTemp.setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
                     caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
                 end
@@ -297,7 +292,6 @@ class VuePartie < Vue
                 end
             end
         end
-        self.actualiser()
     end
 
 end
