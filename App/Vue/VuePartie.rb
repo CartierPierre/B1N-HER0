@@ -154,9 +154,9 @@ class VuePartie < Vue
         end
 
         boxJeu.add(@boxHypo)
-        boxJeu.add(Label.new())
+        boxJeu.add(Label.new("  "))
         boxJeu.add(frame)
-        boxJeu.add(Label.new())
+        boxJeu.add(Label.new("  "))
         boxJeu.pack_end(@temps, :expand => true, :fill => false) 
 
         # Menu du bas
@@ -255,8 +255,7 @@ class VuePartie < Vue
         if @modele.niveau().tuileValide?(caseJeu.x,caseJeu.y)
             @modele.jouerCoup(caseJeu.x,caseJeu.y)
             caseJeu.setImageTuile(@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat())
-            self.nbLigneColonne(caseJeu.x,caseJeu.y)
-            #self.actualiser()            
+            self.nbLigneColonne(caseJeu.x,caseJeu.y)          
         end
     end
 
@@ -266,7 +265,6 @@ class VuePartie < Vue
         if(tabCoord)
             @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.nbLigneColonne(tabCoord[0],tabCoord[1])
-            self.actualiser() 
         end 
     end
 
@@ -275,7 +273,6 @@ class VuePartie < Vue
         if(tabCoord)
             @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.nbLigneColonne(tabCoord[0],tabCoord[1])
-            self.actualiser() 
         end
     end
 

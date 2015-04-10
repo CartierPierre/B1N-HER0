@@ -2,14 +2,18 @@ require_relative 'Controleur'
 
 class ControleurPartie < Controleur
 
-	def initialize(jeu,niveau)
+	def initialize(jeu,niveau,partie)
 		super(jeu)
-		@modele = Partie.creer(nil,niveau)
+        if(partie)
+            @modele = partie
+        else
+		    @modele = Partie.creer(nil,niveau)
+        end
 		@vue = VuePartie.new(@modele,"Jeu",self)
 	end	
 
     def options()
-        changerControleur(ControleurOptions.new(@jeu))
+        changerControleur(ControleurOptions.new(@jeu,@modele))
     end
 
     def quitter()

@@ -8,7 +8,7 @@ class ControleurNouvellePartie < Controleur
 
     def jouer(taille,difficulte)
         niveau = GestionnaireNiveau.instance.recupererNiveauAleaSelonDimDiff(taille, difficulte)
-        changerControleur(ControleurPartie.new(@jeu,niveau))
+        changerControleur(ControleurPartie.new(@jeu,niveau,nil))
     end
 
     def annuler()
