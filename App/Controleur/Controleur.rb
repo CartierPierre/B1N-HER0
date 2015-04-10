@@ -6,7 +6,7 @@ class Controleur
     @vue
     @modele
     @gestionnaireUtilisateur
-    @utilisateur
+    @@utilisateur
     @@options = Option.creer(Option::TUILE_ROUGE,Option::TUILE_BLEUE,Langue::FR) 
 
     def initialize(jeu)

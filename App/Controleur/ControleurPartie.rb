@@ -17,7 +17,7 @@ class ControleurPartie < Controleur
     end
 
     def quitter()
-        changerControleur(ControleurMenuPrincipal.new(@jeu,@utilisateur))
+        changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 
 end
