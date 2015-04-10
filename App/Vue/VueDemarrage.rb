@@ -12,9 +12,6 @@ class VueDemarrage < Vue
 
         buttonConnexion = Button.new(:label => "Connexion")
         buttonInscription = Button.new(:label => "Inscription")
-        buttonJeu = Button.new(:label => "Test jeu")
-
-
 
         pixbufHero = Gdk::Pixbuf.new(:file => './Ressources/Hero.png', :width => 400, :height => 400)
         pixbufTitre = Gdk::Pixbuf.new(:file => './Ressources/Titre.png')
@@ -25,7 +22,6 @@ class VueDemarrage < Vue
         vbox.add(imgTitre)
         vbox.add(buttonConnexion)
         vbox.add(buttonInscription)
-        vbox.add(buttonJeu)
         vbox.set_homogeneous(true);
 
         hbox.add(imgHero)
@@ -36,7 +32,6 @@ class VueDemarrage < Vue
 
         buttonConnexion.signal_connect('clicked')  {onBtnConnexionClicked}
         buttonInscription.signal_connect('clicked')  {onBtnInscriptionClicked}
-        buttonJeu.signal_connect('clicked')  {onBtnJeuClicked}
 
         self.actualiser()
     end
@@ -50,10 +45,5 @@ class VueDemarrage < Vue
         fermerCadre()
         @controleur.inscription()
 	end
-
-    def onBtnJeuClicked
-        fermerCadre()
-        @controleur.jeu()
-    end
 
 end

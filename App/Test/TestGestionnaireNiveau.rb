@@ -32,3 +32,8 @@ difficultes = gn.recupererListeDifficulte(12)
 difficultes.each do |difficulte|
 	puts " - difficulte #{ difficulte }"
 end
+
+niveau = gn.recupererNiveauAleaSelonDimDiff(12, 2)
+if ( niveau != nil )
+	puts "Un niveau avec une difficultée de 2 et une dimention de 12 a été trouvé : id = #{ niveau.id }"
+end

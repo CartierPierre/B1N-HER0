@@ -14,8 +14,4 @@ class ControleurDemarrage < Controleur
         changerControleur(ControleurInscription.new(@jeu,""))
     end
 
-    def jeu()
-        changerControleur(ControleurPartie.new(@jeu))
-    end
-
 end

@@ -33,21 +33,27 @@ class VuePartie < Vue
     class CaseJeu < Gtk::Button
         attr_accessor :x, :y
 
+        @@imgEtat1 = Gdk::Pixbuf.new(:file => './Ressources/CaseRouge32.png')
+        @@imgEtat2 = Gdk::Pixbuf.new(:file => './Ressources/CaseBleue32.png')
+        @@imgEtatLock1 = Gdk::Pixbuf.new(:file => './Ressources/CaseRouge32Lock.png')
+        @@imgEtatLock2 = Gdk::Pixbuf.new(:file => './Ressources/CaseBleue32Lock.png')
+
         def initialize(x,y)
             super()
             @x,@y = x,y
-            self.set_size_request(32, 32)
+            #self.set_size_request(32, 32)
+            self.set_border_width(0)
         end
 
         def setImageTuile(etat)
             if (etat == Etat.etat_1)
-                self.set_image(Image.new(:file => './Ressources/CaseRouge32.png'))
+                self.set_image(Image.new(:pixbuf => @@imgEtat1))
             elsif (etat == Etat.etat_2)
-                self.set_image(Image.new(:file => './Ressources/CaseBleue32.png'))
+                self.set_image(Image.new(:pixbuf => @@imgEtat2))
             elsif (etat == Etat.lock_1)
-                self.set_image(Image.new(:file => './Ressources/CaseRouge32Lock.png'))
+                self.set_image(Image.new(:pixbuf => @@imgEtatLock1))
             elsif (etat == Etat.lock_2)
-                self.set_image(Image.new(:file => './Ressources/CaseBleue32Lock.png'))
+                self.set_image(Image.new(:pixbuf => @@imgEtatLock2))
             else
                 self.set_image(Image.new())
             end    
@@ -94,8 +100,6 @@ class VuePartie < Vue
         boxNav.pack_start(@buttonOptions)
         boxNav.pack_start(@buttonRegles)
         boxNav.pack_start(@buttonQuitter)
-
-        # boxNav.add(Label.new("Niveau " + @modele.niveau().difficulte().to_s() + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s()))
 
         # Menu hypothèse
         @boxHypo = Box.new(:vertical)
@@ -177,6 +181,10 @@ class VuePartie < Vue
         # Ajout dans la box principal des éléments
         boxVertMain.add(boxNav)
         boxVertMain.add(Label.new())
+        labelNiveau = Label.new()
+        labelNiveau.set_markup("<big>" + "Niveau " + @modele.niveau().difficulte().to_s() + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s() + "</big>")
+        boxVertMain.add(labelNiveau)
+        boxVertMain.add(Label.new())
         boxVertMain.add(boxJeu)
         boxVertMain.add(Label.new())
         boxVertMain.pack_end(boxFooter, :expand => true, :fill => false)
@@ -198,25 +206,26 @@ class VuePartie < Vue
     end
 
     def onBtnOptionsClicked
-        #fermerCadre()
-        #@controleur.options()
+        fermerCadre()
+        @controleur.options()
     end
 
     def onBtnReglesClicked 
         #@threadChrono.chrono.pause()
-        regles = @controleur.options.langue.langueActuelle[:regles]
+        regles = @controleur.getLangue[:regles]
         regles += "\n\n"
-        regles += @controleur.options.langue.langueActuelle[:regles1]
-        regles += @controleur.options.langue.langueActuelle[:regles2]
-        regles += @controleur.options.langue.langueActuelle[:regles3]
-        dialogRegles = MessageDialog.new(:parent => @fenetre, :type => :question, :buttons_type => :close, :message => regles)
+        regles += @controleur.getLangue[:regles1]
+        regles += @controleur.getLangue[:regles2]
+        regles += @controleur.getLangue[:regles3]
+        dialogRegles = MessageDialog.new(:parent => @@fenetre, :type => :question, :buttons_type => :close, :message => regles)
         dialogRegles.run()
         dialogRegles.destroy()
         #@threadChrono.chrono.finPause()
     end
 
     def onBtnQuitterClicked
-
+        fermerCadre()
+        @controleur.quitter()
     end
 
     # Hypothèse
@@ -247,7 +256,7 @@ class VuePartie < Vue
             @modele.jouerCoup(caseJeu.x,caseJeu.y)
             caseJeu.setImageTuile(@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat())
             self.nbLigneColonne(caseJeu.x,caseJeu.y)
-            self.actualiser()            
+            #self.actualiser()            
         end
     end
 

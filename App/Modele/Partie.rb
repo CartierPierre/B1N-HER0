@@ -20,7 +20,7 @@ class Partie
         @niveau = niveau
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
         @dateDebutPartie = Time.new()
-        @score = Score.creer( 0, 0, 0, 0, @utilisateur.id, @niveau.id)
+        #@score = Score.creer( 0, 0, 0, 0, @utilisateur.id, @niveau.id)
 
         @listeUndo = Array.new()
         @listeRedo = Array.new()

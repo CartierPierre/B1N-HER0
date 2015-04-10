@@ -29,7 +29,7 @@ class Vue
     end
 
     def nouveauBouton(labelBouton,image)
-        bouton = Button.new(:label => @controleur.options.langue.langueActuelle[labelBouton])
+        bouton = Button.new(:label => @controleur.getLangue[labelBouton])
         bouton.set_always_show_image(true)
         bouton.set_image_position(:top)
         bouton.set_image(Image.new(:file => './Vue/img/' + image + '.png'))

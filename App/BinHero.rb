@@ -32,6 +32,7 @@ require_relative './Modele/Score'
 require_relative './Modele/ThreadChrono'
 require_relative './Modele/Tuile'
 require_relative './Modele/Utilisateur'
+require_relative './Modele/GestionnaireNiveau'
 require_relative './Modele/GestionnaireUtilisateur'
 require_relative './Modele/Stockage'
 

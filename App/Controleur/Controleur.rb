@@ -14,12 +14,12 @@ class Controleur
         @gestionnaireUtilisateur = GestionnaireUtilisateur.instance()
     end
 
-    def changerControleur(controleur)
-    	@jeu.controleur = controleur
+    def getLangue
+        return @@options.langue.langueActuelle
     end
 
-    def options()
-        return @@options
+    def changerControleur(controleur)
+    	@jeu.controleur = controleur
     end
 
     def quitterJeu

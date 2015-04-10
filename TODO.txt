@@ -5,3 +5,4 @@
 - Mise en ligne avec serveur (Kevin)
 - DDC (Quentin)
 - Mode hypothese code et vue (Pierre, Amaury, Corentin)
+- Langue du systeme
