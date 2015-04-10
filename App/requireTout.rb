@@ -21,7 +21,7 @@ require_relative "./Vue/VuePartie"
 
 require "sqlite3"
 
-require_relative "./Modele/stockage"
+require_relative "./Modele/Stockage"
 require_relative "./Modele/GestionnaireUtilisateur"
 require_relative "./Modele/Utilisateur"
 require_relative "./Modele/Option"
