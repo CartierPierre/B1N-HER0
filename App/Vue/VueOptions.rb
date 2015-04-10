@@ -81,10 +81,10 @@ class VueOptions < Vue
             @boutonImgTuile2Actif.active = true
         end 
 
-        @boutonImgTuileRouge.signal_connect('toggled') { onBtnImgTuileToggle("Rouge") }
-        @boutonImgTuileBleue.signal_connect('toggled') { onBtnImgTuileToggle("Bleue") }
-        @boutonImgTuileJaune.signal_connect('toggled') { onBtnImgTuileToggle("Jaune") }
-        @boutonImgTuileVerte.signal_connect('toggled') { onBtnImgTuileToggle("Verte") }
+        @boutonImgTuileRouge.signal_connect('toggled') { onBtnImgTuileToggle(Option::TUILE_ROUGE,@boutonImgTuileRouge) }
+        @boutonImgTuileBleue.signal_connect('toggled') { onBtnImgTuileToggle(Option::TUILE_BLEUE,@boutonImgTuileBleue) }
+        @boutonImgTuileJaune.signal_connect('toggled') { onBtnImgTuileToggle(Option::TUILE_JAUNE,@boutonImgTuileJaune) }
+        @boutonImgTuileVerte.signal_connect('toggled') { onBtnImgTuileToggle(Option::TUILE_VERTE,@boutonImgTuileVerte) }
 
         boxImgTuile.add(@boutonImgTuileRouge)
         boxImgTuile.add(@boutonImgTuileBleue)
@@ -100,8 +100,10 @@ class VueOptions < Vue
     end
 
     def onBtnImgTuileToggle(couleur,bouton)
-        if(couleur == "Rouge") 
-
+        if(bouton != @boutonImgTuile1Actif && bouton != @boutonImgTuile2Actif) 
+            @boutonImgTuile1Actif.active = false
+            @boutonImgTuile1Actif = bouton
+            @boutonImgTuile2Actif = @boutonImgTuile1Actif
         end
     end
 

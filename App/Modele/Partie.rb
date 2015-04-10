@@ -1,8 +1,7 @@
 require 'time'
 
 class Partie
-    attr_reader :grille, :niveau, :score, :utilisateur
-    @dateDebutPartie
+    attr_reader :grille, :niveau, :score, :utilisateur, :chrono
     @listeUndo
     @listeRedo
 
@@ -19,7 +18,7 @@ class Partie
         @utilisateur = utilisateur
         @niveau = niveau
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
-        @dateDebutPartie = Time.new()
+        @chrono = Chrono.creer()
         #@score = Score.creer( 0, 0, 0, 0, @utilisateur.id, @niveau.id)
 
         @listeUndo = Array.new()
@@ -30,29 +29,62 @@ class Partie
         @cpttest = 0
     end
 
-    def charger(data)
+    def Partie.charger(utilisateur, niveau, data)
+        partie = Partie.creer(utilisateur, niveau)
+
         tabData = data.split("|")
-        @grille.charger(tabData[0])
 
-        @listeUndo.clear()
-        tabData[1].split(";").each do |coupData|
-            tabCoup = coupData.split(",")
-            coup = Coup.creer(tabCoup[0], tabCoup[1], tabCoup[2])
-            @listeUndo.push(coup)
+        partie.setChrono(Chrono.charger(tabData[0]))
+
+        partie.setGrille(Grille.charger(tabData[1]))
+
+        if(tabData.size >= 3)
+            tabData[2].split(";").each do |coupData|
+                tabCoup = coupData.split(",")
+                coup = Coup.creer(tabCoup[0], tabCoup[1], tabCoup[2])
+                partie.addUndo(coup)
+            end
         end
 
-        @listeRedo.clear()
-        tabData[2].split(";").each do |coupData|
-            tabCoup = coupData.split(",")
-            coup = Coup.creer(tabCoup[0], tabCoup[1], tabCoup[2])
-            @listeRedo.push(coup)
+        if(tabData.size >= 4)
+            tabData[3].split(";").each do |coupData|
+                tabCoup = coupData.split(",")
+                coup = Coup.creer(tabCoup[0], tabCoup[1], tabCoup[2])
+                partie.addRedo(coup)
+            end
         end
+
+        return partie
+    end
+
+    #Méthode permettant d'accéder au champ lors du chargement
+    def addUndo(coup)
+        @listeUndo.push(coup)
+    end
+
+    def addRedo(coup)
+        @listeRedo.push(coup)
+    end
+
+    def setChrono(chrono)
+        @chrono = chrono
+    end
+
+    def setGrille(grille)
+        @grille = grille
     end
 
     def sauvegarder()
         data = String.new()
-        data += grille.sauvegarder()
+
+        data += @chrono.sauvegarder
+
         data += "|"
+
+        data += grille.sauvegarder()
+
+        data += "|"
+
         0.upto(@listeUndo.size() - 1) do |i|
             coup = @listeUndo[i]
             data += "#{coup.x},#{coup.y},#{coup.etat}"
@@ -60,11 +92,13 @@ class Partie
                 data += ";"
             end
         end
+
         data += "|"
+
         0.upto(@listeRedo.size() - 1) do |i|
-            coup = @listeUndo[i]
+            coup = @listeRedo[i]
             data += "#{coup.x},#{coup.y},#{coup.etat}"
-            if(i != (@listeUndo.size() - 1))
+            if(i != (@listeRedo.size() - 1))
                 data += ";"
             end
         end

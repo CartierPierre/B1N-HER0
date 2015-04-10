@@ -2,10 +2,10 @@ require_relative 'Controleur'
 
 class ControleurPartie < Controleur
 
-	def initialize(jeu,niveau,partie)
+	def initialize(jeu,niveau,controleur)
 		super(jeu)
-        if(partie)
-            @modele = partie
+        if(niveau)
+            @modele = controleur.modele
         else
 		    @modele = Partie.creer(nil,niveau)
         end

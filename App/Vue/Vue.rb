@@ -33,7 +33,7 @@ class Vue
         bouton = Button.new(:label => @controleur.getLangue[labelBouton])
         bouton.set_always_show_image(true)
         bouton.set_image_position(:top)
-        bouton.set_image(Image.new(:file => './Vue/img/' + image + '.png'))
+        bouton.set_image(Image.new(:file => './Ressources/' + image + '.png'))
         return bouton
     end
 
