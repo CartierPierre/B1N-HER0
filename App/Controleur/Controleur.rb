@@ -1,5 +1,3 @@
-require_relative '../Modele/Option'
-
 class Controleur
 
     @jeu
