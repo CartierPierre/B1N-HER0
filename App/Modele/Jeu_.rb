@@ -6,6 +6,9 @@ load 'Tuile.rb'
 load 'Niveau.rb'
 load 'Partie.rb'
 load 'Etat.rb'
+load 'RegleUn.rb'
+load 'RegleDeux.rb'
+load 'RegleTrois.rb'
 
 class Jeu
     @partie
@@ -36,6 +39,9 @@ class Jeu
         p @partie.compterCasesLigne(0)
         p @partie.compterCasesLigne(1)
         p @partie.compterCasesColonne(5)
+        print "\n"
+        jouerEn(0,2);
+        @partie.grille.afficher()
     end
 
     def to_s()
@@ -46,6 +52,30 @@ class Jeu
             print "\n"
         end
         print "\n"
+    end
+    
+    def TestRegleUn()
+    	if RegleUn.appliquer(@partie) == true then
+			print "regle un true\n"
+		else
+			print "regle un false\n"
+		end
+    end
+    
+    def TestRegleDeux()
+    	if RegleDeux.appliquer(@partie) == true then
+			print "regle deux true\n"
+		else
+			print "regle deux false\n"
+		end
+    end
+    
+    def TestRegleTrois()
+    	if RegleTrois.appliquer(@partie) == true then
+			print "regle trois true\n"
+		else
+			print "regle trois false\n"
+		end
     end
 end
 
@@ -67,3 +97,6 @@ p data
 j = Marshal::load(data)
 g.afficher()
 j.afficher()
+n.TestRegleUn()
+n.TestRegleDeux()
+n.TestRegleTrois()
