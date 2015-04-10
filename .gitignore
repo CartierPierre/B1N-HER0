@@ -6,3 +6,4 @@ InterfaceGraphique/TestGTK/doc/created.rid
 doc/
 *.ppr
 *.sqlite
+App/Ressources/bdd.sqlite
