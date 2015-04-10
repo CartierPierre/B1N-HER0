@@ -40,11 +40,11 @@ class Etat
     end
 
     def Etat.egale?(etat1, etat2)
-        if(etat1 == etat2)
+        if etat1 == etat2 
             return true
-        elsif((etat1 == @@ETAT_1 && etat2 == @@LOCK_1) || (etat2 == @@ETAT_1 && etat1 == @@LOCK_1))
+    	elsif (etat1 == @@ETAT_1 && etat2 == @@LOCK_1) || (etat2 == @@ETAT_1 && etat1 == @@LOCK_1)
             return true
-        elsif((etat1 == @@ETAT_2 && etat2 == @@LOCK_2) || (etat2 == @@ETAT_2 && etat2 == @@LOCK_2))
+        elsif (etat1 == @@ETAT_2 && etat2 == @@LOCK_2) || (etat2 == @@ETAT_2 && etat1 == @@LOCK_2)
             return true
         end
 

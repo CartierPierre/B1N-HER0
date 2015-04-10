@@ -9,7 +9,7 @@ load 'Etat.rb'
 load 'RegleUn.rb'
 load 'RegleDeux.rb'
 load 'RegleTrois.rb'
-
+#00_________1____0___11_______0_0_1__
 class Jeu
     @partie
 
@@ -23,7 +23,7 @@ class Jeu
         niveau = Niveau.creer(
                     1,
                     2,
-                    Grille.creer(6).charger("00_________1____0___11_______0_0_1__"),
+                    Grille.creer(6).charger("001011010011110100001101110010101100"),
                     Grille.creer(6).charger("001011010011110100001101110010101100"),
                     1,
                     6
@@ -40,7 +40,7 @@ class Jeu
         p @partie.compterCasesLigne(1)
         p @partie.compterCasesColonne(5)
         print "\n"
-        jouerEn(0,2);
+        #jouerEn(0,2);
         @partie.grille.afficher()
     end
 
@@ -81,7 +81,10 @@ end
 
 n = Jeu.creer()
 puts n
-n.test
+n.test()
+n.TestRegleUn()
+n.TestRegleDeux()
+n.TestRegleTrois()
 # n.jouerEn(1,1)
 # n.jouerEn(1,1)
 # puts n
@@ -97,6 +100,3 @@ p data
 j = Marshal::load(data)
 g.afficher()
 j.afficher()
-n.TestRegleUn()
-n.TestRegleDeux()
-n.TestRegleTrois()

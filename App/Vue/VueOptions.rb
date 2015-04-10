@@ -5,12 +5,22 @@ class VueOptions < Vue
     @boutonLangueFr
     @boutonLangueEn
 
+    @boutonImgTuileRouge
+    @boutonImgTuileBleue
+    @boutonImgTuileJaune
+    @boutonImgTuileVerte
+
+    @boutonImgTuile1Actif
+    @boutonImgTuile2Actif
+
     @boutonRetour
 
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
         
         boxPrincipale = Box.new(:vertical)
+
+        # Langue
         boxLangue = Box.new(:horizontal)
 
         @labelLangue = Label.new(@controleur.getLangue[:langue])
@@ -26,11 +36,73 @@ class VueOptions < Vue
         @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
         @boutonRetour.signal_connect('clicked')  {onBtnRetourClicked}
 
+        # Images tuile
+        boxImgTuile = Box.new(:horizontal)
+
+        @boutonImgTuileRouge = ToggleButton.new()
+        @boutonImgTuileRouge.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_ROUGE]))
+        @boutonImgTuileBleue = ToggleButton.new()
+        @boutonImgTuileBleue.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_BLEUE]))
+        @boutonImgTuileJaune = ToggleButton.new()
+        @boutonImgTuileJaune.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_JAUNE]))
+        @boutonImgTuileVerte = ToggleButton.new()
+        @boutonImgTuileVerte.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_VERTE]))
+
+        if(@modele.couleurTuile1 == Option::TUILE_ROUGE)
+            @boutonImgTuile1Actif = @boutonImgTuileRouge
+            @boutonImgTuile1Actif.active = true
+        end
+        if(@modele.couleurTuile1 == Option::TUILE_BLEUE)
+            @boutonImgTuile1Actif = @boutonImgTuileBleue
+            @boutonImgTuile1Actif.active = true
+        end  
+        if(@modele.couleurTuile1 == Option::TUILE_JAUNE)
+            @boutonImgTuile1Actif = @boutonImgTuileJaune
+            @boutonImgTuile1Actif.active = true
+        end
+        if(@modele.couleurTuile1 == Option::TUILE_VERTE)
+            @boutonImgTuile1Actif = @boutonImgTuileVerte
+            @boutonImgTuile1Actif.active = true
+        end
+        if(@modele.couleurTuile2 == Option::TUILE_ROUGE)
+            @boutonImgTuile2Actif = @boutonImgTuileRouge
+            @boutonImgTuile2Actif.active = true
+        end
+        if(@modele.couleurTuile2 == Option::TUILE_BLEUE)
+            @boutonImgTuile2Actif = @boutonImgTuileBleue
+            @boutonImgTuile2Actif.active = true
+        end
+        if(@modele.couleurTuile2 == Option::TUILE_JAUNE)
+            @boutonImgTuile2Actif = @boutonImgTuileJaune
+            @boutonImgTuile2Actif.active = true
+        end
+        if(@modele.couleurTuile2 == Option::TUILE_VERTE)
+            @boutonImgTuile2Actif = @boutonImgTuileVerte
+            @boutonImgTuile2Actif.active = true
+        end 
+
+        @boutonImgTuileRouge.signal_connect('toggled') { onBtnImgTuileToggle("Rouge") }
+        @boutonImgTuileBleue.signal_connect('toggled') { onBtnImgTuileToggle("Bleue") }
+        @boutonImgTuileJaune.signal_connect('toggled') { onBtnImgTuileToggle("Jaune") }
+        @boutonImgTuileVerte.signal_connect('toggled') { onBtnImgTuileToggle("Verte") }
+
+        boxImgTuile.add(@boutonImgTuileRouge)
+        boxImgTuile.add(@boutonImgTuileBleue)
+        boxImgTuile.add(@boutonImgTuileJaune)
+        boxImgTuile.add(@boutonImgTuileVerte)
+
         boxPrincipale.add(boxLangue)
+        boxPrincipale.add(boxImgTuile)
         boxPrincipale.add(@boutonRetour)
 
         @cadre.add(boxPrincipale)
         self.actualiser()
+    end
+
+    def onBtnImgTuileToggle(couleur,bouton)
+        if(couleur == "Rouge") 
+
+        end
     end
 
     def actualiserLangue() 

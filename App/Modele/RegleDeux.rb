@@ -17,26 +17,25 @@ class RegleDeux
     end
     
     def RegleDeux.appliquer(partie)
-
-	0.upto Math.sqrt(partie.grille().taille() - 1) do |x|
-		0.upto Math.sqrt(partie.grille().taille() - 2) do |y| 
- 			if Etat.egale?(partie.grille().getTuile(x,y).etat(),partie.grille().getTuile(x,y+1).etat()) && Etat.egale?(partie.grille().getTuile(x,y+1).etat(),partie.grille().getTuile(x,y+2).etat()) then
+	0.upto partie.grille().taille() - 1 do |x|
+		0.upto partie.grille().taille() - 3 do |y|
+			if partie.grille().getTuile(x,y).etat() == Etat.vide && partie.grille().getTuile(x,y+1).etat() == Etat.vide && partie.grille().getTuile(x,y+2).etat() == Etat.vide then 
+ 			elsif Etat.egale?(partie.grille().getTuile(x,y).etat(),partie.grille().getTuile(x,y+1).etat()) && Etat.egale?(partie.grille().getTuile(x,y+1).etat(),partie.grille().getTuile(x,y+2).etat()) then
  					#Meme si plus que trois, il retourne faux 
  					return false
     		end
     	end
-
-	0.upto Math.sqrt(partie.grille().taille() - 1) do |y|
-		0.upto Math.sqrt(partie.grille().taille() - 2) do |x|
-    		if partie.grille().getTuile(x,y).etat() == Etat.etat_1 && partie.grille().getTuile(x+1,y).etat() == Etat.etat_1 && partie.grille().getTuile(x+2,y).etat() == Etat.etat_1 then
+    end
+    
+	0.upto partie.grille().taille() - 1 do |y|
+		0.upto partie.grille().taille() - 3 do |x|
+			if partie.grille().getTuile(x,y).etat() == Etat.vide && partie.grille().getTuile(x+1,y).etat() == Etat.vide && partie.grille().getTuile(x+2,y).etat() == Etat.vide then
+    		elsif Etat.egale?(partie.grille().getTuile(x,y).etat(),partie.grille().getTuile(x+1,y).etat()) && Etat.egale?(partie.grille().getTuile(x+1,y).etat(),partie.grille().getTuile(x+2,y).etat()) then
  					#Meme si plus que trois, il retourne faux 
  					return false
- 					
-    		elsif partie.grille().getTuile(x,y).etat() == Etat.etat_2 && partie.grille().getTuile(x+1,y).etat() == Etat.etat_2 && partie.grille().getTuile(x+2,y).etat() == Etat.etat_2 then
- 					return false
-    			end			
-    		end
+    		end	
     	end
-    	return true
+    end
+    return true
     end
 end

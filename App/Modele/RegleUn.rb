@@ -16,14 +16,14 @@ class RegleUn
 	
 	def RegleUn.appliquer(partie)
 	
-    		0.upto(Math.sqrt(partie.grille.taille()) - 1) do |x|
+    		0.upto(partie.grille.taille() - 1) do |x|
     			tab = partie.compterCasesLigne(x)
     			if  tab[0] != tab[1] then
     				return false
     			end
     		end
     		
-    		0.upto(Math.sqrt(partie.grille.taille()) - 1) do |y|
+    		0.upto(partie.grille.taille() - 1) do |y|
     			tab = partie.compterCasesColonne(y)
     			if  tab[0] != tab[1] then
     				return false
