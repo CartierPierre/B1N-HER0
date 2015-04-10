@@ -10,6 +10,9 @@ class VueOptions < Vue
     @boutonImgTuileJaune
     @boutonImgTuileVerte
 
+    @boutonImgTuile1Actif
+    @boutonImgTuile2Actif
+
     @boutonRetour
 
     def initialize(modele,titre,controleur)
@@ -45,6 +48,44 @@ class VueOptions < Vue
         @boutonImgTuileVerte = ToggleButton.new()
         @boutonImgTuileVerte.set_image(Image.new(:pixbuf => Option::TUILE_VERTE))
 
+        if(@modele.couleurTuile1 == "Rouge")
+            @boutonImgTuile1Actif = @boutonImgTuileRouge
+            @boutonImgTuile1Actif.active = true
+        end
+        if(@modele.couleurTuile1 == "Bleue")
+            @boutonImgTuile1Actif = @boutonImgTuileBleue
+            @boutonImgTuile1Actif.active = true
+        end  
+        if(@modele.couleurTuile1 == "Jaune")
+            @boutonImgTuile1Actif = @boutonImgTuileJaune
+            @boutonImgTuile1Actif.active = true
+        end
+        if(@modele.couleurTuile1 == "Verte")
+            @boutonImgTuile1Actif = @boutonImgTuileVerte
+            @boutonImgTuile1Actif.active = true
+        end
+        if(@modele.couleurTuile2 == "Rouge")
+            @boutonImgTuile2Actif = @boutonImgTuileRouge
+            @boutonImgTuile2Actif.active = true
+        end
+        if(@modele.couleurTuile2 == "Bleue")
+            @boutonImgTuile2Actif = @boutonImgTuileBleue
+            @boutonImgTuile2Actif.active = true
+        end
+        if(@modele.couleurTuile2 == "Jaune")
+            @boutonImgTuile2Actif = @boutonImgTuileJaune
+            @boutonImgTuile2Actif.active = true
+        end
+        if(@modele.couleurTuile2 == "Verte")
+            @boutonImgTuile2Actif = @boutonImgTuileVerte
+            @boutonImgTuile2Actif.active = true
+        end 
+
+        @boutonImgTuileRouge.signal_connect('toggled') { onBtnImgTuileToggle("Rouge") }
+        @boutonImgTuileBleue.signal_connect('toggled') { onBtnImgTuileToggle("Bleue") }
+        @boutonImgTuileJaune.signal_connect('toggled') { onBtnImgTuileToggle("Jaune") }
+        @boutonImgTuileVerte.signal_connect('toggled') { onBtnImgTuileToggle("Verte") }
+
         boxImgTuile.add(@boutonImgTuileRouge)
         boxImgTuile.add(@boutonImgTuileBleue)
         boxImgTuile.add(@boutonImgTuileJaune)
@@ -56,6 +97,12 @@ class VueOptions < Vue
 
         @cadre.add(boxPrincipale)
         self.actualiser()
+    end
+
+    def onBtnImgTuileToggle(couleur,bouton)
+        if(couleur == "Rouge") 
+
+        end
     end
 
     def actualiserLangue() 
