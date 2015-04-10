@@ -21,7 +21,8 @@ class Vue
     end
 
     def actualiser()
-        @@fenetre.show_all()
+        @@fenetre.set_default_size(500, 500).show_all()
+        #@@fenetre.show_all()
     end
 
     def fermerCadre()
