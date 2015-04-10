@@ -1,5 +1,3 @@
-require_relative '../Vue/Langue'
-
 ##
 # Classe Option
 #
@@ -11,15 +9,19 @@ class Option
 
 	### Constante de classe
 	
-    IMG = [Gdk::Pixbuf.new(:file => './Ressources/CaseRouge32.png'),
-        Gdk::Pixbuf.new(:file => './Ressources/CaseBleue32.png'),
-        Gdk::Pixbuf.new(:file => './Ressources/CaseVerte32.png'),
-        Gdk::Pixbuf.new(:file => './Ressources/CaseJaune32.png')]
+    IMG = [
+		Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/CaseRouge32.png"),
+        Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/CaseBleue32.png"),
+        Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/CaseVerte32.png"),
+        Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/CaseJaune32.png")
+	]
 
-    IMG_LOCK = [Gdk::Pixbuf.new(:file => './Ressources/CaseRouge32Lock.png'),
-        Gdk::Pixbuf.new(:file => './Ressources/CaseBleue32Lock.png'),
-        Gdk::Pixbuf.new(:file => './Ressources/CaseVerte32Lock.png'),
-        Gdk::Pixbuf.new(:file => './Ressources/CaseJaune32Lock.png')]
+    IMG_LOCK = [
+		Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/CaseRouge32Lock.png"),
+        Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/CaseBleue32Lock.png"),
+        Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/CaseVerte32Lock.png"),
+        Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/CaseJaune32Lock.png")
+	]
 
     TUILE_ROUGE = 0
     TUILE_BLEUE = 1

@@ -13,8 +13,8 @@ class VueDemarrage < Vue
         buttonConnexion = Button.new(:label => "Connexion")
         buttonInscription = Button.new(:label => "Inscription")
 
-        pixbufHero = Gdk::Pixbuf.new(:file => './Ressources/Hero.png', :width => 400, :height => 400)
-        pixbufTitre = Gdk::Pixbuf.new(:file => './Ressources/Titre.png')
+        pixbufHero = Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/Hero.png", :width => 400, :height => 400)
+        pixbufTitre = Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/Titre.png")
 
         imgHero = Image.new(:pixbuf => pixbufHero)
         imgTitre = Image.new(:pixbuf => pixbufTitre)
