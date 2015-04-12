@@ -13,6 +13,7 @@ class Vue
         @@fenetre.title = titre
     	@@fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
     	@@fenetre.set_resizable(false)
+        @@fenetre.set_size_request(420,410)
         @controleur=controleur
 
         @@fenetre.signal_connect('destroy') {
@@ -21,8 +22,7 @@ class Vue
     end
 
     def actualiser()
-        @@fenetre.set_default_size(500, 500).show_all()
-        #@@fenetre.show_all()
+        @@fenetre.show_all()
     end
 
     def fermerCadre()
