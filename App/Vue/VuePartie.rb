@@ -156,7 +156,7 @@ class VuePartie < Vue
 
         # Menu du bas
         boxFooter = Box.new(:horizontal)
-        @buttonUndo = nouveauBouton(:annuler,"undo")
+        @buttonUndo = nouveauBouton(:annulerAction,"undo")
         @buttonRedo = nouveauBouton(:repeter,"redo")
         @buttonConseil = nouveauBouton(:conseil,"conseil")
         @buttonRestart = nouveauBouton(:recommencer,"restart")
@@ -225,7 +225,7 @@ class VuePartie < Vue
 
     # Hypothèse
     def onBtnHypoClicked
-        @labelHypothese.set_label(" Mode\n hypothèse\n activé")
+        @labelHypothese.set_label(@controleur.getLangue[:hypotheseActive])
         @buttonValiderHypo.show()
         @buttonAnnulerHypo.show()
         @buttonHypothese.hide()

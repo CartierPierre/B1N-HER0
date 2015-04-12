@@ -5,6 +5,8 @@ class VueOptions < Vue
     @boutonLangueFr
     @boutonLangueEn
 
+    @labelChoixCouleur
+
     @boutonImgTuileRouge
     @boutonImgTuileBleue
     @boutonImgTuileJaune
@@ -13,31 +15,33 @@ class VueOptions < Vue
     @boutonImgTuile1Actif
     @boutonImgTuile2Actif
 
-    @boutonRetour
+    @boutonAppliquer
+    @boutonAnnuler
 
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
-        
-        boxPrincipale = Box.new(:vertical)
 
         # Langue
-        boxLangue = Box.new(:horizontal)
+        boxLangue = Box.new(:horizontal, 10)
 
-        @labelLangue = Label.new(@controleur.getLangue[:langue])
-        boxLangue.add(@labelLangue)
+        @labelLangue = Label.new()
+        @labelLangue.set_markup("<big>" + @controleur.getLangue[:langue] + "</big>")
         @boutonLangueFr = Button.new(:label => @controleur.getLangue[:francais])
         @boutonLangueFr.signal_connect('clicked')  { onBtnLangueFrClicked }
         @boutonLangueEn = Button.new(:label => @controleur.getLangue[:anglais])
         @boutonLangueEn.signal_connect('clicked')  { onBtnLangueEnClicked }
 
+        boxLangue.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxLangue.add(@labelLangue)
         boxLangue.add(@boutonLangueFr)
         boxLangue.add(@boutonLangueEn)
-
-        @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
-        @boutonRetour.signal_connect('clicked')  {onBtnRetourClicked}
+        boxLangue.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Images tuile
-        boxImgTuile = Box.new(:horizontal)
+        boxImgTuile = Box.new(:horizontal, 10)
+
+        @labelChoixCouleur = Label.new()
+        @labelChoixCouleur.set_markup("<big>" + @controleur.getLangue[:couleurTuiles] + "</big>")
 
         @boutonImgTuileRouge = ToggleButton.new()
         @boutonImgTuileRouge.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_ROUGE]))
@@ -86,14 +90,36 @@ class VueOptions < Vue
         @boutonImgTuileJaune.signal_connect('toggled') { onBtnImgTuileToggle(Option::TUILE_JAUNE,@boutonImgTuileJaune) }
         @boutonImgTuileVerte.signal_connect('toggled') { onBtnImgTuileToggle(Option::TUILE_VERTE,@boutonImgTuileVerte) }
 
+        boxImgTuile.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         boxImgTuile.add(@boutonImgTuileRouge)
         boxImgTuile.add(@boutonImgTuileBleue)
         boxImgTuile.add(@boutonImgTuileJaune)
         boxImgTuile.add(@boutonImgTuileVerte)
+        boxImgTuile.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
+        # Boutons appliquer et annuler
+        hboxAppliquerAnnuler = Box.new(:horizontal, 10)
+
+        @boutonAppliquer = Button.new(:label => @controleur.getLangue[:appliquer])
+        @boutonAppliquer.signal_connect('clicked') { onBtnAppliquerClicked }
+
+        @boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
+        @boutonAnnuler.signal_connect('clicked') { onBtnAnnulerClicked }
+
+        hboxAppliquerAnnuler.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxAppliquerAnnuler.add(@boutonAppliquer)
+        hboxAppliquerAnnuler.add(@boutonAnnuler)
+        hboxAppliquerAnnuler.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        # Box principale                
+        boxPrincipale = Box.new(:vertical, 20)
+
+        boxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         boxPrincipale.add(boxLangue)
+        boxPrincipale.add(@labelChoixCouleur)
         boxPrincipale.add(boxImgTuile)
-        boxPrincipale.add(@boutonRetour)
+        boxPrincipale.add(hboxAppliquerAnnuler)
+        boxPrincipale.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         @cadre.add(boxPrincipale)
         self.actualiser()
@@ -108,10 +134,12 @@ class VueOptions < Vue
     end
 
     def actualiserLangue() 
+        @labelChoixCouleur.set_markup("<big>" + @controleur.getLangue[:couleurTuiles] + "</big>")
         @boutonLangueFr.set_label(@controleur.getLangue[:francais])
         @boutonLangueEn.set_label(@controleur.getLangue[:anglais])
-        @boutonRetour.set_label(@controleur.getLangue[:retour])
-        @labelLangue.set_label(@controleur.getLangue[:langue])
+        @boutonAppliquer.set_label(@controleur.getLangue[:appliquer])
+        @boutonAnnuler.set_label(@controleur.getLangue[:annuler])
+        @labelLangue.set_markup("<big>" + @controleur.getLangue[:langue] + "</big>")
     end
 
     def onBtnLangueFrClicked
@@ -124,8 +152,12 @@ class VueOptions < Vue
         self.actualiserLangue()
     end
 
-    def onBtnRetourClicked
+    def onBtnAppliquerClicked
+
+    end
+
+    def onBtnAnnulerClicked
         fermerCadre()
-        @controleur.retour()
+        @controleur.annuler()
     end
 end

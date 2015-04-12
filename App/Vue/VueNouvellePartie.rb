@@ -29,7 +29,7 @@ class VueNouvellePartie < Vue
 		hboxTaille = Box.new(:horizontal, 10)
 
 		labelTaille = Label.new()
-		labelTaille.set_markup("<big>Taille de la grille</big>")
+		labelTaille.set_markup("<big>" + @controleur.getLangue[:tailleGrille] + "</big>")
 
 		@bouton6x6 = ToggleButton.new("6x6")
 		@bouton8x8 = ToggleButton.new("8x8")
@@ -52,7 +52,7 @@ class VueNouvellePartie < Vue
         hboxDiff = Box.new(:horizontal, 10)
 
         @labelDiff = Label.new()
-		@labelDiff.set_markup("<big>Difficulté</big>")
+		@labelDiff.set_markup("<big>" + @controleur.getLangue[:difficulte] + "</big>")
 
         @boutonDiff1 = ToggleButton.new("1")
         @boutonDiff2 = ToggleButton.new("2")
@@ -83,10 +83,10 @@ class VueNouvellePartie < Vue
         # Boutons valider et annuler
         hboxValiderAnnuler = Box.new(:horizontal, 10)
 
-        @boutonValider = Button.new(:stock_id => Gtk::Stock::APPLY)
+        @boutonValider = Button.new(:label => @controleur.getLangue[:appliquer])
         @boutonValider.signal_connect('clicked')  { onBtnValiderClicked }
 
-		@boutonAnnuler = Button.new(:stock_id => Gtk::Stock::CANCEL)
+		@boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
         @boutonAnnuler.signal_connect('clicked')  { onBtnAnnulerClicked }
 
         hboxValiderAnnuler.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)

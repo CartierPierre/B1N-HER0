@@ -17,15 +17,15 @@ class VueMenuPrincipal < Vue
 
 		vbox = Box.new(:vertical, 20)
 
-		@boutonJouer = Button.new(:label => "Jouer")
+		@boutonJouer = Button.new(:label => @controleur.getLangue[:jouer])
         @boutonJouer.set_size_request(100,40)
-		@boutonClassement = Button.new(:label => "Classement")
+		@boutonClassement = Button.new(:label => @controleur.getLangue[:classement])
         @boutonClassement.set_size_request(100,40)
-		@boutonOptions = Button.new(:label => "Options")
+		@boutonOptions = Button.new(:label => @controleur.getLangue[:options])
         @boutonOptions.set_size_request(100,40)
-		@boutonProfil = Button.new(:label => "Profil")
+		@boutonProfil = Button.new(:label => @controleur.getLangue[:profil])
         @boutonProfil.set_size_request(100,40)
-		@boutonQuitter = Button.new(:stock_id => Gtk::Stock::QUIT)
+		@boutonQuitter = Button.new(:label => @controleur.getLangue[:quitter])
         @boutonQuitter.set_size_request(100,40)
 
         espaceDebut = Alignment.new(0, 0, 0, 0)

@@ -25,7 +25,9 @@ class Langue
             regles: "Règles du jeu",
             quitter: "Quitter",
             hypothese: "Hypothèse",
+            hypotheseActive: " Hypothèse\n activé",
             valider: "Valider",
+            appliquer: "Appliquer",
             annuler: "Annuler",
             repeter: "Répéter",
             conseil: "Conseil",
@@ -42,7 +44,13 @@ class Langue
             retour: "Retour",
             regles1: "Règle n°1 : Il ne peut y avoir plus de deux cases possédant le même état à la suite.\n\n",
             regles2: "Règle n°2 : Chaque ligne et colonne possède autant de cases à l’état n°1 et à l’état n°2.\n\n",
-            regles3: "Règle n°3 : Il ne peut y avoir deux lignes ou deux colonnes identiques."
+            regles3: "Règle n°3 : Il ne peut y avoir deux lignes ou deux colonnes identiques.",
+            couleurTuiles: "Couleur des tuiles",
+            tailleGrille: "Taille de la grille",
+            difficulte: "Difficulté",
+            jouer: "Jouer",
+            classement: "Classement",
+            profil: "Profil"
         }
 
         @langueEn = {
@@ -50,10 +58,13 @@ class Langue
             charger: "Load",
             options: "Settings",
             regles: "Rules",
-            quitter: "Exit",
+            quitter: "Quit",
             hypothese: "Hypothesis",
+            hypotheseActive: " Hypothesis\n enabled",
             valider: "Confirm",
-            annuler: "Undo",
+            appliquer: "Apply",
+            annuler: "Cancel",
+            annulerAction: "Undo",
             repeter: "Redo",
             conseil: "Advice",
             recommencer: "Restart",
@@ -69,7 +80,13 @@ class Langue
             retour: "Back",
             regles1: "Rule n°1 : Three adjacent tiles of the same color in a row or column isn't allowed.\n\n",
             regles2: "Rule n°2 : Rows and columns have an equal number of each color.\n\n",
-            regles3: "Rule n°3 : No two rows and no two columns are the same."
+            regles3: "Rule n°3 : No two rows and no two columns are the same.",
+            couleurTuiles: "Color tiles",
+            tailleGrille: "Grid size",
+            difficulte: "Difficulty",
+            jouer: "Play",
+            classement: "Ranking",
+            profil: "Profile"
         }
             if(langue == FR)
                   @langueActuelle = @langueFr

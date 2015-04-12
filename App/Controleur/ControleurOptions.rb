@@ -9,7 +9,7 @@ class ControleurOptions < Controleur
 		@vue = VueOptions.new(@modele,"Options",self)
 	end
 
-    def retour()
+    def annuler()
         changerControleur(ControleurPartie.new(@jeu,nil,@partie))
     end
 
