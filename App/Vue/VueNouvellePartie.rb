@@ -1,5 +1,6 @@
 class VueNouvellePartie < Vue
 
+    @boutonDerniereTaille
 	@bouton6x6
 	@bouton8x8
 	@bouton10x10
@@ -7,6 +8,7 @@ class VueNouvellePartie < Vue
 
 	@labelDiff
 
+    @boutonDerniereDiff
 	@boutonDiff1
     @boutonDiff2
     @boutonDiff3
@@ -31,15 +33,15 @@ class VueNouvellePartie < Vue
 		labelTaille = Label.new()
 		labelTaille.set_markup("<big>" + @controleur.getLangue[:tailleGrille] + "</big>")
 
-		@bouton6x6 = ToggleButton.new("6x6")
-		@bouton8x8 = ToggleButton.new("8x8")
-		@bouton10x10 = ToggleButton.new("10x10")
-		@bouton12x12 = ToggleButton.new("12x12")
+		@bouton6x6 = Button.new(:label => "6x6")
+		@bouton8x8 = Button.new(:label => "8x8")
+		@bouton10x10 = Button.new(:label => "10x10")
+		@bouton12x12 = Button.new(:label => "12x12")
 
-		@bouton6x6.signal_connect('toggled') { onBtnTailleToggle(6,@bouton6x6) }
-		@bouton8x8.signal_connect('toggled') { onBtnTailleToggle(8,@bouton8x8) }
-		@bouton10x10.signal_connect('toggled') { onBtnTailleToggle(10,@bouton10x10) }
-		@bouton12x12.signal_connect('toggled') { onBtnTailleToggle(12,@bouton12x12) }
+		@bouton6x6.signal_connect('clicked') { onBtnTailleClicked(6,@bouton6x6) }
+		@bouton8x8.signal_connect('clicked') { onBtnTailleClicked(8,@bouton8x8) }
+		@bouton10x10.signal_connect('clicked') { onBtnTailleClicked(10,@bouton10x10) }
+		@bouton12x12.signal_connect('clicked') { onBtnTailleClicked(12,@bouton12x12) }
 
 		hboxTaille.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 		hboxTaille.add(@bouton6x6)
@@ -54,21 +56,21 @@ class VueNouvellePartie < Vue
         @labelDiff = Label.new()
 		@labelDiff.set_markup("<big>" + @controleur.getLangue[:difficulte] + "</big>")
 
-        @boutonDiff1 = ToggleButton.new("1")
-        @boutonDiff2 = ToggleButton.new("2")
-        @boutonDiff3 = ToggleButton.new("3")
-        @boutonDiff4 = ToggleButton.new("4")
-        @boutonDiff5 = ToggleButton.new("5")
-        @boutonDiff6 = ToggleButton.new("6")
-        @boutonDiff7 = ToggleButton.new("7")
+        @boutonDiff1 = Button.new(:label => "1")
+        @boutonDiff2 = Button.new(:label => "2")
+        @boutonDiff3 = Button.new(:label => "3")
+        @boutonDiff4 = Button.new(:label => "4")
+        @boutonDiff5 = Button.new(:label => "5")
+        @boutonDiff6 = Button.new(:label => "6")
+        @boutonDiff7 = Button.new(:label => "7")
 
-        @boutonDiff1.signal_connect('toggled') { onBtnDifficulteToggle(1,@boutonDiff1) }
-        @boutonDiff2.signal_connect('toggled') { onBtnDifficulteToggle(2,@boutonDiff2) }
-        @boutonDiff3.signal_connect('toggled') { onBtnDifficulteToggle(3,@boutonDiff3) }
-        @boutonDiff4.signal_connect('toggled') { onBtnDifficulteToggle(4,@boutonDiff4) }
-        @boutonDiff5.signal_connect('toggled') { onBtnDifficulteToggle(5,@boutonDiff5) }
-        @boutonDiff6.signal_connect('toggled') { onBtnDifficulteToggle(6,@boutonDiff6) }
-        @boutonDiff7.signal_connect('toggled') { onBtnDifficulteToggle(7,@boutonDiff7) }
+        @boutonDiff1.signal_connect('clicked') { onBtnDifficulteClicked(1,@boutonDiff1) }
+        @boutonDiff2.signal_connect('clicked') { onBtnDifficulteClicked(2,@boutonDiff2) }
+        @boutonDiff3.signal_connect('clicked') { onBtnDifficulteClicked(3,@boutonDiff3) }
+        @boutonDiff4.signal_connect('clicked') { onBtnDifficulteClicked(4,@boutonDiff4) }
+        @boutonDiff5.signal_connect('clicked') { onBtnDifficulteClicked(5,@boutonDiff5) }
+        @boutonDiff6.signal_connect('clicked') { onBtnDifficulteClicked(6,@boutonDiff6) }
+        @boutonDiff7.signal_connect('clicked') { onBtnDifficulteClicked(7,@boutonDiff7) }
 
         hboxDiff.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxDiff.add(@boutonDiff1)
@@ -120,7 +122,7 @@ class VueNouvellePartie < Vue
         @boutonDiff7.hide()
 	end
 
-	def onBtnTailleToggle(taille,bouton)
+	def onBtnTailleClicked(taille,bouton)
 		if(@taille)
 			@boutonDiff1.hide()
 	        @boutonDiff2.hide()
@@ -133,32 +135,20 @@ class VueNouvellePartie < Vue
 
     	if(@difficulte)
     		@difficulte = nil
+            @boutonDerniereDiff.set_sensitive(true)
     		@boutonValider.set_sensitive(false)
-    		@labelDiff.hide()
-    		@boutonDiff1.active = false
-	        @boutonDiff2.active = false
-	        @boutonDiff3.active = false
-	        @boutonDiff4.active = false
-	        @boutonDiff5.active = false
-	        @boutonDiff6.active = false
-	        @boutonDiff7.active = false
-    	end
+        end
 
 		@taille = taille
 		@labelDiff.show()
 
-		if(bouton != @bouton6x6)
-			@bouton6x6.active = false
-		end
-		if(bouton != @bouton8x8)
-			@bouton8x8.active = false
-		end
-		if(bouton != @bouton10x10)
-			@bouton10x10.active = false
-		end
-		if(bouton != @bouton12x12)
-			@bouton12x12.active = false
-		end
+        if(!@boutonDerniereTaille)
+            @boutonDerniereTaille = bouton
+        end
+		@boutonDerniereTaille.set_sensitive(true)
+        @boutonDerniereTaille = bouton
+        @boutonDerniereTaille.set_sensitive(false)
+
 		@listeDiff = GestionnaireNiveau.instance.recupererListeDifficulte(@taille)
 		@listeDiff.each do |niveau|
 			if(niveau == 1)
@@ -185,29 +175,14 @@ class VueNouvellePartie < Vue
 		end
 	end
 
-	def onBtnDifficulteToggle(difficulte,bouton)
+	def onBtnDifficulteClicked(difficulte,bouton)
 		@difficulte = difficulte
-		if(bouton != @boutonDiff1)
-			@boutonDiff1.active = false
-		end
-		if(bouton != @boutonDiff2)
-			@boutonDiff2.active = false
-		end
-		if(bouton != @boutonDiff3)
-			@boutonDiff3.active = false
-		end
-		if(bouton != @boutonDiff4)
-			@boutonDiff4.active = false
-		end
-		if(bouton != @boutonDiff5)
-			@boutonDiff5.active = false
-		end
-		if(bouton != @boutonDiff6)
-			@boutonDiff6.active = false
-		end
-		if(bouton != @boutonDiff7)
-			@boutonDiff7.active = false
-		end
+        if(!@boutonDerniereDiff)
+            @boutonDerniereDiff = bouton
+        end
+		@boutonDerniereDiff.set_sensitive(true)
+        @boutonDerniereDiff = bouton
+        @boutonDerniereDiff.set_sensitive(false)
 		@boutonValider.set_sensitive(true)
 	end
 	
