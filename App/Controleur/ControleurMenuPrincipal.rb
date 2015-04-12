@@ -15,7 +15,7 @@ class ControleurMenuPrincipal < Controleur
     end
 
     def options()
-    	changerControleur(ControleurOptions.new(@jeu,nil))
+    	changerControleur(ControleurOptions.new(@jeu,self))
     end
 
 end

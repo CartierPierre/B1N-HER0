@@ -18,6 +18,8 @@ class VueOptions < Vue
     @boutonAppliquer
     @boutonAnnuler
 
+    @couleurTuile1
+    @couleurTuile2
 
     def initBoutonImgTuile1Actif(bouton,couleur)
         if(@modele.couleurTuile1 == couleur)
@@ -122,7 +124,11 @@ class VueOptions < Vue
         @boutonImgTuile1Actif = @boutonImgTuile2Actif
 
         @boutonImgTuile2Actif = bouton   
-        @boutonImgTuile2Actif.set_sensitive(false)    
+        @boutonImgTuile2Actif.set_sensitive(false)   
+
+        @couleurTemp = @couleurTuile1
+        @couleurTuile1 = @couleurTuile2
+        @couleurTuile2 = couleur 
     end
 
     def actualiserLangue() 

@@ -1,16 +1,18 @@
 class ControleurOptions < Controleur
 
-    @partie
+    @controleurPrecedent
 
-	def initialize(jeu,partie)
+	def initialize(jeu,controleurPrecedent)
 		super(jeu)
-        @partie = partie
+        @controleurPrecedent = controleurPrecedent
 		@modele = @@options
 		@vue = VueOptions.new(@modele,"Options",self)
 	end
 
     def annuler()
-        changerControleur(ControleurPartie.new(@jeu,nil,@partie))
+        if(@controleurPrecedent.instance_of?(ControleurMenuPrincipal))
+            changerControleur(ControleurMenuPrincipal.new(@jeu))
+        end
     end
 
     def setLangueFr()
