@@ -114,6 +114,7 @@ class Grille
     #   Une Grille initialisée avec le modéle désiré.
     #
     def Grille.charger(modele)
+        p Math.sqrt(modele.size)
         return Grille.creer(Math.sqrt(modele.size)).initFrom(modele)
     end
 
@@ -142,16 +143,11 @@ class Grille
     #   * _modele_ - Une chaine de caractères correspondant au modéle à appliquer à la Grille.
     #
     def initFrom(modele)
-        i = 0
-        j = 0
-        modele.split(//).each do |x|
-
-            self.setTuile(j, i, Etat.stringToEtat(x))
-
-            i += 1
-            if i >= @taille
-                i = 0
-                j += 1
+        tab = modele.split(//);
+        taille = Math.sqrt(modele.size) - 1
+        0.upto(taille) do |x|
+            0.upto(taille) do |y|
+                p self.setTuile(x, y, Etat.stringToEtat(tab[(x*taille)+y]))
             end
         end
 
