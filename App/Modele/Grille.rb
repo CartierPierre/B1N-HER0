@@ -1,16 +1,18 @@
-# ajouter sérialisation !!!
+##
+# La classe Grille permet de créer et utiliser des grilles. Cette classe à besoin des classes Tuile et Etat pour fonctionner.
+#
 
 class Grille
     @grille
-    # attr_reader :nbLigne, :nbColonne
     attr_reader :taille
 
     private_class_method :new
-    # Méthode de création d'une grille
+    ##
+    # Méthode de création d'une Grille.
     #
-    # === Arguments
-    # *nbLigne* - Nombre de ligne que contient la grille
-    # *nbColonne* - Nombre de colonne que contient la grille
+    # Paramétre::
+    #   * _taille_ - La _taille_ de la Grille.
+    #
     def Grille.creer(taille)
         new(taille)
     end
@@ -22,65 +24,71 @@ class Grille
         @grille =   Array.new(@taille) { Array.new(@taille) { Tuile.creer() } }
     end
 
-    # Permet d'obtenir une tuile à des coordonnées données
+    ##
+    # Donne la Tuile aux coordonnées données.
     #
-    # === Arguments
-    # *x* - La coordonnée x de la tuile cherchée
-    # *y* - La coordonnée y de la tuile cherchée
+    # Paramétres::
+    #   * _x_ - La coordonnée _x_ de la Tuile cherchée.
+    #   * _y_ - La coordonnée _y_ de la Tuile cherchée.
     #
-    # === Retour
-    # La tuile ciblé par les coordonnées, si elle n'est pas dans les coordonnées données renvoie une nouvelle tuile
-    def getTuile(x, y) #TODO Générer une execption
-        #if(0 <= x && x < @nbLigne && 0 <= y && y < @nbColonne)
+    # Retour::
+    #   La Tuile ciblé par les coordonnées, sinon nil.
+    #
+    def getTuile(x, y) #TODO Générer une exception
         if(0 <= x && x < @taille && 0 <= y && y < @taille)
             return @grille[x][y]
         else
-            return Tuile.creer()
+            # return Tuile.creer()
+            return nil
         end
     end
 
-    # Permet de modifier l'état d'une tuile à des coordonnées données
+    ##
+    # Modifie l'état de la Tuile aux coordonnées données.
     #
-    # === Arguments
-    # *x* - La coordonnée x de la tuile cherchée
-    # *y* - La coordonnée y de la tuile cherchée
-    # *etat* - Le nouvel état de la grille
+    # Paramétres::
+    #   * _x_ - La coordonnée _x_ de la Tuile cherchée..
+    #   * _y_ - La coordonnée _y_ de la Tuile cherchée..
+    #   * _etat_ - Le nouvel _etat_ de la Grille..
+    #
     def setTuile(x, y, etat) #TODO Générer une execption
-        # if(0 <= x && x < @nbLigne && 0 <= y && y < @nbColonne)
         if(0 <= x && x < @taille && 0 <= y && y < @taille)
             getTuile(x, y).etat = etat
         else
             #TODO
         end
+
         self
     end
 
-    # Permet d'obtenir une ligne de la grille
+    ##
+    # Donne la ligne de la Grille à la coordonnée donnée.
     #
-    # === Argument
-    # *x* - La coordonnée de la ligne ciblée
+    # Paramétre::
+    #   * _x_ - La coordonnée de la ligne ciblée.
     #
-    # === Retour
-    # La ligne ciblée si trouvée, sinon une nouvelle ligne
+    # Retour::
+    #   La ligne ciblée si trouvée sous forme de tableau, sinon nil.
+    #
     def getLigne(x) #TODO Générer une execption
-        # if(0 <= x && x < @nbLigne)
         if(0 <= x && x < @taille)
             return @grille[x]
         else
-            #return  Array.new(@nbLigne) { Tuile.creer() }
-            return  Array.new(@taille) { Tuile.creer() }
+            # return Array.new(@taille) { Tuile.creer() }
+            return nil
         end
     end
 
-    # Permet d'obtenir une colonne de la grille
+    ##
+    # Donne la colonne de la Grille à la coordonnée donnée.
     #
-    # === Argument
-    # *y* - La coordonnée de la colonne ciblée
+    # Paramétre::
+    #   * _y_ - La coordonnée de la colonne ciblée.
     #
-    # === Retour
-    # La colonne ciblée si trouvée, sinon une nouvelle colonne
+    # Retour::
+    #   La colonne ciblée si trouvée sous forme de tableau, sinon nil.
+    #
     def getColonne(y) #TODO Générer une execption
-        # if(0 <= y && y < @nbColonne)
         if(0 <= y && y < @taille)
             newColonne = Array.new(@taille)
 
@@ -88,61 +96,58 @@ class Grille
                 newColonne[i] = self.getTuile(i, y)
             end
         else
-            # newColonne = Array.new(@nbLigne) { Tuile.creer() }
-            newColonne = Array.new(@taille) { Tuile.creer() }
+            # newColonne = Array.new(@taille) { Tuile.creer() }
+            newColonne = nil
         end
 
         return newColonne
     end
 
-    # Permet de charger le modèle de grille pour l'appliquer à la grille
+    ##
+    # (Désérialisation)
+    # Charge une Grille à partir du modèle donné.
     #
-    # === Argument
-    # *data* - Une string correspondant au modèle de la grille
-    def Grille.charger(data)
-        return Grille.creer(Math.sqrt(data.size)).initFrom(data)
+    # Paramétre::
+    #   * _modele_ - Une chaine de caractères correspondant au modèle de la Grille.
+    #
+    # Retour::
+    #   Une Grille initialisée avec le modéle désiré.
+    #
+    def Grille.charger(modele)
+        return Grille.creer(Math.sqrt(modele.size)).initFrom(modele)
     end
 
+    ##
+    # (Sérialisation)
+    # Transforme une Grille en chaine de caractères.
+    #
+    # Retour::
+    #   Une chaine de caractères correspondant à l'état de la Grille.
+    #
     def sauvegarder()
         modele = String.new()
         0.upto(taille-1) do |x|
             0.upto(taille-1) do |y|
-                case @grille[x][y].etat
-                    when Etat.vide
-                        modele += "_"
-                    when Etat.lock_1
-                        modele += "0"
-                    when Etat.lock_2
-                        modele += "1"
-                    when Etat.etat_1
-                        modele += "2"
-                    when Etat.etat_2
-                        modele += "3"
-                    else
-                        modele += "_"
-                end
+                modele += Etat.etatToString(@grille[x][y].etat)
             end
         end
 
         return modele
     end
 
-    def initFrom(data)
+    ##
+    # Initialise une Grille à partir du modéle donné.
+    #
+    # Paramétre::
+    #   * _modele_ - Une chaine de caractères correspondant au modéle à appliquer à la Grille.
+    #
+    def initFrom(modele)
         i = 0
         j = 0
-        data.split(//).each do |x|
-            case x
-                when "0"
-                    self.setTuile(j, i, Etat.lock_1())
-                when "1"
-                    self.setTuile(j, i, Etat.lock_2())
-                when "2"
-                    self.setTuile(j, i, Etat.etat_1())
-                when "3"
-                    self.setTuile(j, i, Etat.etat_2())
-                else
-                    self.setTuile(j, i, Etat.vide())
-            end
+        modele.split(//).each do |x|
+
+            self.setTuile(j, i, Etat.stringToEtat(x))
+
             i += 1
             if i >= @taille
                 i = 0
@@ -153,20 +158,12 @@ class Grille
         self
     end
 
-    # Applique un coup joué sur la grille
+    ##
+    # Copie l'état d'une Grille pour le mettre dans la Grille appelante.
     #
-    # === Arguments
-    # *x* - La coordonnée x du coup.
-    # *y* - La coordonnée y du coup.
-    # *etat* - Le nouvel état de la grille.
-    def appliquerCoup(x, y, etat)
-        self.setTuile(x, y, etat)
-    end
-
-    # Créer une nouvelle grille en ce basant sur la grille donnée en paramètre.
+    # Paramétre::
+    #   * _grille_ - La Grille à copier.
     #
-    # === Argument
-    # *grille* - La grille à copier.
     def copier(grille)
         0.upto(self.taille() - 1) do |i|
             0.upto(self.taille() - 1) do |j|
@@ -177,13 +174,15 @@ class Grille
         self
     end
 
-    # Permet de dupliquer la grille
+    ##
+    # Crée un nouvelle Grille à partir de la Grille donnée.
     #
-    # === Argument
-    # *grille* - La grille à dupliquer
+    # Paramétre::
+    #   * _grille_ - La Grille à dupliquer.
     #
-    # === Retourne
-    # Une nouvelle grille basée sur la première
+    # Retour::
+    #   Une nouvelle Grille basée sur la première.
+    #
     def Grille.dupliquer(grille)
         nouvelleGrille = Grille.creer(grille.taille())
         0.upto(grille.taille() - 1) do |i|
@@ -195,20 +194,54 @@ class Grille
         return nouvelleGrille;
     end
 
+    ##
+    # Affiche la Grille sous la forme :
+    # 
+    #   X\Y│ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │
+    #   ───┼───┼───┼───┼───┼───┼───┤
+    #    0 │ O │ O │   │   │   │   │
+    #   ───┼───┼───┼───┼───┼───┼───┤
+    #    1 │   │   │   │   │   │ X │
+    #   ───┼───┼───┼───┼───┼───┼───┤
+    #    2 │   │   │   │   │ O │   │
+    #   ───┼───┼───┼───┼───┼───┼───┤
+    #    3 │   │   │ X │ X │   │   │
+    #   ───┼───┼───┼───┼───┼───┼───┤
+    #    4 │   │   │   │   │   │ O │
+    #   ───┼───┼───┼───┼───┼───┼───┤
+    #    5 │   │ O │   │ X │   │   │
+    #   ───┴───┴───┴───┴───┴───┴───┘
+    #
     def afficher()
-        print "X\\Y│ "
+        print self
+
+        self
+    end
+
+    ##
+    # Convertie la Grille en chaine de caractère affichable dans le terminal.
+    #
+    # Retour::
+    #   Une chaine de caractéres représentant la Grille.
+    #
+    def to_s()
+        n = String.new()
+
+        n += "X\\Y│ "
         0.upto(self.taille() - 1) do |i|
-            print i, " │ "
+            n += i.to_s + " │ "
         end
-        print "\n"
+        n += "\n"
         0.upto(self.taille() - 1) do |i|
-            print "───┼"*(self.taille()), "───┤\n"
-            print " ", i, " │ "
+            n += "───┼"*(self.taille()) + "───┤\n"
+            n += " " + i.to_s + " │ "
             0.upto(self.taille() - 1) do |j|
-                print "#{(@grille[i][j].etat==Etat.etat_1)?'O':((@grille[i][j].etat==Etat.etat_2)?'X':((@grille[i][j].etat==Etat.lock_1)?'Ⓞ':((@grille[i][j].etat==Etat.lock_2)?'Ⓧ':' ')))} │ "
+                n += "#{(@grille[i][j].etat==Etat.etat_1) ? 'O' : ((@grille[i][j].etat==Etat.etat_2) ? 'X' : ((@grille[i][j].etat==Etat.lock_1) ? 'Ⓞ' : ((@grille[i][j].etat==Etat.lock_2) ? 'Ⓧ' : ' ')))} │ "
             end
-            print "\n"
+            n += "\n"
         end
-        print "───┴"*(self.taille()), "───┘\n"
+        n += "───┴"*(self.taille()) + "───┘\n"
+
+        return n
     end
 end

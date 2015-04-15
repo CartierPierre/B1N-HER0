@@ -50,4 +50,36 @@ class Etat
 
         return false
     end
+
+    def Etat.stringToEtat(s)
+        case s
+            when "0"
+                return Etat.lock_1()
+            when "1"
+                return Etat.lock_2()
+            when "2"
+                return Etat.etat_1()
+            when "3"
+                return Etat.etat_2()
+            else
+                return Etat.vide()
+        end
+    end
+
+    def Etat.etatToString(e)
+        case e
+            when Etat.vide
+                return "_"
+            when Etat.lock_1
+                return "0"
+            when Etat.lock_2
+                return "1"
+            when Etat.etat_1
+                return "2"
+            when Etat.etat_2
+                return "3"
+            else
+                return "_"
+        end
+    end
 end
