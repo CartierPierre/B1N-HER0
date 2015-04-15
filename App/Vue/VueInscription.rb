@@ -5,8 +5,8 @@ class VueInscription < Vue
 
         boxPrincipale = Box.new(:vertical,30)
         boxLabel = Box.new(:vertical)
-        boxEntree = Box.new(:vertical)
-        boxInscription = Box.new(:horizontal,10)
+        boxEntree = Box.new(:vertical,15)
+        boxInscription = Box.new(:horizontal,25)
         boxMode = Box.new(:horizontal,10)
         boxValidation = Box.new(:horizontal,10)
 

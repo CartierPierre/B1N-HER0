@@ -7,8 +7,8 @@ class VueConnexion < Vue
         boxPrincipale = Box.new(:vertical,30)
         boxLabel = Box.new(:vertical)
         boxLabel.set_homogeneous(true)
-        boxEntree = Box.new(:vertical)
-        boxConnexion = Box.new(:horizontal,10)
+        boxEntree = Box.new(:vertical,15)
+        boxConnexion = Box.new(:horizontal,25)
         boxValidation = Box.new(:horizontal,10)
 
 		boutonValider = Button.new(:stock_id => Stock::APPLY)
