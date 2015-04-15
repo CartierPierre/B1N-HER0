@@ -1,5 +1,6 @@
 ##
-# La classe Grille permet de créer et utiliser des grilles. Cette classe à besoin des classes Tuile et Etat pour fonctionner.
+# La classe Grille permet de créer et utiliser des grilles.
+# Cette classe à besoin des classes Tuile et Etat pour fonctionner.
 #
 
 class Grille
@@ -119,13 +120,14 @@ class Grille
 
     ##
     # (Sérialisation)
-    # Transforme une Grille en chaine de caractères.
+    # Sauvegarde une Grille en chaine de caractères.
     #
     # Retour::
     #   Une chaine de caractères correspondant à l'état de la Grille.
     #
     def sauvegarder()
         modele = String.new()
+
         0.upto(taille-1) do |x|
             0.upto(taille-1) do |y|
                 modele += Etat.etatToString(@grille[x][y].etat)
@@ -143,7 +145,7 @@ class Grille
     #
     def initFrom(modele)
         tab = modele.split(//);
-        taille = Math.sqrt(modele.size) - 1
+        taille = Math.sqrt(modele.size)
 
         0.upto(taille) do |x|
             0.upto(taille) do |y|

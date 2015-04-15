@@ -6,6 +6,7 @@ load 'Tuile.rb'
 load 'Niveau.rb'
 load 'Partie.rb'
 load 'Etat.rb'
+load 'Chrono.rb'
 load 'RegleUn.rb'
 load 'RegleDeux.rb'
 load 'RegleTrois.rb'
@@ -20,14 +21,7 @@ class Jeu
     end
 
     def initialize()
-        niveau = Niveau.creer(
-                    1,
-                    2,
-                    Grille.creer(6).charger("001011010011110100001101110010101100"),
-                    Grille.creer(6).charger("001011010011110100001101110010101100"),
-                    1,
-                    6
-                )
+        niveau = Niveau.creer( 1, 2, Grille.charger("00_________1____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6)
         @partie = Partie.creer( "lol", niveau)#Utilisateur.creer("Mr Test", "root", 3), niveau)
     end
 
@@ -36,12 +30,24 @@ class Jeu
     end
 
     def test()
-        p @partie.compterCasesLigne(0)
-        p @partie.compterCasesLigne(1)
-        p @partie.compterCasesColonne(5)
-        print "\n"
-        #jouerEn(0,2);
-        @partie.grille.afficher()
+        jouerEn(1, 1)
+        jouerEn(1, 1)
+        jouerEn(1, 2)
+        jouerEn(1, 3)
+        jouerEn(1, 3)
+        @partie.historiqueUndo
+        @partie.historiqueUndo
+        @partie.historiqueUndo
+        @partie.historiqueUndo
+        @partie.historiqueUndo
+        @partie.historiqueUndo
+        @partie.monitor
+        p @partie.sauvegarder
+        @partie = Partie.charger("lol", Niveau.creer( 1, 2, Grille.charger("00_________1____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6), @partie.sauvegarder)
+        @partie.monitor
+        @partie.historiqueRedo
+        @partie.historiqueRedo
+        @partie.historiqueRedo
     end
 
     def to_s()
@@ -80,23 +86,4 @@ class Jeu
 end
 
 n = Jeu.creer()
-puts n
 n.test()
-n.TestRegleUn()
-n.TestRegleDeux()
-n.TestRegleTrois()
-# n.jouerEn(1,1)
-# n.jouerEn(1,1)
-# puts n
-# n.test()
-# puts n
-
-g = Grille.creer(6).charger("00_________1____0___11_______0_0_1__")
-g.setTuile(1,1, 2)
-g.setTuile(3,1, 1)
-g.setTuile(0,4, 2)
-data = Marshal::dump(g)
-p data
-j = Marshal::load(data)
-g.afficher()
-j.afficher()
