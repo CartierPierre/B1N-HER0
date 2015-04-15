@@ -3,46 +3,59 @@ class VueInscription < Vue
     def initialize(modele,titre,controleur,pseudo)
         super(modele,titre,controleur)
 
-        vbox1 = Box.new(:vertical)
-        vbox2 = Box.new(:vertical)
-        vbox3 = Box.new(:vertical)
-
-        hbox1 = Box.new(:horizontal)
-        hbox2 = Box.new(:horizontal)
-        hbox3 = Box.new(:horizontal)
+        boxPrincipale = Box.new(:vertical,30)
+        boxLabel = Box.new(:vertical)
+        boxEntree = Box.new(:vertical)
+        boxInscription = Box.new(:horizontal,10)
+        boxMode = Box.new(:horizontal,10)
+        boxValidation = Box.new(:horizontal,10)
 
 		boutonValider = Button.new(:stock_id => Stock::APPLY)
         boutonValider.set_sensitive(false)
-
 		boutonAnnuler = Button.new(:stock_id => Stock::CANCEL)
-
-        @boutonOnline  = CheckButton.new("Mode Online" )
+        @boutonOnline  = RadioButton.new(@controleur.getLangue[:modeDeJeuEnLigne])
+        @boutonOffline  = RadioButton.new(@boutonOnline,@controleur.getLangue[:modeDeJeuHorsLigne],true)
 
         @entryPseudo = Entry.new
         @entryPseudo.text = pseudo
-
         @entryPassword = Entry.new
         @entryPassword.visibility=(false)
 
+        labelPseudo = Label.new(@controleur.getLangue[:pseudo],true)
+        labelMotDePasse = Label.new(@controleur.getLangue[:motDePasse],true)
 
-        vbox2.pack_start(Label.new("Pseudo",true))
-        vbox2.pack_end(Label.new("Mot De Passe",true))
-        vbox2.set_homogeneous(true);
+        boxLabel.add(labelPseudo)
+        boxLabel.add(labelMotDePasse)
+        boxLabel.set_homogeneous(true)
 
-        vbox3.pack_start(@entryPseudo)
-        vbox3.pack_end(@entryPassword)
+        boxEntree.add(@entryPseudo)
+        boxEntree.add(@entryPassword)
 
-        hbox1.add(vbox2)
-        hbox1.add(vbox3)
+        boxInscription.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxInscription.add(boxLabel)
+        boxInscription.add(boxEntree)
+        boxInscription.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        hbox2.pack_start(boutonValider)
-        hbox2.pack_end(boutonAnnuler)
 
-        vbox1.add(hbox1)
-        vbox1.pack_end(hbox2)
-        vbox1.pack_end(@boutonOnline)
+        boxMode.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxMode.add(@boutonOnline)
+        boxMode.add(@boutonOffline)
+        boxMode.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        @cadre.add(vbox1)
+
+        boxValidation.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxValidation.add(boutonValider)
+        boxValidation.add(boutonAnnuler)
+        boxValidation.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+
+        boxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxPrincipale.add(boxInscription)
+        boxPrincipale.add(boxMode)
+        boxPrincipale.add(boxValidation)
+        boxPrincipale.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        @cadre.add(boxPrincipale)
 
         boutonValider.signal_connect('clicked')    {onBtnValiderClicked}
         boutonAnnuler.signal_connect('clicked')    {onBtnAnnulerClicked}
