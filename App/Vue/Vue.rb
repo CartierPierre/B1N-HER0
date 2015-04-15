@@ -12,7 +12,6 @@ class Vue
         @modele = modele
         @@fenetre.title = titre
     	@@fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
-    	@@fenetre.set_resizable(false)
         @@fenetre.set_size_request(420,410)
         @controleur=controleur
 

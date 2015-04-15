@@ -4,7 +4,7 @@ class ControleurPartie < Controleur
 
 	def initialize(jeu,niveau)
 		super(jeu)
-		@modele = Partie.creer(@@utilisateur,niveau)
+		@modele = Partie.creer(nil,niveau)
 		@vue = VuePartie.new(@modele,"Jeu",self)
 	end	
 

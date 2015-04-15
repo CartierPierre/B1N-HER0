@@ -29,6 +29,7 @@ class Langue
             valider: "Valider",
             appliquer: "Appliquer",
             annuler: "Annuler",
+            annulerAction: "Annuler",
             repeter: "Répéter",
             conseil: "Conseil",
             recommencer: "Recommencer",

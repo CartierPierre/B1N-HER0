@@ -4,24 +4,24 @@ class VuePartie < Vue
     @temps
 
     # Boutons du menu de navigation
-    @buttonSave
-    @buttonLoad
-    @buttonOptions
-    @buttonRegles
-    @buttonQuitter
+    @boutonSave
+    @boutonLoad
+    @boutonOptions
+    @boutonRegles
+    @boutonQuitter
 
     # Boutons du menu en haut
     @boxHypo
     @labelHypothese
-    @buttonHypothese
-    @buttonValiderHypo
-    @buttonAnnulerHypo
+    @boutonHypothese
+    @boutonValiderHypo
+    @boutonAnnulerHypo
 
     # Boutons du menu en bas
-    @buttonUndo
-    @buttonRedo
-    @buttonConseil
-    @buttonRestart
+    @boutonUndo
+    @boutonRedo
+    @boutonConseil
+    @boutonRestart
 
     @grille
 
@@ -66,65 +66,71 @@ class VuePartie < Vue
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
 
-        boxVertMain = Box.new(:vertical)
+        vboxPrincipale = Box.new(:vertical)
 
         @tailleGrille = @modele.grille().taille()
 
         @temps = Label.new("00:00")
 
-        #@threadChrono = ThreadChrono.new()
-        #@threadChrono.start()
+        @threadChrono = Thread.new() {
+            while(true)
+                if(!@modele.chrono.estActif)
+                    @temps.set_label(@modele.chrono.to_s)
+                end
+                sleep(0.1)
+            end
+        }
 
         # Navigation
         boxNav = Box.new(:horizontal)
 
-        @buttonSave = nouveauBouton(:sauvegarder,"save")
-        @buttonLoad = nouveauBouton(:charger,"load")
-        @buttonOptions = nouveauBouton(:options,"options")
-        @buttonRegles = nouveauBouton(:regles,"regles")
-        @buttonQuitter = nouveauBouton(:quitter,"exit")
+        @boutonSave = nouveauBouton(:sauvegarder,"save")
+        @boutonLoad = nouveauBouton(:charger,"load")
+        @boutonOptions = nouveauBouton(:options,"options")
+        @boutonRegles = nouveauBouton(:regles,"regles")
+        @boutonQuitter = nouveauBouton(:quitter,"exit")
 
-        @buttonSave.signal_connect('clicked')  { onBtnSaveClicked }
-        @buttonLoad.signal_connect('clicked')  { onBtnLoadClicked }
-        @buttonOptions.signal_connect('clicked')  { onBtnOptionsClicked }
-        @buttonRegles.signal_connect('clicked')  { onBtnReglesClicked }
-        @buttonQuitter.signal_connect('clicked')  { onBtnQuitterClicked }
+        @boutonSave.signal_connect('clicked')  { onBtnSaveClicked }
+        @boutonLoad.signal_connect('clicked')  { onBtnLoadClicked }
+        @boutonOptions.signal_connect('clicked')  { onBtnOptionsClicked }
+        @boutonRegles.signal_connect('clicked')  { onBtnReglesClicked }
+        @boutonQuitter.signal_connect('clicked')  { onBtnQuitterClicked }
 
-        boxNav.pack_start(@buttonSave, :expand => true, :fill => true)
-        boxNav.pack_start(@buttonLoad)
-        boxNav.pack_start(@buttonOptions)
-        boxNav.pack_start(@buttonRegles)
-        boxNav.pack_start(@buttonQuitter)
+        boxNav.pack_start(@boutonSave, :expand => true, :fill => true)
+        boxNav.pack_start(@boutonLoad)
+        boxNav.pack_start(@boutonOptions)
+        boxNav.pack_start(@boutonRegles)
+        boxNav.pack_start(@boutonQuitter)
 
         # Menu hypothèse
-        @boxHypo = Box.new(:vertical)
+        @boxHypo = Box.new(:vertical,10)
         @labelHypothese = Label.new("")
 
-        @buttonHypothese = nouveauBouton(:hypothese,"hypothese")
-        @buttonHypothese.signal_connect('clicked') { onBtnHypoClicked }
-        @buttonHypothese.set_size_request(100,64)
+        @boutonHypothese = nouveauBouton(:hypothese,"hypothese")
+        @boutonHypothese.signal_connect('clicked') { onBtnHypoClicked }
+        @boutonHypothese.set_size_request(100,64)
 
-        @buttonValiderHypo = nouveauBouton(:valider,"valider")
-        @buttonValiderHypo.signal_connect('clicked') { onBtnHypoValiderClicked }
-        @buttonValiderHypo.set_size_request(100,64)
+        @boutonValiderHypo = nouveauBouton(:valider,"valider")
+        @boutonValiderHypo.signal_connect('clicked') { onBtnHypoValiderClicked }
+        @boutonValiderHypo.set_size_request(100,64)
 
-        @buttonAnnulerHypo = nouveauBouton(:annuler,"annuler")
-        @buttonAnnulerHypo.signal_connect('clicked') { onBtnHypoAnnulerClicked }
-        @buttonAnnulerHypo.set_size_request(100,64)
+        @boutonAnnulerHypo = nouveauBouton(:annuler,"annuler")
+        @boutonAnnulerHypo.signal_connect('clicked') { onBtnHypoAnnulerClicked }
+        @boutonAnnulerHypo.set_size_request(100,64)
 
-        @boxHypo.pack_start(Label.new(), :expand => true, :fill => true)   
+        @boxHypo.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         @boxHypo.add(@labelHypothese)     
-        @boxHypo.add(@buttonHypothese)
-        @boxHypo.add(@buttonValiderHypo)
-        @boxHypo.add(@buttonAnnulerHypo)
-        @boxHypo.pack_end(Label.new(), :expand => true, :fill => true)     
+        @boxHypo.add(@boutonHypothese)
+        @boxHypo.add(@boutonValiderHypo)
+        @boxHypo.add(@boutonAnnulerHypo)
+        @boxHypo.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)     
 
         @imageTuile1 = Image.new(:file => './Ressources/CaseRouge32.png')
         @imageTuile2 = Image.new(:file => './Ressources/CaseBleue32.png')
 
         # Création de la grille
         boxJeu = Box.new(:horizontal)
-        frame = Table.new(@tailleGrille,@tailleGrille,false)
+        grille = Table.new(@tailleGrille,@tailleGrille,false)
         @grille = Array.new(@tailleGrille+1) { Array.new(@tailleGrille+1) }
 
         0.upto(@tailleGrille) do |x|
@@ -143,52 +149,50 @@ class VuePartie < Vue
                     caseTemp.setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
                     caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
                 end
-                frame.attach(caseTemp,y,y+1,x,x+1)
+                grille.attach(caseTemp,y,y+1,x,x+1)
                 @grille[x][y] = caseTemp
             end
         end
 
-        boxJeu.add(@boxHypo)
-        boxJeu.add(Label.new("  "))
-        boxJeu.add(frame)
-        boxJeu.add(Label.new("  "))
-        boxJeu.pack_end(@temps, :expand => true, :fill => false) 
+        boxJeu.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)   
+        boxJeu.add(@boxHypo)  
+        boxJeu.add(grille)
+        boxJeu.add(@temps)
+        boxJeu.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Menu du bas
         boxFooter = Box.new(:horizontal)
-        @buttonUndo = nouveauBouton(:annulerAction,"undo")
-        @buttonRedo = nouveauBouton(:repeter,"redo")
-        @buttonConseil = nouveauBouton(:conseil,"conseil")
-        @buttonRestart = nouveauBouton(:recommencer,"restart")
+        @boutonUndo = nouveauBouton(:annulerAction,"undo")
+        @boutonRedo = nouveauBouton(:repeter,"redo")
+        @boutonConseil = nouveauBouton(:conseil,"conseil")
+        @boutonRestart = nouveauBouton(:recommencer,"restart")
 
-        @buttonUndo.signal_connect('clicked')  { onBtnUndoClicked }
-        @buttonRedo.signal_connect('clicked')  { onBtnRedoClicked }
-        @buttonConseil.signal_connect('clicked')  { onBtnConseilClicked }
-        @buttonRestart.signal_connect('clicked')  { onBtnRestartClicked }
+        @boutonUndo.signal_connect('clicked')  { onBtnUndoClicked }
+        @boutonRedo.signal_connect('clicked')  { onBtnRedoClicked }
+        @boutonConseil.signal_connect('clicked')  { onBtnConseilClicked }
+        @boutonRestart.signal_connect('clicked')  { onBtnRestartClicked }
 
-        boxFooter.pack_start(Label.new(), :expand => true, :fill => true)        
-        boxFooter.add(@buttonUndo)
-        boxFooter.add(@buttonRedo)
-        boxFooter.add(@buttonConseil)
-        boxFooter.add(@buttonRestart)
-        boxFooter.pack_end(Label.new(), :expand => true, :fill => true) 
+        boxFooter.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)       
+        boxFooter.add(@boutonUndo)
+        boxFooter.add(@boutonRedo)
+        boxFooter.add(@boutonConseil)
+        boxFooter.add(@boutonRestart)
+        boxFooter.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Ajout dans la box principal des éléments
-        boxVertMain.add(boxNav)
-        boxVertMain.add(Label.new())
+        vboxPrincipale.add(boxNav)
         labelNiveau = Label.new()
-        labelNiveau.set_markup("<big>" + "Niveau " + @modele.niveau().difficulte().to_s() + " - " + @tailleGrille.to_s() + "x" + @tailleGrille.to_s() + "</big>")
-        boxVertMain.add(labelNiveau)
-        boxVertMain.add(Label.new())
-        boxVertMain.add(boxJeu)
-        boxVertMain.add(Label.new())
-        boxVertMain.pack_end(boxFooter, :expand => true, :fill => false)
+        labelNiveau.set_markup("<big>" + "Niveau " + @modele.niveau.difficulte.to_s + " - " + @tailleGrille.to_i.to_s + "x" + @tailleGrille.to_i.to_s + "</big>")
+        vboxPrincipale.add(labelNiveau)
+        vboxPrincipale.add(boxJeu) 
+        vboxPrincipale.add(boxFooter)
+        vboxPrincipale.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        @cadre.add(boxVertMain)
+        @cadre.add(vboxPrincipale)
 
         self.actualiser()
-        @buttonValiderHypo.hide()
-        @buttonAnnulerHypo.hide() 
+        @boutonValiderHypo.hide()
+        @boutonAnnulerHypo.hide() 
     end
 
     # Signaux des boutons de navigation
@@ -206,7 +210,7 @@ class VuePartie < Vue
     end
 
     def onBtnReglesClicked 
-        #@threadChrono.chrono.pause()
+        @modele.chrono.pause()
         regles = @controleur.getLangue[:regles]
         regles += "\n\n"
         regles += @controleur.getLangue[:regles1]
@@ -215,7 +219,7 @@ class VuePartie < Vue
         dialogRegles = MessageDialog.new(:parent => @@fenetre, :type => :question, :buttons_type => :close, :message => regles)
         dialogRegles.run()
         dialogRegles.destroy()
-        #@threadChrono.chrono.finPause()
+        @modele.chrono.finPause()
     end
 
     def onBtnQuitterClicked
@@ -226,23 +230,23 @@ class VuePartie < Vue
     # Hypothèse
     def onBtnHypoClicked
         @labelHypothese.set_label(@controleur.getLangue[:hypotheseActive])
-        @buttonValiderHypo.show()
-        @buttonAnnulerHypo.show()
-        @buttonHypothese.hide()
+        @boutonValiderHypo.show()
+        @boutonAnnulerHypo.show()
+        @boutonHypothese.hide()
     end
 
     def onBtnHypoValiderClicked
         @labelHypothese.set_label("")
-        @buttonValiderHypo.hide()
-        @buttonAnnulerHypo.hide()
-        @buttonHypothese.show()
+        @boutonValiderHypo.hide()
+        @boutonAnnulerHypo.hide()
+        @boutonHypothese.show()
     end
 
     def onBtnHypoAnnulerClicked
         @labelHypothese.set_label("")
-        @buttonValiderHypo.hide()
-        @buttonAnnulerHypo.hide()
-        @buttonHypothese.show()
+        @boutonValiderHypo.hide()
+        @boutonAnnulerHypo.hide()
+        @boutonHypothese.show()
     end
 
     # Grille

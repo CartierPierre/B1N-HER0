@@ -38,7 +38,6 @@ require_relative "./Modele/Tuile"
 require_relative "./Modele/Chrono"
 require_relative "./Modele/Coup"
 require_relative "./Modele/Partie"
-require_relative "./Modele/ThreadChrono"
 
 ##
 # Controleur
