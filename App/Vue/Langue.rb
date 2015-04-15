@@ -50,7 +50,9 @@ class Langue
             difficulte: "Difficulté",
             jouer: "Jouer",
             classement: "Classement",
-            profil: "Profil"
+            profil: "Profil",
+            modeDeJeuEnLigne: "Mode de jeu en ligne",
+            modeDeJeuHorsLigne: "Mode de jeu hors ligne"
         }
 
         @langueEn = {
@@ -86,7 +88,9 @@ class Langue
             difficulte: "Difficulty",
             jouer: "Play",
             classement: "Ranking",
-            profil: "Profile"
+            profil: "Profile",
+            modeDeJeuEnLigne: "Online play mode",
+            modeDeJeuHorsLigne: "Offline play mode"
         }
             if(langue == FR)
                   @langueActuelle = @langueFr

@@ -8,8 +8,8 @@ class VueDemarrage < Vue
         super(modele,titre,controleur)
 
 
-        buttonConnexion = Button.new(:label => "Connexion")
-        buttonInscription = Button.new(:label => "Inscription")
+        buttonConnexion = Button.new(:label => @controleur.getLangue[:connexion])
+        buttonInscription = Button.new(:label => @controleur.getLangue[:inscription])
 
         pixbufHero = Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/Hero.png", :width => 400, :height => 400)
         pixbufTitre = Gdk::Pixbuf.new(:file => File.dirname(__FILE__) + "/../Ressources/Titre.png")

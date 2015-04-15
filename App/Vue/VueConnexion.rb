@@ -3,39 +3,50 @@ class VueConnexion < Vue
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
-        vbox1 = Box.new(:vertical)
-        vbox2 = Box.new(:vertical)
-        vbox3 = Box.new(:vertical)
 
-        hbox1 = Box.new(:horizontal)
-        hbox2 = Box.new(:horizontal)
+        boxPrincipale = Box.new(:vertical,30)
+        boxLabel = Box.new(:vertical)
+        boxLabel.set_homogeneous(true)
+        boxEntree = Box.new(:vertical)
+        boxConnexion = Box.new(:horizontal,10)
+        boxValidation = Box.new(:horizontal,10)
 
 		boutonValider = Button.new(:stock_id => Stock::APPLY)
         boutonValider.set_sensitive(false)
-
 		boutonAnnuler = Button.new(:stock_id => Stock::CANCEL)
 
         @entryPseudo = Entry.new
         @entryPassword = Entry.new
         @entryPassword.visibility=(false)
 
-        vbox2.pack_start(Label.new("Pseudo",true))
-        vbox2.pack_end(Label.new("Mot De Passe",true))
-        vbox2.set_homogeneous(true);
+        labelPseudo = Label.new(@controleur.getLangue[:pseudo],true)
+        labelMotDePasse = Label.new(@controleur.getLangue[:motDePasse],true)
 
-        vbox3.pack_start(@entryPseudo)
-        vbox3.pack_end(@entryPassword)
+        boxLabel.add(labelPseudo)
+        boxLabel.add(labelMotDePasse)
+        boxLabel.set_homogeneous(true)
 
-        hbox1.add(vbox2)
-        hbox1.add(vbox3)
+        boxEntree.add(@entryPseudo)
+        boxEntree.add(@entryPassword)
 
-        hbox2.pack_start(boutonValider)
-        hbox2.pack_end(boutonAnnuler)
+        boxConnexion.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxConnexion.add(boxLabel)
+        boxConnexion.add(boxEntree)
+        boxConnexion.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vbox1.add(hbox1)
-        vbox1.add(hbox2)
 
-        @cadre.add(vbox1)
+        boxValidation.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxValidation.add(boutonValider)
+        boxValidation.add(boutonAnnuler)
+        boxValidation.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+
+        boxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxPrincipale.add(boxConnexion)
+        boxPrincipale.add(boxValidation)
+        boxPrincipale.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        @cadre.add(boxPrincipale)
 
 
         boutonValider.signal_connect('clicked')     {
