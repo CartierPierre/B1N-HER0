@@ -1,3 +1,7 @@
+##
+# La classe Partie permet de créer et utiliser des objet Partie.
+# Cette classe à besoin des classes Chrono, Coup, Etat, Grille, Niveau et Score pour fonctionner.
+
 class Partie
     attr_reader :grille, :niveau, :score, :utilisateur, :chrono
     @listeUndo
