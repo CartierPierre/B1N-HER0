@@ -49,10 +49,10 @@ class Partie
         # Sépare les différents champs des données dans un tableau
         donnees = donnee.split("|")
 
-        # Charge le chrono avec les données sérialiser du chrono
+        # Charge le chrono avec les données sérialisée du chrono
         partie.setChrono(Chrono.charger(donnees[0]))
 
-        # Charge la grille avec les données sérialiser de la grille
+        # Charge la grille avec les données sérialisée de la grille
         partie.setGrille(Grille.charger(donnees[1]))
 
         # On remet en place la liste des undo
@@ -102,14 +102,17 @@ class Partie
     def sauvegarder()
         data = String.new()
 
+        # Sérialisation du chrono
         data += @chrono.sauvegarder
 
         data += "|"
 
+        # Sérialisation de la grille
         data += grille.sauvegarder()
 
         data += "|"
 
+        # Sérialisation de la liste des undo
         0.upto(@listeUndo.size() - 1) do |i|
             coup = @listeUndo[i]
             data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
@@ -120,6 +123,7 @@ class Partie
 
         data += "|"
 
+        # Sérialisation de la liste des redo
         0.upto(@listeRedo.size() - 1) do |i|
             coup = @listeRedo[i]
             data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
@@ -131,11 +135,13 @@ class Partie
         return data
     end
 
-    # Enregistre un coup est l'état de la tuile avant ce coup
+    ##
+    # Ajoute à l'historique l'emplacement du Coup avec l'état de la Tuile avant le Coup.
     #
-    # === Argument
-    # *coup* - Le coup joué.
-    def historiqueAdd(coup)
+    # Paramétre::
+    #   * _coup_ - Le Coup joué
+    #
+    def historiqueAjouter(coup)
         # Vide l'historique si pour coller avec les undo
        @listeRedo.clear()
 
@@ -159,45 +165,61 @@ class Partie
         self
     end
 
-    # Efface un coup jouer
+    ##
+    # Enlève un Coup joué.
+    #
+    # Retour::
+    #   Un tableau contenant la coordonnée x et la coodonnée y du Coup.
+    #
     def historiqueUndo()
         if(@listeUndo.size > 0)
             coup = @listeUndo.pop()
             @listeRedo.push(coup)
             @grille.setTuile(coup.x, coup.y, coup.etat)
 
-            monitor
             return Array[ coup.x, coup.y ]
         end
 
         return nil
     end
 
-    # Efface un coup jouer
+    ##
+    # Remet en place un Coup joué.
+    #
+    # Retour::
+    #   Un tableau contenant la coordonnée x et la coodonnée y du Coup.
+    #
     def historiqueRedo()
         if(@listeRedo.size > 0)
             coup = @listeRedo.pop()
             @listeUndo.push(coup)
             @grille.setTuile(coup.x, coup.y, Etat.suivant(coup.etat))
 
-            monitor
            return Array[ coup.x, coup.y ]
         end
 
         return nil
     end
 
-    #Recommence la grille
+    ##
+    # Remet à zéro la Partie en cours.
+    #
     def recommencer()
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
         @listeUndo = Array.new()
         @listeRedo = Array.new()
     end
 
-    #Permet de jouer un coup
+    ##
+    # Joue un Coup aux coordonnées données.
+    #
+    # Paramétres::
+    #   * _x_ - La coordonnée x du Coup.
+    #   * _y_ - La coordonnée y du Coup.
+    #
     def jouerCoup(x, y)#TODO signale un coup invalide
         if @niveau.tuileValide?(x, y)
-            historiqueAdd(Coup.creer(x, y, @grille.getTuile(x, y).etat()))
+            historiqueAjouter(Coup.creer(x, y, @grille.getTuile(x, y).etat()))
             t = Etat.suivant(@grille.getTuile(x, y).etat())
             @grille.setTuile(x, y, t)
 
@@ -205,10 +227,12 @@ class Partie
         end
     end
 
-    # Vérifie si la grille est comforme à la grille solution.
+    ##
+    # Vérifie si la Grille est comforme à la Grille solution.
     #
-    # === Retourne
-    # Un booléen indiquant si la grille est valide.
+    # Retour::
+    #   Un booléen indiquant si la Grille est valide.
+    #
     def valider()
         0.upto(@grille.taille() - 1) do |x|
             0.upto(@grille.taille() - 1) do |y|
@@ -221,7 +245,15 @@ class Partie
         return true
     end
 
-    # Donne le nombre de case de chaque état d'une ligne
+    ##
+    # Donne le nombre de case de chaque Etat de la ligne demandée.
+    #
+    # Paramétre::
+    #   * _x_ - La coordonnée de la ligne.
+    #
+    # Retour::
+    #   Un tableau contenant respectivement le nombre de case à l'état 1 et le nombre de case à l'état 2.
+    #
     def compterCasesLigne(x)
         nbEtat = Array[0, 0]
         @grille.getLigne(x).each do |tuile|
@@ -235,7 +267,15 @@ class Partie
         return nbEtat
     end
 
-    # Donne le nombre de case de chaque état d'une colonne
+    ##
+    # Donne le nombre de case de chaque Etat de la colonne demandée.
+    #
+    # Paramétre::
+    #   * _y_ - La coordonnée de la colonne.
+    #
+    # Retour::
+    #   Un tableau contenant respectivement le nombre de case à l'état 1 et le nombre de case à l'état 2.
+    #
     def compterCasesColonne(y)
         nbEtat = Array[0, 0]
         @grille.getColonne(y).each do |tuile|
