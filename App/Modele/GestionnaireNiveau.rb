@@ -52,8 +52,8 @@ class GestionnaireNiveau
 		return Niveau.creer(
 			args[0], # id
 			args[1], # uuid
-			Grille.creer( args[5] ).charger( args[2] ), # probleme
-			Grille.creer( args[5] ).charger( args[3] ), # solution
+			Grille.charger(args[2] ), # probleme
+			Grille.charger(args[3] ), # solution
 			args[4], # difficulte
 			args[5] # dimention
 		)
