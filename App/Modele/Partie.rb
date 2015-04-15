@@ -1,14 +1,15 @@
-require 'time'
-
 class Partie
     attr_reader :grille, :niveau, :score, :utilisateur, :chrono
     @listeUndo
     @listeRedo
 
-    # Méthode de création d'une partie
+    ##
+    # Méthode de création d'une Partie.
     #
-    # === Argument
-    # *niveau* - Le niveau sur lequel ce base la partie
+    # Paramétres::
+    #   * _utilisateur_ - Utilisateur qui joue la partie.
+    #   * _niveau_ - Le Niveau sur lequel ce base la partie.
+    #
     private_class_method :new
     def Partie.creer(utilisateur, niveau)
         new(utilisateur, niveau)
@@ -23,33 +24,51 @@ class Partie
 
         @listeUndo = Array.new()
         @listeRedo = Array.new()
-        
+
         @modeHypo=0
 
         @cpttest = 0
     end
 
-    def Partie.charger(utilisateur, niveau, data)
+    ##
+    # (Désérialisation)
+    # Charge une Partie avec l'utilisateur, le niveau et les données passés en paramétre.
+    #
+    # Paramétres::
+    #   * _utilisateur_ - Utilisateur de la Partie.
+    #   * _niveau_ - Le Niveau sur lequel ce base la Partie.
+    #   * _donnee_ - Une chaine de caractère correspondant à la sérialisation de la Partie.
+    #
+    # Retour::
+    #   Une nouvelle partie construite à partir des paramètres donnés.
+    #
+    def Partie.charger(utilisateur, niveau, donnee)
+        # Crée un nouvelle partie
         partie = Partie.creer(utilisateur, niveau)
 
-        tabData = data.split("|")
+        # Sépare les différents champs des données dans un tableau
+        donnees = donnee.split("|")
 
-        partie.setChrono(Chrono.charger(tabData[0]))
+        # Charge le chrono avec les données sérialiser du chrono
+        partie.setChrono(Chrono.charger(donnees[0]))
 
-        partie.setGrille(Grille.charger(tabData[1]))
+        # Charge la grille avec les données sérialiser de la grille
+        partie.setGrille(Grille.charger(donnees[1]))
 
-        if(tabData.size >= 3)
-            tabData[2].split(";").each do |coupData|
-                tabCoup = coupData.split(",")
-                coup = Coup.creer(tabCoup[0], tabCoup[1], tabCoup[2])
+        # On remet en place la liste des undo
+        if(donnees[2])
+            donnees[2].split(";").each do |coupDonnee|
+                tabCoup = coupDonnee.split(",")
+                coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
                 partie.addUndo(coup)
             end
         end
 
-        if(tabData.size >= 4)
-            tabData[3].split(";").each do |coupData|
-                tabCoup = coupData.split(",")
-                coup = Coup.creer(tabCoup[0], tabCoup[1], tabCoup[2])
+        # On remet en place la liste des redo
+        if(donnees[3])
+            donnees[3].split(";").each do |coupDonnee|
+                tabCoup = coupDonnee.split(",")
+                coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
                 partie.addRedo(coup)
             end
         end
@@ -57,7 +76,6 @@ class Partie
         return partie
     end
 
-    #Méthode permettant d'accéder au champ lors du chargement
     def addUndo(coup)
         @listeUndo.push(coup)
     end
@@ -74,6 +92,13 @@ class Partie
         @grille = grille
     end
 
+    ##
+    # (Sérialisation)
+    # Sauvegarde une partie en chaine de caractéres.
+    #
+    # Retour::
+    #   Une chaine de caractéres correspondant à l'état de la partie.
+    #
     def sauvegarder()
         data = String.new()
 
@@ -87,7 +112,7 @@ class Partie
 
         0.upto(@listeUndo.size() - 1) do |i|
             coup = @listeUndo[i]
-            data += "#{coup.x},#{coup.y},#{coup.etat}"
+            data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
             if(i != (@listeUndo.size() - 1))
                 data += ";"
             end
@@ -97,7 +122,7 @@ class Partie
 
         0.upto(@listeRedo.size() - 1) do |i|
             coup = @listeRedo[i]
-            data += "#{coup.x},#{coup.y},#{coup.etat}"
+            data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
             if(i != (@listeRedo.size() - 1))
                 data += ";"
             end
@@ -139,7 +164,7 @@ class Partie
         if(@listeUndo.size > 0)
             coup = @listeUndo.pop()
             @listeRedo.push(coup)
-            @grille.appliquerCoup(coup.x, coup.y, coup.etat)
+            @grille.setTuile(coup.x, coup.y, coup.etat)
 
             monitor
             return Array[ coup.x, coup.y ]
@@ -153,7 +178,7 @@ class Partie
         if(@listeRedo.size > 0)
             coup = @listeRedo.pop()
             @listeUndo.push(coup)
-            @grille.appliquerCoup(coup.x, coup.y, Etat.suivant(coup.etat))
+            @grille.setTuile(coup.x, coup.y, Etat.suivant(coup.etat))
 
             monitor
            return Array[ coup.x, coup.y ]
@@ -174,7 +199,7 @@ class Partie
         if @niveau.tuileValide?(x, y)
             historiqueAdd(Coup.creer(x, y, @grille.getTuile(x, y).etat()))
             t = Etat.suivant(@grille.getTuile(x, y).etat())
-            @grille.appliquerCoup(x, y, t)
+            @grille.setTuile(x, y, t)
 
             monitor
         end
