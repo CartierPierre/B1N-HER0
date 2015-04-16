@@ -10,8 +10,7 @@ load 'Chrono.rb'
 load 'RegleUn.rb'
 load 'RegleDeux.rb'
 load 'RegleTrois.rb'
-#001100001100____0___11_______0_0_1__
-#Grille.charger("00_________1____0___11_______0_0_1__
+#001100001100____0___11_______0_0_1__ pour tester regle trois
 class Jeu
     @partie
 
@@ -22,7 +21,7 @@ class Jeu
     end
 
     def initialize()
-        niveau = Niveau.creer( 1, 2, Grille.charger("000100001100____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6)
+        niveau = Niveau.creer( 1, 2, Grille.charger("00_________1____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6)
         @partie = Partie.creer( "lol", niveau)#Utilisateur.creer("Mr Test", "root", 3), niveau)
     end
 
@@ -82,11 +81,8 @@ class Jeu
     end
     
     def TestRegleTrois()
-    	if RegleTrois.appliquer(@partie) == true then
-			print "regle trois true\n"
-		else
-			print "regle trois false\n"
-		end
+		print RegleTrois.appliquer(@partie)
+		print "\n"	
     end
 end
 
