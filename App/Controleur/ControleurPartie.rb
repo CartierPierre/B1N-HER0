@@ -49,6 +49,10 @@ class ControleurPartie < Controleur
         return getCouleurTuile(@@options.couleurTuile2)
     end
 
+    def getHypoActif
+        return @modele.hypoActif
+    end
+
     def options()
         changerControleur(ControleurOptions.new(@jeu,@modele))
     end

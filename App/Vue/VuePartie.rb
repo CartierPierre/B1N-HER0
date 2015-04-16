@@ -23,46 +23,9 @@ class VuePartie < Vue
     @boutonConseil
     @boutonRestart
 
-    @grilleTable
     @grille
 
     @threadChrono
-
-    class CaseJeu < Gtk::Button
-        attr_accessor :x, :y
-
-        @controleur
-
-        def initialize(x,y,controleur)
-            super()
-            @x,@y = x,y
-            @controleur = controleur
-            self.set_size_request(20, 20)
-            self.set_border_width(0)
-        end
-
-        def setImageTuile(etat)
-            if (etat == Etat.etat_1)
-                self.set_image(Image.new(:pixbuf => @controleur.getImgTuile1))
-            elsif (etat == Etat.etat_2)
-                self.set_image(Image.new(:pixbuf => @controleur.getImgTuile2))
-            elsif (etat == Etat.lock_1)
-                self.set_image(Image.new(:pixbuf => @controleur.getImgTuileLock1))
-            elsif (etat == Etat.lock_2)
-                self.set_image(Image.new(:pixbuf => @controleur.getImgTuileLock2))
-            else
-                self.set_image(Image.new())
-            end    
-        end
-
-    end
-
-    def nbLigneColonne(x,y)
-        nbCasesColonne = @modele.compterCasesColonne(y)
-        nbCasesLigne = @modele.compterCasesLigne(x)
-        @grille[0][y+1].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesColonne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesColonne[1]}</span> ])
-        @grille[x+1][0].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesLigne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesLigne[1]}</span> ])
-    end
 
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
@@ -125,11 +88,8 @@ class VuePartie < Vue
         @boxHypo.add(@boutonAnnulerHypo)
         @boxHypo.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)     
 
-        @imageTuile1 = Image.new(:file => './Ressources/CaseRouge32.png')
-        @imageTuile2 = Image.new(:file => './Ressources/CaseBleue32.png')
-
         # Création de la grille
-        @grilleTable = Table.new(@tailleGrille,@tailleGrille,true)
+        grilleTable = Table.new(@tailleGrille,@tailleGrille,true)
         @grille = Array.new(@tailleGrille+1) { Array.new(@tailleGrille+1) }
 
         0.upto(@tailleGrille) do |x|
@@ -144,24 +104,24 @@ class VuePartie < Vue
                     nb = @modele.compterCasesLigne(x-1)
                     caseTemp = Label.new.set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
                 else
-                    caseTemp = CaseJeu.new(x-1,y-1,@controleur)
+                    caseTemp = TuileGtk.new(x-1,y-1,@controleur)
                     caseTemp.setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
-                    caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
+                    caseTemp.signal_connect('clicked') { onTuileGtkClicked(caseTemp) }
                 end
-                @grilleTable.attach(caseTemp,y,y+1,x,x+1)
+                grilleTable.attach(caseTemp,y,y+1,x,x+1)
                 @grille[x][y] = caseTemp
             end
         end
 
-        boxJeu = Box.new(:horizontal,30)
-        boxJeu.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)   
-        boxJeu.add(@boxHypo)  
-        boxJeu.add(@grilleTable)
-        boxJeu.add(@temps)
-        boxJeu.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        @boxJeu = Box.new(:horizontal,30)
+        @boxJeu.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)   
+        @boxJeu.add(@boxHypo)  
+        @boxJeu.add(grilleTable)
+        @boxJeu.add(@temps)
+        @boxJeu.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Menu du bas
-        boxFooter = Box.new(:horizontal)
+        @boxFooter = Box.new(:horizontal)
         @boutonUndo = nouveauBouton(:annulerAction,"undo")
         @boutonRedo = nouveauBouton(:repeter,"redo")
         @boutonConseil = nouveauBouton(:conseil,"conseil")
@@ -172,12 +132,12 @@ class VuePartie < Vue
         @boutonConseil.signal_connect('clicked')  { onBtnConseilClicked }
         @boutonRestart.signal_connect('clicked')  { onBtnRestartClicked }
 
-        boxFooter.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)       
-        boxFooter.add(@boutonUndo)
-        boxFooter.add(@boutonRedo)
-        boxFooter.add(@boutonConseil)
-        boxFooter.add(@boutonRestart)
-        boxFooter.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        @boxFooter.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)       
+        @boxFooter.add(@boutonUndo)
+        @boxFooter.add(@boutonRedo)
+        @boxFooter.add(@boutonConseil)
+        @boxFooter.add(@boutonRestart)
+        @boxFooter.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Ajout dans la box principal des éléments
         vboxPrincipale = Box.new(:vertical,30)
@@ -185,14 +145,21 @@ class VuePartie < Vue
         labelNiveau = Label.new()
         labelNiveau.set_markup("<big>" + "Niveau " + @modele.niveau.difficulte.to_s + " - " + @tailleGrille.to_i.to_s + "x" + @tailleGrille.to_i.to_s + "</big>")
         vboxPrincipale.add(labelNiveau)
-        vboxPrincipale.add(boxJeu) 
-        vboxPrincipale.add(boxFooter)
+        vboxPrincipale.add(@boxJeu) 
+        vboxPrincipale.add(@boxFooter)
 
         @cadre.add(vboxPrincipale)
 
         self.actualiser()
         @boutonValiderHypo.hide()
         @boutonAnnulerHypo.hide() 
+    end
+    
+    def nbLigneColonne(x,y)
+        nbCasesColonne = @modele.compterCasesColonne(y)
+        nbCasesLigne = @modele.compterCasesLigne(x)
+        @grille[0][y+1].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesColonne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesColonne[1]}</span> ])
+        @grille[x+1][0].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesLigne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesLigne[1]}</span> ])
     end
 
     # Signaux des boutons de navigation
@@ -211,7 +178,9 @@ class VuePartie < Vue
 
     def onBtnReglesClicked 
         @modele.chrono.pause()
-        @grilleTable.hide()
+        @boxJeu.hide()
+        @boxFooter.hide()
+
         regles = @controleur.getLangue[:regles]
         regles += "\n\n"
         regles += @controleur.getLangue[:regles1]
@@ -220,8 +189,10 @@ class VuePartie < Vue
         dialogRegles = MessageDialog.new(:parent => @@fenetre, :type => :question, :buttons_type => :close, :message => regles)
         dialogRegles.run()
         dialogRegles.destroy()
+
         @modele.chrono.finPause()
-        @grilleTable.show()
+        @boxJeu.show()
+        @boxFooter.show()
     end
 
     def onBtnQuitterClicked
@@ -252,7 +223,7 @@ class VuePartie < Vue
     end
 
     # Grille
-    def onCaseJeuClicked(caseJeu)
+    def onTuileGtkClicked(caseJeu)
         if @modele.niveau().tuileValide?(caseJeu.x,caseJeu.y)
             @modele.jouerCoup(caseJeu.x,caseJeu.y)
             caseJeu.setImageTuile(@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat())
@@ -289,10 +260,10 @@ class VuePartie < Vue
                     
                 elsif(x == 0)
                     nb = @modele.compterCasesColonne(y-1)
-                    @grille[x][y].set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
+                    @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
                 elsif(y == 0)
                     nb = @modele.compterCasesLigne(x-1)
-                    @grille[x][y].set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
+                    @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
                 else
                     @grille[x][y].setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
                 end

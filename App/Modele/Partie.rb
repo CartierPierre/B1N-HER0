@@ -3,7 +3,7 @@
 # Cette classe à besoin des classes Chrono, Coup, Etat, Grille, Niveau et Score pour fonctionner.
 
 class Partie
-    attr_reader :grille, :niveau, :score, :utilisateur, :chrono
+    attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :hypoActif
     @listeUndo
     @listeRedo
 
@@ -29,7 +29,7 @@ class Partie
         @listeUndo = Array.new()
         @listeRedo = Array.new()
 
-        @modeHypo=0
+        @hypoActif = false
 
         @cpttest = 0
     end

@@ -7,6 +7,7 @@ include Gtk
 
 require_relative "./Vue/Vue"
 require_relative "./Vue/Langue"
+require_relative "./Vue/TuileGtk"
 require_relative "./Vue/VueChargerPartie"
 require_relative "./Vue/VueConnexion"
 require_relative "./Vue/VueDemarrage"
