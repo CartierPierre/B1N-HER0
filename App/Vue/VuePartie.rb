@@ -23,6 +23,7 @@ class VuePartie < Vue
     @boutonConseil
     @boutonRestart
 
+    @grilleTable
     @grille
 
     @threadChrono
@@ -36,7 +37,7 @@ class VuePartie < Vue
             super()
             @x,@y = x,y
             @controleur = controleur
-            #self.set_size_request(32, 32)
+            self.set_size_request(20, 20)
             self.set_border_width(0)
         end
 
@@ -66,15 +67,14 @@ class VuePartie < Vue
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
 
-        vboxPrincipale = Box.new(:vertical)
-
         @tailleGrille = @modele.grille().taille()
 
         @temps = Label.new("00:00")
 
         @threadChrono = Thread.new() {
+            @modele.chrono.start()
             while(true)
-                if(!@modele.chrono.estActif)
+                if(@modele.chrono.estActif)
                     @temps.set_label(@modele.chrono.to_s)
                 end
                 sleep(0.1)
@@ -129,8 +129,7 @@ class VuePartie < Vue
         @imageTuile2 = Image.new(:file => './Ressources/CaseBleue32.png')
 
         # Création de la grille
-        boxJeu = Box.new(:horizontal)
-        grille = Table.new(@tailleGrille,@tailleGrille,false)
+        @grilleTable = Table.new(@tailleGrille,@tailleGrille,true)
         @grille = Array.new(@tailleGrille+1) { Array.new(@tailleGrille+1) }
 
         0.upto(@tailleGrille) do |x|
@@ -149,14 +148,15 @@ class VuePartie < Vue
                     caseTemp.setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
                     caseTemp.signal_connect('clicked') { onCaseJeuClicked(caseTemp) }
                 end
-                grille.attach(caseTemp,y,y+1,x,x+1)
+                @grilleTable.attach(caseTemp,y,y+1,x,x+1)
                 @grille[x][y] = caseTemp
             end
         end
 
+        boxJeu = Box.new(:horizontal,30)
         boxJeu.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)   
         boxJeu.add(@boxHypo)  
-        boxJeu.add(grille)
+        boxJeu.add(@grilleTable)
         boxJeu.add(@temps)
         boxJeu.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
@@ -180,13 +180,13 @@ class VuePartie < Vue
         boxFooter.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Ajout dans la box principal des éléments
+        vboxPrincipale = Box.new(:vertical,30)
         vboxPrincipale.add(boxNav)
         labelNiveau = Label.new()
         labelNiveau.set_markup("<big>" + "Niveau " + @modele.niveau.difficulte.to_s + " - " + @tailleGrille.to_i.to_s + "x" + @tailleGrille.to_i.to_s + "</big>")
         vboxPrincipale.add(labelNiveau)
         vboxPrincipale.add(boxJeu) 
         vboxPrincipale.add(boxFooter)
-        vboxPrincipale.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         @cadre.add(vboxPrincipale)
 
@@ -211,6 +211,7 @@ class VuePartie < Vue
 
     def onBtnReglesClicked 
         @modele.chrono.pause()
+        @grilleTable.hide()
         regles = @controleur.getLangue[:regles]
         regles += "\n\n"
         regles += @controleur.getLangue[:regles1]
@@ -220,6 +221,7 @@ class VuePartie < Vue
         dialogRegles.run()
         dialogRegles.destroy()
         @modele.chrono.finPause()
+        @grilleTable.show()
     end
 
     def onBtnQuitterClicked
