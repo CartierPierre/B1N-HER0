@@ -60,8 +60,8 @@ class VuePartie < Vue
     def nbLigneColonne(x,y)
         nbCasesColonne = @modele.compterCasesColonne(y)
         nbCasesLigne = @modele.compterCasesLigne(x)
-        @grille[0][y+1].set_markup(%Q[ <span foreground="red">#{nbCasesColonne[0]}</span> - <span foreground="blue">#{nbCasesColonne[1]}</span> ])
-        @grille[x+1][0].set_markup(%Q[ <span foreground="red">#{nbCasesLigne[0]}</span> - <span foreground="blue">#{nbCasesLigne[1]}</span> ])
+        @grille[0][y+1].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesColonne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesColonne[1]}</span> ])
+        @grille[x+1][0].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesLigne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesLigne[1]}</span> ])
     end
 
     def initialize(modele,titre,controleur)
@@ -139,10 +139,10 @@ class VuePartie < Vue
                     caseTemp = Label.new()
                 elsif(x == 0)
                     nb = @modele.compterCasesColonne(y-1)
-                    caseTemp = Label.new.set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
+                    caseTemp = Label.new.set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
                 elsif(y == 0)
                     nb = @modele.compterCasesLigne(x-1)
-                    caseTemp = Label.new.set_markup(%Q[ <span foreground="red">#{nb[0]}</span> - <span foreground="blue">#{nb[1]}</span> ])
+                    caseTemp = Label.new.set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
                 else
                     caseTemp = CaseJeu.new(x-1,y-1,@controleur)
                     caseTemp.setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())

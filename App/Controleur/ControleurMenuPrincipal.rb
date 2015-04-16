@@ -3,11 +3,15 @@ class ControleurMenuPrincipal < Controleur
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
-		@vue = VueMenuPrincipal.new(@modele,"Menu principal",self)
+		@vue = VueMenuPrincipal.new(@modele,self.getLangue[:menuPrincipal],self)
 	end	
 
-    def jouer()
+    def nouvellePartie()
         changerControleur(ControleurNouvellePartie.new(@jeu))
+    end
+
+    def chargerPartie()
+        changerControleur(ControleurChargerPartie.new(@jeu))
     end
 
     def profil()
@@ -15,7 +19,7 @@ class ControleurMenuPrincipal < Controleur
     end
 
     def options()
-    	changerControleur(ControleurOptions.new(@jeu,self))
+    	changerControleur(ControleurOptions.new(@jeu,nil))
     end
 
 end

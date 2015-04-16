@@ -1,6 +1,7 @@
 class VueMenuPrincipal < Vue
 
-	@boutonJouer
+	@boutonNouvellePartie
+    @boutonChargerPartie
 	@boutonClassement
 	@boutonOptions
 	@boutonProfil
@@ -17,8 +18,10 @@ class VueMenuPrincipal < Vue
 
 		vbox = Box.new(:vertical, 20)
 
-		@boutonJouer = Button.new(:label => @controleur.getLangue[:jouer])
-        @boutonJouer.set_size_request(100,40)
+		@boutonNouvellePartie = Button.new(:label => @controleur.getLangue[:nouvellePartie])
+        @boutonNouvellePartie.set_size_request(100,40)
+        @boutonChargerPartie = Button.new(:label => @controleur.getLangue[:chargerPartie])
+        @boutonChargerPartie.set_size_request(100,40)
 		@boutonClassement = Button.new(:label => @controleur.getLangue[:classement])
         @boutonClassement.set_size_request(100,40)
 		@boutonOptions = Button.new(:label => @controleur.getLangue[:options])
@@ -31,7 +34,8 @@ class VueMenuPrincipal < Vue
         espaceDebut = Alignment.new(0, 0, 0, 0)
         vbox.pack_start(espaceDebut, :expand => true)
 
-        creerAlignBouton(vbox,@boutonJouer)
+        creerAlignBouton(vbox,@boutonNouvellePartie)
+        creerAlignBouton(vbox,@boutonChargerPartie)
         creerAlignBouton(vbox,@boutonClassement)
         creerAlignBouton(vbox,@boutonOptions)
         creerAlignBouton(vbox,@boutonProfil)
@@ -42,17 +46,23 @@ class VueMenuPrincipal < Vue
 
         @cadre.add(vbox)
 
-        @boutonJouer.signal_connect('clicked')  {onBtnJouerClicked}
-        @boutonOptions.signal_connect('clicked')  {onBtnOptionsClicked}
-        @boutonQuitter.signal_connect('clicked')  {Gtk.main_quit}
+        @boutonNouvellePartie.signal_connect('clicked') { onBtnNouvellePartieClicked }
+        @boutonChargerPartie.signal_connect('clicked') { onBtnChargerPartieClicked }
+        @boutonOptions.signal_connect('clicked') { onBtnOptionsClicked }
+        @boutonQuitter.signal_connect('clicked') { Gtk.main_quit }
       
         self.actualiser()
 	end
 	
-	def onBtnJouerClicked
+	def onBtnNouvellePartieClicked
         fermerCadre()
-        @controleur.jouer()
+        @controleur.nouvellePartie()
 	end
+
+    def onBtnChargerPartieClicked
+        fermerCadre()
+        @controleur.chargerPartie()
+    end
 
 	def onBtnOptionsClicked
         fermerCadre()

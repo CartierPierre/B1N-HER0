@@ -38,6 +38,9 @@ class VueOptions < Vue
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
+        @couleurTuile1 = @modele.couleurTuile1()
+        @couleurTuile2 = @modele.couleurTuile2()
+
         # Langue
         boxLangue = Box.new(:horizontal, 10)
 
@@ -128,7 +131,10 @@ class VueOptions < Vue
 
         @couleurTemp = @couleurTuile1
         @couleurTuile1 = @couleurTuile2
-        @couleurTuile2 = couleur 
+        @couleurTuile2 = couleur
+
+        @modele.changerTuile1(@couleurTuile1)
+        @modele.changerTuile2(@couleurTuile2)
     end
 
     def actualiserLangue() 

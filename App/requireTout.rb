@@ -7,6 +7,7 @@ include Gtk
 
 require_relative "./Vue/Vue"
 require_relative "./Vue/Langue"
+require_relative "./Vue/VueChargerPartie"
 require_relative "./Vue/VueConnexion"
 require_relative "./Vue/VueDemarrage"
 require_relative "./Vue/VueInscription"
@@ -44,6 +45,7 @@ require_relative "./Modele/Partie"
 #
 
 require_relative "./Controleur/Controleur"
+require_relative "./Controleur/ControleurChargerPartie"
 require_relative "./Controleur/ControleurConnexion"
 require_relative "./Controleur/ControleurDemarrage"
 require_relative "./Controleur/ControleurInscription"

@@ -67,11 +67,13 @@ class Option
 	### Méthodes d'instances
     
     def changerTuile1(couleur) # couleur est une tuile choisie par clic
+        @couleurTuile1 = couleur
         @imgTuile1 = IMG[couleur]
         @imgTuileLock1 = IMG_LOCK[couleur]
     end
     
     def changerTuile2(couleur) # couleur est une tuile choisie par clic
+        @couleurTuile2 = couleur
         @imgTuile2 = IMG[couleur]
         @imgTuileLock2 = IMG_LOCK[couleur]
     end
