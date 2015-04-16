@@ -2,6 +2,7 @@
 
 load 'Grille.rb'
 load "Partie.rb"
+load "Tuile.rb"
 
 class RegleTrois
 		
@@ -19,27 +20,26 @@ class RegleTrois
     	#Pour chaque ligne
     	0.upto partie.grille().taille() - 1 do |x|
 			(x+1).upto partie.grille().taille() - 1 do |z|
-				print "#{(partie.grille.getLigne(x) & partie.grille.getLigne(z)).empty?}\n"
-				print "#{(partie.grille.getLigne(x) & partie.grille.getLigne(z)).size}\n"
+				#print "#{(partie.grille.getLigne(x) & partie.grille.getLigne(z)).empty?}\n"
+				#print "#{(partie.grille.getLigne(x) & partie.grille.getLigne(z)).size}\n"
 				p partie.grille.getLigne(x)
 				p partie.grille.getLigne(z)
-				p (partie.grille.getLigne(x) & partie.grille.getLigne(z))
-				if !((partie.grille.getLigne(x) & partie.grille.getLigne(z)).empty?) && (partie.grille.getLigne(x) & partie.grille.getLigne(z)).size == partie.grille().taille()
-					#si il y a intersection entre deux ligne et la taille d'intersection est égale à la taille de ligne
-		    			return Array[x,z]
+				if partie.grille.getLigne(x).eql?(partie.grille.getLigne(z))
+		    			return false
     			end
     		end
     	end
-    	#Pour chaque colonne
+    	#Pour chaque colonne 
     	0.upto partie.grille().taille() - 1 do |y|
 			(y+1).upto partie.grille().taille() - 1 do |z|
-				if !((partie.grille.getColonne(y) & partie.grille.getColonne(z)).empty?) && (partie.grille.getColonne(y) & partie.grille.getColonne(z)).size == partie.grille().taille()
-				#si il y a intersection entre deux colonne et la taille d'intersection est égale à la taille de colonne	
-		    			return Array[y,z]
+				p partie.grille.getColonne(y)
+				p partie.grille.getColonne(z)
+				if partie.grille.getColonne(y).eql?(partie.grille.getColonne(z))
+		    			return false
     			end
     		end
     	end
-    	return Array[0,0]
+    	return true
     end
 end				
     			

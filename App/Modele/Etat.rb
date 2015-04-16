@@ -91,7 +91,7 @@ class Etat
     #   Un bouléen indiquand si les deux états sont égaux.
     #
     def Etat.egale?(etat1, etat2)
-        if etat1 == etat2 
+        if etat1 == etat2 #&& etat1 != Etat.vide && etat2 != Etat.vide
             return true
         elsif (etat1 == @@ETAT_1 && etat2 == @@LOCK_1) || (etat2 == @@ETAT_1 && etat1 == @@LOCK_1) # ETAT_1 == LOCK_1
             return true

@@ -10,7 +10,8 @@ load 'Chrono.rb'
 load 'RegleUn.rb'
 load 'RegleDeux.rb'
 load 'RegleTrois.rb'
-#00_________1____0___11_______0_0_1__
+#001100001100____0___11_______0_0_1__
+#Grille.charger("00_________1____0___11_______0_0_1__
 class Jeu
     @partie
 
@@ -21,7 +22,7 @@ class Jeu
     end
 
     def initialize()
-        niveau = Niveau.creer( 1, 2, Grille.charger("00_________1____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6)
+        niveau = Niveau.creer( 1, 2, Grille.charger("000100001100____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6)
         @partie = Partie.creer( "lol", niveau)#Utilisateur.creer("Mr Test", "root", 3), niveau)
     end
 
@@ -48,6 +49,10 @@ class Jeu
         @partie.historiqueRedo
         @partie.historiqueRedo
         @partie.historiqueRedo
+		TestRegleUn()
+		TestRegleDeux()
+		TestRegleTrois()
+		self.to_s()
     end
 
     def to_s()
