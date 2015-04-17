@@ -241,15 +241,17 @@ class VuePartie < Vue
 
     # Validation
     def onBtnValiderGrilleClicked
-        # explications = @controleur.getLangue[:grilleInvalide]
-        # explications += "\n\n"
-        # explications += @controleur.getLangue[:grilleInvalideExplications]
-        # dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
-        # dialogValidationGrille.run()
-        # dialogValidationGrille.destroy()
-
-        fermerCadre()
-        @controleur.validerGrille()
+        if(!@modele.valider())
+            explications = @controleur.getLangue[:grilleInvalide]
+            explications += "\n\n"
+            explications += @controleur.getLangue[:grilleInvalideExplications]
+            dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
+            dialogValidationGrille.run()
+            dialogValidationGrille.destroy()
+        else           
+            fermerCadre()
+            @controleur.validerGrille() 
+        end
     end
 
     # Grille
@@ -283,7 +285,7 @@ class VuePartie < Vue
     end
 
     def onBtnConseilClicked
-
+        surbrillanceLigne(2)
     end
 
     def onBtnAideClicked
@@ -307,6 +309,36 @@ class VuePartie < Vue
                 end
             end
         end
+    end
+
+    def surbrillanceLigne(ligne)
+        Thread.new {
+            0.upto(5) do |n|
+                1.upto(@tailleGrille) do |x|
+                    if(n%2 == 0) # Pair
+                        @grille[ligne][x].set_sensitive(false)
+                    else # Impair
+                        @grille[ligne][x].set_sensitive(true)
+                    end
+                end 
+                sleep(0.5)
+            end
+        }    
+    end
+
+    def surbrillanceColonne(colonne)
+        Thread.new {
+            0.upto(5) do |n|
+                1.upto(@tailleGrille) do |x|
+                    if(n%2 == 0) # Pair
+                        @grille[x][colonne].set_sensitive(false)
+                    else # Impair
+                        @grille[x][colonne].set_sensitive(true)
+                    end
+                end 
+                sleep(0.5)
+            end
+        }    
     end
 
 end
