@@ -61,4 +61,8 @@ class ControleurPartie < Controleur
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 
+    def validerGrille()
+        changerControleur(ControleurResultatPartie.new(@jeu,@modele))
+    end
+
 end

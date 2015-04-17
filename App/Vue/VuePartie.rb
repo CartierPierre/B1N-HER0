@@ -23,6 +23,8 @@ class VuePartie < Vue
     @boutonConseil
     @boutonRestart
 
+    @boutonValiderGrille
+
     @grille
 
     @threadChrono
@@ -31,18 +33,6 @@ class VuePartie < Vue
         super(modele,"B1N-HER0",controleur)
 
         @tailleGrille = @modele.grille().taille()
-
-        @temps = Label.new("00:00")
-
-        @threadChrono = Thread.new() {
-            @modele.chrono.start()
-            while(true)
-                if(@modele.chrono.estActif)
-                    @temps.set_label(@modele.chrono.to_s)
-                end
-                sleep(0.1)
-            end
-        }
 
         # Navigation
         boxNav = Box.new(:horizontal)
@@ -113,11 +103,35 @@ class VuePartie < Vue
             end
         end
 
+        # Chrono et validation de la grille
+        vboxChronoValidation = Box.new(:vertical, 30)
+        @temps = Label.new()
+        @temps.set_markup("<big>00:00</big>")
+
+        @threadChrono = Thread.new() {
+            @modele.chrono.start()
+            while(true)
+                if(@modele.chrono.estActif)
+                    @temps.set_markup("<big>" + @modele.chrono.to_s + "</big>")
+                end
+                sleep(0.1)
+            end
+        }
+
+        @boutonValiderGrille = nouveauBouton(:validerGrille,"valider")
+        @boutonValiderGrille.set_sensitive(true)
+        @boutonValiderGrille.signal_connect('clicked')  { onBtnValiderGrilleClicked }
+
+        vboxChronoValidation.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)  
+        vboxChronoValidation.add(@temps)
+        vboxChronoValidation.add(@boutonValiderGrille)
+        vboxChronoValidation.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)  
+
         @boxJeu = Box.new(:horizontal,30)
         @boxJeu.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)   
         @boxJeu.add(@boxHypo)  
         @boxJeu.add(grilleTable)
-        @boxJeu.add(@temps)
+        @boxJeu.add(vboxChronoValidation)
         @boxJeu.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Menu du bas
@@ -125,17 +139,20 @@ class VuePartie < Vue
         @boutonUndo = nouveauBouton(:annulerAction,"undo")
         @boutonRedo = nouveauBouton(:repeter,"redo")
         @boutonConseil = nouveauBouton(:conseil,"conseil")
+        @boutonAide = nouveauBouton(:aide,"aide")
         @boutonRestart = nouveauBouton(:recommencer,"restart")
 
         @boutonUndo.signal_connect('clicked')  { onBtnUndoClicked }
         @boutonRedo.signal_connect('clicked')  { onBtnRedoClicked }
         @boutonConseil.signal_connect('clicked')  { onBtnConseilClicked }
+        @boutonAide.signal_connect('clicked')  { onBtnAideClicked }
         @boutonRestart.signal_connect('clicked')  { onBtnRestartClicked }
 
         @boxFooter.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)       
         @boxFooter.add(@boutonUndo)
         @boxFooter.add(@boutonRedo)
         @boxFooter.add(@boutonConseil)
+        @boxFooter.add(@boutonAide)
         @boxFooter.add(@boutonRestart)
         @boxFooter.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
@@ -222,12 +239,29 @@ class VuePartie < Vue
         @boutonHypothese.show()
     end
 
+    # Validation
+    def onBtnValiderGrilleClicked
+        # explications = @controleur.getLangue[:grilleInvalide]
+        # explications += "\n\n"
+        # explications += @controleur.getLangue[:grilleInvalideExplications]
+        # dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
+        # dialogValidationGrille.run()
+        # dialogValidationGrille.destroy()
+
+        fermerCadre()
+        @controleur.validerGrille()
+    end
+
     # Grille
-    def onTuileGtkClicked(caseJeu)
-        if @modele.niveau().tuileValide?(caseJeu.x,caseJeu.y)
-            @modele.jouerCoup(caseJeu.x,caseJeu.y)
-            caseJeu.setImageTuile(@modele.grille().getTuile(caseJeu.x,caseJeu.y).etat())
-            self.nbLigneColonne(caseJeu.x,caseJeu.y)          
+    def onTuileGtkClicked(tuileGtk)
+        if( @modele.niveau.tuileValide?(tuileGtk.x,tuileGtk.y) )
+            @modele.jouerCoup(tuileGtk.x,tuileGtk.y)
+            tuileGtk.setImageTuile(@modele.grille.getTuile(tuileGtk.x,tuileGtk.y).etat())
+            self.nbLigneColonne(tuileGtk.x,tuileGtk.y)          
+        end
+
+        if( @modele.grille.estRemplie?() )
+            @boutonValiderGrille.set_sensitive(true)
         end
     end
 
@@ -249,6 +283,10 @@ class VuePartie < Vue
     end
 
     def onBtnConseilClicked
+
+    end
+
+    def onBtnAideClicked
 
     end
 

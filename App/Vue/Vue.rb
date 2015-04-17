@@ -36,4 +36,10 @@ class Vue
         return bouton
     end
 
+    def creerAlignBouton(box,bouton) 
+        align = Alignment.new(0.5, 0, 0.6, 0)
+        align.add(bouton)
+        box.add(align)
+    end
+
 end

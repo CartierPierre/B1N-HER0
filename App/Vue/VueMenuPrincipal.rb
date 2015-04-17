@@ -7,12 +7,6 @@ class VueMenuPrincipal < Vue
 	@boutonProfil
 	@boutonQuitter
 
-    def creerAlignBouton(box,bouton) 
-        align = Alignment.new(0.5, 0, 0.6, 0)
-        align.add(bouton)
-        box.add(align)
-    end
-
 	def initialize(modele,titre,controleur)
 		super(modele,titre,controleur)
 

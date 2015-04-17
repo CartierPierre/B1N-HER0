@@ -16,6 +16,7 @@ require_relative "./Vue/VueMenuPrincipal"
 require_relative "./Vue/VueNouvellePartie"
 require_relative "./Vue/VueOptions"
 require_relative "./Vue/VuePartie"
+require_relative "./Vue/VueResultatPartie"
 
 ##
 # Modele
@@ -54,7 +55,4 @@ require_relative "./Controleur/ControleurMenuPrincipal"
 require_relative "./Controleur/ControleurNouvellePartie"
 require_relative "./Controleur/ControleurOptions"
 require_relative "./Controleur/ControleurPartie"
-
-# Dir[File.dirname(__FILE__) + "/Modele/*.rb"].each {|file| require file }
-# Sa marche sauf quand un bollos fait des ***** de tests directement dans les fichiers de classes
-# Donc obligé de faire des require à la main pour éviter les erreurs
+require_relative "./Controleur/ControleurResultatPartie"

@@ -26,12 +26,14 @@ class Langue
             quitter: "Quitter",
             hypothese: "Hypothèse",
             hypotheseActive: " Hypothèse\n activé",
+            validerGrille: "Valider la grille",
             valider: "Valider",
             appliquer: "Appliquer",
             annuler: "Annuler",
             annulerAction: "Annuler",
             repeter: "Répéter",
             conseil: "Conseil",
+            aide: "Aide",
             recommencer: "Recommencer",
             pseudo: "Pseudo",
             motDePasse: "Mot de passe",
@@ -56,7 +58,16 @@ class Langue
             classement: "Classement",
             profil: "Profil",
             modeDeJeuEnLigne: "Mode de jeu en ligne",
-            modeDeJeuHorsLigne: "Mode de jeu hors ligne"
+            modeDeJeuHorsLigne: "Mode de jeu hors ligne",
+            resultatPartie: "Résultat de la partie",
+            retournerMenuPrincipal: "Retourner au menu principal",
+            temps: "Temps",
+            score: "Score",
+            nbCoups: "Nombre de coups effectués",
+            nbConseils: "Nombre de conseils utilisés",
+            nbAides: "Nombre d'aides utilisées",
+            grilleInvalide: "Grille invalide",
+            grilleInvalideExplications: "La grille est invalide, vérifiez bien que toutes les règles sont respectées."
         }
 
         @langueEn = {
@@ -67,12 +78,14 @@ class Langue
             quitter: "Quit",
             hypothese: "Hypothesis",
             hypotheseActive: " Hypothesis\n enabled",
+            validerGrille: "Check the grid",
             valider: "Confirm",
             appliquer: "Apply",
             annuler: "Cancel",
             annulerAction: "Undo",
             repeter: "Redo",
             conseil: "Advice",
+            aide: "Help",
             recommencer: "Restart",
             pseudo: "Pseudo",
             motDePasse: "Password",
@@ -97,7 +110,16 @@ class Langue
             classement: "Ranking",
             profil: "Profile",
             modeDeJeuEnLigne: "Online play mode",
-            modeDeJeuHorsLigne: "Offline play mode"
+            modeDeJeuHorsLigne: "Offline play mode",
+            resultatPartie: "Result of the game",
+            temps: "Time",
+            retournerMenuPrincipal: "Back to the main menu",
+            score: "Score",
+            nbCoups: "Number of moves made",
+            nbConseils: "Number of advices used",
+            nbAides: "Number of helps used",
+            grilleInvalide: "Invalid grid",
+            grilleInvalideExplications: "The grid is invalid, make sure that all the rules are followed."
         }
             if(langue == FR)
                   @langueActuelle = @langueFr
