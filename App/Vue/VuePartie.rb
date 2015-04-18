@@ -249,6 +249,20 @@ class VuePartie < Vue
         }    
     end
 
+    def surbrillanceTuile(x,y)
+        Thread.new {
+            # Le nombre dans le upto doit être impair
+            0.upto(7) do |n|
+                if(n%2 == 0) # Pair
+                    @grille[x][y].set_sensitive(false)
+                else # Impair
+                    @grille[x][y].set_sensitive(true)
+                end
+                sleep(0.3)
+            end
+        }    
+    end
+
     protected :actualiserGrille, :couperChaine, :surbrillanceLigne, :surbrillanceColonne
 
     ###################################
@@ -396,7 +410,12 @@ class VuePartie < Vue
     end
 
     def onBtnAideClicked
+        aide = Array[2,5]
 
+        @modele.grille.setTuile(aide[0]-1,aide[1]-1, Etat.lock_1) # A faire dans le modele de l'aide directement (seulement pour test là)
+
+        @grille[aide[0]][aide[1]].setImageTuile(@modele.grille.getTuile(aide[0]-1,aide[1]-1).etat())
+        surbrillanceTuile(aide[0],aide[1])
     end
 
     def onBtnRestartClicked
