@@ -118,7 +118,7 @@ class Partie
     #   * _y_ - La coordonnée y du Coup.
     #
     def jouerCoup(x, y)#TODO signale un coup invalide
-        if @niveau.tuileValide?(x, y)
+        if(!(@grille.getTuile(x, y).etat == Etat.lock_1) && !(@grille.getTuile(x, y).etat == Etat.lock_2))
             historiqueAjouter(Coup.creer(x, y, @grille.getTuile(x, y).etat()))
             t = Etat.suivant(@grille.getTuile(x, y).etat())
             @grille.setTuile(x, y, t)
