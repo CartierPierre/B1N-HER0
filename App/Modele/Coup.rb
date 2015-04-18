@@ -22,6 +22,6 @@ class Coup
     end
 
     def to_s
-        return "Coup x = #{@x} y = #{@y} etat = #{@etat}"
+        return "\tCoup x = #{@x} y = #{@y} etat = #{@etat}"
     end
 end

@@ -234,6 +234,14 @@ class Partie
             partie.chargerRedo(donnees[3])
         end
 
+        if(donnees[4])
+            p donneesHypothese = donnees[4].split('#')
+
+            partie.setModeHypothese(((donneesHypothese[0] == 'true') ? true : false))
+
+            partie.setPartieHypothese(donneesHypothese[1].gsub(/\//, "|"))
+        end
+
         return partie
     end
 
@@ -264,6 +272,15 @@ class Partie
         @grille = grille
     end
     #protected :setGrille
+
+    def setModeHypothese(bool)
+        @modeHypothese = bool
+    end
+    #protected :setModeHypothese
+
+    def setPartieHypothese(donnee)
+        @partieHypothese = donnee
+    end
 
     ##
     # (Sérialisation)
@@ -303,6 +320,14 @@ class Partie
             if(i != (@listeRedo.size() - 1))
                 data += ";"
             end
+        end
+
+        data += "|"
+
+        if(@modeHypothese)
+            data += @modeHypothese.to_s + "#"
+
+            data += @partieHypothese.gsub(/\|/, '/')
         end
 
         return data
@@ -379,7 +404,8 @@ class Partie
         @grille.afficher()
         puts "Liste des undo :", @listeUndo, "\n"
         puts "Liste des redo :", @listeRedo, "\n"
-        print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n\n"
+        print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n"
+        print "\n"
     end
 
     #TODO reset grille
