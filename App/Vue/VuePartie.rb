@@ -1,7 +1,13 @@
 class VuePartie < Vue
 
     @tailleGrille
+
+    # Jeu
+    @labelConseil
     @temps
+    @boutonValiderGrille
+    @grille 
+    @threadChrono
 
     # Boutons du menu de navigation
     @boutonSave
@@ -23,12 +29,6 @@ class VuePartie < Vue
     @boutonConseil
     @boutonRestart
 
-    @boutonValiderGrille
-
-    @grille
-
-    @threadChrono
-
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
 
@@ -36,6 +36,7 @@ class VuePartie < Vue
 
         # Navigation
         boxNav = Box.new(:horizontal)
+        boxNav.set_homogeneous(true)
 
         @boutonSave = nouveauBouton(:sauvegarder,"save")
         @boutonLoad = nouveauBouton(:charger,"load")
@@ -104,7 +105,12 @@ class VuePartie < Vue
         end
 
         # Chrono et validation de la grille
-        vboxChronoValidation = Box.new(:vertical, 30)
+        vboxJeuDroite = Box.new(:vertical, 30)
+
+        @labelConseil = Label.new()
+        alignLabelConseil = Alignment.new(0, 0, 0, 1.0)
+        alignLabelConseil.add(@labelConseil)
+
         @temps = Label.new()
         @temps.set_markup("<big>00:00</big>")
 
@@ -122,20 +128,23 @@ class VuePartie < Vue
         @boutonValiderGrille.set_sensitive(true)
         @boutonValiderGrille.signal_connect('clicked')  { onBtnValiderGrilleClicked }
 
-        vboxChronoValidation.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)  
-        vboxChronoValidation.add(@temps)
-        vboxChronoValidation.add(@boutonValiderGrille)
-        vboxChronoValidation.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)  
+        vboxJeuDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)  
+        vboxJeuDroite.add(alignLabelConseil)
+        vboxJeuDroite.add(@temps)
+        vboxJeuDroite.add(@boutonValiderGrille)
+        vboxJeuDroite.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)  
 
         @boxJeu = Box.new(:horizontal,30)
         @boxJeu.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)   
         @boxJeu.add(@boxHypo)  
         @boxJeu.add(grilleTable)
-        @boxJeu.add(vboxChronoValidation)
+        @boxJeu.add(vboxJeuDroite)
         @boxJeu.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Menu du bas
         @boxFooter = Box.new(:horizontal)
+        @boxFooter.set_homogeneous(true)
+
         @boutonUndo = nouveauBouton(:annulerAction,"undo")
         @boutonRedo = nouveauBouton(:repeter,"redo")
         @boutonConseil = nouveauBouton(:conseil,"conseil")
@@ -284,8 +293,29 @@ class VuePartie < Vue
         end
     end
 
+    def couperChaine(chaine, longueurMax)
+        chaine.gsub(/\s+/, " ").gsub(/(.{1,#{longueurMax}})( |\Z)/, "\\1\n")
+    end
+
     def onBtnConseilClicked
-        surbrillanceLigne(2)
+        conseil = Array[:regleLigne, 2, :regles1]
+
+        chaine = @controleur.getLangue[:appliquerRegle] + @controleur.getLangue[conseil[2]] + @controleur.getLangue[conseil[0]] + conseil[1].to_s 
+        @labelConseil.set_markup("<big>" + couperChaine(chaine,30) + "</big>")
+
+        if(conseil[0] == :regleLigne)
+            surbrillanceLigne(conseil[1])
+        else
+            surbrillanceColonne(conseil[1])
+        end
+
+        Thread.new {
+            @boutonConseil.set_sensitive(false)
+            @labelConseil.show()
+            sleep(15)
+            @labelConseil.hide()
+            @boutonConseil.set_sensitive(true)
+        }
     end
 
     def onBtnAideClicked
@@ -313,7 +343,8 @@ class VuePartie < Vue
 
     def surbrillanceLigne(ligne)
         Thread.new {
-            0.upto(5) do |n|
+            # Le nombre dans le upto doit être impair
+            0.upto(7) do |n|
                 1.upto(@tailleGrille) do |x|
                     if(n%2 == 0) # Pair
                         @grille[ligne][x].set_sensitive(false)
@@ -321,14 +352,15 @@ class VuePartie < Vue
                         @grille[ligne][x].set_sensitive(true)
                     end
                 end 
-                sleep(0.5)
+                sleep(0.3)
             end
         }    
     end
 
     def surbrillanceColonne(colonne)
         Thread.new {
-            0.upto(5) do |n|
+            # Le nombre dans le upto doit être impair
+            0.upto(7) do |n|
                 1.upto(@tailleGrille) do |x|
                     if(n%2 == 0) # Pair
                         @grille[x][colonne].set_sensitive(false)
@@ -336,7 +368,7 @@ class VuePartie < Vue
                         @grille[x][colonne].set_sensitive(true)
                     end
                 end 
-                sleep(0.5)
+                sleep(0.3)
             end
         }    
     end
