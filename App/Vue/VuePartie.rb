@@ -29,8 +29,21 @@ class VuePartie < Vue
     @boutonConseil
     @boutonRestart
 
+    # Configuration de la surbrillance pour les aides et conseils
+    @nbClignotements        # Fait varier le nombre de clignotements
+    @vitesseClignotement    # Fait varier la vitesse du clignotement (petit = rapide)
+
+    @dureeConseils          # Durée des conseils en secondes
+    @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
+
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
+
+        @nbClignotements = 5
+        @vitesseClignotement = 0.3
+
+        @dureeConseils = 15
+        @delaiReactivation = 5
 
         @tailleGrille = @modele.grille().taille()
 
@@ -219,8 +232,7 @@ class VuePartie < Vue
 
     def surbrillanceLigne(ligne)
         Thread.new {
-            # Le nombre dans le upto doit être impair
-            0.upto(7) do |n|
+            0.upto(@nbClignotements*2-1) do |n|
                 1.upto(@tailleGrille) do |x|
                     if(n%2 == 0) # Pair
                         @grille[ligne][x].set_sensitive(false)
@@ -228,15 +240,14 @@ class VuePartie < Vue
                         @grille[ligne][x].set_sensitive(true)
                     end
                 end 
-                sleep(0.3)
+                sleep(@vitesseClignotement)
             end
         }    
     end
 
     def surbrillanceColonne(colonne)
         Thread.new {
-            # Le nombre dans le upto doit être impair
-            0.upto(7) do |n|
+            0.upto(@nbClignotements*2-1) do |n|
                 1.upto(@tailleGrille) do |x|
                     if(n%2 == 0) # Pair
                         @grille[x][colonne].set_sensitive(false)
@@ -244,22 +255,24 @@ class VuePartie < Vue
                         @grille[x][colonne].set_sensitive(true)
                     end
                 end 
-                sleep(0.3)
+                sleep(@vitesseClignotement)
             end
         }    
     end
 
     def surbrillanceTuile(x,y)
         Thread.new {
-            # Le nombre dans le upto doit être impair
-            0.upto(7) do |n|
+            @boutonAide.set_sensitive(false)
+            0.upto(@nbClignotements*2-1) do |n|
                 if(n%2 == 0) # Pair
                     @grille[x][y].set_sensitive(false)
                 else # Impair
                     @grille[x][y].set_sensitive(true)
                 end
-                sleep(0.3)
+                sleep(@vitesseClignotement)
             end
+            sleep(@delaiReactivation)
+            @boutonAide.set_sensitive(true)
         }    
     end
 
@@ -403,8 +416,9 @@ class VuePartie < Vue
         Thread.new {
             @boutonConseil.set_sensitive(false)
             @labelConseil.show()
-            sleep(15)
+            sleep(@dureeConseils)
             @labelConseil.hide()
+            sleep(@delaiReactivation)
             @boutonConseil.set_sensitive(true)
         }
     end
@@ -414,7 +428,7 @@ class VuePartie < Vue
 
         @modele.grille.setTuile(aide[0]-1,aide[1]-1, Etat.lock_1) # A faire dans le modele de l'aide directement (seulement pour test là)
 
-        @grille[aide[0]][aide[1]].setImageTuile(@modele.grille.getTuile(aide[0]-1,aide[1]-1).etat())
+        @grille[aide[0]][aide[1]].setImageTuile(@modele.grille.getTuile(aide[0]-1,aide[1]-1).etat()) 
         surbrillanceTuile(aide[0],aide[1])
     end
 
