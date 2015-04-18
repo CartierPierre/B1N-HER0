@@ -50,7 +50,7 @@ class ControleurPartie < Controleur
     end
 
     def getHypoActif
-        return @modele.hypoActif
+        return @modele.modeHypothese
     end
 
     def options()

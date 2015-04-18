@@ -3,9 +3,10 @@
 # Cette classe à besoin des classes Chrono, Coup, Etat, Grille, Niveau et Score pour fonctionner.
 
 class Partie
-    attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :hypoActif
+    attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :modeHypothese
     @listeUndo
     @listeRedo
+    @partieHypothese
 
     ##
     # Méthode de création d'une Partie.
@@ -29,114 +30,9 @@ class Partie
         @listeUndo = Array.new()
         @listeRedo = Array.new()
 
-        @hypoActif = false
+        @modeHypothese = false
 
         @cpttest = 0
-    end
-
-    ##
-    # (Désérialisation)
-    # Charge une Partie avec l'utilisateur, le niveau et les données passés en paramétre.
-    #
-    # Paramétres::
-    #   * _utilisateur_ - Utilisateur de la Partie.
-    #   * _niveau_ - Le Niveau sur lequel ce base la Partie.
-    #   * _donnee_ - Une chaine de caractère correspondant à la sérialisation de la Partie.
-    #
-    # Retour::
-    #   Une nouvelle partie construite à partir des paramètres donnés.
-    #
-    def Partie.charger(utilisateur, niveau, donnee)
-        # Crée un nouvelle partie
-        partie = Partie.creer(utilisateur, niveau)
-
-        # Sépare les différents champs des données dans un tableau
-        donnees = donnee.split("|")
-
-        # Charge le chrono avec les données sérialisée du chrono
-        partie.setChrono(Chrono.charger(donnees[0]))
-
-        # Charge la grille avec les données sérialisée de la grille
-        partie.setGrille(Grille.charger(donnees[1]))
-
-        # On remet en place la liste des undo
-        if(donnees[2])
-            donnees[2].split(";").each do |coupDonnee|
-                tabCoup = coupDonnee.split(",")
-                coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
-                partie.addUndo(coup)
-            end
-        end
-
-        # On remet en place la liste des redo
-        if(donnees[3])
-            donnees[3].split(";").each do |coupDonnee|
-                tabCoup = coupDonnee.split(",")
-                coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
-                partie.addRedo(coup)
-            end
-        end
-
-        return partie
-    end
-
-    def addUndo(coup)
-        @listeUndo.push(coup)
-    end
-
-    def addRedo(coup)
-        @listeRedo.push(coup)
-    end
-
-    def setChrono(chrono)
-        @chrono = chrono
-    end
-
-    def setGrille(grille)
-        @grille = grille
-    end
-
-    ##
-    # (Sérialisation)
-    # Sauvegarde une partie en chaine de caractéres.
-    #
-    # Retour::
-    #   Une chaine de caractéres correspondant à l'état de la partie.
-    #
-    def sauvegarder()
-        data = String.new()
-
-        # Sérialisation du chrono
-        data += @chrono.sauvegarder
-
-        data += "|"
-
-        # Sérialisation de la grille
-        data += grille.sauvegarder()
-
-        data += "|"
-
-        # Sérialisation de la liste des undo
-        0.upto(@listeUndo.size() - 1) do |i|
-            coup = @listeUndo[i]
-            data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
-            if(i != (@listeUndo.size() - 1))
-                data += ";"
-            end
-        end
-
-        data += "|"
-
-        # Sérialisation de la liste des redo
-        0.upto(@listeRedo.size() - 1) do |i|
-            coup = @listeRedo[i]
-            data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
-            if(i != (@listeRedo.size() - 1))
-                data += ";"
-            end
-        end
-
-        return data
     end
 
     ##
@@ -295,14 +191,195 @@ class Partie
         return nbEtat
     end
 
+
+
+    #############################
+    #                           #
+    # =>    SÉRIALISATION    <= #
+    #                           #
+    #############################
+
+    ##
+    # (Désérialisation)
+    # Charge une Partie avec l'utilisateur, le niveau et les données passés en paramétre.
+    #
+    # Paramétres::
+    #   * _utilisateur_ - Utilisateur de la Partie.
+    #   * _niveau_ - Le Niveau sur lequel ce base la Partie.
+    #   * _donnee_ - Une chaine de caractère correspondant à la sérialisation de la Partie.
+    #
+    # Retour::
+    #   Une nouvelle partie construite à partir des paramètres donnés.
+    #
+    def Partie.charger(utilisateur, niveau, donnee)
+        # Crée un nouvelle partie
+        partie = Partie.creer(utilisateur, niveau)
+
+        # Sépare les différents champs des données dans un tableau
+        donnees = donnee.split("|")
+
+        # Charge le chrono avec les données sérialisée du chrono
+        partie.setChrono(Chrono.charger(donnees[0]))
+
+        # Charge la grille avec les données sérialisée de la grille
+        partie.setGrille(Grille.charger(donnees[1]))
+
+        # On remet en place la liste des undo
+        if(donnees[2])
+            partie.chargerUndo(donnees[2])
+        end
+
+        # On remet en place la liste des redo
+        if(donnees[3])
+            partie.chargerRedo(donnees[3])
+        end
+
+        return partie
+    end
+
+    def chargerUndo(donnee)
+        donnee.split(";").reverse.each do |coupDonnee|
+            tabCoup = coupDonnee.split(",")
+            coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
+            @listeUndo.unshift(coup)
+        end
+    end
+    #protected :chargerUndo
+
+    def chargerRedo(donnee)
+        donnee.split(";").reverse.each do |coupDonnee|
+            tabCoup = coupDonnee.split(",")
+            coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
+            @listeRedo.unshift(coup)
+        end
+    end
+    #protected :chargerRedo
+
+    def setChrono(chrono)
+        @chrono = chrono
+    end
+    #protected :setChrono
+
+    def setGrille(grille)
+        @grille = grille
+    end
+    #protected :setGrille
+
+    ##
+    # (Sérialisation)
+    # Sauvegarde une partie en chaine de caractéres.
+    #
+    # Retour::
+    #   Une chaine de caractéres correspondant à l'état de la partie.
+    #
+    def sauvegarder()
+        data = String.new()
+
+        # Sérialisation du chrono
+        data += @chrono.sauvegarder
+
+        data += "|"
+
+        # Sérialisation de la grille
+        data += grille.sauvegarder()
+
+        data += "|"
+
+        # Sérialisation de la liste des undo
+        0.upto(@listeUndo.size() - 1) do |i|
+            coup = @listeUndo[i]
+            data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
+            if(i != (@listeUndo.size() - 1))
+                data += ";"
+            end
+        end
+
+        data += "|"
+
+        # Sérialisation de la liste des redo
+        0.upto(@listeRedo.size() - 1) do |i|
+            coup = @listeRedo[i]
+            data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
+            if(i != (@listeRedo.size() - 1))
+                data += ";"
+            end
+        end
+
+        return data
+    end
+
+
+
+    ##############################
+    #                            #
+    # =>    MODE HYPOTHÉSE    <= #
+    #                            #
+    ##############################
+
+    ##
+    # Active le mode hypothése sur la partie.
+    #
+    def activerModeHypothese()
+        if(!@modeHypothese)
+            @partieHypothese = sauvegarder  # Sauvegarde la partie actuelle
+            @listeUndo = Array.new()        # Remet à zéro les Undos
+            @listeRedo = Array.new()        # Remet à zéro les Redos
+            @modeHypothese = true           # Indique que le mode est actif
+        end
+    end
+
+    def validerHypothese()
+        if(@modeHypothese)
+            # Sépare les différents champs des données dans un tableau
+            donnees = @partieHypothese.split("|")
+
+            # On remet en place la liste des undo
+            if(donnees[2])
+                chargerUndo(donnees[2])
+            end
+
+            # On remet en place la liste des redo
+            if(donnees[3])
+                chargerRedo(donnees[3])
+            end
+
+            @modeHypothese = false
+        end
+    end
+
+    def annulerHypothese()
+        if(@modeHypothese)
+            @listeUndo = Array.new()        # Remet à zéro les Undos
+            @listeRedo = Array.new()        # Remet à zéro les Redos
+
+            # Sépare les différents champs des données dans un tableau
+            donnees = @partieHypothese.split("|")
+
+            # Charge la grille avec les données sérialisée de la grille
+            @grille = Grille.charger(donnees[1])
+
+            # On remet en place la liste des undo
+            if(donnees[2])
+                chargerUndo(donnees[2])
+            end
+
+            # On remet en place la liste des redo
+            if(donnees[3])
+                chargerRedo(donnees[3])
+            end
+
+            @modeHypothese = false
+        end
+    end
+
     @cpttest
     def monitor
         @cpttest += 1
-        print "\nN° ", @cpttest, "\n"
+        print "N° ", @cpttest, "#{(@modeHypothese ? ' (Mode Hypothése)' : '')}\n"
         @grille.afficher()
         puts "Liste des undo :", @listeUndo, "\n"
         puts "Liste des redo :", @listeRedo, "\n"
-        print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n"
+        print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n\n"
     end
 
     #TODO reset grille
