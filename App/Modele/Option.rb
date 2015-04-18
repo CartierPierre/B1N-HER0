@@ -78,12 +78,8 @@ class Option
         @imgTuileLock2 = IMG_LOCK[couleur]
     end
 
-    def setLangueFr()
-        @langue.setLangueFr()
-    end
-
-    def setLangueEn()
-        @langue.setLangueEn()
+    def setLangue(langue)
+        @langue.setLangue(langue)
     end
 	
 end

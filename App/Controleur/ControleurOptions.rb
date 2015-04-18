@@ -17,12 +17,12 @@ class ControleurOptions < Controleur
         end
     end
 
-    def setLangueFr()
-        @@options.setLangueFr()
+    def setLangue(langue)
+        @@options.setLangue(langue)
     end
 
-    def setLangueEn()
-        @@options.setLangueEn()
+    def getLangueConstante()
+        return @@options.langue.getLangueConstante()
     end
 
 end

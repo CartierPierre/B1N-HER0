@@ -21,6 +21,8 @@ class VueOptions < Vue
     @couleurTuile1
     @couleurTuile2
 
+    @languePrecedente
+
     def initBoutonImgTuile1Actif(bouton,couleur)
         if(@modele.couleurTuile1 == couleur)
             @boutonImgTuile1Actif = bouton
@@ -37,6 +39,8 @@ class VueOptions < Vue
 
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
+
+        @languePrecedente = @controleur.getLangueConstante()
 
         @couleurTuile1 = @modele.couleurTuile1()
         @couleurTuile2 = @modele.couleurTuile2()
@@ -132,9 +136,6 @@ class VueOptions < Vue
         @couleurTemp = @couleurTuile1
         @couleurTuile1 = @couleurTuile2
         @couleurTuile2 = couleur
-
-        @modele.changerTuile1(@couleurTuile1)
-        @modele.changerTuile2(@couleurTuile2)
     end
 
     def actualiserLangue() 
@@ -147,20 +148,24 @@ class VueOptions < Vue
     end
 
     def onBtnLangueFrClicked
-        @controleur.setLangueFr()
+        @controleur.setLangue(Langue::FR)
         self.actualiserLangue()
     end
 
     def onBtnLangueEnClicked
-        @controleur.setLangueEn()
+        @controleur.setLangue(Langue::EN)
         self.actualiserLangue()
     end
 
-    def onBtnAppliquerClicked
-
+    def onBtnAppliquerClicked        
+        @modele.changerTuile1(@couleurTuile1)
+        @modele.changerTuile2(@couleurTuile2)
+        fermerCadre()
+        @controleur.annuler()
     end
 
     def onBtnAnnulerClicked
+        @controleur.setLangue(@languePrecedente)
         fermerCadre()
         @controleur.annuler()
     end

@@ -7,16 +7,17 @@
 
 class Langue
 
-      EN = 0
-      FR = 1
+    EN = 0
+    FR = 1
 
-	@langueFr
-	@langueEn
-	@langueActuelle
+    @langueFr
+    @langueEn
+    @langueActuelle
+    @langueConstante
 
-	attr_reader :langueActuelle
+    attr_reader :langueActuelle
 
-	def initialize(langue) 
+    def initialize(langue) 
 
         @langueFr = {
             sauvegarder: "Sauvegarder",
@@ -133,19 +134,25 @@ class Langue
             baseDonnees: "Database",
             codage: "Coding"
         }
-            if(langue == FR)
-                  @langueActuelle = @langueFr
-            else
-                  @langueActuelle = @langueEn
-            end
-	end
+        if(langue == FR)
+            @langueActuelle = @langueFr
+        else
+            @langueActuelle = @langueEn
+        end
+        @langueConstante = langue
+    end
 
-	def setLangueFr()
-		@langueActuelle = @langueFr
-	end
+    def getLangueConstante()
+        return @langueConstante
+    end
 
-	def setLangueEn()
-		@langueActuelle = @langueEn
-	end
+    def setLangue(langue)
+        if(langue == FR)
+            @langueActuelle = @langueFr
+        else
+            @langueActuelle = @langueEn
+        end  
+        @langueConstante = langue
+    end
 
 end
