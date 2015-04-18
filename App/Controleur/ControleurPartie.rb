@@ -49,7 +49,7 @@ class ControleurPartie < Controleur
         return getCouleurTuile(@@options.couleurTuile2)
     end
 
-    def getHypoActif
+    def getModeHypotheseActif
         return @modele.modeHypothese
     end
 

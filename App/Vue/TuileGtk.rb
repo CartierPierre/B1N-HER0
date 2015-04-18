@@ -24,7 +24,7 @@ class TuileGtk < Gtk::Button
             image = Image.new()
         end 
 
-        if(@controleur.getHypoActif)
+        if(@controleur.getModeHypotheseActif)
             image.set_opacity(0.5)
         end   
         self.set_image(image)

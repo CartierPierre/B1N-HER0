@@ -20,8 +20,8 @@ class VuePartie < Vue
     @boxHypo
     @labelHypothese
     @boutonHypothese
-    @boutonValiderHypo
-    @boutonAnnulerHypo
+    @boutonValiderHypothese
+    @boutonAnnulerHypothese
 
     # Boutons du menu en bas
     @boutonUndo
@@ -64,19 +64,19 @@ class VuePartie < Vue
         @boutonHypothese.signal_connect('clicked') { onBtnHypoClicked }
         @boutonHypothese.set_size_request(100,64)
 
-        @boutonValiderHypo = nouveauBouton(:valider,"valider")
-        @boutonValiderHypo.signal_connect('clicked') { onBtnHypoValiderClicked }
-        @boutonValiderHypo.set_size_request(100,64)
+        @boutonValiderHypothese = nouveauBouton(:valider,"valider")
+        @boutonValiderHypothese.signal_connect('clicked') { onBtnValiderHypotheseClicked }
+        @boutonValiderHypothese.set_size_request(100,64)
 
-        @boutonAnnulerHypo = nouveauBouton(:annuler,"annuler")
-        @boutonAnnulerHypo.signal_connect('clicked') { onBtnHypoAnnulerClicked }
-        @boutonAnnulerHypo.set_size_request(100,64)
+        @boutonAnnulerHypothese = nouveauBouton(:annuler,"annuler")
+        @boutonAnnulerHypothese.signal_connect('clicked') { onBtnAnnulerHypotheseClicked }
+        @boutonAnnulerHypothese.set_size_request(100,64)
 
         @boxHypo.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         @boxHypo.add(@labelHypothese)     
         @boxHypo.add(@boutonHypothese)
-        @boxHypo.add(@boutonValiderHypo)
-        @boxHypo.add(@boutonAnnulerHypo)
+        @boxHypo.add(@boutonValiderHypothese)
+        @boxHypo.add(@boutonAnnulerHypothese)
         @boxHypo.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)     
 
         # Création de la grille
@@ -165,7 +165,7 @@ class VuePartie < Vue
         @boxFooter.add(@boutonRestart)
         @boxFooter.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Ajout dans la box principal des éléments
+        # Ajout dans la box principale des éléments
         vboxPrincipale = Box.new(:vertical,30)
         vboxPrincipale.add(boxNav)
         labelNiveau = Label.new()
@@ -177,8 +177,33 @@ class VuePartie < Vue
         @cadre.add(vboxPrincipale)
 
         self.actualiser()
-        @boutonValiderHypo.hide()
-        @boutonAnnulerHypo.hide() 
+        @boutonValiderHypothese.hide()
+        @boutonAnnulerHypothese.hide() 
+    end
+
+    #########################################
+    #                                       #
+    # =>    METHODES POUR L'AFFICHAGE    <= #
+    #                                       #
+    #########################################
+    def actualiserGrille()
+        0.upto(@tailleGrille) do |x|
+            0.upto(@tailleGrille) do |y|
+                if(x != 0 && y != 0) 
+                    
+                    if(x == 0)
+                        nb = @modele.compterCasesColonne(y-1)
+                        @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
+                    elsif(y == 0)
+                        nb = @modele.compterCasesLigne(x-1)
+                        @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
+                    else
+                        @grille[x][y].setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
+                    end
+
+                end
+            end
+        end
     end
     
     def nbLigneColonne(x,y)
@@ -188,7 +213,53 @@ class VuePartie < Vue
         @grille[x+1][0].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesLigne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesLigne[1]}</span> ])
     end
 
-    # Signaux des boutons de navigation
+    def couperChaine(chaine, longueurMax)
+        chaine.gsub(/\s+/, " ").gsub(/(.{1,#{longueurMax}})( |\Z)/, "\\1\n")
+    end
+
+    def surbrillanceLigne(ligne)
+        Thread.new {
+            # Le nombre dans le upto doit être impair
+            0.upto(7) do |n|
+                1.upto(@tailleGrille) do |x|
+                    if(n%2 == 0) # Pair
+                        @grille[ligne][x].set_sensitive(false)
+                    else # Impair
+                        @grille[ligne][x].set_sensitive(true)
+                    end
+                end 
+                sleep(0.3)
+            end
+        }    
+    end
+
+    def surbrillanceColonne(colonne)
+        Thread.new {
+            # Le nombre dans le upto doit être impair
+            0.upto(7) do |n|
+                1.upto(@tailleGrille) do |x|
+                    if(n%2 == 0) # Pair
+                        @grille[x][colonne].set_sensitive(false)
+                    else # Impair
+                        @grille[x][colonne].set_sensitive(true)
+                    end
+                end 
+                sleep(0.3)
+            end
+        }    
+    end
+
+    protected :actualiserGrille, :couperChaine, :surbrillanceLigne, :surbrillanceColonne
+
+    ###################################
+    #                                 #
+    # =>    SIGNAUX DES BOUTONS    <= #
+    #                                 #
+    ###################################
+
+    ##
+    # => Boutons du menu en haut
+    ##
     def onBtnSaveClicked 
 
     end
@@ -226,29 +297,50 @@ class VuePartie < Vue
         @controleur.quitter()
     end
 
-    # Hypothèse
+    ##
+    # => Boutons du mode hypothèse
+    ##
     def onBtnHypoClicked
         @labelHypothese.set_label(@controleur.getLangue[:hypotheseActive])
-        @boutonValiderHypo.show()
-        @boutonAnnulerHypo.show()
+        @boutonValiderHypothese.show()
+        @boutonAnnulerHypothese.show()
         @boutonHypothese.hide()
+        @modele.activerModeHypothese()
     end
 
-    def onBtnHypoValiderClicked
+    def onBtnValiderHypotheseClicked
         @labelHypothese.set_label("")
-        @boutonValiderHypo.hide()
-        @boutonAnnulerHypo.hide()
+        @boutonValiderHypothese.hide()
+        @boutonAnnulerHypothese.hide()
         @boutonHypothese.show()
+        @modele.validerHypothese()
+        self.actualiserGrille()
     end
 
-    def onBtnHypoAnnulerClicked
+    def onBtnAnnulerHypotheseClicked
         @labelHypothese.set_label("")
-        @boutonValiderHypo.hide()
-        @boutonAnnulerHypo.hide()
+        @boutonValiderHypothese.hide()
+        @boutonAnnulerHypothese.hide()
         @boutonHypothese.show()
+        @modele.annulerHypothese()
+        self.actualiserGrille()
     end
 
-    # Validation
+    ##
+    # => Boutons de la grille et validation
+    ##
+    def onTuileGtkClicked(tuileGtk)
+        if( @modele.niveau.tuileValide?(tuileGtk.x,tuileGtk.y) )
+            @modele.jouerCoup(tuileGtk.x,tuileGtk.y)
+            tuileGtk.setImageTuile(@modele.grille.getTuile(tuileGtk.x,tuileGtk.y).etat())
+            self.nbLigneColonne(tuileGtk.x,tuileGtk.y)          
+        end
+
+        if( @modele.grille.estRemplie?() )
+            @boutonValiderGrille.set_sensitive(true)
+        end
+    end
+
     def onBtnValiderGrilleClicked
         if(!@modele.valider())
             explications = @controleur.getLangue[:grilleInvalide]
@@ -263,20 +355,9 @@ class VuePartie < Vue
         end
     end
 
-    # Grille
-    def onTuileGtkClicked(tuileGtk)
-        if( @modele.niveau.tuileValide?(tuileGtk.x,tuileGtk.y) )
-            @modele.jouerCoup(tuileGtk.x,tuileGtk.y)
-            tuileGtk.setImageTuile(@modele.grille.getTuile(tuileGtk.x,tuileGtk.y).etat())
-            self.nbLigneColonne(tuileGtk.x,tuileGtk.y)          
-        end
-
-        if( @modele.grille.estRemplie?() )
-            @boutonValiderGrille.set_sensitive(true)
-        end
-    end
-
-    # Boutons du footer
+    ##
+    # => Boutons du menu en bas
+    ##
     def onBtnUndoClicked
         tabCoord = @modele.historiqueUndo()
         if(tabCoord)
@@ -291,10 +372,6 @@ class VuePartie < Vue
             @grille[tabCoord[0]+1][tabCoord[1]+1].setImageTuile(@modele.grille().getTuile(tabCoord[0],tabCoord[1]).etat())
             self.nbLigneColonne(tabCoord[0],tabCoord[1])
         end
-    end
-
-    def couperChaine(chaine, longueurMax)
-        chaine.gsub(/\s+/, " ").gsub(/(.{1,#{longueurMax}})( |\Z)/, "\\1\n")
     end
 
     def onBtnConseilClicked
@@ -324,53 +401,7 @@ class VuePartie < Vue
 
     def onBtnRestartClicked
         @modele.recommencer
-        0.upto(@tailleGrille) do |x|
-            0.upto(@tailleGrille) do |y|
-                if(x == 0 && y == 0)
-                    
-                elsif(x == 0)
-                    nb = @modele.compterCasesColonne(y-1)
-                    @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
-                elsif(y == 0)
-                    nb = @modele.compterCasesLigne(x-1)
-                    @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
-                else
-                    @grille[x][y].setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
-                end
-            end
-        end
-    end
-
-    def surbrillanceLigne(ligne)
-        Thread.new {
-            # Le nombre dans le upto doit être impair
-            0.upto(7) do |n|
-                1.upto(@tailleGrille) do |x|
-                    if(n%2 == 0) # Pair
-                        @grille[ligne][x].set_sensitive(false)
-                    else # Impair
-                        @grille[ligne][x].set_sensitive(true)
-                    end
-                end 
-                sleep(0.3)
-            end
-        }    
-    end
-
-    def surbrillanceColonne(colonne)
-        Thread.new {
-            # Le nombre dans le upto doit être impair
-            0.upto(7) do |n|
-                1.upto(@tailleGrille) do |x|
-                    if(n%2 == 0) # Pair
-                        @grille[x][colonne].set_sensitive(false)
-                    else # Impair
-                        @grille[x][colonne].set_sensitive(true)
-                    end
-                end 
-                sleep(0.3)
-            end
-        }    
+        self.actualiserGrille()
     end
 
 end
