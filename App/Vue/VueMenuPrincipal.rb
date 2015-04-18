@@ -5,6 +5,7 @@ class VueMenuPrincipal < Vue
 	@boutonClassement
 	@boutonOptions
 	@boutonProfil
+    @boutonCredits
 	@boutonQuitter
 
 	def initialize(modele,titre,controleur)
@@ -13,17 +14,19 @@ class VueMenuPrincipal < Vue
 		vbox = Box.new(:vertical, 20)
 
 		@boutonNouvellePartie = Button.new(:label => @controleur.getLangue[:nouvellePartie])
-        @boutonNouvellePartie.set_size_request(100,40)
+        @boutonNouvellePartie.set_size_request(100,35)
         @boutonChargerPartie = Button.new(:label => @controleur.getLangue[:chargerPartie])
-        @boutonChargerPartie.set_size_request(100,40)
+        @boutonChargerPartie.set_size_request(100,35)
 		@boutonClassement = Button.new(:label => @controleur.getLangue[:classement])
-        @boutonClassement.set_size_request(100,40)
+        @boutonClassement.set_size_request(100,35)
 		@boutonOptions = Button.new(:label => @controleur.getLangue[:options])
-        @boutonOptions.set_size_request(100,40)
+        @boutonOptions.set_size_request(100,35)
 		@boutonProfil = Button.new(:label => @controleur.getLangue[:profil])
-        @boutonProfil.set_size_request(100,40)
+        @boutonProfil.set_size_request(100,35)
+        @boutonCredits = Button.new(:label => @controleur.getLangue[:credits])
+        @boutonCredits.set_size_request(100,35)
 		@boutonQuitter = Button.new(:label => @controleur.getLangue[:quitter])
-        @boutonQuitter.set_size_request(100,40)
+        @boutonQuitter.set_size_request(100,35)
 
         espaceDebut = Alignment.new(0, 0, 0, 0)
         vbox.pack_start(espaceDebut, :expand => true)
@@ -33,6 +36,7 @@ class VueMenuPrincipal < Vue
         creerAlignBouton(vbox,@boutonClassement)
         creerAlignBouton(vbox,@boutonOptions)
         creerAlignBouton(vbox,@boutonProfil)
+        creerAlignBouton(vbox,@boutonCredits)
         creerAlignBouton(vbox,@boutonQuitter)
 
         espaceFin = Alignment.new(0, 0, 0, 0)
@@ -43,6 +47,7 @@ class VueMenuPrincipal < Vue
         @boutonNouvellePartie.signal_connect('clicked') { onBtnNouvellePartieClicked }
         @boutonChargerPartie.signal_connect('clicked') { onBtnChargerPartieClicked }
         @boutonOptions.signal_connect('clicked') { onBtnOptionsClicked }
+        @boutonCredits.signal_connect('clicked') { onBtnCreditsClicked }
         @boutonQuitter.signal_connect('clicked') { Gtk.main_quit }
       
         self.actualiser()
@@ -62,5 +67,10 @@ class VueMenuPrincipal < Vue
         fermerCadre()
 		@controleur.options()
 	end
+
+    def onBtnCreditsClicked
+        fermerCadre()
+        @controleur.credits()
+    end
 
 end

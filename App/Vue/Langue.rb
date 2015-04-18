@@ -67,7 +67,13 @@ class Langue
             nbConseils: "Nombre de conseils utilisés",
             nbAides: "Nombre d'aides utilisées",
             grilleInvalide: "Grille invalide",
-            grilleInvalideExplications: "La grille est invalide, vérifiez bien que toutes les règles sont respectées."
+            grilleInvalideExplications: "La grille est invalide, vérifiez bien que toutes les règles sont respectées.",
+            credits: "Crédits",
+            chefProjet: "Chef de projet",
+            documentaliste: "Documentaliste",
+            interfaceGraphique: "Interface graphique",
+            baseDonnees: "Base de données",
+            codage: "Codage du jeu"
         }
 
         @langueEn = {
@@ -119,7 +125,13 @@ class Langue
             nbConseils: "Number of advices used",
             nbAides: "Number of helps used",
             grilleInvalide: "Invalid grid",
-            grilleInvalideExplications: "The grid is invalid, make sure that all the rules are followed."
+            grilleInvalideExplications: "The grid is invalid, make sure that all the rules are followed.",
+            credits: "Credits",
+            chefProjet: "Project manager",
+            documentaliste: "Archivist",
+            interfaceGraphique: "Graphical User Interface",
+            baseDonnees: "Database",
+            codage: "Coding"
         }
             if(langue == FR)
                   @langueActuelle = @langueFr

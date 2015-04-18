@@ -22,4 +22,8 @@ class ControleurMenuPrincipal < Controleur
     	changerControleur(ControleurOptions.new(@jeu,nil))
     end
 
+    def credits()
+        changerControleur(ControleurCredits.new(@jeu))
+    end
+
 end
