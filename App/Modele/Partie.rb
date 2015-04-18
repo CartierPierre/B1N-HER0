@@ -353,6 +353,9 @@ class Partie
         end
     end
 
+    ##
+    # Valide le mode hypothése pour le fusionner avec la partie.
+    #
     def validerHypothese()
         if(@modeHypothese)
             # Sépare les différents champs des données dans un tableau
@@ -372,6 +375,9 @@ class Partie
         end
     end
 
+    ##
+    # Annule le mode hypothése et remet la partie dans l'état à laquelle elle se trouver avant l'activation du mode hypothése.
+    #
     def annulerHypothese()
         if(@modeHypothese)
             @listeUndo = Array.new()        # Remet à zéro les Undos
