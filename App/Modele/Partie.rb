@@ -238,9 +238,11 @@ class Partie
     #   Un booléen indiquant si la Grille est valide.
     #
     def valider()
+        @grille.afficher()
+        @niveau.solution.afficher()
         0.upto(@grille.taille() - 1) do |x|
             0.upto(@grille.taille() - 1) do |y|
-                if(Etat.egale?(@grille.getTuile(x, y).etat, @niveau.solution.getTuile(x, y).etat))
+                if(!Etat.egale?(@grille.getTuile(x, y).etat, @niveau.solution.getTuile(x, y).etat))
                     return false
                 end
             end
