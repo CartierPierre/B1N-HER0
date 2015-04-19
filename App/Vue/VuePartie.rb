@@ -39,7 +39,7 @@ class VuePartie < Vue
     def initialize(modele,titre,controleur)
         super(modele,"B1N-HER0",controleur)
 
-        @nbClignotements = 5
+        @nbClignotements = 4
         @vitesseClignotement = 0.3
 
         @dureeConseils = 15
@@ -369,17 +369,18 @@ class VuePartie < Vue
     end
 
     def onBtnValiderGrilleClicked
-        if(!@modele.valider())
-            explications = @controleur.getLangue[:grilleInvalide]
-            explications += "\n\n"
-            explications += @controleur.getLangue[:grilleInvalideExplications]
-            dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
-            dialogValidationGrille.run()
-            dialogValidationGrille.destroy()
-        else           
+        # if(!@modele.valider())
+        #     explications = @controleur.getLangue[:grilleInvalide]
+        #     explications += "\n\n"
+        #     explications += @controleur.getLangue[:grilleInvalideExplications]
+        #     dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
+        #     dialogValidationGrille.run()
+        #     dialogValidationGrille.destroy()
+        # else     
+            @modele.chrono.stop()     
             fermerCadre()
             @controleur.validerGrille() 
-        end
+        # end
     end
 
     ##

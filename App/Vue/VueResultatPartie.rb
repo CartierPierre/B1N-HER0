@@ -10,22 +10,30 @@ class VueResultatPartie < Vue
         @boutonRetour = Button.new(:label => @controleur.getLangue[:retournerMenuPrincipal])
         @boutonRetour.set_size_request(100,40)
 
+        labelFelicitations = Label.new()
+        labelFelicitations.set_markup("<big>" + @controleur.getLangue[:felicitations] + @modele.grille.taille.to_i.to_s + "x" + @modele.grille.taille.to_i.to_s + @controleur.getLangue[:felicitations2] + @modele.niveau.difficulte.to_s + "</big>")
+
+        # score = Score.creer(id, uuid, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau)
+        score = Score.creer(@modele.chrono.to_i, @modele.nbCoups, @modele.nbConseils, @modele.nbAides, 1, 1)
+        points = score.nbPoints(@modele.niveau)
+
         labelScore = Label.new()
-        labelScore.set_markup("<big>" + @controleur.getLangue[:score] + " : " + "0" + "</big>")
+        labelScore.set_markup("<big>" + @controleur.getLangue[:score] + " : " + points.to_s + "</big>")
 
         labelTemps = Label.new()
-        labelTemps.set_markup("<big>" + @controleur.getLangue[:temps] + " : " + "00:00" + "</big>")
+        labelTemps.set_markup("<big>" + @controleur.getLangue[:temps] + " : " + @modele.chrono.to_s + "</big>")
 
         labelNbCoups = Label.new()
-        labelNbCoups.set_markup("<big>" + @controleur.getLangue[:nbCoups] + " : " + "0" + "</big>")
+        labelNbCoups.set_markup("<big>" + @controleur.getLangue[:nbCoups] + " : " + @modele.nbCoups.to_s + "</big>")
 
         labelConseils = Label.new()
-        labelConseils.set_markup("<big>" + @controleur.getLangue[:nbConseils] + " : " + "0" + "</big>")
+        labelConseils.set_markup("<big>" + @controleur.getLangue[:nbConseils] + " : " + @modele.nbConseils.to_s + "</big>")
 
         labelAides = Label.new()
-        labelAides.set_markup("<big>" + @controleur.getLangue[:nbAides] + " : " + "0" + "</big>")
+        labelAides.set_markup("<big>" + @controleur.getLangue[:nbAides] + " : " + @modele.nbAides.to_s + "</big>")
 
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxPrincipale.add(labelFelicitations)
         vboxPrincipale.add(labelScore)
         vboxPrincipale.add(labelTemps)
         vboxPrincipale.add(labelNbCoups)
