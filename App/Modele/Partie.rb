@@ -229,10 +229,58 @@ class Partie
     # Méthode qui donne une case valide de la solution pour aider le joueur.
     #
     # Retour::
-    #   Un tableau de coordonées de la case solution. Array[x, y]
+    #   Un tableau de coordonées de la case solution choisie aléatoirement selon les meilleurs aides possibles, sinon nil si aucune aide n'est possible. Array[x, y]
     #
-    def demanderAide()
-        return Array[0, 0]
+    def demanderAide() #TODO améliorer pour donnée une case qui débloque une régle
+        casesPossible = Array.new()
+        meilleurCases = Array[-1, -1, 10]
+
+        # Parcours la grille à la recherche de cases pourvant aider.
+        0.upto(@grille.taille() - 1) do |x|
+            0.upto(@grille.taille() - 1) do |y|
+                # Elle doit être soit vide, soit fausse
+                if(@grille.getTuile(x, y).estVide?() || !Etat.egale?(@grille.getTuile(x, y).etat, @niveau.solution.getTuile(x, y).etat))
+                    nbVoisin = Array[x, y, 0]
+
+                    # On parcours les cases alentour pour voir si l'aide serait utile.
+                    (x-1).upto(x+1) do |i|
+                        (y-1).upto(y+1) do |j|
+                            if(i >= 0 && j >= 0 && i < @grille.taille() && j < @grille.taille() && !(i == x && j == y))
+                                # La cases est dans la grille...
+                                if(!@grille.getTuile(i, j).estVide?())
+                                    # Elle n'est pas vide, on augmente le nombre de voisin.
+                                    nbVoisin[2] += 1
+                                end
+                            elsif(i == x && j == y && !(i-1 >= 0 && j-1 >= 0 && i+1 < @grille.taille() && j+1 < @grille.taille()))
+                                # La case est vide mais sur un bord, on la compte comme un voisin pour ne pas toujours aider sur les bords.
+                                nbVoisin[2] += 1
+                            end
+                        end # Upto j
+                    end # Upto i
+
+                    # La nouvelle cases est meilleur que l'ancienne, on la change et vide les cases possibles.
+                    if(nbVoisin[2] < meilleurCases[2])
+                        meilleurCases = nbVoisin
+                        casesPossible.clear()
+                    # La nouvelle cases est égales à l'ancienne, on l'ajoute aux cases possibles.
+                    elsif(nbVoisin[2] == meilleurCases[2])
+                        casesPossible.push(meilleurCases)
+                        meilleurCases = nbVoisin
+                    end
+                end
+            end # Upto y
+        end # Upto x
+
+        if(meilleurCases[0] != -1 && meilleurCases[1] != -1)
+            casesPossible.push(meilleurCases)
+        end
+
+        if(meilleurCases = casesPossible.sample())
+            @grille.setTuile(meilleurCases[0], meilleurCases[1], @niveau.solution.getTuile(meilleurCases[0], meilleurCases[1]).etat())
+            return Array[meilleurCases[0], meilleurCases[1]]
+        end
+
+        return nil
     end
 
 
