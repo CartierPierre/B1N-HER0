@@ -36,6 +36,8 @@ class VuePartie < Vue
     @dureeConseils          # Durée des conseils en secondes
     @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
 
+    @confirmationSauvegarde
+
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
@@ -279,7 +281,19 @@ class VuePartie < Vue
         }    
     end
 
-    protected :actualiserGrille, :couperChaine, :surbrillanceLigne, :surbrillanceColonne
+    def cacherJeu()
+        @modele.chrono.pause()
+        @boxJeu.hide()
+        @boxFooter.hide()
+    end
+
+    def montrerJeu()
+        @modele.chrono.finPause()
+        @boxJeu.show()
+        @boxFooter.show()
+    end
+
+    protected :actualiserGrille, :couperChaine, :surbrillanceLigne, :surbrillanceColonne, :cacherJeu, :montrerJeu
 
     ###################################
     #                                 #
@@ -291,11 +305,34 @@ class VuePartie < Vue
     # => Boutons du menu en haut
     ##
     def onBtnSaveClicked 
-        # message = @controleur.getLangue[:confirmationSauvegarde]
-        # boutonOui = Button.new(:label => @controleur.getLangue[:oui])
-        # dialogSauvegarde = MessageDialog.new(:parent => @@fenetre, :type => :question, :message => message, [Stock::OK,Dialog::response_yes])
-        # dialogSauvegarde.run()
-        # dialogSauvegarde.destroy()
+        self.cacherJeu()
+
+        @confirmationSauvegarde
+        dialogSauvegarde = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:sauvegarder], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
+        
+        labelSauvegarde = Label.new()
+        labelSauvegarde.set_markup("<big>" + @controleur.getLangue[:confirmationSauvegarde] + "</big>")
+        dialogSauvegarde.child.set_spacing(10)
+        dialogSauvegarde.child.add(labelSauvegarde)
+
+        dialogSauvegarde.show_all()
+        dialogSauvegarde.run do |reponse|
+            if(reponse == ResponseType::YES)
+                @confirmationSauvegarde = true
+            else
+                @confirmationSauvegarde = false
+            end             
+        end
+        dialogSauvegarde.destroy()
+
+        if(@confirmationSauvegarde)
+            messageConfirmation = @controleur.getLangue[:sauvegardeEffectuee]
+            dialogConfirmation = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => messageConfirmation)
+            dialogConfirmation.run()
+            dialogConfirmation.destroy()
+        end
+
+        self.montrerJeu()
     end
 
     def onBtnLoadClicked 
@@ -309,9 +346,7 @@ class VuePartie < Vue
     end
 
     def onBtnReglesClicked 
-        @modele.chrono.pause()
-        @boxJeu.hide()
-        @boxFooter.hide()
+        self.cacherJeu()
 
         regles = @controleur.getLangue[:regles]
         regles += "\n\n"
@@ -322,9 +357,7 @@ class VuePartie < Vue
         dialogRegles.run()
         dialogRegles.destroy()
 
-        @modele.chrono.finPause()
-        @boxJeu.show()
-        @boxFooter.show()
+        self.montrerJeu()
     end
 
     def onBtnQuitterClicked

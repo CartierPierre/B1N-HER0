@@ -22,6 +22,7 @@ class Langue
         @langueFr = {
             sauvegarder: "Sauvegarder",
             confirmationSauvegarde: "Voulez vous vraiment sauvegarder cette partie ?",
+            sauvegardeEffectuee: "La partie a bien été sauvegardée",
             charger: "Charger",
             options: "Options",
             regles: "Règles du jeu",
@@ -90,6 +91,7 @@ class Langue
         @langueEn = {
             sauvegarder: "Save",
             confirmationSauvegarde: "Do you really want to save this game ?",
+            sauvegardeEffectuee: "The game has been saved.",
             charger: "Load",
             options: "Settings",
             regles: "Rules",
