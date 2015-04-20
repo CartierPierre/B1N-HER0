@@ -1,5 +1,6 @@
 ##
 # La classe Coup permet de créer et utiliser des coups.
+#
 
 class Coup
     attr_reader :x, :y
@@ -19,6 +20,41 @@ class Coup
 
     def initialize(x, y, etat)
         @x, @y, @etat = x, y, etat
+    end
+
+
+
+
+    #############################
+    #                           #
+    # =>    SÉRIALISATION    <= #
+    #                           #
+    #############################
+
+    ##
+    # (Sérialisation)
+    # Sauvegarde un Coup en chaine de caractères.
+    #
+    # Retour::
+    #   Un chaine de caractéres représentant un coup avec les champs (respectivement: coordonnée x, coordonnée y et état précédent) séparés par des ','.
+    #    self.sauvegarder #=> "5,1,_"
+    def sauvegarder()
+        return "#{x},#{y},#{Etat.etatToString(etat)}"
+    end
+
+    ##
+    # (Désérialisation)
+    # Charge un Coup à partir des données.
+    #
+    # Paramétre::
+    #   * _donnee_ - Une chaine de caractéres qui représente un Coup. Aller voir Coup.sauvegarder.
+    #
+    # Retour::
+    #   Un nouveau coup initialisé avec les données.
+    #
+    def Coup.charger(donnee)
+        donnees = donnee.split(',')
+        return Coup.creer(donnees[0], donnees[1], Etat.stringToEtat(donnees[2]))
     end
 
     def to_s

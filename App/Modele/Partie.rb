@@ -1,6 +1,7 @@
 ##
-# La classe Partie permet de créer et utiliser des objet Partie.
+# La classe Partie permet de créer et utiliser des objets Partie.
 # Cette classe à besoin des classes Chrono, Coup, Etat, Grille, Niveau et Score pour fonctionner.
+#
 
 class Partie
     attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides
@@ -165,6 +166,14 @@ class Partie
         return true
     end
 
+
+
+    ############################
+    #                          #
+    # =>  AIDE / CONSEILLE  <= #
+    #                          #
+    ############################
+
     ##
     # Donne le nombre de case de chaque Etat de la ligne demandée.
     #
@@ -292,13 +301,78 @@ class Partie
     #############################
 
     ##
+    # (Sérialisation)
+    # Sauvegarde une partie en chaine de caractéres.
+    #
+    # Retour::
+    #   Une chaine de caractéres correspondant à l'état de la partie, avec chaque champs séparer par un '|', sous la forme :
+    #    self.sauvegarder #=> "donnees_chrono|donnees_grille|liste_undo|liste_redo|donnees_hypothese"
+    #
+    #   - *donnees_chrono* : aller voir Chrono.sauvegarder.
+    #        self.sauvegarder.split('|')[0] #=> "true;50:37:17:20:4:2015:1:110:true:CEST;;"
+    #
+    #   - *donnees_grille* : aller voir Grille.sauvegarder.
+    #        self.sauvegarder.split('|')[1] #=> "003________1_3__0_22112______0_0_1__"
+    #
+    #   - *liste_undo* : une liste de Coup séparer par des ';'. Aller voir Coup.sauvegarder.
+    #        self.sauvegarder.split('|')[2] #=> "5,0,_;5,0,2;3,0,_;2,1,_;2,1,2;5,0,3"
+    #
+    #   - *liste_redo* : une liste de Coup séparer par des ';'. Aller voir Coup.sauvegarder.
+    #        self.sauvegarder.split('|')[3] #=> "1,3,2;1,3,_"
+    #
+    #   - *donnees_hypothese* : un bouléen indiquant si le mode hypothése est activé, suivit par un '#', puis la sérialisation de la Partie avec les '|' remplacer pas des '/'.
+    #        self.sauvegarder.split('|')[4] #=> "true#true;40:55:17:20:4:2015:1:110:true:CEST;;/003________1____0__2112______0_0_1__/0,2,_;0,2,2;3,4,_;3,1,_//false"
+    #
+    def sauvegarder()
+        data = String.new()
+
+        # Sérialisation du chrono
+        data += @chrono.sauvegarder
+
+        data += "|"
+
+        # Sérialisation de la grille
+        data += grille.sauvegarder()
+
+        data += "|"
+
+        # Sérialisation de la liste des undo
+        0.upto(@listeUndo.size() - 1) do |i|
+            data += @listeUndo[i].sauvegarder
+            if(i != (@listeUndo.size() - 1))
+                data += ";"
+            end
+        end
+
+        data += "|"
+
+        # Sérialisation de la liste des redo
+        0.upto(@listeRedo.size() - 1) do |i|
+            data += @listeRedo[i].sauvegarder
+            if(i != (@listeRedo.size() - 1))
+                data += ";"
+            end
+        end
+
+        data += "|"
+
+        data += @modeHypothese.to_s
+
+        if(@modeHypothese)
+            data += "#" + @partieHypothese.gsub(/\|/, '/')
+        end
+
+        return data
+    end
+
+    ##
     # (Désérialisation)
     # Charge une Partie avec l'utilisateur, le niveau et les données passés en paramétre.
     #
     # Paramétres::
     #   * _utilisateur_ - Utilisateur de la Partie.
     #   * _niveau_ - Le Niveau sur lequel ce base la Partie.
-    #   * _donnee_ - Une chaine de caractère correspondant à la sérialisation de la Partie.
+    #   * _donnee_ - Une chaine de caractère correspondant à la sérialisation de la Partie. Aller voir Partie.sauvegarder
     #
     # Retour::
     #   Une nouvelle partie construite à partir des paramètres donnés.
@@ -326,12 +400,16 @@ class Partie
             partie.chargerRedo(donnees[3])
         end
 
+        # On remet en place le mode hypothése
         if(donnees[4])
             p donneesHypothese = donnees[4].split('#')
 
-            partie.setModeHypothese(((donneesHypothese[0] == 'true') ? true : false))
-
-            partie.setPartieHypothese(donneesHypothese[1].gsub(/\//, "|"))
+            if(donneesHypothese[0] == 'true')
+                partie.setModeHypothese(true)
+                partie.setPartieHypothese(donneesHypothese[1].gsub(/\//, "|"))
+            else
+                partie.setModeHypothese(false)
+            end
         end
 
         return partie
@@ -339,18 +417,14 @@ class Partie
 
     def chargerUndo(donnee)
         donnee.split(";").reverse.each do |coupDonnee|
-            tabCoup = coupDonnee.split(",")
-            coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
-            @listeUndo.unshift(coup)
+            @listeUndo.unshift(Coup.charger(coupDonnee))
         end
     end
     #protected :chargerUndo
 
     def chargerRedo(donnee)
         donnee.split(";").reverse.each do |coupDonnee|
-            tabCoup = coupDonnee.split(",")
-            coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
-            @listeRedo.unshift(coup)
+            @listeRedo.unshift(Coup.charger(coupDonnee))
         end
 
         self
@@ -382,57 +456,6 @@ class Partie
         @partieHypothese = donnee
 
         self
-    end
-
-    ##
-    # (Sérialisation)
-    # Sauvegarde une partie en chaine de caractéres.
-    #
-    # Retour::
-    #   Une chaine de caractéres correspondant à l'état de la partie.
-    #
-    def sauvegarder()
-        data = String.new()
-
-        # Sérialisation du chrono
-        data += @chrono.sauvegarder
-
-        data += "|"
-
-        # Sérialisation de la grille
-        data += grille.sauvegarder()
-
-        data += "|"
-
-        # Sérialisation de la liste des undo
-        0.upto(@listeUndo.size() - 1) do |i|
-            coup = @listeUndo[i]
-            data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
-            if(i != (@listeUndo.size() - 1))
-                data += ";"
-            end
-        end
-
-        data += "|"
-
-        # Sérialisation de la liste des redo
-        0.upto(@listeRedo.size() - 1) do |i|
-            coup = @listeRedo[i]
-            data += "#{coup.x},#{coup.y},#{Etat.etatToString(coup.etat)}"
-            if(i != (@listeRedo.size() - 1))
-                data += ";"
-            end
-        end
-
-        data += "|"
-
-        if(@modeHypothese)
-            data += @modeHypothese.to_s + "#"
-
-            data += @partieHypothese.gsub(/\|/, '/')
-        end
-
-        return data
     end
 
 

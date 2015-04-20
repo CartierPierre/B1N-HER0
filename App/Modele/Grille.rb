@@ -104,6 +104,15 @@ class Grille
         return newColonne
     end
 
+
+
+
+    #############################
+    #                           #
+    # =>    SÉRIALISATION    <= #
+    #                           #
+    #############################
+
     ##
     # (Désérialisation)
     # Charge une Grille à partir du modèle donné.
