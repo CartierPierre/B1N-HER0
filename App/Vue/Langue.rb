@@ -82,7 +82,8 @@ class Langue
             interfaceGraphique: "Interface graphique",
             baseDonnees: "Base de données",
             codage: "Codage du jeu",
-            rang: "Rang"
+            rang: "Rang",
+            demarrage: "Demarrage"
         }
 
         @langueEn = {
@@ -148,7 +149,8 @@ class Langue
             interfaceGraphique: "Graphical User Interface",
             baseDonnees: "Database",
             codage: "Coding",
-            rang: "Rank"
+            rang: "Rank",
+            demarrage: "Launch"
         }
         if(langue == FR)
             @langueActuelle = @langueFr

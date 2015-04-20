@@ -11,5 +11,7 @@ class ControleurClassement < Controleur
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 
-    listeUtilisateurs = @gestionnaireUtilisateur.recupererListeUtilisateur(0,@gestionnaireUtilisateur.recupererNombreUtilisateur())
+    def listeUtilisteurs
+        return  @gestionnaireUtilisateur.recupererListeUtilisateur(0,@gestionnaireUtilisateur.recupererNombreUtilisateur())
+    end
 end

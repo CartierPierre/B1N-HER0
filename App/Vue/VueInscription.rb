@@ -10,9 +10,9 @@ class VueInscription < Vue
         boxMode = Box.new(:horizontal,10)
         boxValidation = Box.new(:horizontal,10)
 
-		boutonValider = Button.new(:stock_id => Stock::APPLY)
+		boutonValider = Button.new(:label => @controleur.getLangue[:valider])
         boutonValider.set_sensitive(false)
-		boutonAnnuler = Button.new(:stock_id => Stock::CANCEL)
+		boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
         @boutonOnline  = RadioButton.new(@controleur.getLangue[:modeDeJeuEnLigne])
         @boutonOffline  = RadioButton.new(@boutonOnline,@controleur.getLangue[:modeDeJeuHorsLigne],true)
 

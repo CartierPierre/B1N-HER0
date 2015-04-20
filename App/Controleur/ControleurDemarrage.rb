@@ -3,7 +3,7 @@ class ControleurDemarrage < Controleur
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
-		@vue = VueDemarrage.new(@modele,"Demarrage",self)
+		@vue = VueDemarrage.new(@modele,self.getLangue[:demarrage],self)
 	end
 
     def connexion()
