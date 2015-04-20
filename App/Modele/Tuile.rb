@@ -10,9 +10,4 @@ class Tuile
     def initialize()
         @etat = Etat.vide
     end
-	
-	def eql?(other)
-		Etat.egale?(@etat,other.etat)
-	end
-	
 end

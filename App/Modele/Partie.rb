@@ -35,6 +35,7 @@ class Partie
         @regles = Array.new()
         @regles.push(RegleUn.instance())
         @regles.push(RegleDeux.instance())
+        @regles.push(RegleTrois.instance())
 
         @modeHypothese = false
 
