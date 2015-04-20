@@ -26,6 +26,7 @@ class Partie
         @niveau = niveau
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
         @chrono = Chrono.creer()
+        @chrono.start()
         #@score = Score.creer( 0, 0, 0, 0, @utilisateur.id, @niveau.id)
 
         @listeUndo = Array.new()
@@ -117,6 +118,8 @@ class Partie
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
         @listeUndo = Array.new()
         @listeRedo = Array.new()
+        @modeHypothese = false
+        @chrono.start()
 
         self
     end

@@ -13,6 +13,7 @@ load 'RegleTrois.rb'
 #001100001100____0___11_______0_0_1__ pour tester regle trois
 class Jeu
     @partie
+    @niveau
 
     private_class_method :new
     # Méthode de création d'un Jeu
@@ -21,8 +22,8 @@ class Jeu
     end
 
     def initialize()
-        niveau = Niveau.creer( 1, 2, Grille.charger("00_________1____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6)
-        @partie = Partie.creer( "lol", niveau)#Utilisateur.creer("Mr Test", "root", 3), niveau)
+        @niveau = Niveau.creer( 1, 2, Grille.charger("00_________1____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6)
+        @partie = Partie.creer( "lol", @niveau)#Utilisateur.creer("Mr Test", "root", 3), niveau)
     end
 
     def jouerEn(x, y)
@@ -30,28 +31,48 @@ class Jeu
     end
 
     def test()
-        jouerEn(1, 1)
-        jouerEn(1, 1)
-        jouerEn(1, 2)
-        jouerEn(1, 3)
-        jouerEn(1, 3)
-        @partie.historiqueUndo
-        @partie.historiqueUndo
-        @partie.historiqueUndo
-        @partie.historiqueUndo
-        @partie.historiqueUndo
-        @partie.historiqueUndo
+        # #Joue avant hypothese
+        @partie.jouerCoup(3, 0)
+        @partie.jouerCoup(5, 0)
+        @partie.jouerCoup(1, 0)
+
+        # #Activation de l'hypothese
+        # @partie.activerModeHypothese()
+        # @partie.activerModeHypothese()
+        # @partie.monitor()
+
+        # #Joue dans l'hypothése
+        # @partie.jouerCoup(1, 1)
+        # @partie.jouerCoup(1, 1)
+        # @partie.jouerCoup(2, 1)
+        # @partie.jouerCoup(1, 2)
+        # @partie.jouerCoup(3, 1)
+        # @partie.jouerCoup(3, 1)
+
+        # #Valide l'hypothése
+        # # @partie.annulerHypothese()
+        # # @partie.monitor
+
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueUndo()
+        # # @partie.historiqueRedo()
+        # # @partie.monitor
+
+        # p @partie.sauvegarder
+        # @partie = Partie.charger("lol", @niveau, @partie.sauvegarder)
+        # @partie.monitor
+        # @partie.annulerHypothese()
         @partie.monitor
-        p @partie.sauvegarder
-        @partie = Partie.charger("lol", Niveau.creer( 1, 2, Grille.charger("00_________1____0___11_______0_0_1__"), Grille.charger("001011010011110100001101110010101100"), 1, 6), @partie.sauvegarder)
-        @partie.monitor
-        @partie.historiqueRedo
-        @partie.historiqueRedo
-        @partie.historiqueRedo
-		TestRegleUn()
-		TestRegleDeux()
-		TestRegleTrois()
-		self.to_s()
+
+        p @partie.appliquerRegles()
     end
 
     def to_s()

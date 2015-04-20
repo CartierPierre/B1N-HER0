@@ -42,6 +42,9 @@ require_relative "./Modele/Tuile"
 require_relative "./Modele/Chrono"
 require_relative "./Modele/Coup"
 require_relative "./Modele/Partie"
+require_relative "./Modele/RegleUn"
+require_relative "./Modele/RegleDeux"
+require_relative "./Modele/RegleTrois"
 
 ##
 # Controleur
