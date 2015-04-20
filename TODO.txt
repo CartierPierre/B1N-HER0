@@ -1,10 +1,10 @@
 + (Fini, mais pas validation auto) Validation de la grille/Finir partie (Amaury)
 + (Fini) 3 regles (Tianqi)
++ (Fini, reste un bug à corriger) Mode hypothese code et vue (Pierre, Amaury, Corentin)
 - Vues ( Loic et Corentin)
 - Sauvegardes, options (Kevin)
 - Mise en ligne avec serveur (Kevin)
 - DDC (Quentin)  -> Pierre
-+ (Fini, reste un bug à corriger) Mode hypothese code et vue (Pierre, Amaury, Corentin)
 - (Fait, annulé)Langue de l'OS (Corentin)
 - Manuel utilisateur et DDC (Pierre)
 - Classements (Kevin et Loic)
