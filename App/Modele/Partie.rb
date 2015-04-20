@@ -6,6 +6,7 @@ class Partie
     attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides
     @listeUndo
     @listeRedo
+    @regles
     @partieHypothese
 
     ##
@@ -29,6 +30,9 @@ class Partie
 
         @listeUndo = Array.new()
         @listeRedo = Array.new()
+
+        @regles = Array.new()
+        @regles.push(RegleUn.instance())
 
         @modeHypothese = false
 
@@ -208,6 +212,11 @@ class Partie
     #
     def appliquerRegles()
         resultat = nil
+        @regles.each do |regle|
+            if( (resultat = regle.appliquer(self)) )
+                return resultat
+            end
+        end
         return resultat
     end
 
