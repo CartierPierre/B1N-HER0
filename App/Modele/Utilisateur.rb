@@ -1,7 +1,7 @@
 ##
 # Classe Utilisateur
 #
-# Version 5
+# Version 6
 #
 # Voir attribut statistique et option
 #
@@ -24,9 +24,9 @@ class Utilisateur
     def Utilisateur.creer(*args)
 		case args.size
 			when 0
-				new(nil, nil, nil, nil, Time.now.to_i, Time.now.to_i, Option.creer, nil, nil)
+				new(nil, nil, nil, nil, Time.now.to_i, Time.now.to_i, Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR), nil, nil)
 			when 3
-				new(nil, nil, args[0], args[1], Time.now.to_i, Time.now.to_i, nil, args[2], nil)
+				new(nil, nil, args[0], args[1], Time.now.to_i, Time.now.to_i, Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR), args[2], nil)
 			when 9
 				new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
 			else
