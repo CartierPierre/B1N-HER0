@@ -3,7 +3,7 @@ class ControleurClassement < Controleur
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
-		@vue = VueClassement.new(@modele,self.getLangue[:profil],self)
+		@vue = VueClassement.new(@modele,self.getLangue[:classement],self)
 	end
 
 
@@ -11,4 +11,5 @@ class ControleurClassement < Controleur
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 
+    listeUtilisateurs = @gestionnaireUtilisateur.recupererListeUtilisateur(0,@gestionnaireUtilisateur.recupererNombreUtilisateur())
 end

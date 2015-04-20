@@ -2,6 +2,7 @@ class VueClassement < Vue
 
 	@taille
 	@difficulte
+    @utilisateurs
 
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
@@ -109,4 +110,6 @@ class VueClassement < Vue
 	def onBtnDifficulteClicked(difficulte)
 		@difficulte = difficulte
 	end
+
+
 end
