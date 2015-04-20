@@ -33,6 +33,7 @@ class Partie
 
         @regles = Array.new()
         @regles.push(RegleUn.instance())
+        @regles.push(RegleDeux.instance())
 
         @modeHypothese = false
 
