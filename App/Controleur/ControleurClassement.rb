@@ -3,7 +3,7 @@ class ControleurClassement < Controleur
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
-		@vue = VueClassement.new(@modele,"Profil",self)
+		@vue = VueClassement.new(@modele,self.getLangue[:profil],self)
 	end
 
 
