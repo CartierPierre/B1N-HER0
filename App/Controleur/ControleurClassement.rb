@@ -1,9 +1,9 @@
-class ControleurProfil < Controleur
+class ControleurClassement < Controleur
 
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
-		@vue = VueProfil.new(@modele,"Profil",self)
+		@vue = VueClassement.new(@modele,"Profil",self)
 	end
 
 

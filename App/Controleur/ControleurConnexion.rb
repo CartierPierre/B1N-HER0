@@ -2,7 +2,7 @@ class ControleurConnexion < Controleur
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
-		@vue = VueConnexion.new(@modele,"Connexion",self)
+		@vue = VueConnexion.new(@modele,self.getLangue[:connexion],self)
 	end
 
 

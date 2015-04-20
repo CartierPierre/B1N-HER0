@@ -3,7 +3,7 @@ class ControleurInscription < Controleur
 	def initialize(jeu,pseudo)
 		super(jeu)
 		@modele = nil
-		@vue = VueInscription.new(@modele,"Inscription",self,pseudo)
+		@vue = VueInscription.new(@modele,self.getLangue[:inscription],self,pseudo)
 	end
 
 

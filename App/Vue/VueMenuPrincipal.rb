@@ -48,6 +48,8 @@ class VueMenuPrincipal < Vue
         @boutonChargerPartie.signal_connect('clicked') { onBtnChargerPartieClicked }
         @boutonOptions.signal_connect('clicked') { onBtnOptionsClicked }
         @boutonCredits.signal_connect('clicked') { onBtnCreditsClicked }
+        @boutonClassement.signal_connect('clicked') { onBtnClassementClicked }
+        @boutonProfil.signal_connect('clicked') { onBtnProfilClicked }
         @boutonQuitter.signal_connect('clicked') { Gtk.main_quit }
       
         self.actualiser()
@@ -71,6 +73,16 @@ class VueMenuPrincipal < Vue
     def onBtnCreditsClicked
         fermerCadre()
         @controleur.credits()
+    end
+
+	def onBtnProfilClicked
+        fermerCadre()
+		@controleur.profil()
+	end
+
+    def onBtnClassementClicked
+        fermerCadre()
+        @controleur.classement()
     end
 
 end
