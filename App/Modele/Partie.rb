@@ -112,6 +112,8 @@ class Partie
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
         @listeUndo = Array.new()
         @listeRedo = Array.new()
+
+        self
     end
 
     ##
@@ -130,6 +132,8 @@ class Partie
             monitor
             @nbCoups += 1
         end
+
+        self
     end
 
     ##
@@ -194,6 +198,11 @@ class Partie
         end
 
         return nbEtat
+    end
+
+    def appliquerRegles()
+        resultat = nil
+        return resultat
     end
 
 
@@ -265,26 +274,36 @@ class Partie
             coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
             @listeRedo.unshift(coup)
         end
+
+        self
     end
     #protected :chargerRedo
 
     def setChrono(chrono)
         @chrono = chrono
+
+        self
     end
     #protected :setChrono
 
     def setGrille(grille)
         @grille = grille
+
+        self
     end
     #protected :setGrille
 
     def setModeHypothese(bool)
         @modeHypothese = bool
+
+        self
     end
     #protected :setModeHypothese
 
     def setPartieHypothese(donnee)
         @partieHypothese = donnee
+
+        self
     end
 
     ##
@@ -356,6 +375,8 @@ class Partie
             @listeRedo = Array.new()        # Remet à zéro les Redos
             @modeHypothese = true           # Indique que le mode est actif
         end
+
+        self
     end
 
     ##
@@ -378,6 +399,8 @@ class Partie
 
             @modeHypothese = false
         end
+
+        self
     end
 
     ##
@@ -406,6 +429,8 @@ class Partie
 
             @modeHypothese = false
         end
+
+        self
     end
 
     @cpttest
@@ -417,7 +442,7 @@ class Partie
         puts "Liste des redo :", @listeRedo, "\n"
         print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n"
         print "\n"
-    end
 
-    #TODO reset grille
+        self
+    end
 end
