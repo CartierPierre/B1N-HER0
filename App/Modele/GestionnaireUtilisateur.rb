@@ -56,8 +56,7 @@ class GestionnaireUtilisateur
 			args[3], # motDePasse
 			args[4], # dateInscription
 			args[5], # dateDerniereSync
-			# Marshal.load( args[6] ), # option
-			args[6], # option
+			Option.deserialiser( args[6] ), # option
 			args[7], # type
 			args[8] # statistique
 		)
@@ -145,7 +144,7 @@ class GestionnaireUtilisateur
 				'#{ u.motDePasse }',
 				#{ u.dateInscription },
 				#{ u.dateDerniereSync },
-				'#{ Marshal.dump( u.option ) }',
+				'#{ Option.serialiser( u.option ) }',
 				#{ u.type }
 			);
 		")
@@ -168,7 +167,7 @@ class GestionnaireUtilisateur
 				mot_de_passe = '#{ u.motDePasse }',
 				date_inscription = #{ u.dateInscription },
 				date_derniere_synchronisation = #{ u.dateDerniereSync },
-				options = '#{ Marshal.dump( u.option ) }',
+				options = '#{ Option.serialiser( u.option ) }',
 				type = #{ u.type }
 			WHERE id = #{ u.id };
 		")

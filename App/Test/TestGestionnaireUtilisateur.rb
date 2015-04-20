@@ -28,6 +28,7 @@ begin
 	gu.sauvegarderUtilisateur(testUser)
 	rescue SQLite3::ConstraintException => err
 		puts "L'utilisateur #{ testUser.nom } (id:#{ testUser.id }) existe déjà !"
+		abort
 end
 
 # Test de suppression de l'utilisateur

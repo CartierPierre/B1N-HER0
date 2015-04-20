@@ -1,10 +1,10 @@
-- (En cours) Validation de la grille/Finir partie (Amaury)
-- (Fini) 3 regles (Tianqi)
++ (Fini, mais pas validation auto) Validation de la grille/Finir partie (Amaury)
++ (Fini) 3 regles (Tianqi)
++ (Fini, reste un bug à corriger) Mode hypothese code et vue (Pierre, Amaury, Corentin)
 - Vues ( Loic et Corentin)
 - Sauvegardes, options (Kevin)
 - Mise en ligne avec serveur (Kevin)
 - DDC (Quentin)  -> Pierre
-- (En cours) Mode hypothese code et vue (Pierre, Amaury, Corentin)
 - (Fait, annulé)Langue de l'OS (Corentin)
 - Manuel utilisateur et DDC (Pierre)
 - Classements (Kevin et Loic)
@@ -15,3 +15,4 @@
 - Sauvegarder la partie (Kevin, Amaury et Corentin)
 - Choix dans les options pour laisser ou non l'aide en temps reel ( check si une regle est enfreinte ) (Tianqi)
 - SUCCES URGENT (Kevin, Corentin, Pierre)
+- Gérer le score (mettre dans la partie, sérialiser(sauvegarde de partie), utiliser dans la bdd) (Amaury et Kévin(si pas fait pour la bdd))
