@@ -224,6 +224,16 @@ class Partie
         return resultat
     end
 
+    ##
+    # Méthode qui donne une case valide de la solution pour aider le joueur.
+    #
+    # Retour::
+    #   Un tableau de coordonées de la case solution. Array[x, y]
+    #
+    def demanderAide()
+        return Array[0, 0]
+    end
+
 
 
     #############################
