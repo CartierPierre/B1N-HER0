@@ -291,7 +291,11 @@ class VuePartie < Vue
     # => Boutons du menu en haut
     ##
     def onBtnSaveClicked 
-
+        # message = @controleur.getLangue[:confirmationSauvegarde]
+        # boutonOui = Button.new(:label => @controleur.getLangue[:oui])
+        # dialogSauvegarde = MessageDialog.new(:parent => @@fenetre, :type => :question, :message => message, [Stock::OK,Dialog::response_yes])
+        # dialogSauvegarde.run()
+        # dialogSauvegarde.destroy()
     end
 
     def onBtnLoadClicked 
@@ -453,6 +457,7 @@ class VuePartie < Vue
         aide = @modele.demanderAide() 
 
         @grille[aide[0]+1][aide[1]+1].setImageTuile(@modele.grille.getTuile(aide[0],aide[1]).etat()) 
+        self.nbLigneColonne(aide[0],aide[1])
         surbrillanceTuile(aide[0]+1,aide[1]+1)
     end
 
