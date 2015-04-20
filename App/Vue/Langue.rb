@@ -80,7 +80,8 @@ class Langue
             documentaliste: "Documentaliste",
             interfaceGraphique: "Interface graphique",
             baseDonnees: "Base de données",
-            codage: "Codage du jeu"
+            codage: "Codage du jeu",
+            rang: "Rang"
         }
 
         @langueEn = {
@@ -144,7 +145,8 @@ class Langue
             documentaliste: "Archivist",
             interfaceGraphique: "Graphical User Interface",
             baseDonnees: "Database",
-            codage: "Coding"
+            codage: "Coding",
+            rang: "Rank"
         }
         if(langue == FR)
             @langueActuelle = @langueFr
