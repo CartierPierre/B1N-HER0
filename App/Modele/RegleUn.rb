@@ -44,7 +44,7 @@ class RegleUn
                         Etat.egale?(partie.grille().getTuile(x,y+1).etat(), partie.grille().getTuile(x,y).etat())
                     ) then
                         #On indique le problème une fois qu'on le rencontre.
-                        return Array.new(:regleLigne, x, :regles1)
+                        return Array[:regleLigne, x, :regles1]
                     end
                 end
             end
@@ -63,7 +63,7 @@ class RegleUn
                         Etat.egale?(partie.grille().getTuile(x+1,y).etat(), partie.grille().getTuile(x,y).etat())
                     ) then
                         #On indique le problème une fois qu'on le rencontre.
-                        return Array.new(:regleColonne, x, :regles1)
+                        return Array[:regleColonne, x, :regles1]
                     end
                 end
             end
