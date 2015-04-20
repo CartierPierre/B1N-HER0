@@ -9,6 +9,19 @@ class VueChargerPartie < Vue
     @boutonAnnuler
 
     @taille
+    @partie
+
+    @boutonDerniereSauvegarde
+
+    class BoutonSauvegarde < Gtk::Button
+
+        attr_reader :partie
+
+        def initialize(label,partie)
+            super(:label => label)
+            @partie = partie
+        end
+    end
 
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
@@ -36,32 +49,26 @@ class VueChargerPartie < Vue
         hboxTaille.add(@bouton12x12)
         hboxTaille.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Liste des sauvegardes
+        # Sauvegardes
         hboxScroll = Box.new(:horizontal)
 
         @fenetreScroll = ScrolledWindow.new()
         @fenetreScroll.set_policy(:never,:automatic)
-        @fenetreScroll.set_size_request(300,200)
 
-        @parties = [
-            "Sauvegarde 1",
-            "Sauvegarde 2",
-            "Sauvegarde 3",
-            "Sauvegarde 4",
-        ]
+        parties = Array["Sauvegarde 1","Sauvegarde 2","Sauvegarde 3","Sauvegarde 4","Sauvegarde 5","Sauvegarde 6","Sauvegarde 7"]
 
-        modele = ListStore.new(String)
+        vboxSauvegardes = Box.new(:vertical, 10)
+        parties.each do |partie|
+            boutonSauvegarde = BoutonSauvegarde.new(partie.to_s, partie)
+            boutonSauvegarde.signal_connect('clicked') { onBtnSauvegardeClicked(boutonSauvegarde) }
+            vboxSauvegardes.add(boutonSauvegarde)
+        end 
 
-        column = TreeViewColumn.new("Parties", CellRendererText.new, {:text => 0})
-        treeview = TreeView.new(modele)
-        treeview.append_column(column)
-        treeview.selection.set_mode(:single)
-        @fenetreScroll.add_with_viewport(treeview)
-
-        @parties.each do |v|
-          iter = modele.append
-          iter[0] = v
-        end
+        @fenetreScroll.add_with_viewport(vboxSauvegardes)   
+        hboxScroll.pack_start(Alignment.new(0, 0, 0.1, 0), :expand => true)
+        hboxScroll.pack_start(@fenetreScroll)
+        hboxScroll.pack_end(Alignment.new(1, 0, 0.1, 0), :expand => true)
+        hboxScroll.set_size_request(300,200)
 
         # Boutons valider et annuler
         hboxValiderAnnuler = Box.new(:horizontal, 10)
@@ -83,7 +90,7 @@ class VueChargerPartie < Vue
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(labelTaille)
         vboxPrincipale.add(hboxTaille)
-        vboxPrincipale.add(@fenetreScroll)
+        vboxPrincipale.add(hboxScroll)
         vboxPrincipale.add(hboxValiderAnnuler)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
@@ -95,16 +102,30 @@ class VueChargerPartie < Vue
         @boutonValider.set_sensitive(false)
     end
 
-    def onBtnTailleClicked(taille,bouton)        
+    def onBtnTailleClicked(taille,bouton)   
         @taille = taille
         @fenetreScroll.show()
 
+        if(@partie)
+            @boutonValider.set_sensitive(false)
+            @boutonDerniereSauvegarde.set_sensitive(true)
+        end
         if(!@boutonDerniereTaille)
             @boutonDerniereTaille = bouton
         end
         @boutonDerniereTaille.set_sensitive(true)
         @boutonDerniereTaille = bouton
         @boutonDerniereTaille.set_sensitive(false)
+    end
+
+    def onBtnSauvegardeClicked(boutonSauvegarde)
+        if(@boutonDerniereSauvegarde)
+            @boutonDerniereSauvegarde.set_sensitive(true)
+        end
+        @boutonDerniereSauvegarde = boutonSauvegarde
+        @boutonDerniereSauvegarde.set_sensitive(false)
+        @boutonValider.set_sensitive(true)
+        @partie = @boutonDerniereSauvegarde.partie()
     end
     
     def onBtnValiderClicked

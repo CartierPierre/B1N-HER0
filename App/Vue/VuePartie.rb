@@ -406,34 +406,54 @@ class VuePartie < Vue
     end
 
     def onBtnConseilClicked
-        conseil = Array[:regleLigne, 2, :regles1]
+        conseil = @modele.appliquerRegles()
 
-        chaine = @controleur.getLangue[:appliquerRegle] + @controleur.getLangue[conseil[2]] + @controleur.getLangue[conseil[0]] + conseil[1].to_s 
-        @labelConseil.set_markup("<big>" + couperChaine(chaine,30) + "</big>")
+        if(conseil != nil)
+            chaine = @controleur.getLangue[:appliquerRegle] + @controleur.getLangue[conseil[2]] + @controleur.getLangue[conseil[0]] 
+            if(conseil[2] == :regles3)
+                conseil[1][0] += 1
+                conseil[1][1] += 1
+                chaine += (conseil[1][0]).to_s 
+                chaine += @controleur.getLangue[:et]
+                chaine += conseil[1][1].to_s 
+            else
+                conseil[1] += 1
+                chaine += conseil[1].to_s 
+            end
+            @labelConseil.set_markup("<big>" + couperChaine(chaine,30) + "</big>")
 
-        if(conseil[0] == :regleLigne)
-            surbrillanceLigne(conseil[1])
-        else
-            surbrillanceColonne(conseil[1])
+            if(conseil[0] == :regleLigne)
+                if(conseil[2] == :regles3)
+                    surbrillanceLigne(conseil[1][0])
+                    surbrillanceLigne(conseil[1][1])
+                else
+                    surbrillanceLigne(conseil[1])
+                end
+            else
+                if(conseil[2] == :regles3)
+                    surbrillanceColonne(conseil[1][0])
+                    surbrillanceColonne(conseil[1][1])
+                else
+                    surbrillanceColonne(conseil[1])
+                end
+            end
+
+            Thread.new {
+                @boutonConseil.set_sensitive(false)
+                @labelConseil.show()
+                sleep(@dureeConseils)
+                @labelConseil.hide()
+                sleep(@delaiReactivation)
+                @boutonConseil.set_sensitive(true)
+            }
         end
-
-        Thread.new {
-            @boutonConseil.set_sensitive(false)
-            @labelConseil.show()
-            sleep(@dureeConseils)
-            @labelConseil.hide()
-            sleep(@delaiReactivation)
-            @boutonConseil.set_sensitive(true)
-        }
     end
 
     def onBtnAideClicked
-        aide = Array[2,5]
+        aide = @modele.demanderAide() 
 
-        @modele.grille.setTuile(aide[0]-1,aide[1]-1, Etat.lock_1) # A faire dans le modele de l'aide directement (seulement pour test là)
-
-        @grille[aide[0]][aide[1]].setImageTuile(@modele.grille.getTuile(aide[0]-1,aide[1]-1).etat()) 
-        surbrillanceTuile(aide[0],aide[1])
+        @grille[aide[0]+1][aide[1]+1].setImageTuile(@modele.grille.getTuile(aide[0],aide[1]).etat()) 
+        surbrillanceTuile(aide[0]+1,aide[1]+1)
     end
 
     def onBtnRestartClicked
