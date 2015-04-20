@@ -18,6 +18,10 @@ class ControleurMenuPrincipal < Controleur
     	changerControleur(ControleurProfil.new(@jeu))
     end
 
+    def classement()
+    	changerControleur(ControleurClassement.new(@jeu))
+    end
+
     def options()
     	changerControleur(ControleurOptions.new(@jeu,nil))
     end
