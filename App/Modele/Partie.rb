@@ -3,7 +3,7 @@
 # Cette classe à besoin des classes Chrono, Coup, Etat, Grille, Niveau et Score pour fonctionner.
 
 class Partie
-    attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :modeHypothese
+    attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides
     @listeUndo
     @listeRedo
     @partieHypothese
@@ -31,6 +31,10 @@ class Partie
         @listeRedo = Array.new()
 
         @modeHypothese = false
+
+        @nbCoups = 0
+        @nbConseils = 0
+        @nbAides = 0
 
         @cpttest = 0
     end
@@ -124,6 +128,7 @@ class Partie
             @grille.setTuile(x, y, t)
 
             monitor
+            @nbCoups += 1
         end
     end
 

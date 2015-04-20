@@ -29,6 +29,10 @@ class Chrono
         return @fin
     end
 
+    def to_i()
+        return @fin.to_i
+    end
+
     def to_s()
         temps = Time.now()-@debut
         minutes = sprintf('%02i', ((temps.to_i % 3600) / 60))

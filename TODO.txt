@@ -1,7 +1,7 @@
 - (En cours) Validation de la grille/Finir partie (Amaury)
 - (Fini) 3 regles (Tianqi)
 - Vues ( Loic et Corentin)
-- Sauvegardes, options, scores (Kevin)
+- Sauvegardes, options (Kevin)
 - Mise en ligne avec serveur (Kevin)
 - DDC (Quentin)  -> Pierre
 - (En cours) Mode hypothese code et vue (Pierre, Amaury, Corentin)

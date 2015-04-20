@@ -139,6 +139,7 @@ class VueOptions < Vue
     end
 
     def actualiserLangue() 
+        @@fenetre.title = @controleur.getLangue[:options]
         @labelChoixCouleur.set_markup("<big>" + @controleur.getLangue[:couleurTuiles] + "</big>")
         @boutonLangueFr.set_label(@controleur.getLangue[:francais])
         @boutonLangueEn.set_label(@controleur.getLangue[:anglais])
