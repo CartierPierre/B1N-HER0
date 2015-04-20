@@ -15,7 +15,7 @@ class Langue
     @langueActuelle
     @langueConstante
 
-    attr_reader :langueActuelle
+    attr_reader :langueActuelle, :langueConstante
 
     def initialize(langue) 
 
