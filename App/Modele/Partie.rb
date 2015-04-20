@@ -200,6 +200,12 @@ class Partie
         return nbEtat
     end
 
+    ##
+    # Applique toutes les régles sur la Partie.
+    #
+    # Retour::
+    #   Renvoie nil si aucun problème n'est présent, sinon un Array contenant si le problème vient d'une ligne ou un colonne, le numéro de celle-ci et la régle qui a été appliquée.
+    #
     def appliquerRegles()
         resultat = nil
         return resultat
