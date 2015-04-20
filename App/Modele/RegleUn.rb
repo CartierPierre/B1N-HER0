@@ -35,9 +35,9 @@ class RegleUn
         0.upto(partie.grille().taille() - 1) do |x|
             1.upto(partie.grille().taille() - 2)do |y|
                 if(# On ne souhaite pas contrôler les cases vide (on peut avoir 3 cases vides de suite).
-                    partie.grille().getTuile(x, y-1).etat() != Etat.vide &&
-                    partie.grille().getTuile(x,  y ).etat() != Etat.vide &&
-                    partie.grille().getTuile(x, y+1).etat() != Etat.vide
+                    !partie.grille().getTuile(x, y-1).estVide?() &&
+                    !partie.grille().getTuile(x,  y ).estVide?() &&
+                    !partie.grille().getTuile(x, y+1).estVide?()
                 ) then
                     if(# On vérifie que les cases avant et après n'est pas la même valeur que la notre.
                         Etat.egale?(partie.grille().getTuile(x,y-1).etat(), partie.grille().getTuile(x,y).etat()) &&
@@ -54,9 +54,9 @@ class RegleUn
         0.upto(partie.grille().taille() - 1) do |y|
             1.upto(partie.grille().taille() - 2) do |x|
                 if(# On ne souhaite pas contrôler les cases vide (on peut avoir 3 cases vides de suite).
-                    partie.grille().getTuile(x-1,y).etat() != Etat.vide &&
-                    partie.grille().getTuile( x ,y).etat() != Etat.vide &&
-                    partie.grille().getTuile(x+1,y).etat() != Etat.vide
+                    !partie.grille().getTuile(x-1,y).estVide?() &&
+                    !partie.grille().getTuile( x ,y).estVide?() &&
+                    !partie.grille().getTuile(x+1,y).estVide?()
                 ) then
                     if(# On vérifie que les cases avant et après n'est pas la même valeur que la notre.
                         Etat.egale?(partie.grille().getTuile(x-1,y).etat(), partie.grille().getTuile(x,y).etat()) &&

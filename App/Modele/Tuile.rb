@@ -10,4 +10,8 @@ class Tuile
     def initialize()
         @etat = Etat.vide
     end
+
+    def estVide?()
+        return etat == Etat.vide
+    end
 end
