@@ -9,7 +9,8 @@ class ControleurPartie < Controleur
         else
             @modele = partie 
         end
-		@vue = VuePartie.new(@modele,"Jeu",self)
+        titre = self.getLangue[:niveau] + " " + @modele.niveau.difficulte.to_s + " - " + @modele.grille.taille.to_i.to_s + "x" + @modele.grille.taille.to_i.to_s
+		@vue = VuePartie.new(@modele,titre,self)
 	end	
 
     def getImgTuile1

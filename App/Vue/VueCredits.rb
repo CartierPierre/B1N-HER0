@@ -8,7 +8,7 @@ class VueCredits < Vue
         vboxPrincipale = Box.new(:vertical, 20)
 
         labelBinHero = Label.new()
-        labelBinHero.set_markup("<big>B1N-HER0</big>")
+        labelBinHero.set_markup("<big>B1N HER0</big>")
 
         labelChefProjet = Label.new()
         labelChefProjet.set_label(@controleur.getLangue[:chefProjet] + " : Pierre CARTIER")

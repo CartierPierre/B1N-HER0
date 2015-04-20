@@ -1,5 +1,5 @@
 class Vue
-    @@fenetre = Window.new("BinHero")
+    @@fenetre = Window.new("B1N-HER0")
     @cadre
     @modele
     @controleur
@@ -10,7 +10,7 @@ class Vue
         @cadre = Frame.new()
         @@fenetre.add(@cadre)
         @modele = modele
-        @@fenetre.title = titre
+        @@fenetre.title = "B1N HER0 - " + titre
     	@@fenetre.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
         @@fenetre.set_size_request(420,410)
         @controleur=controleur

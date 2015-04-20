@@ -37,7 +37,7 @@ class VuePartie < Vue
     @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
 
     def initialize(modele,titre,controleur)
-        super(modele,"B1N-HER0",controleur)
+        super(modele,titre,controleur)
 
         @nbClignotements = 4
         @vitesseClignotement = 0.3
@@ -46,6 +46,10 @@ class VuePartie < Vue
         @delaiReactivation = 5
 
         @tailleGrille = @modele.grille().taille()
+
+        if(!@modele.chrono.estActif)
+            @modele.chrono.finPause()
+        end
 
         # Navigation
         boxNav = Box.new(:horizontal)
@@ -128,7 +132,6 @@ class VuePartie < Vue
         @temps.set_markup("<big>00:00</big>")
 
         @threadChrono = Thread.new() {
-            @modele.chrono.start()
             while(true)
                 if(@modele.chrono.estActif)
                     @temps.set_markup("<big>" + @modele.chrono.to_s + "</big>")
@@ -182,7 +185,7 @@ class VuePartie < Vue
         vboxPrincipale = Box.new(:vertical,30)
         vboxPrincipale.add(boxNav)
         labelNiveau = Label.new()
-        labelNiveau.set_markup("<big>" + "Niveau " + @modele.niveau.difficulte.to_s + " - " + @tailleGrille.to_i.to_s + "x" + @tailleGrille.to_i.to_s + "</big>")
+        labelNiveau.set_markup("<big>" + @controleur.getLangue[:niveau] + " " + @modele.niveau.difficulte.to_s + " - " + @tailleGrille.to_i.to_s + "x" + @tailleGrille.to_i.to_s + "</big>")
         vboxPrincipale.add(labelNiveau)
         vboxPrincipale.add(@boxJeu) 
         vboxPrincipale.add(@boxFooter)
@@ -296,6 +299,7 @@ class VuePartie < Vue
     end
 
     def onBtnOptionsClicked
+        @modele.chrono.pause()
         fermerCadre()
         @controleur.options()
     end
@@ -376,8 +380,7 @@ class VuePartie < Vue
         #     dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
         #     dialogValidationGrille.run()
         #     dialogValidationGrille.destroy()
-        # else     
-            @modele.chrono.stop()     
+        # else      
             fermerCadre()
             @controleur.validerGrille() 
         # end
@@ -434,6 +437,10 @@ class VuePartie < Vue
     end
 
     def onBtnRestartClicked
+        @labelHypothese.set_label("")
+        @boutonValiderHypothese.hide()
+        @boutonAnnulerHypothese.hide()
+        @boutonHypothese.show()
         @modele.recommencer
         self.actualiserGrille()
     end
