@@ -1,9 +1,5 @@
 #Règle 2: pas plus de 2 chiffres identiques côte à côte 
 
-load 'Grille.rb'
-load "Partie.rb"
-load "Etat.rb"
-
 class RegleDeux
 		
     private_class_method :new

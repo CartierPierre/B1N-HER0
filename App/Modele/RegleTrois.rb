@@ -1,9 +1,5 @@
 #Règle 3: 2 lignes ou 2 colonnes ne peuvent être identiques.
 
-load 'Grille.rb'
-load "Partie.rb"
-load "Tuile.rb"
-
 class RegleTrois
 		
     private_class_method :new

@@ -8,6 +8,8 @@ class Etat
     @@LOCK_1 = 3 # Etat 1 d'une case bloquée
     @@LOCK_2 = 4 # Etat 2 d'une case bloquée
 
+    private_class_method :new
+
     ##
     # Donne la valeur d'état vide.
     #

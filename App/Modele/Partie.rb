@@ -6,6 +6,7 @@ class Partie
     attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides
     @listeUndo
     @listeRedo
+    @regles
     @partieHypothese
 
     ##
@@ -30,6 +31,9 @@ class Partie
 
         @listeUndo = Array.new()
         @listeRedo = Array.new()
+
+        @regles = Array.new()
+        @regles.push(RegleUn.instance())
 
         @modeHypothese = false
 
@@ -115,6 +119,8 @@ class Partie
         @listeRedo = Array.new()
         @modeHypothese = false
         @chrono.start()
+
+        self
     end
 
     ##
@@ -133,6 +139,8 @@ class Partie
             monitor
             @nbCoups += 1
         end
+
+        self
     end
 
     ##
@@ -151,7 +159,7 @@ class Partie
                 end
             end
         end
-        chrono.stop()    
+
         return true
     end
 
@@ -197,6 +205,22 @@ class Partie
         end
 
         return nbEtat
+    end
+
+    ##
+    # Applique toutes les régles sur la Partie.
+    #
+    # Retour::
+    #   Renvoie nil si aucun problème n'est présent, sinon un Array contenant si le problème vient d'une ligne ou un colonne, le numéro de celle-ci et la régle qui a été appliquée.
+    #
+    def appliquerRegles()
+        resultat = nil
+        @regles.each do |regle|
+            if( (resultat = regle.appliquer(self)) )
+                return resultat
+            end
+        end
+        return resultat
     end
 
 
@@ -268,26 +292,36 @@ class Partie
             coup = Coup.creer(tabCoup[0].to_i, tabCoup[1].to_i, Etat.stringToEtat(tabCoup[2]))
             @listeRedo.unshift(coup)
         end
+
+        self
     end
     #protected :chargerRedo
 
     def setChrono(chrono)
         @chrono = chrono
+
+        self
     end
     #protected :setChrono
 
     def setGrille(grille)
         @grille = grille
+
+        self
     end
     #protected :setGrille
 
     def setModeHypothese(bool)
         @modeHypothese = bool
+
+        self
     end
     #protected :setModeHypothese
 
     def setPartieHypothese(donnee)
         @partieHypothese = donnee
+
+        self
     end
 
     ##
@@ -359,8 +393,13 @@ class Partie
             @listeRedo = Array.new()        # Remet à zéro les Redos
             @modeHypothese = true           # Indique que le mode est actif
         end
+
+        self
     end
 
+    ##
+    # Valide le mode hypothése pour le fusionner avec la partie.
+    #
     def validerHypothese()
         if(@modeHypothese)
             # Sépare les différents champs des données dans un tableau
@@ -378,8 +417,13 @@ class Partie
 
             @modeHypothese = false
         end
+
+        self
     end
 
+    ##
+    # Annule le mode hypothése et remet la partie dans l'état à laquelle elle se trouver avant l'activation du mode hypothése.
+    #
     def annulerHypothese()
         if(@modeHypothese)
             @listeUndo = Array.new()        # Remet à zéro les Undos
@@ -403,6 +447,8 @@ class Partie
 
             @modeHypothese = false
         end
+
+        self
     end
 
     @cpttest
@@ -414,7 +460,7 @@ class Partie
         puts "Liste des redo :", @listeRedo, "\n"
         print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n"
         print "\n"
-    end
 
-    #TODO reset grille
+        self
+    end
 end
