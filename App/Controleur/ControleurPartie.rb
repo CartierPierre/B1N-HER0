@@ -14,19 +14,19 @@ class ControleurPartie < Controleur
 	end	
 
     def getImgTuile1
-        return @@options.imgTuile1
+        return @@utilisateur.option.imgTuile1
     end
 
     def getImgTuile2
-        return @@options.imgTuile2
+        return @@utilisateur.option.imgTuile2
     end
 
     def getImgTuileLock1
-        return @@options.imgTuileLock1
+        return @@utilisateur.option.imgTuileLock1
     end
 
     def getImgTuileLock2
-        return @@options.imgTuileLock2
+        return @@utilisateur.option.imgTuileLock2
     end
 
     def getCouleurTuile(couleur)
@@ -43,11 +43,11 @@ class ControleurPartie < Controleur
     private :getCouleurTuile
 
     def getCouleurTuile1
-        return getCouleurTuile(@@options.couleurTuile1)
+        return getCouleurTuile(@@utilisateur.option.couleurTuile1)
     end
 
     def getCouleurTuile2
-        return getCouleurTuile(@@options.couleurTuile2)
+        return getCouleurTuile(@@utilisateur.option.couleurTuile2)
     end
 
     def getModeHypotheseActif

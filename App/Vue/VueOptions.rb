@@ -162,7 +162,7 @@ class VueOptions < Vue
         @modele.changerTuile1(@couleurTuile1)
         @modele.changerTuile2(@couleurTuile2)
         fermerCadre()
-        @controleur.annuler()
+        @controleur.appliquer()
     end
 
     def onBtnAnnulerClicked

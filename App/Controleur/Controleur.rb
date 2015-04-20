@@ -4,8 +4,7 @@ class Controleur
     @vue
     @modele
     @gestionnaireUtilisateur
-    @@utilisateur
-    @@options = Option.creer(Option::TUILE_ROUGE,Option::TUILE_BLEUE,Langue::FR) 
+    @@utilisateur = nil
 
     def initialize(jeu)
         @jeu = jeu
@@ -13,7 +12,10 @@ class Controleur
     end
 
     def getLangue
-        return @@options.langue.langueActuelle
+        if(@@utilisateur)
+            return @@utilisateur.option.langue.langueActuelle
+        end
+        return Langue.new(Langue::FR).langueActuelle 
     end
 
     def changerControleur(controleur)
