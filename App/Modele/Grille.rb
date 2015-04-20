@@ -252,7 +252,7 @@ class Grille
     def estRemplie?()
         0.upto(self.taille() - 1) do |i|
             0.upto(self.taille() - 1) do |j|
-                if(self.getTuile(i,j).etat == Etat.vide)
+                if(self.getTuile(i,j).estVide?())
                     return false
                 end
             end
