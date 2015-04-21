@@ -13,12 +13,8 @@ class VueResultatPartie < Vue
         labelFelicitations = Label.new()
         labelFelicitations.set_markup("<big>" + @controleur.getLangue[:felicitations] + @modele.grille.taille.to_i.to_s + "x" + @modele.grille.taille.to_i.to_s + @controleur.getLangue[:felicitations2] + @modele.niveau.difficulte.to_s + "</big>")
 
-        # score = Score.creer(id, uuid, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau)
-        score = Score.creer(@modele.chrono.to_i, @modele.nbCoups, @modele.nbConseils, @modele.nbAides, 1, 1)
-        points = score.nbPoints(@modele.niveau)
-
         labelScore = Label.new()
-        labelScore.set_markup("<big>" + @controleur.getLangue[:score] + " : " + points.to_s + "</big>")
+        labelScore.set_markup("<big>" + @controleur.getLangue[:score] + " : " + @modele.score.nbPoints(@modele.niveau).to_s + "</big>")
 
         labelTemps = Label.new()
         labelTemps.set_markup("<big>" + @controleur.getLangue[:temps] + " : " + @modele.chrono.to_s + "</big>")

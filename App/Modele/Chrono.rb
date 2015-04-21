@@ -40,11 +40,6 @@ class Chrono
         return @tempsFin
     end
 
-    # Inutile comme méthode, on déjà accés au temps de fin
-    # def to_i()
-    #     return @tempsFin.to_i
-    # end
-
     ##
     # Donne le chrono sous forme de chaine de caractères.
     #
