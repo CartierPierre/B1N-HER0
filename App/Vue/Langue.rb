@@ -39,7 +39,7 @@ class Langue
             conseil: "Conseil",
             couleurTuiles: "Couleur des tuiles",
             credits: "Crédits",
-            demarrage: "Demarrage"
+            demarrage: "Demarrage",
             difficulte: "Difficulté",
             documentaliste: "Documentaliste",
             et: " et ",
@@ -88,7 +88,7 @@ class Langue
             tailleGrille: "Taille de la grille",
             temps: "Temps",
             valider: "Valider",
-            validerGrille: "Valider la grille",
+            validerGrille: "Valider la grille"
         }
 
         @langueEn = {
@@ -111,7 +111,7 @@ class Langue
             conseil: "Advice",
             couleurTuiles: "Color tiles",
             credits: "Credits",
-            demarrage: "Launch"
+            demarrage: "Launch",
             difficulte: "Difficulty",
             documentaliste: "Archivist",
             et: " and ",
@@ -160,7 +160,7 @@ class Langue
             tailleGrille: "Grid size",
             temps: "Time",
             valider: "Confirm",
-            validerGrille: "Check the grid",
+            validerGrille: "Check the grid"
         }
         if(langue == FR)
             @langueActuelle = @langueFr
