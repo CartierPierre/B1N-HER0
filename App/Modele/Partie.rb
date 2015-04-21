@@ -4,7 +4,7 @@
 #
 
 class Partie
-    attr_reader :grille, :niveau, :score, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides
+    attr_reader :grille, :niveau, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides
     @listeUndo
     @listeRedo
     @regles
@@ -28,7 +28,6 @@ class Partie
         @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
         @chrono = Chrono.creer()
         @chrono.start()
-        #@score = Score.creer( 0, 0, 0, 0, @utilisateur.id, @niveau.id)
 
         @listeUndo = Array.new()
         @listeRedo = Array.new()
@@ -228,6 +227,7 @@ class Partie
         resultat = nil
         @regles.each do |regle|
             if( (resultat = regle.appliquer(self)) )
+                @nbConseils += 1
                 return resultat
             end
         end
@@ -286,6 +286,7 @@ class Partie
 
         if(meilleurCases = casesPossible.sample())
             @grille.setTuile(meilleurCases[0], meilleurCases[1], @niveau.solution.getTuile(meilleurCases[0], meilleurCases[1]).etat())
+            @nbAides += 1
             return Array[meilleurCases[0], meilleurCases[1]]
         end
 
@@ -402,7 +403,7 @@ class Partie
 
         # On remet en place le mode hypothése
         if(donnees[4])
-            p donneesHypothese = donnees[4].split('#')
+            donneesHypothese = donnees[4].split('#')
 
             if(donneesHypothese[0] == 'true')
                 partie.setModeHypothese(true)
