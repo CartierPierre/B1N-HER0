@@ -3,7 +3,7 @@
 #
 
 class Chrono
-    attr_reader :estActif, :debut, :pause, :fin
+    attr_accessor :estActif, :tempsDebut, :tempsPause, :tempsFin
 
     private_class_method :new
     ##
@@ -13,7 +13,7 @@ class Chrono
     end
 
     def initialize()
-        @debut=Time.now
+        @tempsDebut=Time.now
         @estActif = false
     end
 
@@ -21,7 +21,7 @@ class Chrono
     # Démarre le chrono.
     #
     def start()
-        @debut=Time.now
+        @tempsDebut=Time.now
         @estActif = true
 
         self
@@ -34,15 +34,15 @@ class Chrono
     #   Le temps de fin.
     #
     def stop()
-        @fin=Time.now-@debut
+        @tempsFin=Time.now-@tempsDebut
         @estActif = false
 
-        return @fin
+        return @tempsFin
     end
 
     # Inutile comme méthode, on déjà accés au temps de fin
     # def to_i()
-    #     return @fin.to_i
+    #     return @tempsFin.to_i
     # end
 
     ##
@@ -52,7 +52,7 @@ class Chrono
     #   Une chaine de caractéres représentant le chrono.
     #
     def to_s()
-        temps = Time.now()-@debut
+        temps = Time.now()-@tempsDebut
         minutes = sprintf('%02i', ((temps.to_i % 3600) / 60))
         secondes = sprintf('%02i', (temps.to_i % 60))
 
@@ -63,8 +63,10 @@ class Chrono
     # Met le chrono en pause.
     #
     def pause() #a utiliser seulement pour les sauvegardes ou regles, penser a masquer la grille
-        @pause=Time.now
-        @estActif = false
+        if(@estActif)
+            @tempsPause=Time.now
+            @estActif = false
+        end
 
         self
     end
@@ -73,8 +75,10 @@ class Chrono
     # Remet le chrono en marche
     #
     def finPause()
-        @debut+=(Time.now-@pause)
-        @estActif = true
+        if(!@estActif)
+            @tempsDebut+=(Time.now-@tempsPause)
+            @estActif = true
+        end
 
         self
     end
@@ -93,19 +97,23 @@ class Chrono
     # Sauvegarde un Chrono en chaine de caractéres.
     #
     # Retour::
-    #   Une chaine de caractére représentant le Chrono, chaque champs séparer par un ';' (respectivement estActif, debut, pause, fin).
+    #   Une chaine de caractére représentant le Chrono, chaque champs séparer par un ';' (respectivement estActif, tempsDebut, tempsPause, tempsFin).
     #    self.sauvegarder #=> "true;50:37:17:20:4:2015:1:110:true:CEST;;"
     #
     def sauvegarder()
+        # On s'assure que le chrono est en pause pour la sauvegarde
+        wasActif = @estActif
+        self.pause()
+
         donnee = String.new()
 
         # Sauvegarde le bouléen qui indique si le chrono est actif.
         donnee += "#{estActif.to_s};"
 
         # Sauvegarde du temps de début.
-        @debut.to_a().each do |x|
+        @tempsDebut.to_a().each do |x|
             donnee += "#{x.to_s}"
-            if x != @debut.to_a().last()
+            if x != @tempsDebut.to_a().last()
                 donnee += ":"
             end
         end
@@ -113,10 +121,10 @@ class Chrono
         donnee += ";"
 
         # Sauvegarde du temps de pause.
-        if(@pause)
-            @pause.to_a().each do |x|
+        if(@tempsPause)
+            @tempsPause.to_a().each do |x|
                 donnee += "#{x.to_s}"
-                if x != @pause.to_a().last()
+                if x != @tempsPause.to_a().last()
                     donnee += ":"
                 end
             end
@@ -125,13 +133,18 @@ class Chrono
         donnee += ";"
 
         # Sauvegarde du temps de fin.
-        if(@fin)
-            @fin.to_a().each do |x|
+        if(@tempsFin)
+            @tempsFin.to_a().each do |x|
                 donnee += "#{x.to_s}"
-                if x != @fin.to_a().last()
+                if x != @tempsFin.to_a().last()
                     donnee += ":"
                 end
             end
+        end
+
+        # On remet en route le chrono s'il l'était avant la sauvegarde.
+        if(wasActif)
+            self.finPause()
         end
 
         return donnee
@@ -157,18 +170,21 @@ class Chrono
 
         # On remet le temps de début.
         t = donnees[1].split(':')
-        debut = Time.gm( t[0].to_i, t[1].to_i, t[2].to_i, t[3].to_i, t[4].to_i, t[5].to_i, t[6].to_i, t[7].to_i,((t[5] == 'true')?true:false), t[6])
-                        # seconde :  minute  :   heure  :   jour   :   mois   :annee     :   wday   :   yday   :              isdst          : zone
+                    #Time.gm(  seconde ,  minute  ,   heure  ,   jour   ,   mois   ,   annee  ,   wday   ,   yday   ,              isdst          , zone
+        tempsDebut = Time.gm( t[0].to_i, t[1].to_i, t[2].to_i, t[3].to_i, t[4].to_i, t[5].to_i, t[6].to_i, t[7].to_i,((t[5] == 'true')?true:false), t[6])
+
         # On remet le temps de pause.
-        if donnees.size >= 4
+        if donnees.size >= 3
             t = donnees[2].split(':')
-            chrono.pause = Time.now + (Time.gm( t[0].to_i, t[1].to_i, t[2].to_i, t[3].to_i, t[4].to_i, t[5].to_i, t[6].to_i, t[7].to_i,((t[5] == 'true')?true:false), t[6]) - debut)
+            chrono.tempsPause = Time.now + (Time.gm( t[0].to_i, t[1].to_i, t[2].to_i, t[3].to_i, t[4].to_i, t[5].to_i, t[6].to_i, t[7].to_i,((t[5] == 'true')?true:false), t[6]) - tempsDebut)
         end
 
+        chrono.tempsDebut = chrono.tempsPause - (Time.gm( t[0].to_i, t[1].to_i, t[2].to_i, t[3].to_i, t[4].to_i, t[5].to_i, t[6].to_i, t[7].to_i,((t[5] == 'true')?true:false), t[6]) - tempsDebut)
+
         # On remet le temps de fin.
-        if donnees.size >= 3
+        if donnees.size >= 4
             t = donnees[3].split(':')
-            chrono.fin = Time.now + (Time.gm( t[0].to_i, t[1].to_i, t[2].to_i, t[3].to_i, t[4].to_i, t[5].to_i, t[6].to_i, t[7].to_i,((t[5] == 'true')?true:false), t[6]) - debut)
+            chrono.tempsFin = Time.now + (Time.gm( t[0].to_i, t[1].to_i, t[2].to_i, t[3].to_i, t[4].to_i, t[5].to_i, t[6].to_i, t[7].to_i,((t[5] == 'true')?true:false), t[6]) - tempsDebut)
         end
 
         return chrono
