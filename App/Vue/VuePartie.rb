@@ -36,8 +36,6 @@ class VuePartie < Vue
     @dureeConseils          # Durée des conseils en secondes
     @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
 
-    @confirmationSauvegarde
-
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
@@ -307,7 +305,7 @@ class VuePartie < Vue
     def onBtnSauvegarderClicked 
         self.cacherJeu()
 
-        @confirmationSauvegarde
+        confirmation = false
         dialogSauvegarde = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:sauvegarder], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
         
         labelSauvegarde = Label.new()
@@ -318,14 +316,14 @@ class VuePartie < Vue
         dialogSauvegarde.show_all()
         dialogSauvegarde.run do |reponse|
             if(reponse == ResponseType::YES)
-                @confirmationSauvegarde = true
+                confirmation = true
             else
-                @confirmationSauvegarde = false
+                confirmation = false
             end             
         end
         dialogSauvegarde.destroy()
 
-        if(@confirmationSauvegarde)
+        if(confirmation)
             messageConfirmation = @controleur.getLangue[:sauvegardeEffectuee]
             dialogConfirmation = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => messageConfirmation)
             dialogConfirmation.run()
@@ -363,8 +361,32 @@ class VuePartie < Vue
     end
 
     def onBtnQuitterClicked
-        fermerCadre()
-        @controleur.quitter()
+        self.cacherJeu()
+        confirmation = false
+
+        dialogConfirmation = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:quitter], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
+        
+        labelConfirmation = Label.new()
+        labelConfirmation.set_markup("<big>" + @controleur.getLangue[:confirmationQuitter] + "</big>")
+        dialogConfirmation.child.set_spacing(10)
+        dialogConfirmation.child.add(labelConfirmation)
+
+        dialogConfirmation.show_all()
+        dialogConfirmation.run do |reponse|
+            if(reponse == ResponseType::YES)
+                confirmation = true
+            else
+                confirmation = false
+            end             
+        end
+        dialogConfirmation.destroy()
+
+        if(confirmation)
+            fermerCadre()
+            @controleur.quitter()
+        end
+
+        self.montrerJeu()
     end
 
     ##
@@ -499,12 +521,29 @@ class VuePartie < Vue
     end
 
     def onBtnRecommencerClicked
-        @labelHypothese.set_label("")
-        @boutonValiderHypothese.hide()
-        @boutonAnnulerHypothese.hide()
-        @boutonHypothese.show()
-        @modele.recommencer
-        self.actualiserGrille()
+        self.cacherJeu()
+
+        dialogConfirmation = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:recommencer], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
+        
+        labelConfirmation = Label.new()
+        labelConfirmation.set_markup("<big>" + @controleur.getLangue[:confirmationRecommencer] + "</big>")
+        dialogConfirmation.child.set_spacing(10)
+        dialogConfirmation.child.add(labelConfirmation)
+
+        dialogConfirmation.show_all()
+        dialogConfirmation.run do |reponse|
+            if(reponse == ResponseType::YES)
+                @labelHypothese.set_label("")
+                @boutonValiderHypothese.hide()
+                @boutonAnnulerHypothese.hide()
+                @boutonHypothese.show()
+                @modele.recommencer
+                self.actualiserGrille()
+            end             
+        end
+        dialogConfirmation.destroy()
+
+        self.montrerJeu()
     end
 
 end
