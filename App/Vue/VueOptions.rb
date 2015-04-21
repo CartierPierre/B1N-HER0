@@ -1,102 +1,99 @@
 class VueOptions < Vue
 
+    # Langue
     @labelLangue
+    @boutonsLangue    
+    @boutonLangueActif
+    @languePrecedenteConstante
 
-    @boutonLangueFr
-    @boutonLangueEn
-
+    # Couleur des tuiles
     @labelChoixCouleur
-
-    @boutonImgTuileRouge
-    @boutonImgTuileBleue
-    @boutonImgTuileJaune
-    @boutonImgTuileVerte
-
-    @boutonImgTuile1Actif
-    @boutonImgTuile2Actif
-
-    @boutonAppliquer
-    @boutonAnnuler
-
+    @boutonsCouleurTuile
+    @boutonCouleurTuile1Actif
+    @boutonCouleurTuile2Actif
     @couleurTuile1
     @couleurTuile2
 
-    @languePrecedente
+    # Boutons appliquer et annuler
+    @boutonAppliquer
+    @boutonAnnuler
 
-    def initBoutonImgTuile1Actif(bouton,couleur)
-        if(@modele.couleurTuile1 == couleur)
-            @boutonImgTuile1Actif = bouton
-            @boutonImgTuile1Actif.set_sensitive(false)
+    class BoutonLabel < Gtk::Button
+
+        attr_reader :label
+
+        def initialize(label)
+            super(:label => label)
+            @label = label
         end
     end
 
-    def initBoutonImgTuile2Actif(bouton,couleur)
-        if(@modele.couleurTuile2 == couleur)
-            @boutonImgTuile2Actif = bouton
-            @boutonImgTuile2Actif.set_sensitive(false)
+    def initTableauBoutonsLangue(label,langue)
+        boutonTemp = BoutonLabel.new(label)
+        boutonTemp.signal_connect('clicked')  { onBtnLangueClicked(boutonTemp,langue) }
+        if(@controleur.getLangueConstante == langue)
+            @boutonLangueActif = boutonTemp
+            boutonTemp.set_sensitive(false)
         end
+        @boutonsLangue.push(boutonTemp)
+    end
+
+    def initTableauBoutonsCouleurTuile(couleur)
+        boutonTemp = Button.new()
+        boutonTemp.set_image(Image.new(:pixbuf => Option::IMG[couleur]))
+        boutonTemp.signal_connect('clicked')  { onBtnCouleurTuileClicked(boutonTemp,couleur) }
+        if(@modele.couleurTuile1 == couleur)
+            @boutonCouleurTuile1Actif = boutonTemp
+            @boutonCouleurTuile1Actif.set_sensitive(false)
+        end
+        if(@modele.couleurTuile2 == couleur)
+            @boutonCouleurTuile2Actif = boutonTemp
+            @boutonCouleurTuile2Actif.set_sensitive(false)
+        end
+        @boutonsCouleurTuile.push(boutonTemp)
     end
 
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
-        @languePrecedente = @controleur.getLangueConstante()
-
+        @languePrecedenteConstante = @controleur.getLangueConstante()
         @couleurTuile1 = @modele.couleurTuile1()
         @couleurTuile2 = @modele.couleurTuile2()
 
-        # Langue
+        # Choix de la langue
         boxLangue = Box.new(:horizontal, 10)
 
         @labelLangue = Label.new()
         @labelLangue.set_markup("<big>" + @controleur.getLangue[:langue] + "</big>")
-        @boutonLangueFr = Button.new(:label => @controleur.getLangue[:francais])
-        @boutonLangueFr.signal_connect('clicked')  { onBtnLangueFrClicked }
-        @boutonLangueEn = Button.new(:label => @controleur.getLangue[:anglais])
-        @boutonLangueEn.signal_connect('clicked')  { onBtnLangueEnClicked }
+
+        @boutonsLangue = Array.new()
+        initTableauBoutonsLangue(@controleur.getLangue[:francais], Langue::FR)
+        initTableauBoutonsLangue(@controleur.getLangue[:anglais], Langue::EN)
 
         boxLangue.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         boxLangue.add(@labelLangue)
-        boxLangue.add(@boutonLangueFr)
-        boxLangue.add(@boutonLangueEn)
+        @boutonsLangue.each do |bouton|
+            boxLangue.add(bouton)
+        end
         boxLangue.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Images tuile
-        boxImgTuile = Box.new(:horizontal, 10)
+        # Choix de la couleur des tuiles
+        boxCouleurTuile = Box.new(:horizontal, 10)
 
         @labelChoixCouleur = Label.new()
         @labelChoixCouleur.set_markup("<big>" + @controleur.getLangue[:couleurTuiles] + "</big>")
 
-        @boutonImgTuileRouge = Button.new()
-        @boutonImgTuileRouge.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_ROUGE]))
-        @boutonImgTuileBleue = Button.new()
-        @boutonImgTuileBleue.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_BLEUE]))
-        @boutonImgTuileJaune = Button.new()
-        @boutonImgTuileJaune.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_JAUNE]))
-        @boutonImgTuileVerte = Button.new()
-        @boutonImgTuileVerte.set_image(Image.new(:pixbuf => Option::IMG[Option::TUILE_VERTE]))
+        @boutonsCouleurTuile = Array.new()
+        initTableauBoutonsCouleurTuile(Option::TUILE_ROUGE)
+        initTableauBoutonsCouleurTuile(Option::TUILE_BLEUE)
+        initTableauBoutonsCouleurTuile(Option::TUILE_JAUNE)
+        initTableauBoutonsCouleurTuile(Option::TUILE_VERTE)
 
-        initBoutonImgTuile1Actif(@boutonImgTuileRouge, Option::TUILE_ROUGE)
-        initBoutonImgTuile1Actif(@boutonImgTuileBleue, Option::TUILE_BLEUE)
-        initBoutonImgTuile1Actif(@boutonImgTuileJaune, Option::TUILE_JAUNE)
-        initBoutonImgTuile1Actif(@boutonImgTuileVerte, Option::TUILE_VERTE)
-
-        initBoutonImgTuile2Actif(@boutonImgTuileRouge, Option::TUILE_ROUGE)
-        initBoutonImgTuile2Actif(@boutonImgTuileBleue, Option::TUILE_BLEUE)
-        initBoutonImgTuile2Actif(@boutonImgTuileJaune, Option::TUILE_JAUNE)
-        initBoutonImgTuile2Actif(@boutonImgTuileVerte, Option::TUILE_VERTE)
-
-        @boutonImgTuileRouge.signal_connect('clicked') { onBtnImgTuileClicked(Option::TUILE_ROUGE,@boutonImgTuileRouge) }
-        @boutonImgTuileBleue.signal_connect('clicked') { onBtnImgTuileClicked(Option::TUILE_BLEUE,@boutonImgTuileBleue) }
-        @boutonImgTuileJaune.signal_connect('clicked') { onBtnImgTuileClicked(Option::TUILE_JAUNE,@boutonImgTuileJaune) }
-        @boutonImgTuileVerte.signal_connect('clicked') { onBtnImgTuileClicked(Option::TUILE_VERTE,@boutonImgTuileVerte) }
-
-        boxImgTuile.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        boxImgTuile.add(@boutonImgTuileRouge)
-        boxImgTuile.add(@boutonImgTuileBleue)
-        boxImgTuile.add(@boutonImgTuileJaune)
-        boxImgTuile.add(@boutonImgTuileVerte)
-        boxImgTuile.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxCouleurTuile.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        @boutonsCouleurTuile.each do |bouton|
+            boxCouleurTuile.add(bouton)
+        end
+        boxCouleurTuile.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Boutons appliquer et annuler
         hboxAppliquerAnnuler = Box.new(:horizontal, 10)
@@ -112,50 +109,49 @@ class VueOptions < Vue
         hboxAppliquerAnnuler.add(@boutonAnnuler)
         hboxAppliquerAnnuler.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Box principale                
-        boxPrincipale = Box.new(:vertical, 20)
+        # Vbox principale                
+        vboxPrincipale = Box.new(:vertical, 20)
 
-        boxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        boxPrincipale.add(boxLangue)
-        boxPrincipale.add(@labelChoixCouleur)
-        boxPrincipale.add(boxImgTuile)
-        boxPrincipale.add(hboxAppliquerAnnuler)
-        boxPrincipale.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxPrincipale.add(boxLangue)
+        vboxPrincipale.add(@labelChoixCouleur)
+        vboxPrincipale.add(boxCouleurTuile)
+        vboxPrincipale.add(hboxAppliquerAnnuler)
+        vboxPrincipale.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        @cadre.add(boxPrincipale)
+        @cadre.add(vboxPrincipale)
         self.actualiser()
     end
 
-    def onBtnImgTuileClicked(couleur,bouton)
-        @boutonImgTuile1Actif.set_sensitive(true)
-        @boutonImgTuile1Actif = @boutonImgTuile2Actif
+    def actualiserLangue() 
+        @@fenetre.title = "B1N HER0 - " + @controleur.getLangue[:options]        
+        @labelLangue.set_markup("<big>" + @controleur.getLangue[:langue] + "</big>")
+        @boutonsLangue.each do |bouton|
+            bouton.set_label(bouton.label)
+        end
+        @labelChoixCouleur.set_markup("<big>" + @controleur.getLangue[:couleurTuiles] + "</big>")
+        @boutonAppliquer.set_label(@controleur.getLangue[:appliquer])
+        @boutonAnnuler.set_label(@controleur.getLangue[:annuler])
+    end
 
-        @boutonImgTuile2Actif = bouton   
-        @boutonImgTuile2Actif.set_sensitive(false)   
+    def onBtnLangueClicked(bouton,langue)
+        @boutonLangueActif.set_sensitive(true)
+        @boutonLangueActif = bouton
+        @boutonLangueActif.set_sensitive(false)
+        @controleur.setLangue(langue)
+        self.actualiserLangue()
+    end
+
+    def onBtnCouleurTuileClicked(bouton,couleur)
+        @boutonCouleurTuile1Actif.set_sensitive(true)
+        @boutonCouleurTuile1Actif = @boutonCouleurTuile2Actif
+
+        @boutonCouleurTuile2Actif = bouton   
+        @boutonCouleurTuile2Actif.set_sensitive(false)   
 
         @couleurTemp = @couleurTuile1
         @couleurTuile1 = @couleurTuile2
         @couleurTuile2 = couleur
-    end
-
-    def actualiserLangue() 
-        @@fenetre.title = "B1N HER0 - " + @controleur.getLangue[:options]
-        @labelChoixCouleur.set_markup("<big>" + @controleur.getLangue[:couleurTuiles] + "</big>")
-        @boutonLangueFr.set_label(@controleur.getLangue[:francais])
-        @boutonLangueEn.set_label(@controleur.getLangue[:anglais])
-        @boutonAppliquer.set_label(@controleur.getLangue[:appliquer])
-        @boutonAnnuler.set_label(@controleur.getLangue[:annuler])
-        @labelLangue.set_markup("<big>" + @controleur.getLangue[:langue] + "</big>")
-    end
-
-    def onBtnLangueFrClicked
-        @controleur.setLangue(Langue::FR)
-        self.actualiserLangue()
-    end
-
-    def onBtnLangueEnClicked
-        @controleur.setLangue(Langue::EN)
-        self.actualiserLangue()
     end
 
     def onBtnAppliquerClicked        
@@ -166,7 +162,7 @@ class VueOptions < Vue
     end
 
     def onBtnAnnulerClicked
-        @controleur.setLangue(@languePrecedente)
+        @controleur.setLangue(@languePrecedenteConstante)
         fermerCadre()
         @controleur.annuler()
     end
