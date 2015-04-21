@@ -25,7 +25,7 @@ class Partie
     def initialize(utilisateur, niveau)
         @utilisateur = utilisateur
         @niveau = niveau
-        @grille = Grille.creer(niveau.probleme.taille).copier(niveau.probleme)
+        @grille = Grille.creer(niveau.dimention).copier(niveau.probleme)
         @chrono = Chrono.creer()
         @chrono.start()
 
@@ -379,12 +379,12 @@ class Partie
     # Retour::
     #   Une nouvelle partie construite à partir des paramètres donnés.
     #
-    def Partie.charger(utilisateur, niveau, donnee)
+    def Partie.charger(utilisateur, niveau, sauvegarde)
         # Crée un nouvelle partie
         partie = Partie.creer(utilisateur, niveau)
 
         # Sépare les différents champs des données dans un tableau
-        donnees = donnee.split("|")
+        donnees = sauvegarde.contenu.split("|")
 
         # Charge le chrono avec les données sérialisée du chrono
         partie.setChrono(Chrono.charger(donnees[0]))

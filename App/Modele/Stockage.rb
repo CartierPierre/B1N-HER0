@@ -52,7 +52,7 @@ class Stockage
 	# Execute une requête SQL sur la base de données locale
 	#
 	def executer(requete)
-		# puts requete
+		puts requete
 		return @bddLocal.execute(requete)
 	end
 	

@@ -1,14 +1,13 @@
 ##
 # Classe Score
 #
-# Version 4
+# Version 6
 #
 class Score
 
     ### Attributs d'instances
 
-    attr_reader :id, :uuid, :idUtilisateur, :idNiveau
-    attr_accessor :tempsTotal, :nbCoups, :nbConseils, :nbAides
+    attr_accessor :id, :uuid, :tempsTotal, :nbCoups, :nbConseils, :nbAides, :idUtilisateur, :idNiveau
 
     ### Méthodes de classe
 
@@ -20,7 +19,7 @@ class Score
             when 0
                 new(nil, nil, nil, nil, nil, nil, nil, nil)
             when 6
-                new(nil, nil, args[0], args[1], args[3], args[4], args[5], args[6])
+                new(nil, nil, args[0], args[1], args[2], args[3], args[4], args[5])
             when 8
                 new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7])
             else

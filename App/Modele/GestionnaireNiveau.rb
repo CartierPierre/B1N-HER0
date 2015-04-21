@@ -190,4 +190,22 @@ class GestionnaireNiveau
 		return hydraterNiveau( resultat[0] )
 	end
 	
+	##
+	# Temporaire, pas utiliser sauf buddies
+	#
+	def insert(n)
+		@stockage.executer("
+			INSERT INTO niveau
+			VALUES (
+				null,
+				null,
+				'#{ n.probleme.sauvegarder() }',
+				'#{ n.solution.sauvegarder() }',
+				'#{ n.difficulte }',
+				'#{ n.dimention }'
+			);
+		")
+		n.id = @stockage.dernierId()
+	end
+	
 end

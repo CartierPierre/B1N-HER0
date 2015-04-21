@@ -1,13 +1,13 @@
 ##
 # Classe Niveau
 #
-# Version 2
+# Version 3
 #
 class Niveau
 
 	### Attributs d'instances
 	
-    attr_reader :id, :uuid, :probleme, :solution, :difficulte, :dimention
+    attr_accessor :id, :uuid, :probleme, :solution, :difficulte, :dimention
 	
 	### Méthodes de classe
 	
@@ -19,7 +19,7 @@ class Niveau
 			when 0
 				new(nil, nil, nil, nil, nil, nil)
 			when 4
-				new(nil, nil, args[0], args[1], args[3], args[4])
+				new(nil, nil, args[0], args[1], args[2], args[3])
 			when 6
 				new(args[0], args[1], args[2], args[3], args[4], args[5])
 			else

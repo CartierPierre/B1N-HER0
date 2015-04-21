@@ -1,13 +1,13 @@
 ##
 # Classe Sauvegarde
 #
-# Version 4
+# Version 6
 #
 class Sauvegarde
 
 	### Attributs d'instances
 	
-    attr_reader :id, :uuid, :description, :dateCreation, :contenu, :idUtilisateur, :idNiveau
+    attr_accessor :id, :uuid, :description, :dateCreation, :contenu, :idUtilisateur, :idNiveau
 	
 	### Méthodes de classe
 	
@@ -19,7 +19,7 @@ class Sauvegarde
 			# args[0] (string) description
 			# args[1] (Partie) partie
 			when 2
-				new( nil, nil, args[0], Time.now.to_i, "SERIALISATION", args[1].utilisateur.id, args[1].niveau.id ) # Pour les développeurs
+				new( nil, nil, args[0], Time.now.to_i, args[1].sauvegarder(), args[1].utilisateur.id, args[1].niveau.id ) # Pour les développeurs
 			when 7
 				new( args[0], args[1], args[2], args[3], args[4], args[5], args[6] ) # Pour la classe GestionnaireSauvegarde
 			else
