@@ -152,6 +152,11 @@ class GestionnaireScore
 			SELECT *
 			FROM score
 			WHERE id_utilisateur = #{ u.id }
+			ORDER BY
+				temps_total,
+				nb_coups DESC,
+				nb_conseils DESC,
+				nb_aides DESC
 			LIMIT #{ l }
 			OFFSET #{ o };
 		")
@@ -203,7 +208,12 @@ class GestionnaireScore
 			FROM score
 			WHERE
 				id_utilisateur = #{ u.id }
-				AND id_niveau = #{ n.id };
+				AND id_niveau = #{ n.id }
+			ORDER BY
+				temps_total,
+				nb_coups DESC,
+				nb_conseils DESC,
+				nb_aides DESC
 			LIMIT #{ l }
 			OFFSET #{ o };
 		")
