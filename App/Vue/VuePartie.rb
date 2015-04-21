@@ -27,7 +27,7 @@ class VuePartie < Vue
     @boutonUndo
     @boutonRedo
     @boutonConseil
-    @boutonRestart
+    @boutonRecommencer
 
     # Configuration de la surbrillance pour les aides et conseils
     @nbClignotements        # Fait varier le nombre de clignotements
@@ -41,11 +41,11 @@ class VuePartie < Vue
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
-        @nbClignotements = 4
+        @nbClignotements = 0
         @vitesseClignotement = 0.3
 
         @dureeConseils = 15
-        @delaiReactivation = 5
+        @delaiReactivation = 0
 
         @tailleGrille = @modele.grille().taille()
 
@@ -167,20 +167,20 @@ class VuePartie < Vue
         @boutonRedo = nouveauBouton(:repeter,"redo")
         @boutonConseil = nouveauBouton(:conseil,"conseil")
         @boutonAide = nouveauBouton(:aide,"aide")
-        @boutonRestart = nouveauBouton(:recommencer,"restart")
+        @boutonRecommencer = nouveauBouton(:recommencer,"restart")
 
         @boutonUndo.signal_connect('clicked')  { onBtnUndoClicked }
         @boutonRedo.signal_connect('clicked')  { onBtnRedoClicked }
         @boutonConseil.signal_connect('clicked')  { onBtnConseilClicked }
         @boutonAide.signal_connect('clicked')  { onBtnAideClicked }
-        @boutonRestart.signal_connect('clicked')  { onBtnRestartClicked }
+        @boutonRecommencer.signal_connect('clicked')  { onBtnRecommencerClicked }
 
         @boxFooter.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)       
         @boxFooter.add(@boutonUndo)
         @boxFooter.add(@boutonRedo)
         @boxFooter.add(@boutonConseil)
         @boxFooter.add(@boutonAide)
-        @boxFooter.add(@boutonRestart)
+        @boxFooter.add(@boutonRecommencer)
         @boxFooter.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Ajout dans la box principale des éléments
@@ -412,17 +412,17 @@ class VuePartie < Vue
     end
 
     def onBtnValiderGrilleClicked
-        # if(!@modele.valider())
-        #     explications = @controleur.getLangue[:grilleInvalide]
-        #     explications += "\n\n"
-        #     explications += @controleur.getLangue[:grilleInvalideExplications]
-        #     dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
-        #     dialogValidationGrille.run()
-        #     dialogValidationGrille.destroy()
-        # else      
+        if(!@modele.valider())
+            explications = @controleur.getLangue[:grilleInvalide]
+            explications += "\n\n"
+            explications += @controleur.getLangue[:grilleInvalideExplications]
+            dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
+            dialogValidationGrille.run()
+            dialogValidationGrille.destroy()
+        else      
             fermerCadre()
             @controleur.validerGrille() 
-        # end
+        end
     end
 
     ##
@@ -498,7 +498,7 @@ class VuePartie < Vue
         end
     end
 
-    def onBtnRestartClicked
+    def onBtnRecommencerClicked
         @labelHypothese.set_label("")
         @boutonValiderHypothese.hide()
         @boutonAnnulerHypothese.hide()
