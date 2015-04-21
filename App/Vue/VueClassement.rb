@@ -7,7 +7,7 @@ class VueClassement < Vue
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
-        @scores = @controleur.listeScores()
+        @scores = @controleur.listeDesScores()
 
         fenetreScroll = ScrolledWindow.new()
         fenetreScroll.set_policy(:never,:automatic)
@@ -67,10 +67,10 @@ class VueClassement < Vue
         @scores.each do |x|
             iter = liste.append
             iter[0] = 0
-            iter[1] = "test"
-            iter[2] = x.nbPoints
-            iter[3] = 3
-            iter[4] = 4
+            iter[1] = x["pseudo"]
+            iter[2] = x["points"]
+            iter[3] = x["taille"]
+            iter[4] = x["difficulte"]
         end
 
 		labelTaille = Label.new()

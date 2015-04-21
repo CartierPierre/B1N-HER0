@@ -4,11 +4,15 @@ class Controleur
     @vue
     @modele
     @gestionnaireUtilisateur
+    @gestionnaireScore
+    @gestionnaireNiveau
     @@utilisateur = nil
 
     def initialize(jeu)
         @jeu = jeu
         @gestionnaireUtilisateur = GestionnaireUtilisateur.instance()
+        @gestionnaireScore = GestionnaireScore.instance()
+        @gestionnaireNiveau = GestionnaireNiveau.instance()
     end
 
     def getLangue
