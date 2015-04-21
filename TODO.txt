@@ -2,7 +2,6 @@
 + (Fini) 3 regles (Tianqi)
 + (Fini, reste un bug à corriger) Mode hypothese code et vue (Pierre, Amaury, Corentin)
 - Vues ( Loic et Corentin)
-- Sauvegardes(Kevin)
 - Mise en ligne avec serveur (Kevin)
 - DDC (Quentin)  -> Pierre
 - (Fait, annulé)Langue de l'OS (Corentin)
@@ -10,7 +9,6 @@
 - Classements (Kevin et Loic)
 - Profil (Kevin et Loic)
 - Reprendre la derniere partie (Kevin et Corentin)
-- Charger une partie (Kevin et Corentin)
 - Sauvegarder la partie (Kevin, Amaury et Corentin)
 - Choix dans les options pour laisser ou non l'aide en temps reel ( check si une regle est enfreinte ) (Tianqi)
 - SUCCES URGENT (Kevin, Corentin, Pierre)
