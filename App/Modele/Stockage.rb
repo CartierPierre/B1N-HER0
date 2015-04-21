@@ -2,21 +2,20 @@
 # La classe Stockage permet d'utiliser le base de données local et de la syncroniser avec la base de données distante
 # Utilise le DP Singleton
 #
-# Version 3
+# Version 4
 #
 class Stockage
 	
 	### Attributs de classe
 	
 	@@instance = nil
+	@@port = 10101
+	@@hote = 'Raspberry-0'
 	
 	
 	### Attributs d'instances
 	
-	@bddLocal = nil
-	@port = 10101
-	@hote = 'Raspbery-0'
-	
+	@bddLocal
 	
 	### Méthodes de classe
 	
@@ -89,10 +88,10 @@ class Stockage
 	#
 	def testConnexion()
 		# Ouverture connexion au serveur
-		socket = TCPSocket.new( "Raspberry-0", 10101 )
+		socket = TCPSocket.new( @@hote, @@port )
 
 		# Envoi de données
-		requete = Requete.creer( 1, 'toto', 'tata' )
+		requete = Requete.creer( 'ping' )
 		# puts requete.idCommande
 		# puts requete.arguments
 		str = Marshal.dump( requete )

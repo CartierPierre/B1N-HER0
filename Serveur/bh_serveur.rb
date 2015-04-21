@@ -4,36 +4,36 @@ Encoding.default_external = Encoding::UTF_8
 
 # Require
 require 'socket'
-require_relative "./requete"
-require_relative "./reponse"
+require_relative "./Requete"
+require_relative "./Reponse"
+require_relative "./Traitement"
 
 # Variables
 port = 10101
+traitement = Traitement.instance()
 
-# Ouverture port
-server = TCPServer.new('localhost', port)
-# server.set_encoding 'ASCII-8BIT'
+# Lancement du serveur
+server = TCPServer.new( port )
 puts "Serveur lancé sur le port #{ port }"
 
+# Écoute de connexion entrantes
 loop do
-
 	Thread.start(server.accept) do |client|
 		
 		# Reception data
-		str = client.gets
+		str = client.gets()
 		requete = Marshal.load( str )
 		
 		# Exploitation
-		puts "IP: #{ client.addr[3] }, cmd: #{ requete.idCommande }, attr: #{ requete.arguments }"
+		puts "IP: #{ client.addr[3] }, cmd: #{ requete.methode }, attr: #{ requete.arguments }"
+		reponse = traitement.send( requete.methode )
 		
 		# Envoi data
-		reponse = Reponse.creer( 'wip' )
 		str = Marshal.dump( reponse )
-		client.puts str
+		client.puts( str )
 		
 		# Fin connexion
-		client.close
+		client.close()
 		
 	end
-	
 end

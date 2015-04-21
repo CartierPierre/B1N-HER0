@@ -1,37 +1,37 @@
 ##
 # Classe Requete
 #
-# Version 1
+# Version 2
 #
 class Requete
 
 	### Attributs d'instances
 	
-	# int
-	# Identifiant de la commande à executer sur le serveur
-	@idCommande
+	# String
+	# Nom de la méthode à exécuter sur le serveur
+	@methode
 	
 	# Array
-	# Arguments liées à la commande
+	# Arguments liées à la méthode
 	@arguments
 	
-	attr_reader :idCommande, :arguments
+	attr_reader :methode, :arguments
 	
 	### Méthodes de classe
 	
 	##
 	# Instancie une Requete
 	#
-	def Requete.creer(idCommande, *arguments)
-		new(idCommande, arguments)
+	def Requete.creer(methode, *arguments)
+		new(methode, arguments)
     end
 	
 	##
 	# Constructeur
 	#
 	private_class_method :new
-	def initialize(idCommande, arguments)
-		@idCommande, @arguments = idCommande, arguments
+	def initialize(methode, arguments)
+		@methode, @arguments = methode, arguments
 	end
 
 end
