@@ -51,20 +51,20 @@ begin
 end
 
 # Insertion d'utilisateurs ...
-puts "Insertion d'utilisateurs ..."
-begin
-	bdd.execute("
-		INSERT INTO utilisateur VALUES
-		(NULL, NULL, 'toto0', 'azerty', 0, 0, 'SERIALISATION', 0),
-		(NULL, NULL, 'toto1', 'azerty', 0, 0, 'SERIALISATION', 0),
-		(NULL, NULL, 'toto2', 'azerty', 0, 0, 'SERIALISATION', 0);
-	")
-	rescue SQLite3::Exception => err
-		puts "Erreur"
-		puts err
-		abort
-end
-puts "OK"
+# puts "Insertion d'utilisateurs ..."
+# begin
+	# bdd.execute("
+		# INSERT INTO utilisateur VALUES
+		# (NULL, NULL, 'toto0', 'azerty', 0, 0, 'SERIALISATION', 0),
+		# (NULL, NULL, 'toto1', 'azerty', 0, 0, 'SERIALISATION', 0),
+		# (NULL, NULL, 'toto2', 'azerty', 0, 0, 'SERIALISATION', 0);
+	# ")
+	# rescue SQLite3::Exception => err
+		# puts "Erreur"
+		# puts err
+		# abort
+# end
+# puts "OK"
 # (NULL, NULL, 'toto0', 'azerty', 0, 0, 'SERIALISATION', 0),
 # (NULL, NULL, 'toto0', 'azerty', 0, 0, '#{ Marshal.dump( Option.creer() ) }', 0),
 
@@ -90,21 +90,21 @@ begin
 end
 
 # Insertion de niveaux ...
-begin
-	puts "Insertion de niveaux ..."
-	bdd.execute("
-		INSERT INTO niveau VALUES
-		(NULL, NULL, '00_________1____0___11_______0_0_1__', '001011010011110100001101110010101100', 1, 6),
-		(NULL, NULL, '_1_1___0____0___0__________10__01__10____0___00__10_0__1_________0__1_1_0______0_____1__0______1_____1____0___0__11_0_________0_______1_0_______', '110110100100011001010110100101101001011010011001010101010110101010101010001011001101010100110011101011001100100101100101010010011011101100110010', 2, 12),
-		(NULL, NULL, '0___0____1__0_1_0________________1___0_1_1__1__1__0____________1', '0110011011010010001011011010110001010011011010011001011010011001', 6, 8);
-	")
-	rescue SQLite3::Exception => err
-		puts "Erreur"
-		puts err
-		abort
-	ensure
-		puts "OK"
-end
+# begin
+	# puts "Insertion de niveaux ..."
+	# bdd.execute("
+		# INSERT INTO niveau VALUES
+		# (NULL, NULL, '00_________1____0___11_______0_0_1__', '001011010011110100001101110010101100', 1, 6),
+		# (NULL, NULL, '_1_1___0____0___0__________10__01__10____0___00__10_0__1_________0__1_1_0______0_____1__0______1_____1____0___0__11_0_________0_______1_0_______', '110110100100011001010110100101101001011010011001010101010110101010101010001011001101010100110011101011001100100101100101010010011011101100110010', 2, 12),
+		# (NULL, NULL, '0___0____1__0_1_0________________1___0_1_1__1__1__0____________1', '0110011011010010001011011010110001010011011010011001011010011001', 6, 8);
+	# ")
+	# rescue SQLite3::Exception => err
+		# puts "Erreur"
+		# puts err
+		# abort
+	# ensure
+		# puts "OK"
+# end
 
 # Création de la table des sauvegardes ...
 begin
@@ -131,21 +131,21 @@ begin
 end
 
 # Insertion de sauvegardes ...
-begin
-	puts "Insertion de sauvegardes ..."
-	bdd.execute("
-		INSERT INTO sauvegarde VALUES
-		(NULL, NULL, 'Description 0', 0, 'SERIALISATION_CONTENU', 1, 1),
-		(NULL, NULL, 'Description 1', 0, 'SERIALISATION_CONTENU', 1, 2),
-		(NULL, NULL, 'Description 2', 0, 'SERIALISATION_CONTENU', 2, 3);
-	")
-	rescue SQLite3::Exception => err
-		puts "Erreur"
-		puts err
-		abort
-	ensure
-		puts "OK"
-end
+# begin
+	# puts "Insertion de sauvegardes ..."
+	# bdd.execute("
+		# INSERT INTO sauvegarde VALUES
+		# (NULL, NULL, 'Description 0', 0, 'SERIALISATION_CONTENU', 1, 1),
+		# (NULL, NULL, 'Description 1', 0, 'SERIALISATION_CONTENU', 1, 2),
+		# (NULL, NULL, 'Description 2', 0, 'SERIALISATION_CONTENU', 2, 3);
+	# ")
+	# rescue SQLite3::Exception => err
+		# puts "Erreur"
+		# puts err
+		# abort
+	# ensure
+		# puts "OK"
+# end
 
 # Création de la table des scores ...
 begin
@@ -173,21 +173,21 @@ begin
 end
 
 # Insertion de scores ...
-begin
-	puts "Insertion de scores ..."
-	bdd.execute("
-		INSERT INTO score VALUES
-		(NULL, NULL, 0, 0, 0, 0, 1, 1),
-		(NULL, NULL, 0, 0, 0, 0, 1, 2),
-		(NULL, NULL, 0, 0, 0, 0, 2, 3);
-	")
-	rescue SQLite3::Exception => err
-		puts "Erreur"
-		puts err
-		abort
-	ensure
-		puts "OK"
-end
+# begin
+	# puts "Insertion de scores ..."
+	# bdd.execute("
+		# INSERT INTO score VALUES
+		# (NULL, NULL, 0, 0, 0, 0, 1, 1),
+		# (NULL, NULL, 0, 0, 0, 0, 1, 2),
+		# (NULL, NULL, 0, 0, 0, 0, 2, 3);
+	# ")
+	# rescue SQLite3::Exception => err
+		# puts "Erreur"
+		# puts err
+		# abort
+	# ensure
+		# puts "OK"
+# end
 
 # Fermeture de la base de données
 begin
