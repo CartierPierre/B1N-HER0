@@ -54,6 +54,10 @@ class ControleurPartie < Controleur
         return @modele.modeHypothese
     end
 
+    def charger()
+        changerControleur(ControleurChargerPartie.new(@jeu,@modele))
+    end
+
     def options()
         changerControleur(ControleurOptions.new(@jeu,@modele))
     end

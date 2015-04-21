@@ -11,7 +11,7 @@ class ControleurMenuPrincipal < Controleur
     end
 
     def chargerPartie()
-        changerControleur(ControleurChargerPartie.new(@jeu))
+        changerControleur(ControleurChargerPartie.new(@jeu,nil))
     end
 
     def profil()

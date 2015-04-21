@@ -71,18 +71,18 @@ class VueChargerPartie < Vue
         hboxScroll.set_size_request(300,200)
 
         # Boutons valider et annuler
-        hboxValiderAnnuler = Box.new(:horizontal, 10)
+        hboxChargerAnnuler = Box.new(:horizontal, 10)
 
-        @boutonValider = Button.new(:label => @controleur.getLangue[:charger])
-        @boutonValider.signal_connect('clicked') { onBtnValiderClicked }
+        @boutonCharger = Button.new(:label => @controleur.getLangue[:charger])
+        @boutonCharger.signal_connect('clicked') { onBtnChargerClicked }
 
         @boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
         @boutonAnnuler.signal_connect('clicked') { onBtnAnnulerClicked }
 
-        hboxValiderAnnuler.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxValiderAnnuler.add(@boutonValider)
-        hboxValiderAnnuler.add(@boutonAnnuler)
-        hboxValiderAnnuler.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxChargerAnnuler.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxChargerAnnuler.add(@boutonCharger)
+        hboxChargerAnnuler.add(@boutonAnnuler)
+        hboxChargerAnnuler.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Ajout dans la vbox principale             
         vboxPrincipale = Box.new(:vertical, 20)
@@ -91,7 +91,7 @@ class VueChargerPartie < Vue
         vboxPrincipale.add(labelTaille)
         vboxPrincipale.add(hboxTaille)
         vboxPrincipale.add(hboxScroll)
-        vboxPrincipale.add(hboxValiderAnnuler)
+        vboxPrincipale.add(hboxChargerAnnuler)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Actualisation et masquage des boutons de choix de difficultés
@@ -99,7 +99,7 @@ class VueChargerPartie < Vue
         self.actualiser()
 
         @fenetreScroll.hide()
-        @boutonValider.set_sensitive(false)
+        @boutonCharger.set_sensitive(false)
     end
 
     def onBtnTailleClicked(taille,bouton)   
@@ -107,7 +107,7 @@ class VueChargerPartie < Vue
         @fenetreScroll.show()
 
         if(@partie)
-            @boutonValider.set_sensitive(false)
+            @boutonCharger.set_sensitive(false)
             @boutonDerniereSauvegarde.set_sensitive(true)
         end
         if(!@boutonDerniereTaille)
@@ -124,13 +124,13 @@ class VueChargerPartie < Vue
         end
         @boutonDerniereSauvegarde = boutonSauvegarde
         @boutonDerniereSauvegarde.set_sensitive(false)
-        @boutonValider.set_sensitive(true)
+        @boutonCharger.set_sensitive(true)
         @partie = @boutonDerniereSauvegarde.partie()
     end
     
-    def onBtnValiderClicked
+    def onBtnChargerClicked
         fermerCadre()
-        @controleur.jouer(@taille,@difficulte)
+        @controleur.charger(@partie)
     end
 
     def onBtnAnnulerClicked

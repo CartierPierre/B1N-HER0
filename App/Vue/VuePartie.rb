@@ -10,8 +10,8 @@ class VuePartie < Vue
     @threadChrono
 
     # Boutons du menu de navigation
-    @boutonSave
-    @boutonLoad
+    @boutonSauvegarder
+    @boutonCharger
     @boutonOptions
     @boutonRegles
     @boutonQuitter
@@ -57,20 +57,20 @@ class VuePartie < Vue
         boxNav = Box.new(:horizontal)
         boxNav.set_homogeneous(true)
 
-        @boutonSave = nouveauBouton(:sauvegarder,"save")
-        @boutonLoad = nouveauBouton(:charger,"load")
+        @boutonSauvegarder = nouveauBouton(:sauvegarder,"save")
+        @boutonCharger = nouveauBouton(:charger,"load")
         @boutonOptions = nouveauBouton(:options,"options")
         @boutonRegles = nouveauBouton(:regles,"regles")
         @boutonQuitter = nouveauBouton(:quitter,"exit")
 
-        @boutonSave.signal_connect('clicked')  { onBtnSaveClicked }
-        @boutonLoad.signal_connect('clicked')  { onBtnLoadClicked }
+        @boutonSauvegarder.signal_connect('clicked')  { onBtnSauvegarderClicked }
+        @boutonCharger.signal_connect('clicked')  { onBtnChargerClicked }
         @boutonOptions.signal_connect('clicked')  { onBtnOptionsClicked }
         @boutonRegles.signal_connect('clicked')  { onBtnReglesClicked }
         @boutonQuitter.signal_connect('clicked')  { onBtnQuitterClicked }
 
-        boxNav.pack_start(@boutonSave, :expand => true, :fill => true)
-        boxNav.pack_start(@boutonLoad)
+        boxNav.pack_start(@boutonSauvegarder, :expand => true, :fill => true)
+        boxNav.pack_start(@boutonCharger)
         boxNav.pack_start(@boutonOptions)
         boxNav.pack_start(@boutonRegles)
         boxNav.pack_start(@boutonQuitter)
@@ -304,7 +304,7 @@ class VuePartie < Vue
     ##
     # => Boutons du menu en haut
     ##
-    def onBtnSaveClicked 
+    def onBtnSauvegarderClicked 
         self.cacherJeu()
 
         @confirmationSauvegarde
@@ -335,8 +335,10 @@ class VuePartie < Vue
         self.montrerJeu()
     end
 
-    def onBtnLoadClicked 
-
+    def onBtnChargerClicked 
+        @modele.chrono.pause()
+        fermerCadre()
+        @controleur.charger()
     end
 
     def onBtnOptionsClicked

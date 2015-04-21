@@ -1,19 +1,20 @@
 class VueNouvellePartie < Vue
 
+    # Boutons taille de la grille
     @boutonDerniereTaille
 	@bouton6x6
 	@bouton8x8
 	@bouton10x10
 	@bouton12x12
 
-	@labelDifficulte
-
+    # Boutons difficulté
     @boutonDerniereDifficulte
+	@labelDifficulte
+    @boutonsDifficulte
 
 	@boutonAnnuler
 
-	@listeDifficulte
-
+    # Taille et difficulté sélectionnée
 	@taille
 	@difficulte
 
@@ -126,8 +127,8 @@ class VueNouvellePartie < Vue
         @boutonDerniereTaille = bouton
         @boutonDerniereTaille.set_sensitive(false)
 
-		@listeDifficulte = GestionnaireNiveau.instance.recupererListeDifficulte(@taille)
-		@listeDifficulte.each do |niveau|
+		listeDifficulte = GestionnaireNiveau.instance.recupererListeDifficulte(@taille)
+		listeDifficulte.each do |niveau|
             case(niveau)
                 when 1 then @boutonsDifficulte[0].show();
                 when 2 then @boutonsDifficulte[1].show();
