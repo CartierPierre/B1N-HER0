@@ -26,6 +26,7 @@ require_relative "./Vue/VueResultatPartie"
 #
 
 require "sqlite3"
+require 'socket'
 
 require_relative "./Modele/Chrono"
 require_relative "./Modele/Coup"

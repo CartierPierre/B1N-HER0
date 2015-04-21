@@ -14,6 +14,8 @@ class Stockage
 	### Attributs d'instances
 	
 	@bddLocal = nil
+	@port = 10101
+	@hote = 'Raspbery-0'
 	
 	
 	### Méthodes de classe
@@ -80,6 +82,30 @@ class Stockage
 		else
 			puts "Les données de #{ u.nom } ne seront pas synchronisé"
 		end
+	end
+	
+	##
+	#
+	#
+	def testConnexion()
+		# Ouverture connexion au serveur
+		socket = TCPSocket.new( "Raspberry-0", 10101 )
+
+		# Envoi de données
+		requete = Requete.creer( 1, 'toto', 'tata' )
+		# puts requete.idCommande
+		# puts requete.arguments
+		str = Marshal.dump( requete )
+		socket.print( str )
+		socket.close_write
+
+		# Reception de données
+		str = socket.read
+		reponse = Marshal.load( str )
+		puts "Réponse serveur : #{ reponse.contenu }"
+
+		# Fermture connexion au serveur
+		socket.close
 	end
 	
 end
