@@ -47,6 +47,8 @@ require_relative "./Modele/Partie"
 require_relative "./Modele/RegleUn"
 require_relative "./Modele/RegleDeux"
 require_relative "./Modele/RegleTrois"
+require_relative "./Modele/Requete"
+require_relative "./Modele/Reponse"
 
 ##
 # Controleur
