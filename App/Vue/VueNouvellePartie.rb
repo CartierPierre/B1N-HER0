@@ -6,23 +6,25 @@ class VueNouvellePartie < Vue
 	@bouton10x10
 	@bouton12x12
 
-	@labelDiff
+	@labelDifficulte
 
-    @boutonDerniereDiff
-	@boutonDiff1
-    @boutonDiff2
-    @boutonDiff3
-    @boutonDiff4
-    @boutonDiff5
-    @boutonDiff6
-    @boutonDiff7
+    @boutonDerniereDifficulte
 
 	@boutonAnnuler
 
-	@listeDiff
+	@listeDifficulte
 
 	@taille
 	@difficulte
+
+    def initTableauBoutonsDifficulte()
+        # 7 correspond à la difficulté maximale
+        1.upto(7) do |difficulte|
+            boutonTemp = Button.new(:label => difficulte.to_s)
+            boutonTemp.signal_connect('clicked') { onBtnDifficulteClicked(boutonTemp,difficulte) }
+            @boutonsDifficulte.push(boutonTemp)
+        end
+    end
 
 	def initialize(modele,titre,controleur)
 		super(modele,titre,controleur)
@@ -51,36 +53,19 @@ class VueNouvellePartie < Vue
 		hboxTaille.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Box et boutons difficulté
-        hboxDiff = Box.new(:horizontal, 10)
+        hboxDifficulte = Box.new(:horizontal, 10)
 
-        @labelDiff = Label.new()
-		@labelDiff.set_markup("<big>" + @controleur.getLangue[:difficulte] + "</big>")
+        @labelDifficulte = Label.new()
+		@labelDifficulte.set_markup("<big>" + @controleur.getLangue[:difficulte] + "</big>")
 
-        @boutonDiff1 = Button.new(:label => "1")
-        @boutonDiff2 = Button.new(:label => "2")
-        @boutonDiff3 = Button.new(:label => "3")
-        @boutonDiff4 = Button.new(:label => "4")
-        @boutonDiff5 = Button.new(:label => "5")
-        @boutonDiff6 = Button.new(:label => "6")
-        @boutonDiff7 = Button.new(:label => "7")
+        @boutonsDifficulte = Array.new()
+        initTableauBoutonsDifficulte()
 
-        @boutonDiff1.signal_connect('clicked') { onBtnDifficulteClicked(1,@boutonDiff1) }
-        @boutonDiff2.signal_connect('clicked') { onBtnDifficulteClicked(2,@boutonDiff2) }
-        @boutonDiff3.signal_connect('clicked') { onBtnDifficulteClicked(3,@boutonDiff3) }
-        @boutonDiff4.signal_connect('clicked') { onBtnDifficulteClicked(4,@boutonDiff4) }
-        @boutonDiff5.signal_connect('clicked') { onBtnDifficulteClicked(5,@boutonDiff5) }
-        @boutonDiff6.signal_connect('clicked') { onBtnDifficulteClicked(6,@boutonDiff6) }
-        @boutonDiff7.signal_connect('clicked') { onBtnDifficulteClicked(7,@boutonDiff7) }
-
-        hboxDiff.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxDiff.add(@boutonDiff1)
-        hboxDiff.add(@boutonDiff2)
-        hboxDiff.add(@boutonDiff3)
-        hboxDiff.add(@boutonDiff4)
-        hboxDiff.add(@boutonDiff5)
-        hboxDiff.add(@boutonDiff6)
-        hboxDiff.add(@boutonDiff7)
-        hboxDiff.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxDifficulte.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        @boutonsDifficulte.each do |bouton|
+            hboxDifficulte.add(bouton)
+        end
+        hboxDifficulte.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Boutons valider et annuler
         hboxValiderAnnuler = Box.new(:horizontal, 10)
@@ -102,8 +87,8 @@ class VueNouvellePartie < Vue
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
        	vboxPrincipale.add(labelTaille)
         vboxPrincipale.add(hboxTaille)
-        vboxPrincipale.add(@labelDiff)
-        vboxPrincipale.add(hboxDiff)
+        vboxPrincipale.add(@labelDifficulte)
+        vboxPrincipale.add(hboxDifficulte)
         vboxPrincipale.add(hboxValiderAnnuler)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
@@ -112,35 +97,27 @@ class VueNouvellePartie < Vue
         self.actualiser()
 
         @boutonValider.set_sensitive(false)
-        @labelDiff.hide()
-        @boutonDiff1.hide()
-        @boutonDiff2.hide()
-        @boutonDiff3.hide()
-        @boutonDiff4.hide()
-        @boutonDiff5.hide()
-        @boutonDiff6.hide()
-        @boutonDiff7.hide()
+        @labelDifficulte.hide()
+        @boutonsDifficulte.each do |bouton|
+            bouton.hide()
+        end
 	end
 
 	def onBtnTailleClicked(taille,bouton)
 		if(@taille)
-			@boutonDiff1.hide()
-	        @boutonDiff2.hide()
-	        @boutonDiff3.hide()
-	        @boutonDiff4.hide()
-	        @boutonDiff5.hide()
-	        @boutonDiff6.hide()
-	        @boutonDiff7.hide()
+			@boutonsDifficulte.each do |bouton|
+                bouton.hide()
+            end
     	end
 
     	if(@difficulte)
     		@difficulte = nil
-            @boutonDerniereDiff.set_sensitive(true)
+            @boutonDerniereDifficulte.set_sensitive(true)
     		@boutonValider.set_sensitive(false)
         end
 
 		@taille = taille
-		@labelDiff.show()
+		@labelDifficulte.show()
 
         if(!@boutonDerniereTaille)
             @boutonDerniereTaille = bouton
@@ -149,40 +126,28 @@ class VueNouvellePartie < Vue
         @boutonDerniereTaille = bouton
         @boutonDerniereTaille.set_sensitive(false)
 
-		@listeDiff = GestionnaireNiveau.instance.recupererListeDifficulte(@taille)
-		@listeDiff.each do |niveau|
-			if(niveau == 1)
-				@boutonDiff1.show()
-			end
-			if(niveau == 2)
-				@boutonDiff2.show()
-			end
-			if(niveau == 3)
-				@boutonDiff3.show()
-			end
-			if(niveau == 4)
-				@boutonDiff4.show()
-			end
-			if(niveau == 5)
-				@boutonDiff5.show()
-			end
-			if(niveau == 6)
-				@boutonDiff6.show()
-			end
-			if(niveau == 7)
-				@boutonDiff7.show()
-			end
+		@listeDifficulte = GestionnaireNiveau.instance.recupererListeDifficulte(@taille)
+		@listeDifficulte.each do |niveau|
+            case(niveau)
+                when 1 then @boutonsDifficulte[0].show();
+                when 2 then @boutonsDifficulte[1].show();
+                when 3 then @boutonsDifficulte[2].show();
+                when 4 then @boutonsDifficulte[3].show();
+                when 5 then @boutonsDifficulte[4].show();
+                when 6 then @boutonsDifficulte[5].show();
+                when 7 then @boutonsDifficulte[6].show();
+            end
 		end
 	end
 
-	def onBtnDifficulteClicked(difficulte,bouton)
+	def onBtnDifficulteClicked(bouton,difficulte)
 		@difficulte = difficulte
-        if(!@boutonDerniereDiff)
-            @boutonDerniereDiff = bouton
+        if(!@boutonDerniereDifficulte)
+            @boutonDerniereDifficulte = bouton
         end
-		@boutonDerniereDiff.set_sensitive(true)
-        @boutonDerniereDiff = bouton
-        @boutonDerniereDiff.set_sensitive(false)
+		@boutonDerniereDifficulte.set_sensitive(true)
+        @boutonDerniereDifficulte = bouton
+        @boutonDerniereDifficulte.set_sensitive(false)
 		@boutonValider.set_sensitive(true)
 	end
 	
