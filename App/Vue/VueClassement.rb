@@ -9,11 +9,38 @@ class VueClassement < Vue
 
         @scores = @controleur.listeDesScores()
 
+        @boutonsTaille  = Array.new
+        @boutonsDifficulte = Array.new
+
         fenetreScroll = ScrolledWindow.new()
         fenetreScroll.set_policy(:never,:automatic)
         fenetreScroll.set_size_request(300,200)
 
-        liste = ListStore.new(Integer,String,Integer,Integer,Integer)
+		labelTaille = Label.new()
+		labelTaille.set_markup("<big>" + @controleur.getLangue[:tailleGrille] + "</big>")
+
+        labelDiff = Label.new()
+		labelDiff.set_markup("<big>" + @controleur.getLangue[:difficulte] + "</big>")
+
+        labelRecherche = Label.new()
+		labelRecherche.set_markup("<big>" + @controleur.getLangue[:recherche] + "</big>")
+
+        @entreeRecherche = Entry.new
+
+        @boutonDiff1 = ToggleButton.new("1")
+        @boutonDiff2 = ToggleButton.new("2")
+        @boutonDiff3 = ToggleButton.new("3")
+        @boutonDiff4 = ToggleButton.new("4")
+        @boutonDiff5 = ToggleButton.new("5")
+        @boutonDiff6 = ToggleButton.new("6")
+        @boutonDiff7 = ToggleButton.new("7")
+
+		@bouton6x6 = ToggleButton.new("6x6")
+		@bouton8x8 = ToggleButton.new("8x8")
+		@bouton10x10 = ToggleButton.new("10x10")
+		@bouton12x12 = ToggleButton.new("12x12")
+
+        @liste = ListStore.new(Integer,String,Integer,Integer,Integer)
 
         colonneRang = Gtk::TreeViewColumn.new(@controleur.getLangue[:rang],CellRendererText.new,:text => 0)
         colonneRang.sort_indicator = true
@@ -22,7 +49,6 @@ class VueClassement < Vue
             x.sort_order =
             x.sort_order == :ascending ? :descending : :ascending
         end
-
 
         colonnePseudo = Gtk::TreeViewColumn.new(@controleur.getLangue[:pseudo],CellRendererText.new,:text => 1)
         colonnePseudo.sort_indicator = true
@@ -56,7 +82,7 @@ class VueClassement < Vue
             x.sort_order == :ascending ? :descending : :ascending
         end
 
-        view = TreeView.new(liste)
+        view = TreeView.new(@liste)
         view.append_column(colonneRang)
         view.append_column(colonnePseudo)
         view.append_column(colonneScore)
@@ -65,7 +91,7 @@ class VueClassement < Vue
         fenetreScroll.add_with_viewport(view)
 
         @scores.each do |x|
-            iter = liste.append
+            iter = @liste.append
             iter[0] = 0
             iter[1] = x["pseudo"]
             iter[2] = x["points"]
@@ -73,40 +99,102 @@ class VueClassement < Vue
             iter[4] = x["difficulte"]
         end
 
-		labelTaille = Label.new()
-		labelTaille.set_markup("<big>" + @controleur.getLangue[:tailleGrille] + "</big>")
 
-        labelDiff = Label.new()
-		labelDiff.set_markup("<big>" + @controleur.getLangue[:difficulte] + "</big>")
+        @filtre = TreeModelFilter.new(@liste,nil)
+
+        @filtre.set_visible_func { |model,iter|
+            if @entreeRecherche.text.empty?
+                if @boutonsDifficulte.empty? && @boutonsTaille.empty?
+                    next true
+                end
+                if @boutonsTaille.empty? && @boutonsDifficulte.include?(iter[4])
+                    next true
+                end
+                if @boutonsTaille.include?(iter[3]) && @boutonsDifficulte.empty?
+                    next true
+                end
+                if @boutonsTaille.include?(iter[3]) && @boutonsDifficulte.include?(iter[4])
+                    next true
+                end
+                next false
+            end
+            if iter[1].downcase.include?(@entreeRecherche.text.downcase) && @entreeRecherche.text != ""
+                if @boutonsDifficulte.empty? && @boutonsTaille.empty?
+                    next true
+                end
+                if @boutonsTaille.empty? && @boutonsDifficulte.include?(iter[4])
+                    next true
+                end
+                if @boutonsTaille.include?(iter[3]) && @boutonsDifficulte.empty?
+                    next true
+                end
+                if @boutonsTaille.include?(iter[3]) && @boutonsDifficulte.include?(iter[4])
+                    next true
+                end
+                next false
+            end
+        }
+
+        view.set_model(@filtre)
 
         @boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
         @boutonAnnuler.signal_connect('clicked') { onBtnAnnulerClicked }
 
-		@bouton6x6 = ToggleButton.new("6x6")
-		@bouton8x8 = ToggleButton.new("8x8")
-		@bouton10x10 = ToggleButton.new("10x10")
-		@bouton12x12 = ToggleButton.new("12x12")
+		@bouton6x6.signal_connect('clicked') {
+            @bouton6x6.active? ? @boutonsTaille << 6 : @boutonsTaille .delete(6)
+            @filtre.refilter
+        }
 
-		@bouton6x6.signal_connect('clicked') { onBtnTailleClicked(6) }
-		@bouton8x8.signal_connect('clicked') { onBtnTailleClicked(8) }
-		@bouton10x10.signal_connect('clicked') { onBtnTailleClicked(10) }
-		@bouton12x12.signal_connect('clicked') { onBtnTailleClicked(12) }
+		@bouton8x8.signal_connect('clicked')  {
+            @bouton8x8.active? ? @boutonsTaille  << 8 : @boutonsTaille .delete(8)
+            @filtre.refilter
+        }
 
-        @boutonDiff1 = ToggleButton.new("1")
-        @boutonDiff2 = ToggleButton.new("2")
-        @boutonDiff3 = ToggleButton.new("3")
-        @boutonDiff4 = ToggleButton.new("4")
-        @boutonDiff5 = ToggleButton.new("5")
-        @boutonDiff6 = ToggleButton.new("6")
-        @boutonDiff7 = ToggleButton.new("7")
+		@bouton10x10.signal_connect('clicked') {
+            @bouton10x10.active? ? @boutonsTaille  << 10 : @boutonsTaille .delete(10)
+            @filtre.refilter
+        }
 
-        @boutonDiff1.signal_connect('clicked') { onBtnDifficulteClicked(1) }
-        @boutonDiff2.signal_connect('clicked') { onBtnDifficulteClicked(2) }
-        @boutonDiff3.signal_connect('clicked') { onBtnDifficulteClicked(3) }
-        @boutonDiff4.signal_connect('clicked') { onBtnDifficulteClicked(4) }
-        @boutonDiff5.signal_connect('clicked') { onBtnDifficulteClicked(5) }
-        @boutonDiff6.signal_connect('clicked') { onBtnDifficulteClicked(6) }
-        @boutonDiff7.signal_connect('clicked') { onBtnDifficulteClicked(7) }
+		@bouton12x12.signal_connect('clicked') {
+            @bouton12x12.active? ? @boutonsTaille  << 12 : @boutonsTaille .delete(12)
+            @filtre.refilter
+        }
+
+        @boutonDiff1.signal_connect('clicked') {
+            @boutonDiff1.active? ? @boutonsDifficulte << 1 : @boutonsDifficulte .delete(1)
+            @filtre.refilter
+        }
+
+        @boutonDiff2.signal_connect('clicked') {
+            @boutonDiff2.active? ? @boutonsDifficulte << 2 : @boutonsDifficulte.delete(2)
+            @filtre.refilter
+        }
+
+        @boutonDiff3.signal_connect('clicked') {
+            @boutonDiff3.active? ? @boutonsDifficulte << 3 : @boutonsDifficulte.delete(3)
+            @filtre.refilter
+        }
+
+        @boutonDiff4.signal_connect('clicked') {
+            @boutonDiff4.active? ? @boutonsDifficulte << 4 : @boutonsDifficulte.delete(4)
+            @filtre.refilter
+        }
+
+        @boutonDiff5.signal_connect('clicked') {
+            @boutonDiff5.active? ? @boutonsDifficulte << 5 : @boutonsDifficulte.delete(5)
+            @filtre.refilter
+        }
+
+        @boutonDiff6.signal_connect('clicked') {
+            @boutonDiff6.active? ? @boutonsDifficulte << 6 : @boutonsDifficulte.delete(6)
+            @filtre.refilter
+        }
+
+        @boutonDiff7.signal_connect('clicked') {
+            @boutonDiff7.active? ? @boutonsDifficulte << 7 : @boutonsDifficulte.delete(7)
+            @filtre.refilter
+        }
+
 
 		vboxTaille = Box.new(:vertical, 10)
 		vboxTaille.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
@@ -117,6 +205,11 @@ class VueClassement < Vue
 		vboxTaille.add(@bouton12x12)
 		vboxTaille.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
+        hboxRecherche = Box.new(:horizontal,10)
+        hboxRecherche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxRecherche.add(labelRecherche)
+        hboxRecherche.add(@entreeRecherche)
+        hboxRecherche.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         hboxDiff = Box.new(:horizontal, 10)
         hboxDiff.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
@@ -145,8 +238,13 @@ class VueClassement < Vue
 		vboxPrincipale.add(labelDiff)
         vboxPrincipale.add(hboxDiff)
         vboxPrincipale.add(hboxClass)
+        vboxPrincipale.add(hboxRecherche)
         vboxPrincipale.add(hboxAnnuler)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+
+
+
+        @entreeRecherche.signal_connect("key-release-event"){@filtre.refilter}
 
         @cadre.add(vboxPrincipale)
         self.actualiser()
@@ -164,6 +262,4 @@ class VueClassement < Vue
 	def onBtnDifficulteClicked(difficulte)
 		@difficulte = difficulte
 	end
-
-
 end

@@ -53,10 +53,12 @@ class VueConnexion < Vue
             fermerCadre()
             onBtnValiderClicked
         }
+
         boutonAnnuler.signal_connect('clicked')     {
             fermerCadre()
             onBtnAnnulerClicked
         }
+
         @entryPseudo.signal_connect("key-release-event")     {
             if @entryPseudo.text() == "" || @entryPseudo.text() =~ /\W/
                     boutonValider.set_sensitive(false)
@@ -68,6 +70,7 @@ class VueConnexion < Vue
                 end
             end
         }
+
         @entryPseudo.signal_connect('activate')     {onBtnValiderClicked}
 
         @entryPassword.signal_connect("key-release-event")     {
