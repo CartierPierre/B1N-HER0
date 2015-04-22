@@ -19,6 +19,7 @@ class Succes
 	# Image du succès
 	@image
 	
+	attr_reader :nom, :description, :image
 	### Méthode de classe
 	
 	##

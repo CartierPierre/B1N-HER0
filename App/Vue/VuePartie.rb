@@ -511,12 +511,14 @@ class VuePartie < Vue
     end
 
     def onBtnAideClicked
+        0.upto(100) do
         aide = @modele.demanderAide() 
 
         if(aide != nil)
             @grille[aide[0]+1][aide[1]+1].setImageTuile(@modele.grille.getTuile(aide[0],aide[1]).etat()) 
             self.nbLigneColonne(aide[0],aide[1])
             surbrillanceTuile(aide[0]+1,aide[1]+1)
+        end
         end
     end
 

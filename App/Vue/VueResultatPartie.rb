@@ -2,6 +2,24 @@ class VueResultatPartie < Vue
 
     @boutonRetour
 
+    def creerSucces(succes)
+        hbox = Box.new(:horizontal, 10)
+        hbox.override_background_color(0,Gdk::RGBA::new(0.85,0.85,0.85,1.0))
+        vbox = Box.new(:vertical, 10)
+
+        labelNom = Label.new()
+        labelNom.set_markup("<big>" + succes.nom + "</big>")
+
+        vbox.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vbox.add(labelNom)
+        vbox.add(Label.new(succes.description))
+        vbox.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        hbox.add(Image.new(:pixbuf => succes.image()))
+        hbox.add(vbox)
+        return hbox
+    end
+
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
@@ -28,6 +46,12 @@ class VueResultatPartie < Vue
         labelAides = Label.new()
         labelAides.set_markup("<big>" + @controleur.getLangue[:nbAides] + " : " + @modele.nbAides.to_s + "</big>")
 
+        hboxSucces = Box.new(:horizontal, 30)
+        hboxSucces.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxSucces.add(creerSucces(Succes::S_10_PARTIES))
+        hboxSucces.add(creerSucces(Succes::S_10_PARFAIT))
+        hboxSucces.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(labelFelicitations)
         vboxPrincipale.add(labelScore)
@@ -35,6 +59,7 @@ class VueResultatPartie < Vue
         vboxPrincipale.add(labelNbCoups)
         vboxPrincipale.add(labelConseils)
         vboxPrincipale.add(labelAides)
+        vboxPrincipale.add(hboxSucces)
         creerAlignBouton(vboxPrincipale,@boutonRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
