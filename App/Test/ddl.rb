@@ -2,18 +2,9 @@
 # Crée une base de test
 #
 
-# Dépendances
-require_relative "../requireTout.rb"
-
-# Test sérialisation marshall
-# puts Option.creer()
-# puts Marshal.dump( Option.creer() )
-# abort
-
 # Variables
 pathDb = File.dirname(__FILE__) + "/../Ressources/bdd.sqlite" # Chemin de la base de donnée à créer
-db = false
-rq = false
+bdd = false
 
 # Ouverture de la base de données ...
 begin
