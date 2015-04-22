@@ -8,7 +8,6 @@ class VueClassement < Vue
         super(modele,titre,controleur)
 
         @scores = @controleur.listeDesScores()
-
         @boutonsTaille  = Array.new
         @boutonsDifficulte = Array.new
 
@@ -41,8 +40,9 @@ class VueClassement < Vue
 		@bouton12x12 = ToggleButton.new("12x12")
 
         @liste = ListStore.new(Integer,String,Integer,Integer,Integer)
+        renderer = CellRendererText.new
 
-        colonneRang = Gtk::TreeViewColumn.new(@controleur.getLangue[:rang],CellRendererText.new,:text => 0)
+        colonneRang = Gtk::TreeViewColumn.new(@controleur.getLangue[:rang],renderer,:text => 0)
         colonneRang.sort_indicator = true
         colonneRang.sort_column_id = 0
         colonneRang.signal_connect('clicked') do |x|
@@ -50,7 +50,7 @@ class VueClassement < Vue
             x.sort_order == :ascending ? :descending : :ascending
         end
 
-        colonnePseudo = Gtk::TreeViewColumn.new(@controleur.getLangue[:pseudo],CellRendererText.new,:text => 1)
+        colonnePseudo = Gtk::TreeViewColumn.new(@controleur.getLangue[:pseudo],renderer,:text => 1)
         colonnePseudo.sort_indicator = true
         colonnePseudo.sort_column_id = 1
         colonnePseudo.signal_connect('clicked') do |x|
@@ -58,7 +58,7 @@ class VueClassement < Vue
             x.sort_order == :ascending ? :descending : :ascending
         end
 
-        colonneScore = Gtk::TreeViewColumn.new(@controleur.getLangue[:score],CellRendererText.new,:text => 2)
+        colonneScore = Gtk::TreeViewColumn.new(@controleur.getLangue[:score],renderer,:text => 2)
         colonneScore.sort_indicator = true
         colonneScore.sort_column_id = 2
         colonneScore.signal_connect('clicked') do |x|
@@ -66,7 +66,7 @@ class VueClassement < Vue
             x.sort_order == :ascending ? :descending : :ascending
         end
 
-        colonneTaille = Gtk::TreeViewColumn.new(@controleur.getLangue[:taille],CellRendererText.new,:text => 3)
+        colonneTaille = Gtk::TreeViewColumn.new(@controleur.getLangue[:taille],renderer,:text => 3)
         colonneTaille.sort_indicator = true
         colonneTaille.sort_column_id = 3
         colonneTaille.signal_connect('clicked') do |x|
@@ -74,7 +74,7 @@ class VueClassement < Vue
             x.sort_order == :ascending ? :descending : :ascending
         end
 
-        colonneDifficulte = Gtk::TreeViewColumn.new(@controleur.getLangue[:difficulte],CellRendererText.new,:text => 4)
+        colonneDifficulte = Gtk::TreeViewColumn.new(@controleur.getLangue[:difficulte],renderer,:text => 4)
         colonneDifficulte.sort_indicator = true
         colonneDifficulte.sort_column_id = 4
         colonneDifficulte.signal_connect('clicked') do |x|
@@ -90,6 +90,7 @@ class VueClassement < Vue
         view.append_column(colonneDifficulte)
         fenetreScroll.add_with_viewport(view)
 
+
         @scores.each do |x|
             iter = @liste.append
             iter[0] = 0
@@ -99,8 +100,15 @@ class VueClassement < Vue
             iter[4] = x["difficulte"]
         end
 
+        @liste.set_sort_column_id(2, :descending)
 
         @filtre = TreeModelFilter.new(@liste,nil)
+
+        increment = 1
+        @liste.each do |model, path, iter|
+            iter[0] = increment
+            increment =increment + 1
+        end
 
         @filtre.set_visible_func { |model,iter|
             if @entreeRecherche.text.empty?
