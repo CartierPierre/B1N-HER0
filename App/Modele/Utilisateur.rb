@@ -1,9 +1,7 @@
 ##
 # Classe Utilisateur
 #
-# Version 6
-#
-# Voir attribut statistique et option
+# Version 7
 #
 class Utilisateur
 	
@@ -14,7 +12,44 @@ class Utilisateur
 	
 	### Attributs d'instances
 	
-	attr_accessor :id, :uuid, :nom, :motDePasse, :dateInscription, :dateDerniereSync, :option, :type, :statistique
+	# int
+	# Identifiant local de l'utilisateur
+	@id
+	
+	# int
+	# Identifiant universel unique du niveau
+	@uuid
+	
+	# string
+	# Nom de l'utilisateur
+	@nom
+	
+	# string
+	# Mot de passe de l'utilisateur
+	@motDePasse
+	
+	# int
+	# Date à laquelle l'utilisateur c'est inscrit
+	@dateInscription
+	
+	# int
+	# Date de la dernière syncronisation entre les données local et le serveur
+	@dateDerniereSync
+	
+	# Option
+	# Options de l'utilisateur
+	@option
+	
+	# int
+	# Type de compte (online/offline)
+	@type
+	
+	# Statistique
+	# Statistiques de l'utilisateur
+	@statistique
+	
+	attr_accessor :id, :uuid, :nom, :motDePasse, :dateInscription, :dateDerniereSync, :option, :type
+	attr_reader :statistique
 	
 	### Méthodes de classe
 	
@@ -24,13 +59,13 @@ class Utilisateur
     def Utilisateur.creer(*args)
 		case args.size
 			when 0
-				new(nil, nil, nil, nil, Time.now.to_i, Time.now.to_i, Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR), nil, nil)
+				new(nil, nil, nil, nil, nil, nil, nil, nil)
 			when 3
-				new(nil, nil, args[0], args[1], Time.now.to_i, Time.now.to_i, Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR), args[2], nil)
-			when 9
-				new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
+				new(nil, nil, args[0], args[1], nil, nil, nil, args[2])
+			when 8
+				new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7])
 			else
-				puts "Utilisateur.creer n'accepte que O, 3 ou 9 arguments"
+				puts "Utilisateur.creer n'accepte que O, 3 ou 8 arguments"
         end
     end
 	
@@ -38,43 +73,33 @@ class Utilisateur
 	# Constructeur
 	#
 	private_class_method :new
-    def initialize(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, option, type, statistique)
+    def initialize(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, option, type)
 		
-		# int
-		# Identifiant local de l'utilisateur
 		@id = id
-		
-		# int
-		# Identifiant universel unique du niveau
 		@uuid = uuid
-		
-		# string
-		# Nom de l'utilisateur
 		@nom = nom
-		
-		# string
-		# Mot de passe de l'utilisateur
 		@motDePasse = motDePasse
 		
-		# int
-		# Date à laquelle l'utilisateur c'est inscrit
-		@dateInscription = dateInscription
+		if( dateInscription == nil )
+			@dateInscription = Time.now.to_i
+		else
+			@dateInscription = dateInscription
+		end
 		
-		# int
-		# Date de la dernière syncronisation entre les données local et le serveur
-		@dateDerniereSync = dateDerniereSync
+		if( dateDerniereSync == nil )
+			@dateDerniereSync = Time.now.to_i
+		else
+			@dateDerniereSync = dateDerniereSync
+		end
 		
-		# Option
-		# Options de l'utilisateur
-		@option = option
+		if( option == nil )
+			@option = Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR)
+		else
+			@option = option
+		end
 		
-		# int
-		# Type de compte (online/offline)
 		@type = type
-		
-		# Statistique
-		# Statistiques de l'utilisateur
-		@statistique = statistique
+		@statistique = Statistique.creer(self)
 		
     end
 	

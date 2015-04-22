@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 10
+# Version 11
 #
 class GestionnaireUtilisateur
 	
@@ -57,8 +57,7 @@ class GestionnaireUtilisateur
 			args[4], # dateInscription
 			args[5], # dateDerniereSync
 			Option.deserialiser( args[6] ), # option
-			args[7], # type
-			args[8] # statistique
+			args[7] # type
 		)
 	end
 	private :hydraterUtilisateur
