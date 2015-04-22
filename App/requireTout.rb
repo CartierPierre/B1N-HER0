@@ -51,6 +51,7 @@ require_relative "./Modele/Stockage"
 require_relative "./Modele/Tuile"
 require_relative "./Modele/Utilisateur"
 require_relative "./Modele/Statistique"
+require_relative "./Modele/Succes"
 
 ##
 # Controleur
