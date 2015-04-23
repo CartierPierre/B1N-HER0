@@ -28,6 +28,7 @@ class Succes
 	def initialize( nom, description, image )
 		@nom, @description, @image = nom, description, image
 	end
+	private_class_method :new
 	
 	##
 	# Instancie un succès
