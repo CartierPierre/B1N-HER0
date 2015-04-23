@@ -1,7 +1,7 @@
 ##
 # Classe Traitement	
 #
-# Version 1
+# Version 2
 #
 class Traitement
 
@@ -32,10 +32,17 @@ class Traitement
 	### Méthodes d'instances
 	
 	##
-	#
+	# Renvoi la chaîne de carractère pong en réponse
 	#
 	def ping()
 		return Reponse.creer('pong')
+	end
+	
+	##
+	# Renvoi la liste des ressource du utilisateur (sauvegarde et scores)
+	#
+	def listeRessources()
+		return Reponse.creer(nil)
 	end
 	
 end
