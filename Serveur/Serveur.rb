@@ -55,7 +55,7 @@ class Serveur
 					requete = Marshal.load( str )
 					
 					# Traitement de la requête et construction d'une réponse
-					puts "IP: #{ client.addr[3] }, cmd: #{ requete.methode }, attr: #{ requete.arguments }"
+					puts "IP: #{ client.peeraddr[3] }:#{ client.peeraddr[1] }, cmd: #{ requete.methode }, attr: #{ requete.arguments }"
 					reponse = Traitement.instance().send( requete.methode )
 					
 					# Envoi de la réponse au client
