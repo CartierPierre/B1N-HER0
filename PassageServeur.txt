@@ -2,26 +2,26 @@
 Dans un des menu (option ou profil) :
 -------------------------------------
 
-+ Rajouter la possibilité : Fussioner avec un autre compte (popup avec les mêmes champs que pour l'inscrption, puis choix du compte gardé).
++ Rajouter la possibilitÃ© : Fussioner avec un autre compte (popup avec les mÃªmes champs que pour l'inscrption, puis choix du compte gardÃ©).
 
 Si compte type offline,
 
-	+ Rajouter la possibilité : Convertir en compte online (popup d'attente).
+	+ Rajouter la possibilitÃ© : Convertir en compte online (popup d'attente).
 
 Sinon (compte du type online) :
 
-	+ Rajouter la possibilité : Convertir en compte offline (popup d'attente).
+	+ Rajouter la possibilitÃ© : Convertir en compte offline (popup d'attente).
 
 ----------------
-À la connexion :
+Ã€ la connexion :
 ----------------
 
-Popup d'info dans le cas où l'on se connecte avec un compte online et qu'il n'y a pas internet (la sync sera faite dès que possible).
-Popup d'info compte pas trouvé, donc il faut créer un compte (le compte pourra être fussioné plus tard).
+Popup d'info dans le cas oÃ¹ l'on se connecte avec un compte online et qu'il n'y a pas internet (la sync sera faite dÃ¨s que possible).
+Popup d'info compte pas trouvÃ©, donc il faut crÃ©er un compte (le compte pourra Ãªtre fussionÃ© plus tard).
 
 ------
 Note :
 ------
 
-- Dans tous les cas, impossible de créer un compte online si la connexion n'est pas établie.
+- Dans tous les cas, impossible de crÃ©er un compte online si la connexion n'est pas Ã©tablie.
 - Qui doit faire les test de connexion ?
