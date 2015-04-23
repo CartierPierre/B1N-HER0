@@ -46,11 +46,31 @@ class VueResultatPartie < Vue
         labelAides = Label.new()
         labelAides.set_markup("<big>" + @controleur.getLangue[:nbAides] + " : " + @modele.nbAides.to_s + "</big>")
 
-        hboxSucces = Box.new(:horizontal, 30)
-        hboxSucces.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxSucces.add(creerSucces(Succes::S_10_PARTIES))
-        hboxSucces.add(creerSucces(Succes::S_10_PARFAIT))
-        hboxSucces.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        # Ajout des succès dévérouillés
+        vboxSucces = Box.new(:vertical, 20)
+
+        succes = Array[Succes::S_10_PARTIES,Succes::S_10_PARFAIT]
+
+        if(succes)
+            labelSucces = Label.new()
+            labelSucces.set_markup("<big>" + @controleur.getLangue[:succesDeverrouille] + "</big>")
+            vboxSucces.add(labelSucces)
+
+            # Affichage de 2 succès par ligne
+            hbox = Box.new(:horizontal, 30)
+
+            0.upto(succes.size-1) do |i|
+                if(i%2 == 0) # Pair
+                    hbox = Box.new(:horizontal, 30)
+                    hbox.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+                    hbox.add(creerSucces(succes[i]))
+                    hbox.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+                    vboxSucces.add(hbox)
+                else # Impair
+                    hbox.add(creerSucces(succes[i]))                    
+                end
+            end
+        end
 
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(labelFelicitations)
@@ -59,7 +79,7 @@ class VueResultatPartie < Vue
         vboxPrincipale.add(labelNbCoups)
         vboxPrincipale.add(labelConseils)
         vboxPrincipale.add(labelAides)
-        vboxPrincipale.add(hboxSucces)
+        vboxPrincipale.add(vboxSucces)
         creerAlignBouton(vboxPrincipale,@boutonRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
