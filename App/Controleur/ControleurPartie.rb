@@ -54,6 +54,11 @@ class ControleurPartie < Controleur
         return @modele.modeHypothese
     end
 
+    def sauvegarder()  
+        sauvegarde = Sauvegarde.creer("description useless",@modele)      
+        @gestionnaireSauvegarde.sauvegarderSauvegarde(sauvegarde)
+    end
+
     def charger()
         changerControleur(ControleurChargerPartie.new(@jeu,@modele))
     end

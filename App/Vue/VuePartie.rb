@@ -322,6 +322,7 @@ class VuePartie < Vue
         dialogSauvegarde.destroy()
 
         if(confirmation)
+            @controleur.sauvegarder()
             messageConfirmation = @controleur.getLangue[:sauvegardeEffectuee]
             dialogConfirmation = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => messageConfirmation)
             dialogConfirmation.run()

@@ -9,8 +9,21 @@ class ControleurChargerPartie < Controleur
         @vue = VueChargerPartie.new(@modele,self.getLangue[:chargerPartie],self)
     end 
 
-    def charger(niveau)
-        changerControleur(ControleurPartie.new(@jeu,niveau,nil))
+    def charger(partie)
+        changerControleur(ControleurPartie.new(@jeu,nil,partie))
+    end
+
+    def getParties()
+        parties = Array.new()
+        sauvegardes = @gestionnaireSauvegarde.recupererSauvegardeUtilisateur(@@utilisateur, 0, 10)
+
+        sauvegardes.each do |sauvegarde|
+            niveau = @gestionnaireNiveau.recupererNiveau(sauvegarde.idNiveau)
+            partie = Partie.charger(@@utilisateur, niveau, sauvegarde)
+            parties.push(partie)
+        end
+
+        return parties
     end
 
     def annuler()

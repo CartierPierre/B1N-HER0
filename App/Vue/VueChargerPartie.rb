@@ -55,11 +55,12 @@ class VueChargerPartie < Vue
         @fenetreScroll = ScrolledWindow.new()
         @fenetreScroll.set_policy(:never,:automatic)
 
-        parties = Array["Sauvegarde 1","Sauvegarde 2","Sauvegarde 3","Sauvegarde 4","Sauvegarde 5","Sauvegarde 6","Sauvegarde 7"]
+        parties = @controleur.getParties()
 
         vboxSauvegardes = Box.new(:vertical, 10)
         parties.each do |partie|
-            boutonSauvegarde = BoutonSauvegarde.new(partie.to_s, partie)
+            labelPartie = "Niveau " + partie.niveau.difficulte.to_s + " - " + partie.niveau.id.to_s
+            boutonSauvegarde = BoutonSauvegarde.new(labelPartie, partie)
             boutonSauvegarde.signal_connect('clicked') { onBtnSauvegardeClicked(boutonSauvegarde) }
             vboxSauvegardes.add(boutonSauvegarde)
         end 

@@ -4,6 +4,7 @@ class Controleur
     @vue
     @modele
     @gestionnaireUtilisateur
+    @gestionnaireSauvegarde
     @gestionnaireScore
     @gestionnaireNiveau
     @@utilisateur = nil
@@ -11,6 +12,7 @@ class Controleur
     def initialize(jeu)
         @jeu = jeu
         @gestionnaireUtilisateur = GestionnaireUtilisateur.instance()
+        @gestionnaireSauvegarde = GestionnaireSauvegarde.instance()
         @gestionnaireScore = GestionnaireScore.instance()
         @gestionnaireNiveau = GestionnaireNiveau.instance()
     end
