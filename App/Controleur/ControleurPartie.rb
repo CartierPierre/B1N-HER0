@@ -5,7 +5,7 @@ class ControleurPartie < Controleur
 	def initialize(jeu, niveau, partie)
 		super(jeu)
         if(partie == nil)
-    		@modele = Partie.creer(nil,niveau)
+    		@modele = Partie.creer(@@utilisateur,niveau)
         else
             @modele = partie 
         end

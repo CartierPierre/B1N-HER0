@@ -205,18 +205,16 @@ class VuePartie < Vue
     def actualiserGrille()
         0.upto(@tailleGrille) do |x|
             0.upto(@tailleGrille) do |y|
-                if(x != 0 && y != 0) 
-                    
-                    if(x == 0)
-                        nb = @modele.compterCasesColonne(y-1)
-                        @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
-                    elsif(y == 0)
-                        nb = @modele.compterCasesLigne(x-1)
-                        @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
-                    else
-                        @grille[x][y].setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
-                    end
-
+                if(x == 0 && y == 0) 
+                    @grille[x][y].set_label("")
+                elsif(x == 0)
+                    nb = @modele.compterCasesColonne(y-1)
+                    @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
+                elsif(y == 0)
+                    nb = @modele.compterCasesLigne(x-1)
+                    @grille[x][y].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nb[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nb[1]}</span> ])
+                else
+                    @grille[x][y].setImageTuile(@modele.grille().getTuile(x-1,y-1).etat())
                 end
             end
         end
