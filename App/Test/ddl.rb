@@ -2,6 +2,9 @@
 # Crée une base de test
 #
 
+# Imports
+require 'sqlite3'
+
 # Variables
 pathDb = File.dirname(__FILE__) + "/../Ressources/bdd.sqlite" # Chemin de la base de donnée à créer
 bdd = false
