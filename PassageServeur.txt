@@ -19,9 +19,18 @@ Sinon (compte du type online) :
 Popup d'info dans le cas où l'on se connecte avec un compte online et qu'il n'y a pas internet (la sync sera faite dès que possible).
 Popup d'info compte pas trouvé, donc il faut créer un compte (le compte pourra être fussioné plus tard).
 
-------
-Note :
-------
+----------------
+Algo connexion :
+----------------
 
-- Dans tous les cas, impossible de créer un compte online si la connexion n'est pas établie.
-- Qui doit faire les test de connexion ?
+Quatres types de sorties :
+- Tout va bien, RAS.
+- Compte online trouvé en locale mais impossible de synchroniser, poursuite sans problèmes avec un petit message.
+- Identifiants non trouvées et il y a internet, donc il faut créer un compte.
+- Identifiants non trouvée et il n'y a pas internet, donc compte potentiellement innacessible, il faut créer un compte locale temporaire.
+
+Dans tous les cas, impossible de créer un compte online si la connexion n'est pas établie.
+
+Qui doit faire les test de connexion ?
+- Le modèle et il renvoi au contrôleur un code d'erreur.
+- Le contrôleur (comme actuellement, mais la il faut rajouter des tests en plus).
