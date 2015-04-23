@@ -2,7 +2,7 @@
 # La classe Stockage permet d'utiliser le base de données local et de la syncroniser avec la base de données distante
 # Utilise le DP Singleton
 #
-# Version 4
+# Version 5
 #
 class Stockage
 	
@@ -10,7 +10,7 @@ class Stockage
 	
 	@@instance = nil
 	@@port = 10101
-	@@hote = 'Raspberry-0'
+	@@hote = 'le-mans.kpw.ovh'
 	
 	
 	### Attributs d'instances
