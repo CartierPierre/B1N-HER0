@@ -84,27 +84,38 @@ class Stockage
 	end
 	
 	##
+	# Envoi une requête au serveur
 	#
+	# ==== Paramètres
+	# * +r+ - (Requete) Requete à envoyer au serveur
 	#
-	def testConnexion()
+	def envoyerRequete( requete )
 		# Ouverture connexion au serveur
 		socket = TCPSocket.new( @@hote, @@port )
-
+		
 		# Envoi de données
-		requete = Requete.creer( 'ping' )
-		# puts requete.idCommande
-		# puts requete.arguments
 		str = Marshal.dump( requete )
 		socket.print( str )
 		socket.close_write
-
+		
 		# Reception de données
 		str = socket.read
 		reponse = Marshal.load( str )
-		puts "Réponse serveur : #{ reponse.contenu }"
-
+		
 		# Fermture connexion au serveur
 		socket.close
+		
+		return reponse
+	end
+	
+	##
+	# Test la connexion avec le serveur et chronomètre le temps de réponse
+	#
+	def testConnexion()
+		t = Time.now
+		reponse = self.envoyerRequete( Requete.creer( 'ping' ) )
+		d = ( Time.now - t ) * 1000
+		puts "#{ reponse.contenu } en #{ d } ms"
 	end
 	
 end
