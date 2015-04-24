@@ -1,14 +1,20 @@
 ##
 # Script de test pour la classe Serveur
 #
-# Version 1
+# Version 2
 #
 
 # Dépendances
 require_relative "./requireTout.rb"
 
-# On récupère l'instance
+# On récupère l'instance du gestionnaire d'utilisateur
+gu = GestionnaireUtilisateur.instance()
+
+# On récupère l'instance du serveur
 serveur = Serveur.instance()
+
+# On récupère un utilisateur
+utilisateur = gu.recupererUtilisateur(1)
 
 # Test temps de réponse
 puts "Test de la connexion ..."
@@ -34,3 +40,11 @@ if( succes != 0)
 	print ", moyenne : #{ moy } ms"
 end
 puts
+
+# Test liste ressources
+listeRessources = serveur.listeRessources( utilisateur )
+puts listeRessources
+
+# Test récupération de ressources
+ressources = serveur.recupererRessources( [1, 2, 3], [1, 2, 3] )
+puts ressources

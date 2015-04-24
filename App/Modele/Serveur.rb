@@ -2,7 +2,7 @@
 # La classe Serveur permet de communiquer avec un serveur B1nHer0
 # Utilise le DP Singleton
 #
-# Version 1
+# Version 2
 #
 class Serveur
 
@@ -83,9 +83,38 @@ class Serveur
 	end
 	
 	##
-	# Demande la liste des ressources au serveur
+	# Demande les identifiants et version de toutes les ressources d'un utilisateur
 	#
-	def listeRessources()
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utlisateur dont l'on veut connaître les ressources et leurs versions
+	#
+	# ==== Retour
+	# Renvoi deux tableaux comportant des couple identifiant/version de la totalitée des ressources d'un utilisateur, le premier pour les sauvegardes et le second pour les scores
+	#
+	def listeRessources( utilisateur )
+		reponse = envoyerRequete( Requete.creer( 'listeRessources', utilisateur.uuid ) )
+		if( !reponse)
+			return false
+		end
+		return reponse.contenu
+	end
+	
+	##
+	# Demande une suite de ressources au serveur
+	#
+	# ==== Paramètres
+	# * +u+ - (scores) Liste d'uuid de score que l'on veux récupérer
+	# * +u+ - (sauvegardes) Utlisateur dont l'on veut connaître les ressources et leurs versions
+	#
+	# ==== Retour
+	# Renvoi un tableau multi-dimentionnel comportant l'intégralité des ressources demandées
+	#
+	def recupererRessources( scores, sauvegardes )
+		reponse = envoyerRequete( Requete.creer( 'recupererRessources', scores, sauvegardes ) )
+		if( !reponse)
+			return false
+		end
+		return reponse.contenu
 	end
 	
 end
