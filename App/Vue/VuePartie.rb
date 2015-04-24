@@ -39,11 +39,11 @@ class VuePartie < Vue
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
-        @nbClignotements = 0
+        @nbClignotements = 4
         @vitesseClignotement = 0.3
 
         @dureeConseils = 15
-        @delaiReactivation = 0
+        @delaiReactivation = 5
 
         @tailleGrille = @modele.grille().taille()
 
@@ -506,6 +506,13 @@ class VuePartie < Vue
                 sleep(@delaiReactivation)
                 @boutonConseil.set_sensitive(true)
             }
+        else
+            self.cacherJeu()
+            message = @controleur.getLangue[:reglesRespectees]
+            dialogRegles = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => message)
+            dialogRegles.run()
+            dialogRegles.destroy()
+            self.montrerJeu()
         end
     end
 
