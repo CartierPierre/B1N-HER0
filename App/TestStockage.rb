@@ -1,5 +1,5 @@
 ##
-# Script de test pour la classe stockage, en particulier la couche réseau
+# Script de test pour la classe Stockage
 #
 # Version 5
 #
@@ -7,29 +7,14 @@
 # Dépendances
 require_relative "./requireTout.rb"
 
+# On récupère l'instance du gestionnaire d'utilisateur
+gu = GestionnaireUtilisateur.instance()
+
+# On récupère l'instance du stockage
 stockage = Stockage.instance()
 
-# Test temps de réponse
-puts "Test de la connexion ..."
-moy = 0
-succes = 0
-essais = 0
-while( essais < 10 )
-	t = stockage.testConnexion()
-	print "#{ essais } -> "
-	if( !t )
-		puts "Erreur"
-	else
-		puts "#{ t } ms"
-		moy = moy + t
-		succes = succes + 1
-	end
-	essais = essais + 1
-end
+# On récupère un utilisateur
+utilisateur = gu.recupererUtilisateur(1)
 
-print "#{ succes } / #{ essais } essais reusis"
-if( succes != 0)
-	moy = moy / succes
-	print ", moyenne : #{ moy } ms"
-end
-puts
+# On test la synchronisation des données d'un utilisateur
+stockage.syncroniser( utilisateur )

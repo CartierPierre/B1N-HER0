@@ -191,18 +191,18 @@ class GestionnaireNiveau
 	##
 	# Temporaire, pas utiliser sauf buddies
 	#
-	def insert(n)
-		@stockage.executer("
-			INSERT INTO niveau
-			VALUES (
-				null,
-				'#{ n.probleme.sauvegarder() }',
-				'#{ n.solution.sauvegarder() }',
-				'#{ n.difficulte }',
-				'#{ n.dimention }'
-			);
-		")
-		n.id = @stockage.dernierId()
-	end
+	# def insert(n)
+		# @stockage.executer("
+			# INSERT INTO niveau
+			# VALUES (
+				# null,
+				# '#{ n.probleme.sauvegarder() }',
+				# '#{ n.solution.sauvegarder() }',
+				# '#{ n.difficulte }',
+				# '#{ n.dimention }'
+			# );
+		# ")
+		# n.id = @stockage.dernierId()
+	# end
 	
 end
