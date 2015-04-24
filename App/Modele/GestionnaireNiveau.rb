@@ -2,7 +2,7 @@
 # La classe GestionnaireNiveau permet d'intéragir avec entitées Niveau
 # Utilise le DP Singleton
 #
-# Version 5
+# Version 6
 #
 class GestionnaireNiveau
 	
@@ -51,11 +51,10 @@ class GestionnaireNiveau
 	def hydraterNiveau(args)
 		return Niveau.creer(
 			args[0], # id
-			args[1], # uuid
-			Grille.charger(args[2].delete("\n") ), # probleme
-			Grille.charger(args[3].delete("\n") ), # solution
-			args[4], # difficulte
-			args[5] # dimention
+			Grille.charger(args[1].delete("\n") ), # probleme
+			Grille.charger(args[2].delete("\n") ), # solution
+			args[3], # difficulte
+			args[4]  # dimention
 		)
 	end
 	private :hydraterNiveau
@@ -171,7 +170,6 @@ class GestionnaireNiveau
 		nb = resultat[0][0];
 		
 		offset = Random.rand(0..nb)
-		puts offset
 		
 		resultat = @stockage.executer("
 			SELECT *
@@ -197,7 +195,6 @@ class GestionnaireNiveau
 		@stockage.executer("
 			INSERT INTO niveau
 			VALUES (
-				null,
 				null,
 				'#{ n.probleme.sauvegarder() }',
 				'#{ n.solution.sauvegarder() }',

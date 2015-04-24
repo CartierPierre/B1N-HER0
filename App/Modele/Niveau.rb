@@ -1,13 +1,33 @@
 ##
 # Classe Niveau
 #
-# Version 3
+# Version 4
 #
 class Niveau
 
 	### Attributs d'instances
 	
-    attr_accessor :id, :uuid, :probleme, :solution, :difficulte, :dimention
+	# int
+	# Identifiant du niveau
+	@id
+
+	# Grille
+	# Object Grille contenant un prolème Takuzu
+	@probleme
+
+	# Grille
+	# Object grille contenant la solution au problème
+	@solution
+
+	# int
+	# Difficulté du problème
+	@difficulte
+
+	# int
+	# Dimention de la grille
+	@dimention
+	
+    attr_accessor :id, :probleme, :solution, :difficulte, :dimention
 	
 	### Méthodes de classe
 	
@@ -16,14 +36,14 @@ class Niveau
 	#
     def Niveau.creer(*args)
 		case args.size
-			when 0
-				new(nil, nil, nil, nil, nil, nil)
-			when 4
-				new(nil, nil, args[0], args[1], args[2], args[3])
-			when 6
-				new(args[0], args[1], args[2], args[3], args[4], args[5])
+			# when 0 # Vide
+				# new(nil, nil, nil, nil, nil)
+			when 4 # Utilisateur
+				new(nil, args[0], args[1], args[2], args[3])
+			when 5 # Gestionnaire
+				new(args[0], args[1], args[2], args[3], args[4])
 			else
-				puts "Niveau.creer n'accepte que O, 4 ou 6 arguments"
+				puts "Niveau.creer n'accepte que O, 4 ou 5 arguments"
         end
     end
 	
@@ -31,32 +51,12 @@ class Niveau
 	# Constructeur
 	#
 	private_class_method :new
-    def initialize(id, uuid, probleme, solution, difficulte, dimention)
-	
-		# int
-		# Identifiant du niveau
-        @id = id
-		
-		# uuid
-		# Identifiant universel unique du niveau
-		@uuid = uuid
-		
-		# Grille
-		# Object Grille contenant un prolème Takuzu
+    def initialize(id, probleme, solution, difficulte, dimention)
+		@id = id
 		@probleme = probleme
-		
-		# Grille
-		# Object grille contenant la solution au problème
 		@solution = solution
-		
-		# int
-		# Difficulté du problème
 		@difficulte = difficulte
-		
-		# int
-		# Dimention de la grille
 		@dimention = dimention
-		
     end
 	
 	### Méthodes d'instances

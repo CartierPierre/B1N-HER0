@@ -20,6 +20,10 @@ class Utilisateur
 	# Identifiant universel unique du niveau
 	@uuid
 	
+	# int
+	# Version de l'entitée
+	@version
+	
 	# string
 	# Nom de l'utilisateur
 	@nom
@@ -31,10 +35,6 @@ class Utilisateur
 	# int
 	# Date à laquelle l'utilisateur c'est inscrit
 	@dateInscription
-	
-	# int
-	# Date de la dernière syncronisation entre les données local et le serveur
-	@dateDerniereSync
 	
 	# Option
 	# Options de l'utilisateur
@@ -48,7 +48,7 @@ class Utilisateur
 	# Statistiques de l'utilisateur
 	@statistique
 	
-	attr_accessor :id, :uuid, :nom, :motDePasse, :dateInscription, :dateDerniereSync, :option, :type
+	attr_accessor :id, :uuid, :version, :nom, :motDePasse, :dateInscription, :option, :type
 	attr_reader :statistique
 	
 	### Méthodes de classe
@@ -58,11 +58,11 @@ class Utilisateur
 	#
     def Utilisateur.creer(*args)
 		case args.size
-			when 0
-				new(nil, nil, nil, nil, nil, nil, nil, nil)
-			when 3
-				new(nil, nil, args[0], args[1], nil, nil, nil, args[2])
-			when 8
+			when 0 # Vide
+				new(nil, nil, nil, nil, nil, nil, nil, nil, nil)
+			when 3 # Utilisateur
+				new(nil, nil, nil, args[0], args[1], nil, nil, args[2])
+			when 8 # Gestionnaire
 				new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7])
 			else
 				puts "Utilisateur.creer n'accepte que O, 3 ou 8 arguments"
@@ -73,10 +73,11 @@ class Utilisateur
 	# Constructeur
 	#
 	private_class_method :new
-    def initialize(id, uuid, nom, motDePasse, dateInscription, dateDerniereSync, option, type)
+    def initialize(id, uuid, version, nom, motDePasse, dateInscription, option, type)
 		
 		@id = id
 		@uuid = uuid
+		@version = version;
 		@nom = nom
 		@motDePasse = motDePasse
 		
@@ -84,12 +85,6 @@ class Utilisateur
 			@dateInscription = Time.now.to_i
 		else
 			@dateInscription = dateInscription
-		end
-		
-		if( dateDerniereSync == nil )
-			@dateDerniereSync = Time.now.to_i
-		else
-			@dateDerniereSync = dateDerniereSync
 		end
 		
 		if( option == nil )

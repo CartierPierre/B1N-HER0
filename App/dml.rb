@@ -3,7 +3,7 @@
 #
 
 # Dépendances
-require_relative "../requireTout.rb"
+require_relative "./requireTout.rb"
 
 # On récupère les instances des gestionaires
 gut = GestionnaireUtilisateur.instance()

@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 11
+# Version 12
 #
 class GestionnaireUtilisateur
 	
@@ -52,12 +52,12 @@ class GestionnaireUtilisateur
 		return Utilisateur.creer(
 			args[0], # id
 			args[1], # uuid
-			args[2], # nom
-			args[3], # motDePasse
-			args[4], # dateInscription
-			args[5], # dateDerniereSync
+			args[2], # version
+			args[3], # nom
+			args[4], # motDePasse
+			args[5], # dateInscription
 			Option.deserialiser( args[6] ), # option
-			args[7] # type
+			args[7]  # type
 		)
 	end
 	private :hydraterUtilisateur
@@ -139,15 +139,16 @@ class GestionnaireUtilisateur
 			VALUES (
 				null,
 				null,
+				1,
 				'#{ u.nom }',
 				'#{ u.motDePasse }',
 				#{ u.dateInscription },
-				#{ u.dateDerniereSync },
 				'#{ Option.serialiser( u.option ) }',
 				#{ u.type }
 			);
 		")
 		u.id = @stockage.dernierId()
+		u.version = 1
 	end
 	private :insert
 	
@@ -162,10 +163,10 @@ class GestionnaireUtilisateur
 			UPDATE utilisateur
 			SET
 				uuid = #{ (u.uuid==nil)?"null":u.uuid },
+				version = version + 1,
 				nom = '#{ u.nom }',
 				mot_de_passe = '#{ u.motDePasse }',
 				date_inscription = #{ u.dateInscription },
-				date_derniere_synchronisation = #{ u.dateDerniereSync },
 				options = '#{ Option.serialiser( u.option ) }',
 				type = #{ u.type }
 			WHERE id = #{ u.id };

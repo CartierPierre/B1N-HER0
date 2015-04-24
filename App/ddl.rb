@@ -6,7 +6,7 @@
 require 'sqlite3'
 
 # Variables
-pathDb = File.dirname(__FILE__) + "/../Ressources/bdd.sqlite" # Chemin de la base de donnée à créer
+pathDb = "./Ressources/bdd.sqlite" # Chemin de la base de donnée à créer
 bdd = false
 
 # Ouverture de la base de données ...
@@ -28,10 +28,10 @@ begin
 		CREATE TABLE IF NOT EXISTS `utilisateur` (
 			`id`								INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			`uuid`								INTEGER UNIQUE,
+			`version`							INTEGER NOT NULL,
 			`nom`								TEXT NOT NULL UNIQUE,
 			`mot_de_passe`						TEXT NOT NULL,
 			`date_inscription`					INTEGER NOT NULL,
-			`date_derniere_synchronisation`		INTEGER NOT NULL,
 			`options`							TEXT NOT NULL,
 			`type`								INTEGER NOT NULL
 		);
@@ -68,7 +68,6 @@ begin
 	bdd.execute("
 		CREATE TABLE IF NOT EXISTS `niveau` (
 			`id`								INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-			`uuid`								INTEGER UNIQUE,
 			`probleme`							TEXT NOT NULL,
 			`solution`							TEXT NOT NULL,
 			`difficulte`						INTEGER NOT NULL,
@@ -107,6 +106,7 @@ begin
 		CREATE TABLE IF NOT EXISTS `sauvegarde` (
 			`id`							INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			`uuid`							INTEGER UNIQUE,
+			`version`						INTEGER NOT NULL,
 			`description`					TEXT NOT NULL,
 			`date_creation`					INTEGER NOT NULL,
 			`contenu`						TEXT NOT NULL,
@@ -148,6 +148,7 @@ begin
 		CREATE TABLE IF NOT EXISTS `score` (
 			`id`							INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			`uuid`							INTEGER UNIQUE,
+			`version`						INTEGER NOT NULL,
 			`temps_total`					INTEGER NOT NULL,
 			`nb_coups`						INTEGER NOT NULL,
 			`nb_conseils`					INTEGER NOT NULL,

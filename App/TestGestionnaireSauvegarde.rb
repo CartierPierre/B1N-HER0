@@ -5,7 +5,7 @@
 #
 
 # Dépendances
-require_relative "../requireTout.rb"
+require_relative "./requireTout.rb"
 
 
 

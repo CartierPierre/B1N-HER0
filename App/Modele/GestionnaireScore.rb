@@ -2,7 +2,7 @@
 # La classe GestionnaireScore permet d'intéragir avec entitées Score
 # Utilise le DP Singleton
 #
-# Version 6
+# Version 7
 #
 class GestionnaireScore
 	
@@ -49,7 +49,17 @@ class GestionnaireScore
 	# Renvoi un object score hydraté selon les paramètres
 	#
 	def hydraterScore(args)
-		return Score.creer( args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7] )
+		return Score.creer(
+			args[0], # id
+			args[1], # uuid
+			args[2], # version
+			args[3], # temps_total
+			args[4], # nb_coups
+			args[5], # nb_conseils
+			args[6], # nb_aides
+			args[7], # id_utilisateur
+			args[8]  # id_niveau
+		)
 	end
 	private :hydraterScore
 	
@@ -290,6 +300,7 @@ class GestionnaireScore
 			VALUES (
 				null,
 				null,
+				1,
 				#{ s.tempsTotal },
 				#{ s.nbCoups },
 				#{ s.nbConseils },
@@ -299,6 +310,7 @@ class GestionnaireScore
 			);
 		")
 		s.id = @stockage.dernierId()
+		s.version = 1
 	end
 	private :insert
 	
@@ -313,6 +325,7 @@ class GestionnaireScore
 			UPDATE score
 			SET
 				uuid = #{ (s.uuid==nil)?"null":s.uuid },
+				version = version + 1
 				temps_total = #{ s.tempsTotal },
 				nb_coups = #{ s.nbCoups },
 				nb_conseils = #{ s.nbConseils },

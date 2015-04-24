@@ -5,7 +5,7 @@
 #
 
 # Dépendances
-require_relative "../requireTout.rb"
+require_relative "./requireTout.rb"
 
 # On récupère l'instance du gestionnaire d'utilisateur
 gu = GestionnaireUtilisateur.instance()
@@ -45,7 +45,7 @@ else
 end
 
 # Test mise à jour client
-client.dateDerniereSync = Time.now.to_i
+client.motDePasse = "azerty"
 gu.sauvegarderUtilisateur(client)
 
 # Statistiques
