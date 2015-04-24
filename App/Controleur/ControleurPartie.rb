@@ -54,8 +54,12 @@ class ControleurPartie < Controleur
         return @modele.modeHypothese
     end
 
-    def sauvegarder()  
-        sauvegarde = Sauvegarde.creer("description useless",@modele)      
+    def getNombreSauvegardes()
+        return @gestionnaireSauvegarde.recupererNombreSauvegardeUtilisateur(@@utilisateur)
+    end
+
+    def sauvegarder(description)  
+        sauvegarde = Sauvegarde.creer(description,@modele)      
         @gestionnaireSauvegarde.sauvegarderSauvegarde(sauvegarde)
     end
 

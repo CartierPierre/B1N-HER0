@@ -322,7 +322,28 @@ class VuePartie < Vue
         dialogSauvegarde.destroy()
 
         if(confirmation)
-            @controleur.sauvegarder()
+            champDescription = Entry.new
+            champDescription.set_max_length(20)
+
+            # Nom par défaut :
+            description = "Sauvegarde " + (@controleur.getNombreSauvegardes()+1).to_s
+
+            dialogDescription = Dialog.new(:parent => @@fenetre, :title => "Description", :flags => :modal, :buttons => [[@controleur.getLangue[:valider],ResponseType::OK]])
+            dialogDescription.child.set_spacing(10)
+            dialogDescription.child.add(Label.new(@controleur.getLangue[:descriptionSauvegarde]))
+            dialogDescription.child.add(champDescription)
+            dialogDescription.show_all()
+            dialogDescription.run do |reponse|
+                if(reponse == ResponseType::OK)
+                    if(champDescription.text() != "")
+                        description = champDescription.text()
+                    end
+                end             
+            end             
+            dialogDescription.destroy()
+
+            @controleur.sauvegarder(description)
+
             messageConfirmation = @controleur.getLangue[:sauvegardeEffectuee]
             dialogConfirmation = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => messageConfirmation)
             dialogConfirmation.run()
