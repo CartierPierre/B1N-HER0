@@ -145,8 +145,8 @@ class VueClassement < Vue
 
         view.set_model(@filtre)
 
-        @boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
-        @boutonAnnuler.signal_connect('clicked') { onBtnAnnulerClicked }
+        @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
+        @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
 
 		@bouton6x6.signal_connect('clicked') {
             @bouton6x6.active? ? @boutonsTaille << 6 : @boutonsTaille .delete(6)
@@ -236,10 +236,10 @@ class VueClassement < Vue
         hboxClass.add(fenetreScroll)
         hboxClass.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-		hboxAnnuler = Box.new(:horizontal, 10)
-        hboxAnnuler.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxAnnuler.add(@boutonAnnuler)
-        hboxAnnuler.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+		hboxRetour = Box.new(:horizontal)
+        hboxRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxRetour.add(@boutonRetour)
+        hboxRetour.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         vboxPrincipale = Box.new(:vertical, 20)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
@@ -247,7 +247,7 @@ class VueClassement < Vue
         vboxPrincipale.add(hboxDiff)
         vboxPrincipale.add(hboxClass)
         vboxPrincipale.add(hboxRecherche)
-        vboxPrincipale.add(hboxAnnuler)
+        vboxPrincipale.add(hboxRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
 
@@ -258,9 +258,9 @@ class VueClassement < Vue
         self.actualiser()
     end
 
-	def onBtnAnnulerClicked
+	def onBtnRetourClicked
         fermerCadre()
-        @controleur.annuler()
+        @controleur.retour()
 	end
 
 	def onBtnTailleClicked(taille)

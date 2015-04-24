@@ -14,9 +14,10 @@ class Statistique
 	@tempsTotal
 	@scoreTotal
 	@nbGrillesReso
+	@partieParfaites
 	@succes
 	
-	attr_reader :nbCoups, :nbConseils, :nbAides, :tempsTotal, :scoreTotal, :nbGrillesReso, :succes
+	attr_reader :nbCoups, :nbConseils, :nbAides, :tempsTotal, :scoreTotal, :nbGrillesReso, :partieParfaites, :succes
 	
 	### Méthodes de classe
 	
@@ -31,6 +32,7 @@ class Statistique
 		@tempsTotal = nil
 		@scoreTotal = nil
 		@nbGrillesReso = nil
+	    @partieParfaites = nil
 		@succes = nil
 	end
 	private_class_method :new
@@ -56,10 +58,8 @@ class Statistique
 		@tempsTotal = 0
 		@scoreTotal = 0
 		@nbGrillesReso = 0
+	    @partieParfaites = 0
 		@succes = []
-		
-		# Variables
-		partieParfaites = 0
 		
 		# Récupération des geetionnaires d'entitées
 		gs = GestionnaireScore.instance()
@@ -81,7 +81,7 @@ class Statistique
 			@scoreTotal = @scoreTotal + score.nbPoints(niveau)
 			
 			if( score.nbAides == 0 && score.nbConseils == 0 )
-				partieParfaites = partieParfaites + 1
+				@partieParfaites = @partieParfaites + 1
 			end
 			
 		end
@@ -108,23 +108,23 @@ class Statistique
 			@succes.push( Succes::S_1000_PARTIES )
 		end
 		
-		if( partieParfaites == 10 )
+		if( @partieParfaites == 10 )
 			@succes.push( Succes::S_10_PARFAIT )
 		end
 		
-		if( partieParfaites == 50 )
+		if( @partieParfaites == 50 )
 			@succes.push( Succes::S_50_PARFAIT )
 		end
 		
-		if( partieParfaites == 100 )
+		if( @partieParfaites == 100 )
 			@succes.push( Succes::S_100_PARFAIT )
 		end
 		
-		if( partieParfaites == 500 )
+		if( @partieParfaites == 500 )
 			@succes.push( Succes::S_500_PARFAIT )
 		end
 		
-		if( partieParfaites == 1000 )
+		if( @partieParfaites == 1000 )
 			@succes.push( Succes::S_1000_PARFAIT )
 		end
 		

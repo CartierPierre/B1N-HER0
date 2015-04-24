@@ -8,7 +8,7 @@ class ControleurClassement < Controleur
 	end
 
 
-    def annuler()
+    def retour()
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 
