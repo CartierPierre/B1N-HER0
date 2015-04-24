@@ -58,9 +58,9 @@ class VueChargerPartie < Vue
         parties = @controleur.getParties()
 
         vboxSauvegardes = Box.new(:vertical, 10)
-        parties.each do |partie|
-            labelPartie = "Niveau " + partie.niveau.difficulte.to_s + " - " + partie.niveau.id.to_s
-            boutonSauvegarde = BoutonSauvegarde.new(labelPartie, partie)
+        parties.each do |partie|  
+            labelPartie = "[" + @controleur.getLangue[:difficulte] + " " + partie[1].niveau.difficulte.to_s + "] " + partie[0]
+            boutonSauvegarde = BoutonSauvegarde.new(labelPartie, partie[1])
             boutonSauvegarde.signal_connect('clicked') { onBtnSauvegardeClicked(boutonSauvegarde) }
             vboxSauvegardes.add(boutonSauvegarde)
         end 

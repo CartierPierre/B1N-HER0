@@ -32,7 +32,7 @@ class VueResultatPartie < Vue
         labelFelicitations.set_markup("<big>" + @controleur.getLangue[:felicitations] + @modele.grille.taille.to_i.to_s + "x" + @modele.grille.taille.to_i.to_s + @controleur.getLangue[:felicitations2] + @modele.niveau.difficulte.to_s + "</big>")
 
         labelScore = Label.new()
-        labelScore.set_markup("<big>" + @controleur.getLangue[:score] + " : " + @modele.score.nbPoints(@modele.niveau).to_s + "</big>")
+        labelScore.set_markup("<big>" + @controleur.getLangue[:score] + " : " + @controleur.score.nbPoints(@modele.niveau).to_s + "</big>")
 
         labelTemps = Label.new()
         labelTemps.set_markup("<big>" + @controleur.getLangue[:temps] + " : " + @modele.chrono.to_s + "</big>")
@@ -49,9 +49,7 @@ class VueResultatPartie < Vue
         # Ajout des succès dévérouillés
         vboxSucces = Box.new(:vertical, 20)
 
-        succes = Array[Succes::S_10_PARTIES,Succes::S_10_PARFAIT]
-
-        if(succes)
+        if(@controleur.succes && @controleur.succes.size > 0)
             labelSucces = Label.new()
             labelSucces.set_markup("<big>" + @controleur.getLangue[:succesDeverrouille] + "</big>")
             vboxSucces.add(labelSucces)
@@ -59,15 +57,15 @@ class VueResultatPartie < Vue
             # Affichage de 2 succès par ligne
             hbox = Box.new(:horizontal, 30)
 
-            0.upto(succes.size-1) do |i|
+            0.upto(@controleur.succes.size-1) do |i|
                 if(i%2 == 0) # Pair
                     hbox = Box.new(:horizontal, 30)
                     hbox.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-                    hbox.add(creerSucces(succes[i]))
+                    hbox.add(creerSucces(@controleur.succes[i]))
                     hbox.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
                     vboxSucces.add(hbox)
                 else # Impair
-                    hbox.add(creerSucces(succes[i]))                    
+                    hbox.add(creerSucces(@controleur.succes[i]))                    
                 end
             end
         end

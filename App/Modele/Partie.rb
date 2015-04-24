@@ -4,7 +4,7 @@
 #
 
 class Partie
-    attr_reader :grille, :niveau, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides, :score
+    attr_reader :grille, :niveau, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides
     @listeUndo
     @listeRedo
     @regles
@@ -162,7 +162,6 @@ class Partie
             end
         end
         @chrono.stop()
-        @score = Score.creer(@chrono.tempsFin.to_i, @nbCoups, @nbConseils, @nbAides, 1, 1)
         return true
     end
 

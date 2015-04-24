@@ -36,14 +36,22 @@ class VuePartie < Vue
     @dureeConseils          # Durée des conseils en secondes
     @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
 
+    def creerBoutonImage(labelBouton,image)
+        bouton = Button.new(:label => @controleur.getLangue[labelBouton])
+        bouton.set_always_show_image(true)
+        bouton.set_image_position(:top)
+        bouton.set_image(Image.new(:file => './Ressources/' + image + '.png'))
+        return bouton
+    end
+
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
-        @nbClignotements = 0
+        @nbClignotements = 4
         @vitesseClignotement = 0.3
 
         @dureeConseils = 15
-        @delaiReactivation = 0
+        @delaiReactivation = 5
 
         @tailleGrille = @modele.grille().taille()
 
@@ -55,11 +63,11 @@ class VuePartie < Vue
         boxNav = Box.new(:horizontal)
         boxNav.set_homogeneous(true)
 
-        @boutonSauvegarder = nouveauBouton(:sauvegarder,"save")
-        @boutonCharger = nouveauBouton(:charger,"load")
-        @boutonOptions = nouveauBouton(:options,"options")
-        @boutonRegles = nouveauBouton(:regles,"regles")
-        @boutonQuitter = nouveauBouton(:quitter,"exit")
+        @boutonSauvegarder = creerBoutonImage(:sauvegarder,"save")
+        @boutonCharger = creerBoutonImage(:charger,"load")
+        @boutonOptions = creerBoutonImage(:options,"options")
+        @boutonRegles = creerBoutonImage(:regles,"regles")
+        @boutonQuitter = creerBoutonImage(:quitter,"exit")
 
         @boutonSauvegarder.signal_connect('clicked')  { onBtnSauvegarderClicked }
         @boutonCharger.signal_connect('clicked')  { onBtnChargerClicked }
@@ -77,15 +85,15 @@ class VuePartie < Vue
         @boxHypo = Box.new(:vertical,10)
         @labelHypothese = Label.new("")
 
-        @boutonHypothese = nouveauBouton(:hypothese,"hypothese")
+        @boutonHypothese = creerBoutonImage(:hypothese,"hypothese")
         @boutonHypothese.signal_connect('clicked') { onBtnHypoClicked }
         @boutonHypothese.set_size_request(100,64)
 
-        @boutonValiderHypothese = nouveauBouton(:valider,"valider")
+        @boutonValiderHypothese = creerBoutonImage(:valider,"valider")
         @boutonValiderHypothese.signal_connect('clicked') { onBtnValiderHypotheseClicked }
         @boutonValiderHypothese.set_size_request(100,64)
 
-        @boutonAnnulerHypothese = nouveauBouton(:annuler,"annuler")
+        @boutonAnnulerHypothese = creerBoutonImage(:annuler,"annuler")
         @boutonAnnulerHypothese.signal_connect('clicked') { onBtnAnnulerHypotheseClicked }
         @boutonAnnulerHypothese.set_size_request(100,64)
 
@@ -140,8 +148,8 @@ class VuePartie < Vue
             end
         }
 
-        @boutonValiderGrille = nouveauBouton(:validerGrille,"valider")
-        @boutonValiderGrille.set_sensitive(true)
+        @boutonValiderGrille = creerBoutonImage(:validerGrille,"valider")
+        @boutonValiderGrille.set_sensitive(false)
         @boutonValiderGrille.signal_connect('clicked')  { onBtnValiderGrilleClicked }
 
         vboxJeuDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)  
@@ -161,11 +169,11 @@ class VuePartie < Vue
         @boxFooter = Box.new(:horizontal)
         @boxFooter.set_homogeneous(true)
 
-        @boutonUndo = nouveauBouton(:annulerAction,"undo")
-        @boutonRedo = nouveauBouton(:repeter,"redo")
-        @boutonConseil = nouveauBouton(:conseil,"conseil")
-        @boutonAide = nouveauBouton(:aide,"aide")
-        @boutonRecommencer = nouveauBouton(:recommencer,"restart")
+        @boutonUndo = creerBoutonImage(:annulerAction,"undo")
+        @boutonRedo = creerBoutonImage(:repeter,"redo")
+        @boutonConseil = creerBoutonImage(:conseil,"conseil")
+        @boutonAide = creerBoutonImage(:aide,"aide")
+        @boutonRecommencer = creerBoutonImage(:recommencer,"restart")
 
         @boutonUndo.signal_connect('clicked')  { onBtnUndoClicked }
         @boutonRedo.signal_connect('clicked')  { onBtnRedoClicked }
@@ -306,8 +314,7 @@ class VuePartie < Vue
         confirmation = false
         dialogSauvegarde = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:sauvegarder], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
         
-        labelSauvegarde = Label.new()
-        labelSauvegarde.set_markup("<big>" + @controleur.getLangue[:confirmationSauvegarde] + "</big>")
+        labelSauvegarde = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationSauvegarde])
         dialogSauvegarde.child.set_spacing(10)
         dialogSauvegarde.child.add(labelSauvegarde)
 
@@ -322,7 +329,28 @@ class VuePartie < Vue
         dialogSauvegarde.destroy()
 
         if(confirmation)
-            @controleur.sauvegarder()
+            champDescription = Entry.new
+            champDescription.set_max_length(20)
+
+            # Nom par défaut :
+            description = "Sauvegarde " + (@controleur.getNombreSauvegardes()+1).to_s
+
+            dialogDescription = Dialog.new(:parent => @@fenetre, :title => "Description", :flags => :modal, :buttons => [[@controleur.getLangue[:valider],ResponseType::OK]])
+            dialogDescription.child.set_spacing(10)
+            dialogDescription.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:descriptionSauvegarde]))
+            dialogDescription.child.add(champDescription)
+            dialogDescription.show_all()
+            dialogDescription.run do |reponse|
+                if(reponse == ResponseType::OK)
+                    if(champDescription.text() != "")
+                        description = champDescription.text()
+                    end
+                end             
+            end             
+            dialogDescription.destroy()
+
+            @controleur.sauvegarder(description)
+
             messageConfirmation = @controleur.getLangue[:sauvegardeEffectuee]
             dialogConfirmation = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => messageConfirmation)
             dialogConfirmation.run()
@@ -365,8 +393,7 @@ class VuePartie < Vue
 
         dialogConfirmation = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:quitter], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
         
-        labelConfirmation = Label.new()
-        labelConfirmation.set_markup("<big>" + @controleur.getLangue[:confirmationQuitter] + "</big>")
+        labelConfirmation = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationQuitter])
         dialogConfirmation.child.set_spacing(10)
         dialogConfirmation.child.add(labelConfirmation)
 
@@ -506,6 +533,13 @@ class VuePartie < Vue
                 sleep(@delaiReactivation)
                 @boutonConseil.set_sensitive(true)
             }
+        else
+            self.cacherJeu()
+            message = @controleur.getLangue[:reglesRespectees]
+            dialogRegles = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => message)
+            dialogRegles.run()
+            dialogRegles.destroy()
+            self.montrerJeu()
         end
     end
 
@@ -526,8 +560,7 @@ class VuePartie < Vue
 
         dialogConfirmation = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:recommencer], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
         
-        labelConfirmation = Label.new()
-        labelConfirmation.set_markup("<big>" + @controleur.getLangue[:confirmationRecommencer] + "</big>")
+        labelConfirmation = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationRecommencer])
         dialogConfirmation.child.set_spacing(10)
         dialogConfirmation.child.add(labelConfirmation)
 

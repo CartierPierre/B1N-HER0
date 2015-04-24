@@ -19,7 +19,7 @@ class ControleurChargerPartie < Controleur
 
         sauvegardes.each do |sauvegarde|
             niveau = @gestionnaireNiveau.recupererNiveau(sauvegarde.idNiveau)
-            partie = Partie.charger(@@utilisateur, niveau, sauvegarde)
+            partie = Array[sauvegarde.description, Partie.charger(@@utilisateur, niveau, sauvegarde)]
             parties.push(partie)
         end
 

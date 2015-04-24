@@ -28,18 +28,16 @@ class Vue
         @@fenetre.remove(@cadre)
     end
 
-    def nouveauBouton(labelBouton,image)
-        bouton = Button.new(:label => @controleur.getLangue[labelBouton])
-        bouton.set_always_show_image(true)
-        bouton.set_image_position(:top)
-        bouton.set_image(Image.new(:file => './Ressources/' + image + '.png'))
-        return bouton
-    end
-
     def creerAlignBouton(box,bouton) 
         align = Alignment.new(0.5, 0, 0.6, 0)
         align.add(bouton)
         box.add(align)
+    end
+
+    def creerLabelTailleMoyenne(texte)
+        label = Label.new()
+        label.set_markup(%Q[ <span font_desc="11">#{texte}</span>])
+        return label
     end
 
 end
