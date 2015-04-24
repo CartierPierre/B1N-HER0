@@ -38,7 +38,8 @@ class Stockage
 		# puts "Ouverture de la base de données ..."
 		begin
 			# @bddLocal = SQLite3::Database.new('./bdd-test.sqlite')
-			@bddLocal = SQLite3::Database.new( File.dirname(__FILE__) + "/../Ressources/bdd.sqlite" )
+			# @bddLocal = SQLite3::Database.new( File.dirname(__FILE__) + "/../Ressources/bdd.sqlite" )
+			@bddLocal = SQLite3::Database.new( "./Ressources/bdd.sqlite" )
 			rescue SQLite3::Exception => err
 				puts "Erreur"
 				puts err
