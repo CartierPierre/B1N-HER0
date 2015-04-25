@@ -36,14 +36,6 @@ class VuePartie < Vue
     @dureeConseils          # Durée des conseils en secondes
     @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
 
-    def creerBoutonImage(labelBouton,image)
-        bouton = Button.new(:label => @controleur.getLangue[labelBouton])
-        bouton.set_always_show_image(true)
-        bouton.set_image_position(:top)
-        bouton.set_image(Image.new(:file => './Ressources/' + image + '.png'))
-        return bouton
-    end
-
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
@@ -235,10 +227,6 @@ class VuePartie < Vue
         @grille[x+1][0].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesLigne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesLigne[1]}</span> ])
     end
 
-    def couperChaine(chaine, longueurMax)
-        chaine.gsub(/\s+/, " ").gsub(/(.{1,#{longueurMax}})( |\Z)/, "\\1\n")
-    end
-
     def surbrillanceLigne(ligne)
         Thread.new {
             0.upto(@nbClignotements*2-1) do |n|
@@ -297,6 +285,24 @@ class VuePartie < Vue
         @boxFooter.show()
     end
 
+    def couperChaine(chaine, longueurMax)
+        chaine.gsub(/\s+/, " ").gsub(/(.{1,#{longueurMax}})( |\Z)/, "\\1\n")
+    end
+
+    def creerBoutonImage(labelBouton,image)
+        bouton = Button.new(:label => @controleur.getLangue[labelBouton])
+        bouton.set_always_show_image(true)
+        bouton.set_image_position(:top)
+        bouton.set_image(Image.new(:file => './Ressources/' + image + '.png'))
+        return bouton
+    end
+
+    def creerDialogMessage(titre)
+        dialog = Dialog.new(:parent => @@fenetre, :title => titre, :flags => :modal,:buttons => [[@controleur.getLangue[:fermer],ResponseType::CLOSE]])
+        dialog.child.set_spacing(20)
+        return dialog
+    end
+
     protected :actualiserGrille, :couperChaine, :surbrillanceLigne, :surbrillanceColonne, :cacherJeu, :montrerJeu
 
     ###################################
@@ -315,7 +321,7 @@ class VuePartie < Vue
         dialogSauvegarde = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:sauvegarder], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
         
         labelSauvegarde = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationSauvegarde])
-        dialogSauvegarde.child.set_spacing(10)
+        dialogSauvegarde.child.set_spacing(20)
         dialogSauvegarde.child.add(labelSauvegarde)
 
         dialogSauvegarde.show_all()
@@ -336,7 +342,7 @@ class VuePartie < Vue
             description = "Sauvegarde " + (@controleur.getNombreSauvegardes()+1).to_s
 
             dialogDescription = Dialog.new(:parent => @@fenetre, :title => "Description", :flags => :modal, :buttons => [[@controleur.getLangue[:valider],ResponseType::OK]])
-            dialogDescription.child.set_spacing(10)
+            dialogDescription.child.set_spacing(20)
             dialogDescription.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:descriptionSauvegarde]))
             dialogDescription.child.add(champDescription)
             dialogDescription.show_all()
@@ -351,8 +357,9 @@ class VuePartie < Vue
 
             @controleur.sauvegarder(description)
 
-            messageConfirmation = @controleur.getLangue[:sauvegardeEffectuee]
-            dialogConfirmation = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => messageConfirmation)
+            dialogConfirmation = creerDialogMessage(@controleur.getLangue[:sauvegarder])
+            dialogConfirmation.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:sauvegardeEffectuee]))
+            dialogConfirmation.show_all()
             dialogConfirmation.run()
             dialogConfirmation.destroy()
         end
@@ -375,12 +382,13 @@ class VuePartie < Vue
     def onBtnReglesClicked 
         self.cacherJeu()
 
-        regles = @controleur.getLangue[:regles]
-        regles += "\n\n"
-        regles += @controleur.getLangue[:regles1]
-        regles += @controleur.getLangue[:regles2]
-        regles += @controleur.getLangue[:regles3]
-        dialogRegles = MessageDialog.new(:parent => @@fenetre, :type => :question, :buttons_type => :close, :message => regles)
+        dialogRegles = creerDialogMessage(@controleur.getLangue[:regles])
+        dialogRegles.child.add(creerLabelTailleGrosse(@controleur.getLangue[:regles]))
+        dialogRegles.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:regles1]))
+        dialogRegles.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:regles2]))
+        dialogRegles.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:regles3]))
+
+        dialogRegles.show_all()
         dialogRegles.run()
         dialogRegles.destroy()
 
@@ -393,11 +401,10 @@ class VuePartie < Vue
 
         dialogConfirmation = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:quitter], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
         
-        labelConfirmation = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationQuitter])
-        dialogConfirmation.child.set_spacing(10)
-        dialogConfirmation.child.add(labelConfirmation)
-
+        dialogConfirmation.child.set_spacing(20)
+        dialogConfirmation.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:confirmationQuitter]))
         dialogConfirmation.show_all()
+        
         dialogConfirmation.run do |reponse|
             if(reponse == ResponseType::YES)
                 confirmation = true
@@ -461,10 +468,12 @@ class VuePartie < Vue
 
     def onBtnValiderGrilleClicked
         if(!@modele.valider())
-            explications = @controleur.getLangue[:grilleInvalide]
-            explications += "\n\n"
-            explications += @controleur.getLangue[:grilleInvalideExplications]
-            dialogValidationGrille = MessageDialog.new(:parent => @@fenetre, :type => :warning, :buttons_type => :close, :message => explications)
+            dialogValidationGrille = creerDialogMessage(@controleur.getLangue[:grilleInvalide])
+
+            dialogValidationGrille.child.add(creerLabelTailleGrosse(@controleur.getLangue[:grilleInvalide]))
+            dialogValidationGrille.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:grilleInvalideExplications]))
+
+            dialogValidationGrille.show_all()
             dialogValidationGrille.run()
             dialogValidationGrille.destroy()
         else      
@@ -535,8 +544,10 @@ class VuePartie < Vue
             }
         else
             self.cacherJeu()
-            message = @controleur.getLangue[:reglesRespectees]
-            dialogRegles = MessageDialog.new(:parent => @@fenetre, :type => :info, :buttons_type => :close, :message => message)
+            dialogRegles = creerDialogMessage(@controleur.getLangue[:conseil])
+            dialogRegles.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:reglesRespectees]))
+
+            dialogRegles.show_all()
             dialogRegles.run()
             dialogRegles.destroy()
             self.montrerJeu()
@@ -560,11 +571,10 @@ class VuePartie < Vue
 
         dialogConfirmation = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:recommencer], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
         
-        labelConfirmation = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationRecommencer])
-        dialogConfirmation.child.set_spacing(10)
-        dialogConfirmation.child.add(labelConfirmation)
-
+        dialogConfirmation.child.set_spacing(20)
+        dialogConfirmation.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:confirmationRecommencer]))
         dialogConfirmation.show_all()
+
         dialogConfirmation.run do |reponse|
             if(reponse == ResponseType::YES)
                 @labelHypothese.set_label("")

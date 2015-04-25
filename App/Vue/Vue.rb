@@ -40,4 +40,10 @@ class Vue
         return label
     end
 
+    def creerLabelTailleGrosse(texte)
+        label = Label.new()
+        label.set_markup("<big>" + texte + "</big>")
+        return label
+    end
+
 end
