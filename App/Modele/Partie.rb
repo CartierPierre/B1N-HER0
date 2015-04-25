@@ -324,6 +324,21 @@ class Partie
     def sauvegarder()
         data = String.new()
 
+        # Sérialisation du nombre de coups joués
+        data += @nbCoups.to_s
+
+        data += "|"
+
+        # Sérialisation du nombre de conseils utilisées
+        data += @nbConseils.to_s
+
+        data += "|"
+
+        # Sérialisation du nombre d'aides utilisées
+        data += @nbAides.to_s
+
+        data += "|"
+
         # Sérialisation du chrono
         data += @chrono.sauvegarder
 
@@ -382,25 +397,34 @@ class Partie
         # Sépare les différents champs des données dans un tableau
         donnees = sauvegarde.contenu.split("|")
 
+        # Charge le nombre de coups joués
+        partie.setNbCoups(donnees[0].to_i)
+
+        # Charge le nombre de conseils utilisées
+        partie.setNbConseils(donnees[2].to_i)
+
+        # Charge le nombre d'aides utilisées
+        partie.setNbAides(donnees[1].to_i)
+
         # Charge le chrono avec les données sérialisée du chrono
-        partie.setChrono(Chrono.charger(donnees[0]))
+        partie.setChrono(Chrono.charger(donnees[3]))
 
         # Charge la grille avec les données sérialisée de la grille
-        partie.setGrille(Grille.charger(donnees[1]))
+        partie.setGrille(Grille.charger(donnees[4]))
 
         # On remet en place la liste des undo
-        if(donnees[2])
-            partie.chargerUndo(donnees[2])
+        if(donnees[5])
+            partie.chargerUndo(donnees[5])
         end
 
         # On remet en place la liste des redo
-        if(donnees[3])
-            partie.chargerRedo(donnees[3])
+        if(donnees[6])
+            partie.chargerRedo(donnees[6])
         end
 
         # On remet en place le mode hypothése
-        if(donnees[4])
-            donneesHypothese = donnees[4].split('#')
+        if(donnees[7])
+            donneesHypothese = donnees[7].split('#')
 
             if(donneesHypothese[0] == 'true')
                 partie.setModeHypothese(true)
@@ -455,6 +479,20 @@ class Partie
 
         self
     end
+
+    def setNbCoups(nb)
+        @nbCoups = nb
+    end
+
+    def setNbAides(nb)
+        @nbAides = nb
+    end
+
+
+    def setNbConseils(nb)
+        @nbConseils = nb
+    end
+
 
 
 
