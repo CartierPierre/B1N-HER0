@@ -1,5 +1,7 @@
 class VueChargerPartie < Vue
 
+    ### Attributs d'instances
+
     @boutonDerniereTaille
     @bouton6x6
     @bouton8x8
@@ -13,34 +15,51 @@ class VueChargerPartie < Vue
 
     @boutonDerniereSauvegarde
 
+    ##
+    # Classe qui permet de gérer les boutons de sauvegarde qui contient un objet Partie
+    #
     class BoutonSauvegarde < Gtk::Button
+
+        ### Attribut d'instance
 
         attr_reader :partie
 
+        ##
+        # Méthode de création du bouton de sauvegarde contenant une partie
+        #
+        # Paramètres::
+        #   * _label_ - Label du bouton
+        #   * _partie_ - Partie associé à ce bouton 
+        #
         def initialize(label,partie)
             super(:label => label)
             @partie = partie
         end
     end
 
+    ##
+    # Méthode de création de la vue charger partie
+    #
+    # Paramètres::
+    #   * _modele_ - Modèle associé
+    #   * _titre_ - Titre de la fenetre
+    #   * _controleur_ - Controleur associé 
+    #
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
-        # Box et boutons taille de la grille
+        # Box et boutons pour choisir la taille de la grille
         hboxTaille = Box.new(:horizontal, 10)
-
-        labelTaille = Label.new()
-        labelTaille.set_markup("<big>" + @controleur.getLangue[:tailleGrille] + "</big>")
 
         @bouton6x6 = Button.new(:label => "6x6")
         @bouton8x8 = Button.new(:label => "8x8")
         @bouton10x10 = Button.new(:label => "10x10")
         @bouton12x12 = Button.new(:label => "12x12")
 
-        @bouton6x6.signal_connect('clicked') { onBtnTailleClicked(6,@bouton6x6) }
-        @bouton8x8.signal_connect('clicked') { onBtnTailleClicked(8,@bouton8x8) }
-        @bouton10x10.signal_connect('clicked') { onBtnTailleClicked(10,@bouton10x10) }
-        @bouton12x12.signal_connect('clicked') { onBtnTailleClicked(12,@bouton12x12) }
+        @bouton6x6.signal_connect('clicked') { onBtnTailleClicked(@bouton6x6,6) }
+        @bouton8x8.signal_connect('clicked') { onBtnTailleClicked(@bouton8x8,8) }
+        @bouton10x10.signal_connect('clicked') { onBtnTailleClicked(@bouton10x10,10) }
+        @bouton12x12.signal_connect('clicked') { onBtnTailleClicked(@bouton12x12,12) }
 
         hboxTaille.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxTaille.add(@bouton6x6)
@@ -49,7 +68,7 @@ class VueChargerPartie < Vue
         hboxTaille.add(@bouton12x12)
         hboxTaille.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Sauvegardes
+        # Création des boutons de sauvegarde
         hboxScroll = Box.new(:horizontal)
 
         @fenetreScroll = ScrolledWindow.new()
@@ -89,7 +108,7 @@ class VueChargerPartie < Vue
         vboxPrincipale = Box.new(:vertical, 20)
 
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxPrincipale.add(labelTaille)
+        vboxPrincipale.add(creerLabelTailleGrosse(@controleur.getLangue[:tailleGrille]))
         vboxPrincipale.add(hboxTaille)
         vboxPrincipale.add(hboxScroll)
         vboxPrincipale.add(hboxChargerAnnuler)
@@ -103,7 +122,14 @@ class VueChargerPartie < Vue
         @boutonCharger.set_sensitive(false)
     end
 
-    def onBtnTailleClicked(taille,bouton)   
+    ##
+    # Listener sur les boutons de choix de la taille de la grille
+    #
+    # Paramètres::
+    #   * _bouton_ - Bouton qui a été cliqué
+    #   * _taille_ - Taille de la grille sélectionnée
+    #
+    def onBtnTailleClicked(bouton, taille)   
         @taille = taille
         @fenetreScroll.show()
 
@@ -119,6 +145,12 @@ class VueChargerPartie < Vue
         @boutonDerniereTaille.set_sensitive(false)
     end
 
+    ##
+    # Listener sur les boutons de sauvegarde
+    #
+    # Paramètre::
+    #   * _boutonSauvegarde_ - Bouton qui a été cliqué
+    #
     def onBtnSauvegardeClicked(boutonSauvegarde)
         if(@boutonDerniereSauvegarde)
             @boutonDerniereSauvegarde.set_sensitive(true)
@@ -129,11 +161,19 @@ class VueChargerPartie < Vue
         @partie = @boutonDerniereSauvegarde.partie()
     end
     
+    ##
+    # Listener sur le bouton de chargement de la sauvegarde
+    # Ferme le cadre et charge la partie sélectionnée
+    #
     def onBtnChargerClicked
         fermerCadre()
         @controleur.charger(@partie)
     end
 
+    ##
+    # Listener sur le bouton annuler
+    # Ferme le cadre et retourne au menu principal ou en partie selon la vue précédente
+    #
     def onBtnAnnulerClicked
         fermerCadre()
         @controleur.annuler

@@ -1,5 +1,7 @@
 class VueOptions < Vue
 
+    ### Attributs d'instances
+
     # Langue
     @labelLangue
     @boutonsLangue    
@@ -18,16 +20,35 @@ class VueOptions < Vue
     @boutonAppliquer
     @boutonAnnuler
 
+    ##
+    # Classe qui permet de gérer les boutons qui contient en plus une référence 
+    # sur le label dans la classe Langue pour le changement de langue
+    #
     class BoutonLabel < Gtk::Button
 
-        attr_reader :label
+        ### Attribut d'instance
 
+        attr_reader :labelLangue
+
+        ##
+        # Méthode de création du bouton
+        #
+        # Paramètres::
+        #   * _label_ - Label du bouton
+        #
         def initialize(label)
             super(:label => label)
-            @label = label
+            @labelLangue = label
         end
     end
 
+    ##
+    # Initialise le tableau contenant les boutons pour changer la langue
+    #
+    # Paramètres::
+    #   * _label_ - Label du bouton
+    #   * _langue_ - Constante de la classe Langue
+    #
     def initTableauBoutonsLangue(label,langue)
         boutonTemp = BoutonLabel.new(label)
         boutonTemp.signal_connect('clicked')  { onBtnLangueClicked(boutonTemp,langue) }
@@ -38,6 +59,12 @@ class VueOptions < Vue
         @boutonsLangue.push(boutonTemp)
     end
 
+    ##
+    # Initialise le tableau contenant les boutons pour changer la couleur des tuiles de la grille
+    #
+    # Paramètre::
+    #   * _couleur_ - Constante de la classe Option
+    #
     def initTableauBoutonsCouleurTuile(couleur)
         boutonTemp = Button.new()
         boutonTemp.set_image(Image.new(:pixbuf => Option::IMG[couleur]))
@@ -53,6 +80,15 @@ class VueOptions < Vue
         @boutonsCouleurTuile.push(boutonTemp)
     end
 
+    ##
+    # Méthode de création de la vue options qui permet de changer la langue du jeu
+    # ainsi que la couleur des tuiles de la grille
+    #
+    # Paramètres::
+    #   * _modele_ - Modèle associé
+    #   * _titre_ - Titre de la fenetre
+    #   * _controleur_ - Controleur associé 
+    #
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
@@ -60,11 +96,10 @@ class VueOptions < Vue
         @couleurTuile1 = @modele.couleurTuile1()
         @couleurTuile2 = @modele.couleurTuile2()
 
-        # Choix de la langue
+        # Box et boutons pour choisir la langue
         boxLangue = Box.new(:horizontal, 10)
 
-        @labelLangue = Label.new()
-        @labelLangue.set_markup("<big>" + @controleur.getLangue[:langue] + "</big>")
+        @labelLangue = creerLabelTailleGrosse(@controleur.getLangue[:langue])
 
         @boutonsLangue = Array.new()
         initTableauBoutonsLangue(@controleur.getLangue[:francais], Langue::FR)
@@ -77,11 +112,10 @@ class VueOptions < Vue
         end
         boxLangue.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Choix de la couleur des tuiles
+        # Box et boutons pour choisir la couleur des tuiles de la grille dans le jeu
         boxCouleurTuile = Box.new(:horizontal, 10)
 
-        @labelChoixCouleur = Label.new()
-        @labelChoixCouleur.set_markup("<big>" + @controleur.getLangue[:couleurTuiles] + "</big>")
+        @labelChoixCouleur = creerLabelTailleGrosse(@controleur.getLangue[:couleurTuiles])
 
         @boutonsCouleurTuile = Array.new()
         initTableauBoutonsCouleurTuile(Option::TUILE_ROUGE)
@@ -95,7 +129,7 @@ class VueOptions < Vue
         end
         boxCouleurTuile.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Boutons appliquer et annuler
+        # Boutons pour appliquer et annuler
         hboxAppliquerAnnuler = Box.new(:horizontal, 10)
 
         @boutonAppliquer = Button.new(:label => @controleur.getLangue[:appliquer])
@@ -123,17 +157,27 @@ class VueOptions < Vue
         self.actualiser()
     end
 
+    ##
+    # Actualise la langue de la fenetre, des labels et boutons en fonction de celle sélectionnée
+    #
     def actualiserLangue() 
         @@fenetre.title = "B1N HER0 - " + @controleur.getLangue[:options]        
         @labelLangue.set_markup("<big>" + @controleur.getLangue[:langue] + "</big>")
         @boutonsLangue.each do |bouton|
-            bouton.set_label(bouton.label)
+            bouton.set_label(bouton.labelLangue)
         end
         @labelChoixCouleur.set_markup("<big>" + @controleur.getLangue[:couleurTuiles] + "</big>")
         @boutonAppliquer.set_label(@controleur.getLangue[:appliquer])
         @boutonAnnuler.set_label(@controleur.getLangue[:annuler])
     end
 
+    ##
+    # Listener sur les boutons de choix de la langue
+    #
+    # Paramètres::
+    #   * _bouton_ - Bouton qui a été cliqué
+    #   * _langue_ - Langue sélectionnée
+    #
     def onBtnLangueClicked(bouton,langue)
         @boutonLangueActif.set_sensitive(true)
         @boutonLangueActif = bouton
@@ -142,6 +186,13 @@ class VueOptions < Vue
         self.actualiserLangue()
     end
 
+    ##
+    # Listener sur les boutons de choix de la couleur des tuiles de la grille
+    #
+    # Paramètres::
+    #   * _bouton_ - Bouton qui a été cliqué
+    #   * _couleur_ - Couleur sélectionnée
+    #
     def onBtnCouleurTuileClicked(bouton,couleur)
         @boutonCouleurTuile1Actif.set_sensitive(true)
         @boutonCouleurTuile1Actif = @boutonCouleurTuile2Actif
@@ -154,6 +205,10 @@ class VueOptions < Vue
         @couleurTuile2 = couleur
     end
 
+    ##
+    # Listener sur le bouton pour appliquer qui change au niveau du modèle les couleurs
+    # puis ferme le cadre et retourne au menu principal ou en partie selon la vue précédente
+    #
     def onBtnAppliquerClicked        
         @modele.changerTuile1(@couleurTuile1)
         @modele.changerTuile2(@couleurTuile2)
@@ -161,6 +216,10 @@ class VueOptions < Vue
         @controleur.appliquer()
     end
 
+    ##
+    # Listener sur le bouton pour annuler la configuration qui revient à son état antérieur
+    # puis ferme le cadre et retourne au menu principal ou en partie selon la vue précédente
+    #
     def onBtnAnnulerClicked
         @controleur.setLangue(@languePrecedenteConstante)
         fermerCadre()
