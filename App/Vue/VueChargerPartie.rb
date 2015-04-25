@@ -56,10 +56,10 @@ class VueChargerPartie < Vue
         @bouton10x10 = Button.new(:label => "10x10")
         @bouton12x12 = Button.new(:label => "12x12")
 
-        @bouton6x6.signal_connect('clicked') { onBtnTailleClicked(6,@bouton6x6) }
-        @bouton8x8.signal_connect('clicked') { onBtnTailleClicked(8,@bouton8x8) }
-        @bouton10x10.signal_connect('clicked') { onBtnTailleClicked(10,@bouton10x10) }
-        @bouton12x12.signal_connect('clicked') { onBtnTailleClicked(12,@bouton12x12) }
+        @bouton6x6.signal_connect('clicked') { onBtnTailleClicked(@bouton6x6,6) }
+        @bouton8x8.signal_connect('clicked') { onBtnTailleClicked(@bouton8x8,8) }
+        @bouton10x10.signal_connect('clicked') { onBtnTailleClicked(@bouton10x10,10) }
+        @bouton12x12.signal_connect('clicked') { onBtnTailleClicked(@bouton12x12,12) }
 
         hboxTaille.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxTaille.add(@bouton6x6)
@@ -126,10 +126,10 @@ class VueChargerPartie < Vue
     # Listener sur les boutons de choix de la taille de la grille
     #
     # Paramètres::
-    #   * _taille_ - Taille de la grille sélectionnée
     #   * _bouton_ - Bouton qui a été cliqué
+    #   * _taille_ - Taille de la grille sélectionnée
     #
-    def onBtnTailleClicked(taille,bouton)   
+    def onBtnTailleClicked(bouton, taille)   
         @taille = taille
         @fenetreScroll.show()
 

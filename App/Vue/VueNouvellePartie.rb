@@ -1,5 +1,7 @@
 class VueNouvellePartie < Vue
 
+    ### Attributs d'instances
+
     # Boutons taille de la grille
     @boutonDerniereTaille
 	@bouton6x6
@@ -18,6 +20,9 @@ class VueNouvellePartie < Vue
 	@taille
 	@difficulte
 
+    ##
+    # Initialise le tableau contenant les boutons de chaque difficulté (1 à 7)
+    #
     def initTableauBoutonsDifficulte()
         # 7 correspond à la difficulté maximale
         1.upto(7) do |difficulte|
@@ -27,24 +32,30 @@ class VueNouvellePartie < Vue
         end
     end
 
+    ##
+    # Méthode de création de la vue qui permet de configurer la taille de la grille 
+    # et la difficulté du niveau puis de lancer une partie
+    #
+    # Paramètres::
+    #   * _modele_ - Modèle associé
+    #   * _titre_ - Titre de la fenetre
+    #   * _controleur_ - Controleur associé 
+    #
 	def initialize(modele,titre,controleur)
 		super(modele,titre,controleur)
 
-		# Box et boutons taille de la grille
+		# Box et boutons pour choisir la taille de la grille
 		hboxTaille = Box.new(:horizontal, 10)
-
-		labelTaille = Label.new()
-		labelTaille.set_markup("<big>" + @controleur.getLangue[:tailleGrille] + "</big>")
 
 		@bouton6x6 = Button.new(:label => "6x6")
 		@bouton8x8 = Button.new(:label => "8x8")
 		@bouton10x10 = Button.new(:label => "10x10")
 		@bouton12x12 = Button.new(:label => "12x12")
 
-		@bouton6x6.signal_connect('clicked') { onBtnTailleClicked(6,@bouton6x6) }
-		@bouton8x8.signal_connect('clicked') { onBtnTailleClicked(8,@bouton8x8) }
-		@bouton10x10.signal_connect('clicked') { onBtnTailleClicked(10,@bouton10x10) }
-		@bouton12x12.signal_connect('clicked') { onBtnTailleClicked(12,@bouton12x12) }
+		@bouton6x6.signal_connect('clicked') { onBtnTailleClicked(@bouton6x6,6) }
+		@bouton8x8.signal_connect('clicked') { onBtnTailleClicked(@bouton8x8,8) }
+		@bouton10x10.signal_connect('clicked') { onBtnTailleClicked(@bouton10x10,10) }
+		@bouton12x12.signal_connect('clicked') { onBtnTailleClicked(@bouton12x12,12) }
 
 		hboxTaille.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 		hboxTaille.add(@bouton6x6)
@@ -53,11 +64,10 @@ class VueNouvellePartie < Vue
 		hboxTaille.add(@bouton12x12)
 		hboxTaille.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Box et boutons difficulté
+        # Box et boutons pour choisir la difficulté du niveau
         hboxDifficulte = Box.new(:horizontal, 10)
 
-        @labelDifficulte = Label.new()
-		@labelDifficulte.set_markup("<big>" + @controleur.getLangue[:difficulte] + "</big>")
+        @labelDifficulte = creerLabelTailleGrosse(@controleur.getLangue[:difficulte])
 
         @boutonsDifficulte = Array.new()
         initTableauBoutonsDifficulte()
@@ -68,7 +78,7 @@ class VueNouvellePartie < Vue
         end
         hboxDifficulte.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Boutons valider et annuler
+        # Boutons pour valider et annuler
         hboxValiderAnnuler = Box.new(:horizontal, 10)
 
         @boutonValider = Button.new(:label => @controleur.getLangue[:appliquer])
@@ -86,7 +96,7 @@ class VueNouvellePartie < Vue
 		vboxPrincipale = Box.new(:vertical, 20)
 
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-       	vboxPrincipale.add(labelTaille)
+       	vboxPrincipale.add(creerLabelTailleGrosse(@controleur.getLangue[:tailleGrille]))
         vboxPrincipale.add(hboxTaille)
         vboxPrincipale.add(@labelDifficulte)
         vboxPrincipale.add(hboxDifficulte)
@@ -104,7 +114,14 @@ class VueNouvellePartie < Vue
         end
 	end
 
-	def onBtnTailleClicked(taille,bouton)
+    ##
+    # Listener sur les boutons de choix de la taille de la grille
+    #
+    # Paramètres::
+    #   * _bouton_ - Bouton qui a été cliqué
+    #   * _taille_ - Taille de la grille sélectionnée
+    #
+	def onBtnTailleClicked(bouton, taille)
 		if(@taille)
 			@boutonsDifficulte.each do |bouton|
                 bouton.hide()
@@ -141,7 +158,14 @@ class VueNouvellePartie < Vue
 		end
 	end
 
-	def onBtnDifficulteClicked(bouton,difficulte)
+    ##
+    # Listener sur les boutons de choix de la difficulté du niveau
+    #
+    # Paramètres::
+    #   * _bouton_ - Bouton qui a été cliqué
+    #   * _difficulte_ - Difficulté du niveau sélectionnée  
+    #
+	def onBtnDifficulteClicked(bouton, difficulte)
 		@difficulte = difficulte
         if(!@boutonDerniereDifficulte)
             @boutonDerniereDifficulte = bouton
@@ -152,11 +176,20 @@ class VueNouvellePartie < Vue
 		@boutonValider.set_sensitive(true)
 	end
 	
+    ##
+    # Listener sur le bouton valider
+    # Ferme le cadre et ouvre la vue partie avec une partie choisie aléatoirement 
+    # en fonction de la taille et difficulté sélectionnée
+    #
 	def onBtnValiderClicked
         fermerCadre()
         @controleur.jouer(@taille,@difficulte)
 	end
 
+    ##
+    # Listener sur le bouton annuler
+    # Ferme le cadre et retourne au menu principal
+    #
 	def onBtnAnnulerClicked
         fermerCadre()
         @controleur.annuler

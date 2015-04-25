@@ -53,7 +53,7 @@ class VueCredits < Vue
     end
     
     ##
-    # Listener sur le bouton annuler
+    # Listener sur le bouton retour
     # Ferme le cadre et retourne au menu principal
     #
     def onBtnRetourClicked
