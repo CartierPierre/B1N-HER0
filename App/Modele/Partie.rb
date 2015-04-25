@@ -138,7 +138,6 @@ class Partie
             t = Etat.suivant(@grille.getTuile(x, y).etat())
             @grille.setTuile(x, y, t)
 
-            monitor
             @nbCoups += 1
         end
 
@@ -152,8 +151,6 @@ class Partie
     #   Un booléen indiquant si la Grille est valide.
     #
     def valider()
-        @grille.afficher()
-        @niveau.solution.afficher()
         0.upto(@grille.taille() - 1) do |x|
             0.upto(@grille.taille() - 1) do |y|
                 if(!Etat.egale?(@grille.getTuile(x, y).etat, @niveau.solution.getTuile(x, y).etat))
