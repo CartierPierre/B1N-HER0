@@ -17,38 +17,23 @@ class VueCredits < Vue
 
         vboxPrincipale = Box.new(:vertical, 20)
 
-        labelChefProjet = Label.new()
-        labelChefProjet.set_label(@controleur.getLangue[:chefProjet] + " : Pierre CARTIER")
-
-        labelDoc = Label.new()
-        labelDoc.set_label(@controleur.getLangue[:documentaliste] + " : Quentin BOIVEAU")
-
-        labelInterface = Label.new()
-        labelInterface.set_label(@controleur.getLangue[:interfaceGraphique] + " : Loïc GUENVER et Corentin DELORME")
-
-        labelBdd = Label.new()
-        labelBdd.set_label(@controleur.getLangue[:baseDonnees] + " : Kévin DEMARET")
-
-        labelCodage = Label.new()
-        labelCodage.set_label(@controleur.getLangue[:codage] + " : Tianqi WEI et Amaury SAVARRE")
-
+        # Bouton retour qui permet de retourner au menu principal
         @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
         @boutonRetour.set_size_request(100,40)
+        @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
 
+        # Ajout dans la vbox principale
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(creerLabelTailleGrosse("B1N HER0"))
-        vboxPrincipale.add(labelChefProjet)
-        vboxPrincipale.add(labelDoc)
-        vboxPrincipale.add(labelInterface)
-        vboxPrincipale.add(labelBdd)
-        vboxPrincipale.add(labelCodage)
+        vboxPrincipale.add(Label.new(@controleur.getLangue[:chefProjet] + " : Pierre CARTIER"))
+        vboxPrincipale.add(Label.new(@controleur.getLangue[:documentaliste] + " : Quentin BOIVEAU"))
+        vboxPrincipale.add(Label.new(@controleur.getLangue[:interfaceGraphique] + " : Loïc GUENVER et Corentin DELORME"))
+        vboxPrincipale.add(Label.new(@controleur.getLangue[:baseDonnees] + " : Kévin DEMARET"))
+        vboxPrincipale.add(Label.new(@controleur.getLangue[:codage] + " : Tianqi WEI et Amaury SAVARRE"))
         creerAlignBouton(vboxPrincipale,@boutonRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        @cadre.add(vboxPrincipale)
-
-        @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
-      
+        @cadre.add(vboxPrincipale)      
         self.actualiser()
     end
     

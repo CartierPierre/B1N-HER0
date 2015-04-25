@@ -1,7 +1,19 @@
 class VueResultatPartie < Vue
 
+    ### Attribut d'instance
+
     @boutonRetour
 
+    ##
+    # Méthode qui permet de creer une box horizontale contenant l'image du succès à gauche
+    # et le titre ainsi que sa description à droite
+    #
+    # Paramètre::
+    #   * _succes_ - Constante de la classe Succes
+    #
+    # Retour::
+    #   La nouvelle box horizontale
+    #
     def creerSucces(succes)
         hbox = Box.new(:horizontal, 10)
         hbox.override_background_color(0,Gdk::RGBA::new(0.85,0.85,0.85,1.0))
@@ -20,6 +32,14 @@ class VueResultatPartie < Vue
         return hbox
     end
 
+    ##
+    # Méthode de création de la vue qui affiche le résultat de la partie une fois la grille validée
+    #
+    # Paramètres::
+    #   * _modele_ - Modèle associé
+    #   * _titre_ - Titre de la fenetre
+    #   * _controleur_ - Controleur associé 
+    #
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
@@ -27,32 +47,21 @@ class VueResultatPartie < Vue
 
         @boutonRetour = Button.new(:label => @controleur.getLangue[:retournerMenuPrincipal])
         @boutonRetour.set_size_request(100,40)
+        @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
 
-        labelFelicitations = Label.new()
-        labelFelicitations.set_markup("<big>" + @controleur.getLangue[:felicitations] + @modele.grille.taille.to_i.to_s + "x" + @modele.grille.taille.to_i.to_s + @controleur.getLangue[:felicitations2] + @modele.niveau.difficulte.to_s + "</big>")
+        labelFelicitations = creerLabelTailleGrosse(@controleur.getLangue[:felicitations] + @modele.grille.taille.to_i.to_s + "x" + @modele.grille.taille.to_i.to_s + @controleur.getLangue[:felicitations2] + @modele.niveau.difficulte.to_s)
 
-        labelScore = Label.new()
-        labelScore.set_markup("<big>" + @controleur.getLangue[:score] + " : " + @controleur.score.nbPoints(@modele.niveau).to_s + "</big>")
-
-        labelTemps = Label.new()
-        labelTemps.set_markup("<big>" + @controleur.getLangue[:temps] + " : " + @modele.chrono.to_s + "</big>")
-
-        labelNbCoups = Label.new()
-        labelNbCoups.set_markup("<big>" + @controleur.getLangue[:nbCoups] + " : " + @modele.nbCoups.to_s + "</big>")
-
-        labelConseils = Label.new()
-        labelConseils.set_markup("<big>" + @controleur.getLangue[:nbConseils] + " : " + @modele.nbConseils.to_s + "</big>")
-
-        labelAides = Label.new()
-        labelAides.set_markup("<big>" + @controleur.getLangue[:nbAides] + " : " + @modele.nbAides.to_s + "</big>")
+        labelScore = creerLabelTailleMoyenne(@controleur.getLangue[:score] + " : " + @controleur.score.nbPoints(@modele.niveau).to_s)
+        labelTemps = creerLabelTailleMoyenne(@controleur.getLangue[:temps] + " : " + @modele.chrono.to_s)
+        labelNbCoups = creerLabelTailleMoyenne(@controleur.getLangue[:nbCoups] + " : " + @modele.nbCoups.to_s)
+        labelConseils = creerLabelTailleMoyenne(@controleur.getLangue[:nbConseils] + " : " + @modele.nbConseils.to_s)
+        labelAides = creerLabelTailleMoyenne(@controleur.getLangue[:nbAides] + " : " + @modele.nbAides.to_s)
 
         # Ajout des succès dévérouillés
         vboxSucces = Box.new(:vertical, 20)
 
         if(@controleur.succes && @controleur.succes.size > 0)
-            labelSucces = Label.new()
-            labelSucces.set_markup("<big>" + @controleur.getLangue[:succesDeverrouille] + "</big>")
-            vboxSucces.add(labelSucces)
+            vboxSucces.add(creerLabelTailleGrosse(@controleur.getLangue[:succesDeverrouille]))
 
             # Affichage de 2 succès par ligne
             hbox = Box.new(:horizontal, 30)
@@ -70,6 +79,7 @@ class VueResultatPartie < Vue
             end
         end
 
+        # Ajout dans la vbox principale
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(labelFelicitations)
         vboxPrincipale.add(labelScore)
@@ -81,13 +91,14 @@ class VueResultatPartie < Vue
         creerAlignBouton(vboxPrincipale,@boutonRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        @cadre.add(vboxPrincipale)
-
-        @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
-      
+        @cadre.add(vboxPrincipale)      
         self.actualiser()
     end
     
+    ##
+    # Listener sur le bouton retour
+    # Ferme le cadre et retourne au menu principal
+    #
     def onBtnRetourClicked
         fermerCadre()
         @controleur.retour()
