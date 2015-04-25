@@ -86,7 +86,7 @@ class Score
     #
     def nbPoints(niveau)
         return (
-            ( niveau.dimention ** niveau.difficulte ) / ( 1 + @tempsTotal + ( 2 ** @nbConseils) * 10 + ( 2 ** @nbAides ) * 30 + ( @nbCoups / 10 ) ** 2 )
+            ( niveau.dimention * niveau.difficulte * 10000 ) / ( 1 + @tempsTotal + ( 2 ** @nbConseils) * 10 + ( 2 ** @nbAides ) * 30 + ( @nbCoups / 10 ) ** 2 )
         )
     end
 
