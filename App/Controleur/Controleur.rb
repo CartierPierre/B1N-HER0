@@ -15,7 +15,7 @@ class Controleur
     @@utilisateur = nil
 
     ##
-    # Méthode de création du controleur
+    # Méthode de création du controleur qui récupère les instances des gestionnaires pour les interactions avec la base de données
     #
     # Paramètre::
     #   * _jeu_ - Jeu associé (classe principale du BinHero qui charge GTK)
