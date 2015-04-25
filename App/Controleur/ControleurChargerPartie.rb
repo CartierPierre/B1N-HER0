@@ -1,7 +1,16 @@
 class ControleurChargerPartie < Controleur
 
+    ### Attribut d'instance
+
     @partie
 
+    ##
+    # Méthode de création du controleur qui est responsable du chargement d'une partie
+    #
+    # Paramètres::
+    #   * _jeu_ - Jeu associé (classe principale du BinHero qui charge GTK)
+    #   * _partie_ - Partie chargée si la vue précédente est la vue partie
+    #
     def initialize(jeu, partie)
         super(jeu)
         @modele = nil
@@ -9,10 +18,22 @@ class ControleurChargerPartie < Controleur
         @vue = VueChargerPartie.new(@modele,self.getLangue[:chargerPartie],self)
     end 
 
+    ##
+    # Méthode qui permet de lancer la partie passée en paramètre
+    #
+    # Paramètre::
+    #   * _partie_ - Partie à charger
+    #
     def charger(partie)
         changerControleur(ControleurPartie.new(@jeu,nil,partie))
     end
 
+    ##
+    # Méthode qui permet de récupèrer les sauvegardes de l'utilisateur
+    #
+    # Retour::
+    #   Tableau contenant les parties sauvegardées ainsi que la description associée
+    #
     def getParties()
         parties = Array.new()
         sauvegardes = @gestionnaireSauvegarde.recupererSauvegardeUtilisateur(@@utilisateur, 0, 10)
@@ -26,6 +47,9 @@ class ControleurChargerPartie < Controleur
         return parties
     end
 
+    ##
+    # Retourne au menu principal ou alors en partie selon la vue précédente
+    #
     def annuler()
         if(@partie == nil)
             changerControleur(ControleurMenuPrincipal.new(@jeu))

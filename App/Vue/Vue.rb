@@ -1,5 +1,5 @@
 class Vue
-    ### Attributs de classe
+    ### Attribut de classe
 
     @@fenetre = Window.new("B1N-HER0")
 
@@ -66,6 +66,9 @@ class Vue
     # Paramètre::
     #   * _texte_ - Texte du label
     #
+    # Retour::
+    #   Le nouveau label
+    #
     def creerLabelTailleMoyenne(texte)
         label = Label.new()
         label.set_markup(%Q[ <span font_desc="10.5">#{texte}</span>])
@@ -77,6 +80,9 @@ class Vue
     #
     # Paramètre::
     #   * _texte_ - Texte du label
+    #
+    # Retour::
+    #   Le nouveau label
     #
     def creerLabelTailleGrosse(texte)
         label = Label.new()
