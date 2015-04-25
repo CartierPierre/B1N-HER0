@@ -1,14 +1,11 @@
-# Heu ... ba quand je sérialise les option pour un utilisateur, je me dis cela va
-# juste stocker 2 ou 3 variable et en fait je me retrouve avec un ***** de dico
-# anglais/francais !!!
-#
-# Je pense qu'il serai préférable d'utiliser des constantes de classe ou je sais pas quoi ^^
-#
-
 class Langue
+
+    ### Constantes de classe
 
     EN = 0
     FR = 1
+
+    ### Attributs d'instances
 
     @langueFr
     @langueEn
@@ -17,6 +14,12 @@ class Langue
 
     attr_reader :langueActuelle, :langueConstante
 
+    ##
+    # Méthode de création de la Langue.
+    #
+    # Paramètre::
+    #   * _langue_ - Langue du jeu sous la forme des constantes de cette classe
+    #
     def initialize(langue) 
 
         @langueFr = {
@@ -196,10 +199,20 @@ class Langue
         @langueConstante = langue
     end
 
+    ##
+    # Retour::
+    #   La constante de langue actuellement active
+    #
     def getLangueConstante()
         return @langueConstante
     end
 
+    ##
+    # Affecte une nouvelle langue
+    #
+    # Paramètre::
+    #   * _langue_ - La nouvelle langue à affecter sous la forme des constantes de cette classe
+    #
     def setLangue(langue)
         if(langue == FR)
             @langueActuelle = @langueFr

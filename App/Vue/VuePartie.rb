@@ -404,7 +404,7 @@ class VuePartie < Vue
         dialogConfirmation.child.set_spacing(20)
         dialogConfirmation.child.add(creerLabelTailleMoyenne(@controleur.getLangue[:confirmationQuitter]))
         dialogConfirmation.show_all()
-        
+
         dialogConfirmation.run do |reponse|
             if(reponse == ResponseType::YES)
                 confirmation = true
@@ -555,14 +555,12 @@ class VuePartie < Vue
     end
 
     def onBtnAideClicked
-        0.upto(100) do
         aide = @modele.demanderAide() 
 
         if(aide != nil)
             @grille[aide[0]+1][aide[1]+1].setImageTuile(@modele.grille.getTuile(aide[0],aide[1]).etat()) 
             self.nbLigneColonne(aide[0],aide[1])
             surbrillanceTuile(aide[0]+1,aide[1]+1)
-        end
         end
     end
 
