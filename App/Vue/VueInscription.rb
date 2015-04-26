@@ -109,7 +109,7 @@ class VueInscription < Vue
 	end
 
     def utilisateurExistant(pseudo)
-        @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => "L'utilisateur "+pseudo+" existe déja.")
+        @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:lUtilisateur]+pseudo+@controleur.getLangue[:existe])
 
         @popup.run
         fermerCadre()

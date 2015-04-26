@@ -6,7 +6,11 @@ class VueProfil < Vue
         @statistiques = @controleur.getStatistiques
 
         @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
+        @boutonPseudo = Button.new(:label => @controleur.getLangue[:changerPseudo])
+        @boutonPasse = Button.new(:label => @controleur.getLangue[:changerPasse])
         @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
+        @boutonPseudo.signal_connect('clicked') { onBtnPseudoClicked }
+        @boutonPasse.signal_connect('clicked') { onBtnPasseClicked }
 
         progressionPartie  = @statistiques["nbGrillesReso"]
         progressionParfait = @statistiques["nbPartiesParfaites"]
@@ -42,7 +46,7 @@ class VueProfil < Vue
         labelNbConseil  = Label.new(@controleur.getLangue[:nbConseils] + " : " + @statistiques["nbConseils"])
         labelNbAide     = Label.new(@controleur.getLangue[:nbAides] + " : " + @statistiques["nbAides"])
         labelTpsTotal   = Label.new(@controleur.getLangue[:tempsDeJeu] + " : " + @statistiques["tempsTotal"])
-        labelGrilleReso = Label.new(@controleur.getLangue[:inscrit] + " : " + @statistiques["nbGrillesReso"].to_s)
+        labelGrilleReso = Label.new(@controleur.getLangue[:nbPartiesTermines] + " : " + @statistiques["nbGrillesReso"].to_s)
 
         barreProgressionParfait10   = ProgressBar.new
         barreProgressionParfait50   = ProgressBar.new
@@ -180,15 +184,10 @@ class VueProfil < Vue
         hboxSucces.add(vboxSuccesDroite)
         hboxSucces.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
 
-
-
-
-
-
-
         vboxStatsGauche = Box.new(:vertical, 10)
         vboxStatsGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxStatsGauche.add(labelPseudo)
+        vboxStatsGauche.add(labelDate)
         vboxStatsGauche.add(labelGrilleReso)
         vboxStatsGauche.add(labelNbCoup)
         vboxStatsGauche.add(labelNbAide)
@@ -196,7 +195,8 @@ class VueProfil < Vue
 
         vboxStatsDroite = Box.new(:vertical, 10)
         vboxStatsDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxStatsDroite.add(labelDate)
+        vboxStatsDroite.add(@boutonPseudo)
+        vboxStatsDroite.add(@boutonPasse)
         vboxStatsDroite.add(labelTpsTotal)
         vboxStatsDroite.add(labelNbConseil)
         vboxStatsDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
@@ -228,5 +228,167 @@ class VueProfil < Vue
 	def onBtnRetourClicked
         fermerCadre()
         @controleur.retour()
+	end
+
+	def onBtnPseudoClicked
+        #@controleur.ValiderPasse(@entry.text)
+	end
+
+	def onBtnValiderPasseClicked(passe,ancienPasse)
+        @entryPasse = Entry.new
+        @entryAncienPasse = Entry.new
+        if passe == ancienPasse
+            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:passeDifferent])
+            popup.run
+            popup.destroy
+                @popup.present
+        else
+            if @controleur.validerPasse(passe)
+                popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:passeChange])
+                popup.run
+                popup.destroy
+                @popup.destroy
+            else
+                popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:mauvaisPasse])
+                popup.run
+                popup.destroy
+                @popup.present
+            end
+        end
+    end
+
+	def onBtnAnnulerClicked
+        @popup.destroy
+        @controleur.annuler
+	end
+
+    def onBtnValiderPseudoClicked(pseudo)
+        if @controleur.validerPseudo(@entryPseudo.text)
+            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pseudoChange])
+            popup.run
+            popup.destroy
+            @popup.destroy
+        else
+            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:lUtilisateur]+pseudo+@controleur.getLangue[:existe])
+            popup.run
+            popup.destroy
+        end
+        fermerCadre()
+        @controleur.actualiser
+	end
+
+	def onBtnPasseClicked
+        @popup = Window.new(@controleur.getLangue[:passeChange])
+    	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
+    	@popup.set_resizable(false)
+        @popup.set_size_request(500,100)
+
+        @entryPasse = Entry.new
+        @entryAncienPasse = Entry.new
+        @entryPasse.visibility=(false)
+        @entryAncienPasse.visibility=(false)
+
+		boutonValider = Button.new(:label => @controleur.getLangue[:valider])
+		boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
+        boutonValider.set_sensitive(false)
+
+        @entryPasse.signal_connect("key-release-event")     {
+            if @entryPasse.text() == "" || @entryPasse.text() =~ /\W/
+                    boutonValider.set_sensitive(false)
+            else
+                if @entryAncienPasse.text() == "" || @entryAncienPasse.text() =~ /\W/
+                    boutonValider.set_sensitive(false)
+                else
+                    boutonValider.set_sensitive(true)
+                end
+            end
+        }
+        @entryPasse.signal_connect('activate')   {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
+
+        @entryAncienPasse.signal_connect("key-release-event")     {
+            if @entryAncienPasse.text() == "" || @entryAncienPasse.text() =~ /\W/
+                    boutonValider.set_sensitive(false)
+            else
+                if @entryPasse.text() == "" || @entryPasse.text() =~ /\W/
+                    boutonValider.set_sensitive(false)
+                else
+                    boutonValider.set_sensitive(true)
+                end
+            end
+        }
+        @entryAncienPasse.signal_connect('activate')   {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
+
+
+        vboxLabel = Box.new(:vertical,25)
+        vboxLabel.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxLabel.add(Label.new(@controleur.getLangue[:passeAncien]))
+        vboxLabel.add(Label.new(@controleur.getLangue[:passeNouveau]))
+        vboxLabel.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        vboxEntree = Box.new(:vertical,10)
+        vboxEntree.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxEntree.add(@entryAncienPasse)
+        vboxEntree.add(@entryPasse)
+        vboxEntree.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        hboxForm = Box.new(:horizontal,30)
+        hboxForm.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxForm.add(vboxLabel)
+        hboxForm.add(vboxEntree)
+        hboxForm.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        hboxValider = Box.new(:horizontal,30)
+        hboxValider.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxValider.add(boutonValider)
+        hboxValider.add(boutonAnnuler)
+        hboxValider.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        boutonValider.signal_connect('clicked')     {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
+        boutonAnnuler.signal_connect('clicked')     {onBtnAnnulerClicked}
+
+        @boxPrincipalePasse = Box.new(:vertical,30)
+        @boxPrincipalePasse.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        @boxPrincipalePasse.add(hboxForm)
+        @boxPrincipalePasse.add(hboxValider)
+        @boxPrincipalePasse.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        @popup.add(@boxPrincipalePasse)
+        @popup.show_all()
+	end
+
+    def onBtnPseudoClicked
+        @popup = Window.new(@controleur.getLangue[:pseudoChange])
+    	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
+    	@popup.set_resizable(false)
+        @popup.set_size_request(500,100)
+
+        @entryPseudo = Entry.new
+
+		boutonValider = Button.new(:label => @controleur.getLangue[:valider])
+		boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
+
+        hboxForm = Box.new(:horizontal,30)
+        hboxForm.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxForm.add(Label.new(@controleur.getLangue[:pseudo]))
+        hboxForm.add(@entryPseudo)
+        hboxForm.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        hboxValider = Box.new(:horizontal,30)
+        hboxValider.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxValider.add(boutonValider)
+        hboxValider.add(boutonAnnuler)
+        hboxValider.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        boutonValider.signal_connect('clicked')     {onBtnValiderPseudoClicked(@entryPseudo.text)}
+        boutonAnnuler.signal_connect('clicked')     {onBtnAnnulerClicked}
+
+        boxPrincipalePseudo = Box.new(:vertical,30)
+        boxPrincipalePseudo.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        boxPrincipalePseudo.add(hboxForm)
+        boxPrincipalePseudo.add(hboxValider)
+        boxPrincipalePseudo.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        @popup.add(boxPrincipalePseudo)
+        @popup.show_all()
 	end
 end

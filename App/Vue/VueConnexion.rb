@@ -116,6 +116,13 @@ class VueConnexion < Vue
         @controleur.non()
 	end
 
+	def mauvaisPasse
+        popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:mauvaisPasse])
+        popup.run
+        popup.destroy
+        @popup.present
+	end
+
     def utilisateurInexistant
         @popup = Window.new("Utilisateur Inexistant")
     	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
@@ -125,13 +132,13 @@ class VueConnexion < Vue
 		boutonOui = Button.new(:label => "Oui")
 		boutonNon = Button.new(:label => "Non")
 
-        hbox = Box.new(:horizontal)
+        hbox = Box.new(:horizontal,30)
         hbox.pack_start(boutonOui)
         hbox.pack_start(boutonNon)
 
-        vbox = Box.new(:vertical)
-        vbox.pack_start(Label.new("Il n'existe pas de compte associé à ce pseudo."))
-        vbox.pack_start(Label.new("Voulez-vous créer un compte avec ce pseudo ?"))
+        vbox = Box.new(:vertical,10)
+        vbox.pack_start(Label.new(@controleur.getLangue[:pasDeCompte]))
+        vbox.pack_start(Label.new(@controleur.getLangue[:creerCompte]))
         vbox.pack_end(hbox)
 
         boutonOui.signal_connect('clicked')     {onBtnOuiClicked}

@@ -26,4 +26,35 @@ class ControleurProfil < Controleur
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 
+    def annuler()
+        changerControleur(ControleurProfil.new(@jeu))
+    end
+
+    def validerPasse(passe)
+        if @@utilisateur.motDePasse == passe
+            return false
+        else
+            @@utilisateur.motDePasse = passe
+            @gestionnaireUtilisateur.sauvegarderUtilisateur(@@utilisateur)
+            return true
+        end
+    end
+
+    def validerPseudo(pseudo)
+        listePseudo = Array.new
+        @gestionnaireUtilisateur.recupererListeUtilisateur(0,@gestionnaireUtilisateur.recupererNombreUtilisateur).each do |x|
+            listePseudo << x.nom
+        end
+        if listePseudo.include?(pseudo)
+            return false
+        else
+            @@utilisateur.nom = pseudo
+            @gestionnaireUtilisateur.sauvegarderUtilisateur(@@utilisateur)
+            return true
+        end
+    end
+
+    def actualiser
+        changerControleur(ControleurProfil.new(@jeu))
+    end
 end
