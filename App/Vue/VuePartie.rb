@@ -591,6 +591,8 @@ class VuePartie < Vue
 
         if( @modele.grille.estRemplie?() )
             @boutonValiderGrille.set_sensitive(true)
+        else
+            @boutonValiderGrille.set_sensitive(false)
         end
     end
 
