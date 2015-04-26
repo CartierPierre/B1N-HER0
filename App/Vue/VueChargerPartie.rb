@@ -17,24 +17,26 @@ class VueChargerPartie < Vue
     @vboxSauvegardes
 
     ##
-    # Classe qui permet de gérer les boutons de sauvegarde qui contient un objet Partie
+    # Classe qui permet de gérer les boutons de sauvegarde qui contient un objet Partie et l'id de la sauvegarde
     #
     class BoutonSauvegarde < Gtk::Button
 
-        ### Attribut d'instance
+        ### Attributs d'instances
 
-        attr_reader :partie
+        attr_reader :partie, :idSauvegarde
 
         ##
-        # Méthode de création du bouton de sauvegarde contenant une partie
+        # Méthode de création du bouton de sauvegarde contenant une partie et l'id de la sauvegarde
         #
         # Paramètres::
         #   * _label_ - Label du bouton
         #   * _partie_ - Partie associé à ce bouton 
+        #   * _idSauvegarde_ - Id de la sauvegarde associé 
         #
-        def initialize(label,partie)
+        def initialize(label,partie,idSauvegarde)
             super(:label => label)
             @partie = partie
+            @idSauvegarde = idSauvegarde
         end
     end
 
@@ -92,8 +94,12 @@ class VueChargerPartie < Vue
         @boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
         @boutonAnnuler.signal_connect('clicked') { onBtnAnnulerClicked }
 
+        @boutonSupprimer = Button.new(:label => @controleur.getLangue[:supprimer])
+        @boutonSupprimer.signal_connect('clicked') { onBtnSupprimerClicked }
+
         hboxChargerAnnuler.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxChargerAnnuler.add(@boutonCharger)
+        hboxChargerAnnuler.add(@boutonSupprimer)
         hboxChargerAnnuler.add(@boutonAnnuler)
         hboxChargerAnnuler.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
@@ -113,6 +119,7 @@ class VueChargerPartie < Vue
 
         @fenetreScroll.hide()
         @boutonCharger.set_sensitive(false)
+        @boutonSupprimer.set_sensitive(false)
     end
 
     ##
@@ -132,18 +139,22 @@ class VueChargerPartie < Vue
         @vboxSauvegardes = Box.new(:vertical, 10)
         @fenetreScroll.add_with_viewport(@vboxSauvegardes) 
 
-        parties.each do |partie|  
-            labelPartie = "[" + @controleur.getLangue[:difficulte] + " " + partie[1].niveau.difficulte.to_s + "] " + partie[0]
-            boutonSauvegarde = BoutonSauvegarde.new(labelPartie, partie[1])
-            boutonSauvegarde.signal_connect('clicked') { onBtnSauvegardeClicked(boutonSauvegarde) }
-            @vboxSauvegardes.add(boutonSauvegarde)
-        end 
+        if(parties && parties.size > 0)
+            parties.each do |partie|  
+                labelPartie = "[" + @controleur.getLangue[:difficulte] + " " + partie[1].niveau.difficulte.to_s + "] " + partie[0]
+                boutonSauvegarde = BoutonSauvegarde.new(labelPartie, partie[1], partie[2])
+                boutonSauvegarde.signal_connect('clicked') { onBtnSauvegardeClicked(boutonSauvegarde) }
+                @vboxSauvegardes.add(boutonSauvegarde)
+            end 
+        else
+            @vboxSauvegardes.add(creerLabelTailleMoyenne(@controleur.getLangue[:aucunesSauvegardes]))
+        end
 
         @vboxSauvegardes.show_all()
 
         if(@partie)
             @boutonCharger.set_sensitive(false)
-            @boutonDerniereSauvegarde.set_sensitive(true)
+            @boutonSupprimer.set_sensitive(false)
         end
         if(!@boutonDerniereTaille)
             @boutonDerniereTaille = bouton
@@ -160,12 +171,13 @@ class VueChargerPartie < Vue
     #   * _boutonSauvegarde_ - Bouton qui a été cliqué
     #
     def onBtnSauvegardeClicked(boutonSauvegarde)
-        if(@boutonDerniereSauvegarde)
+        if(@boutonDerniereSauvegarde != nil)
             @boutonDerniereSauvegarde.set_sensitive(true)
         end
         @boutonDerniereSauvegarde = boutonSauvegarde
         @boutonDerniereSauvegarde.set_sensitive(false)
         @boutonCharger.set_sensitive(true)
+        @boutonSupprimer.set_sensitive(true)
         @partie = @boutonDerniereSauvegarde.partie()
     end
     
@@ -176,6 +188,38 @@ class VueChargerPartie < Vue
     def onBtnChargerClicked
         fermerCadre()
         @controleur.charger(@partie)
+    end
+
+    ##
+    # Listener sur le bouton de suppression d'une sauvegarde
+    # Ferme le cadre et charge la partie sélectionnée
+    #
+    def onBtnSupprimerClicked
+        confirmation = false
+        dialogConfirmation = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:supprimer], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
+        
+        labelConfirmation = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationSuppressionSauvegarde])
+        dialogConfirmation.child.set_spacing(20)
+        dialogConfirmation.child.add(labelConfirmation)
+
+        dialogConfirmation.show_all()
+        dialogConfirmation.run do |reponse|
+            if(reponse == ResponseType::YES)
+                confirmation = true
+            else
+                confirmation = false
+            end             
+        end
+        dialogConfirmation.destroy()
+
+        if(confirmation)
+            @controleur.supprimerSauvegarde(@boutonDerniereSauvegarde.idSauvegarde)
+            @boutonDerniereSauvegarde = nil
+            @boutonCharger.set_sensitive(false)
+            @boutonSupprimer.set_sensitive(false)
+            @vboxSauvegardes.hide()
+            @boutonDerniereTaille.set_sensitive(true)
+        end
     end
 
     ##

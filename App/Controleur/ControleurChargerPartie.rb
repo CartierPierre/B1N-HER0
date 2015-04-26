@@ -43,11 +43,22 @@ class ControleurChargerPartie < Controleur
 
         sauvegardes.each do |sauvegarde|
             niveau = @gestionnaireNiveau.recupererNiveau(sauvegarde.idNiveau)
-            partie = Array[sauvegarde.description, Partie.charger(@@utilisateur, niveau, sauvegarde)]
+            partie = Array[sauvegarde.description, Partie.charger(@@utilisateur, niveau, sauvegarde), sauvegarde.id]
             parties.push(partie)
         end
 
         return parties
+    end
+
+    ##
+    # Méthode qui permet de supprimer une sauvegarde
+    #
+    # Paramètre::
+    #   * _id_ - Id de la sauvegarde à supprimer
+    #
+    def supprimerSauvegarde(id)
+        sauvegarde = @gestionnaireSauvegarde.recupererSauvegarde(id)
+        @gestionnaireSauvegarde.supprimerSauvegarde(sauvegarde)
     end
 
     ##
