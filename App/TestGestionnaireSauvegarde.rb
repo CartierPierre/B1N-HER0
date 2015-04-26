@@ -40,7 +40,7 @@ puts
 sauvegarde = gsa.recupererSauvegarde(1)
 if ( sauvegarde == nil )
 	puts "La sauvegarde avec l'id 1 n'existe pas !"
-	abord
+	abort
 end
 puts "La sauvegarde avec l'id 1 existe, description : #{ sauvegarde.description }, sur le niveau #{ sauvegarde.idNiveau }"
 
