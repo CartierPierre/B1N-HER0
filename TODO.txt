@@ -1,6 +1,4 @@
-﻿- (Fini, mais pas validation auto) Validation de la grille/Finir partie (Amaury)
-- Mise en ligne avec serveur (Kevin)
+﻿- Mise en ligne avec serveur (Kevin)
 - Manuel utilisateur(fait) et DDC(a finir) (Pierre)
 - Classements (online?) (Kevin et Loic)
 - Profil (fini?) (Kevin et Loic)
-- (regle 3 visiblemen) Les conseils buguent, mauvaise application des regles etc ... trop tard pour corriger, a moins q'un psychopathe veuille le faire.
