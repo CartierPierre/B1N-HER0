@@ -38,7 +38,7 @@ class RegleDeux
         # Parcours les lignes pour détecter si la régle deux est enfreinte sur l'une d'entre elles.
         0.upto(partie.grille.taille() - 1) do |x|
             tab = partie.compterCasesLigne(x)
-            if(tab[0] > nbCasesMax || tab[1] > nbCasesMax)
+            if(tab[0] >= nbCasesMax || tab[1] >= nbCasesMax)
                 # Il y a plus de cases d'un état qu'il ne peut y avoir de l'autre, la régles deux est enfreinte.
                 return Array[:regleLigne, x, :regles2]
             end
@@ -47,7 +47,7 @@ class RegleDeux
         # Parcours les colonnes pour détecter si la régle deux est enfreinte sur l'une d'entre elles.
         0.upto(partie.grille.taille() - 1) do |y|
             tab = partie.compterCasesColonne(y)
-            if(tab[0] > nbCasesMax || tab[1] > nbCasesMax)
+            if(tab[0] >= nbCasesMax || tab[1] >= nbCasesMax)
                 # Il y a plus de cases d'un état qu'il ne peut y avoir de l'autre, la régles deux est enfreinte.
                 return Array[:regleColonne, y, :regles2]
             end
