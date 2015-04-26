@@ -29,14 +29,17 @@ class ControleurChargerPartie < Controleur
     end
 
     ##
-    # Méthode qui permet de récupèrer les sauvegardes de l'utilisateur
+    # Méthode qui permet de récupèrer les sauvegardes d'une certaine taille de grille de l'utilisateur connecté
+    #
+    # Paramètre::
+    #   * _taille_ - Taille de la grille
     #
     # Retour::
     #   Tableau contenant les parties sauvegardées ainsi que la description associée
     #
-    def getParties()
+    def getParties(taille)
         parties = Array.new()
-        sauvegardes = @gestionnaireSauvegarde.recupererSauvegardeUtilisateur(@@utilisateur, 0, 10)
+        sauvegardes = @gestionnaireSauvegarde.recupererSauvegardeUtilisateurDimention(@@utilisateur, 0, 50, taille)
 
         sauvegardes.each do |sauvegarde|
             niveau = @gestionnaireNiveau.recupererNiveau(sauvegarde.idNiveau)

@@ -14,6 +14,7 @@ class VueChargerPartie < Vue
     @partie
 
     @boutonDerniereSauvegarde
+    @vboxSauvegardes
 
     ##
     # Classe qui permet de gérer les boutons de sauvegarde qui contient un objet Partie
@@ -68,23 +69,15 @@ class VueChargerPartie < Vue
         hboxTaille.add(@bouton12x12)
         hboxTaille.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Création des boutons de sauvegarde
+        # Création de la box pour mettre les boutons de sauvegardes
         hboxScroll = Box.new(:horizontal)
 
         @fenetreScroll = ScrolledWindow.new()
         @fenetreScroll.set_policy(:never,:automatic)
 
-        parties = @controleur.getParties()
+        @vboxSauvegardes = Box.new(:vertical, 10)
 
-        vboxSauvegardes = Box.new(:vertical, 10)
-        parties.each do |partie|  
-            labelPartie = "[" + @controleur.getLangue[:difficulte] + " " + partie[1].niveau.difficulte.to_s + "] " + partie[0]
-            boutonSauvegarde = BoutonSauvegarde.new(labelPartie, partie[1])
-            boutonSauvegarde.signal_connect('clicked') { onBtnSauvegardeClicked(boutonSauvegarde) }
-            vboxSauvegardes.add(boutonSauvegarde)
-        end 
-
-        @fenetreScroll.add_with_viewport(vboxSauvegardes)   
+        @fenetreScroll.add_with_viewport(@vboxSauvegardes)   
         hboxScroll.pack_start(Alignment.new(0, 0, 0.1, 0), :expand => true)
         hboxScroll.pack_start(@fenetreScroll)
         hboxScroll.pack_end(Alignment.new(1, 0, 0.1, 0), :expand => true)
@@ -132,6 +125,15 @@ class VueChargerPartie < Vue
     def onBtnTailleClicked(bouton, taille)   
         @taille = taille
         @fenetreScroll.show()
+
+        parties = @controleur.getParties(@taille)
+
+        parties.each do |partie|  
+            labelPartie = "[" + @controleur.getLangue[:difficulte] + " " + partie[1].niveau.difficulte.to_s + "] " + partie[0]
+            boutonSauvegarde = BoutonSauvegarde.new(labelPartie, partie[1])
+            boutonSauvegarde.signal_connect('clicked') { onBtnSauvegardeClicked(boutonSauvegarde) }
+            @vboxSauvegardes.add(boutonSauvegarde)
+        end 
 
         if(@partie)
             @boutonCharger.set_sensitive(false)
