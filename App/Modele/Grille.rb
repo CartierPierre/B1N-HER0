@@ -35,11 +35,9 @@ class Grille
     # Retour::
     #   La Tuile ciblé par les coordonnées, sinon nil.
     #
-    def getTuile(x, y) #TODO Générer une exception
+    def getTuile(x, y)
         if(0 <= x && x < @taille && 0 <= y && y < @taille)
             return @grille[x][y]
-        else
-            # return Tuile.creer()
             return nil
         end
     end
@@ -52,11 +50,9 @@ class Grille
     #   * _y_ - La coordonnée _y_ de la Tuile cherchée..
     #   * _etat_ - Le nouvel _etat_ de la Grille..
     #
-    def setTuile(x, y, etat) #TODO Générer une execption
+    def setTuile(x, y, etat)
         if(0 <= x && x < @taille && 0 <= y && y < @taille)
             getTuile(x, y).etat = etat
-        else
-            #TODO
         end
 
         self
@@ -71,11 +67,10 @@ class Grille
     # Retour::
     #   La ligne ciblée si trouvée sous forme de tableau, sinon nil.
     #
-    def getLigne(x) #TODO Générer une execption
+    def getLigne(x)
         if(0 <= x && x < @taille)
             return @grille[x]
         else
-            # return Array.new(@taille) { Tuile.creer() }
             return nil
         end
     end
@@ -89,7 +84,7 @@ class Grille
     # Retour::
     #   La colonne ciblée si trouvée sous forme de tableau, sinon nil.
     #
-    def getColonne(y) #TODO Générer une execption
+    def getColonne(y)
         if(0 <= y && y < @taille)
             newColonne = Array.new(@taille)
 
@@ -97,7 +92,6 @@ class Grille
                 newColonne[i] = self.getTuile(i, y)
             end
         else
-            # newColonne = Array.new(@taille) { Tuile.creer() }
             newColonne = nil
         end
 

@@ -525,13 +525,13 @@ class Partie
             donnees = @partieHypothese.split("|")
 
             # On remet en place la liste des undo
-            if(donnees[2])
-                chargerUndo(donnees[2])
+            if(donnees[5])
+                chargerUndo(donnees[5])
             end
 
             # On remet en place la liste des redo
-            if(donnees[3])
-                chargerRedo(donnees[3])
+            if(donnees[6])
+                chargerRedo(donnees[6])
             end
 
             @modeHypothese = false
@@ -552,16 +552,16 @@ class Partie
             donnees = @partieHypothese.split("|")
 
             # Charge la grille avec les données sérialisée de la grille
-            @grille = Grille.charger(donnees[1])
+            @grille = Grille.charger(donnees[4])
 
             # On remet en place la liste des undo
-            if(donnees[2])
-                chargerUndo(donnees[2])
+            if(donnees[5])
+                chargerUndo(donnees[5])
             end
 
             # On remet en place la liste des redo
-            if(donnees[3])
-                chargerRedo(donnees[3])
+            if(donnees[6])
+                chargerRedo(donnees[6])
             end
 
             @modeHypothese = false
