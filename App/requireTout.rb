@@ -1,3 +1,25 @@
+# Detection de l'OS car Linux et Mac n'ont pas besoins du require socket contrairement a Windows
+
+require 'rbconfig'
+
+def os
+    @os ||= (
+        host_os = RbConfig::CONFIG['host_os']
+        case host_os
+            when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+                :windows
+            when /darwin|mac os/
+                :macosx
+            when /linux/
+                :linux
+            when /solaris|bsd/
+                :unix
+            else
+                raise Error::WebDriverError, "unknown os: #{host_os.inspect}"
+        end
+    )
+end
+
 ##
 # Vue
 #
@@ -26,7 +48,10 @@ require_relative "./Vue/VueResultatPartie"
 #
 
 require "sqlite3"
-require 'socket'
+
+if(os == :windows)
+    require 'socket'
+end
 
 require_relative "./Modele/Chrono"
 require_relative "./Modele/Coup"
