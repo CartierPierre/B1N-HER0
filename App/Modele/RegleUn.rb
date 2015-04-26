@@ -38,10 +38,43 @@ class RegleUn
                     !partie.grille().getTuile(x, y-1).estVide?() &&
                     !partie.grille().getTuile(x,  y ).estVide?() &&
                     !partie.grille().getTuile(x, y+1).estVide?()
-                ) then
+                )
                     if(# On vérifie que les cases avant et après n'est pas la même valeur que la notre.
                         Etat.egale?(partie.grille().getTuile(x,y-1).etat(), partie.grille().getTuile(x,y).etat()) &&
                         Etat.egale?(partie.grille().getTuile(x,y+1).etat(), partie.grille().getTuile(x,y).etat())
+                    ) then
+                        #On indique le problème une fois qu'on le rencontre.
+                        return Array[:regleLigne, x, :regles1]
+                    end
+                elsif(# Cas de deux cases identiques côte à côte.
+                    partie.grille().getTuile(x, y-1).estVide?() &&
+                    !partie.grille().getTuile(x,  y ).estVide?() &&
+                    !partie.grille().getTuile(x, y+1).estVide?()
+                )
+                    if(# On vérifie que les cases ont la même valeur.
+                        Etat.egale?(partie.grille().getTuile(x,y+1).etat(), partie.grille().getTuile(x,y).etat())
+                    ) then
+                        #On indique le problème une fois qu'on le rencontre.
+                        return Array[:regleLigne, x, :regles1]
+                    end
+                elsif(# Cas de deux cases identiques séparées par une vide.
+                    !partie.grille().getTuile(x, y-1).estVide?() &&
+                    partie.grille().getTuile(x,  y ).estVide?() &&
+                    !partie.grille().getTuile(x, y+1).estVide?()
+                )
+                    if(# On vérifie que les cases ont la même valeur.
+                        Etat.egale?(partie.grille().getTuile(x,y-1).etat(), partie.grille().getTuile(x,y+1).etat())
+                    ) then
+                        #On indique le problème une fois qu'on le rencontre.
+                        return Array[:regleLigne, x, :regles1]
+                    end
+                elsif(# Cas de deux cases identiques côte à côte.
+                    !partie.grille().getTuile(x, y-1).estVide?() &&
+                    !partie.grille().getTuile(x,  y ).estVide?() &&
+                    partie.grille().getTuile(x, y+1).estVide?()
+                )
+                    if(# On vérifie que les cases ont la même valeur.
+                        Etat.egale?(partie.grille().getTuile(x,y-1).etat(), partie.grille().getTuile(x,y).etat())
                     ) then
                         #On indique le problème une fois qu'on le rencontre.
                         return Array[:regleLigne, x, :regles1]
@@ -63,7 +96,40 @@ class RegleUn
                         Etat.egale?(partie.grille().getTuile(x+1,y).etat(), partie.grille().getTuile(x,y).etat())
                     ) then
                         #On indique le problème une fois qu'on le rencontre.
-                        return Array[:regleColonne, x, :regles1]
+                        return Array[:regleColonne, y, :regles1]
+                    end
+                elsif(# Cas de deux cases identiques côte à côte.
+                    partie.grille().getTuile(x-1, y).estVide?() &&
+                    !partie.grille().getTuile(x,  y ).estVide?() &&
+                    !partie.grille().getTuile(x+1, y).estVide?()
+                )
+                    if(# On vérifie que les cases ont la même valeur.
+                        Etat.egale?(partie.grille().getTuile(x+1,y).etat(), partie.grille().getTuile(x,y).etat())
+                    ) then
+                        #On indique le problème une fois qu'on le rencontre.
+                        return Array[:regleColonne, y, :regles1]
+                    end
+                elsif(# Cas de deux cases identiques séparées par une vide.
+                    !partie.grille().getTuile(x-1, y).estVide?() &&
+                    partie.grille().getTuile(x,  y ).estVide?() &&
+                    !partie.grille().getTuile(x+1, y).estVide?()
+                )
+                    if(# On vérifie que les cases ont la même valeur.
+                        Etat.egale?(partie.grille().getTuile(x-1,y).etat(), partie.grille().getTuile(x+1,y).etat())
+                    ) then
+                        #On indique le problème une fois qu'on le rencontre.
+                        return Array[:regleColonne, y, :regles1]
+                    end
+                elsif(# Cas de deux cases identiques côte à côte.
+                    !partie.grille().getTuile(x-1, y).estVide?() &&
+                    !partie.grille().getTuile(x,  y ).estVide?() &&
+                    partie.grille().getTuile(x+1, y).estVide?()
+                )
+                    if(# On vérifie que les cases ont la même valeur.
+                        Etat.egale?(partie.grille().getTuile(x-1,y).etat(), partie.grille().getTuile(x,y).etat())
+                    ) then
+                        #On indique le problème une fois qu'on le rencontre.
+                        return Array[:regleColonne, y, :regles1]
                     end
                 end
             end
