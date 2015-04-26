@@ -111,6 +111,62 @@ class GestionnaireSauvegarde
 	end
 	
 	##
+	# Compte le nombre de sauvegardes d'un utilisateur et d'un dimention de grille donnée
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont l'on veut connaitre le nombre de sauvegardes
+	# * +d+ - (int) Dimention des grilles
+	#
+	# ==== Retour
+	# Renvoi le nombre de sauvegardes
+	#
+	def recupererNombreSauvegardeUtilisateurDimention(u, d)
+		resultat = @stockage.executer("
+			SELECT COUNT(id)
+			FROM sauvegarde
+			INNER JOIN niveau
+				ON niveau.id = sauvegarde.niveau
+			WHERE
+				sauvegarde.id_utilisateur = #{ u.id }
+				AND niveau.dimention = #{ d };
+		")
+		return resultat[0][0];
+	end
+	
+	##
+	# Liste les sauvegardes d'un utilisateur selon une dimention de grille
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont l'on veut récupérer les sauvegardes
+	# * +o+ - (int) Début de la liste
+	# * +l+ - (int) Fin de la liste
+	# * +d+ - (int) Dimention des grilles
+	#
+	# ==== Retour
+	# Renvoi une liste d'objets sauvegarde
+	#
+	def recupererSauvegardeUtilisateurDimention(u, d, o, l)
+		resultat = @stockage.executer("
+			SELECT *
+			FROM sauvegarde
+			INNER JOIN niveau
+				ON niveau.id = sauvegarde.niveau
+			WHERE
+				sauvegarde.id_utilisateur = #{ u.id }
+				AND niveau.dimention = #{ d }
+			LIMIT #{ l }
+			OFFSET #{ o };
+		")
+		
+		liste = Array.new
+		resultat.each do |el|
+			liste.push( hydraterSauvegarde( el ) )
+		end
+		
+		return liste;
+	end
+	
+	##
 	# Recherche une sauvegarde selon son id
 	#
 	# ==== Paramètres
