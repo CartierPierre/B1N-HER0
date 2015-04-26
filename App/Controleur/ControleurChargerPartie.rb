@@ -39,7 +39,7 @@ class ControleurChargerPartie < Controleur
     #
     def getParties(taille)
         parties = Array.new()
-        sauvegardes = @gestionnaireSauvegarde.recupererSauvegardeUtilisateurDimention(@@utilisateur, 0, 50, taille)
+        sauvegardes = @gestionnaireSauvegarde.recupererSauvegardeUtilisateurDimention(@@utilisateur, taille, 0, 50)
 
         sauvegardes.each do |sauvegarde|
             niveau = @gestionnaireNiveau.recupererNiveau(sauvegarde.idNiveau)

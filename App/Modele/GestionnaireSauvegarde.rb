@@ -150,7 +150,7 @@ class GestionnaireSauvegarde
 			SELECT *
 			FROM sauvegarde
 			INNER JOIN niveau
-				ON niveau.id = sauvegarde.niveau
+				ON niveau.id = sauvegarde.id_niveau
 			WHERE
 				sauvegarde.id_utilisateur = #{ u.id }
 				AND niveau.dimention = #{ d }

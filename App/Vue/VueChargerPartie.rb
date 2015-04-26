@@ -128,12 +128,18 @@ class VueChargerPartie < Vue
 
         parties = @controleur.getParties(@taille)
 
+        @vboxSauvegardes.destroy()
+        @vboxSauvegardes = Box.new(:vertical, 10)
+        @fenetreScroll.add_with_viewport(@vboxSauvegardes) 
+
         parties.each do |partie|  
             labelPartie = "[" + @controleur.getLangue[:difficulte] + " " + partie[1].niveau.difficulte.to_s + "] " + partie[0]
             boutonSauvegarde = BoutonSauvegarde.new(labelPartie, partie[1])
             boutonSauvegarde.signal_connect('clicked') { onBtnSauvegardeClicked(boutonSauvegarde) }
             @vboxSauvegardes.add(boutonSauvegarde)
         end 
+
+        @vboxSauvegardes.show_all()
 
         if(@partie)
             @boutonCharger.set_sensitive(false)
