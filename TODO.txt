@@ -3,6 +3,4 @@
 - Manuel utilisateur(fait) et DDC(a finir) (Pierre)
 - Classements (online?) (Kevin et Loic)
 - Profil (fini?) (Kevin et Loic)
-- Reprendre la derniere partie (Corentin)
-- Sauvegarder la partie (noms explicites ?) (Amaury et Corentin)
-- Les conseils buguent, mauvaise application des regles etc ... trop tard pour corriger, a moins q'un psychopathe veuille le faire.
+- (regle 3 visiblemen) Les conseils buguent, mauvaise application des regles etc ... trop tard pour corriger, a moins q'un psychopathe veuille le faire.
