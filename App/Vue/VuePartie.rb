@@ -1,6 +1,6 @@
 class VuePartie < Vue
 
-    @tailleGrille
+    ### Attributs d'instances
 
     # Jeu
     @labelConseil
@@ -9,14 +9,14 @@ class VuePartie < Vue
     @grille 
     @threadChrono
 
-    # Boutons du menu de navigation
+    # Boutons du menu en haut
     @boutonSauvegarder
     @boutonCharger
     @boutonOptions
     @boutonRegles
     @boutonQuitter
 
-    # Boutons du menu en haut
+    # Boutons du menu des hypothèses
     @boxHypo
     @labelHypothese
     @boutonHypothese
@@ -27,6 +27,7 @@ class VuePartie < Vue
     @boutonUndo
     @boutonRedo
     @boutonConseil
+    @boutonAide
     @boutonRecommencer
 
     # Configuration de la surbrillance pour les aides et conseils
@@ -36,6 +37,14 @@ class VuePartie < Vue
     @dureeConseils          # Durée des conseils en secondes
     @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
 
+    ##
+    # Méthode de création de la vue qui gère une partie
+    #
+    # Paramètres::
+    #   * _modele_ - Modèle associé
+    #   * _titre_ - Titre de la fenetre
+    #   * _controleur_ - Controleur associé 
+    #
     def initialize(modele,titre,controleur)
         super(modele,titre,controleur)
 
@@ -45,13 +54,11 @@ class VuePartie < Vue
         @dureeConseils = 15
         @delaiReactivation = 5
 
-        @tailleGrille = @modele.grille().taille()
-
         if(!@modele.chrono.estActif)
             @modele.chrono.finPause()
         end
 
-        # Navigation
+        # Menu en haut
         boxNav = Box.new(:horizontal)
         boxNav.set_homogeneous(true)
 
@@ -96,12 +103,12 @@ class VuePartie < Vue
         @boxHypo.add(@boutonAnnulerHypothese)
         @boxHypo.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)     
 
-        # Création de la grille
-        grilleTable = Table.new(@tailleGrille,@tailleGrille,true)
-        @grille = Array.new(@tailleGrille+1) { Array.new(@tailleGrille+1) }
+        # Création des tuiles de la grille
+        grilleTable = Table.new(@modele.grille.taille,@modele.grille.taille,true)
+        @grille = Array.new(@modele.grille.taille+1) { Array.new(@modele.grille.taille+1) }
 
-        0.upto(@tailleGrille) do |x|
-            0.upto(@tailleGrille) do |y|
+        0.upto(@modele.grille.taille) do |x|
+            0.upto(@modele.grille.taille) do |y|
                 
                 if(x == 0 && y == 0)
                     caseTemp = Label.new()
@@ -121,7 +128,7 @@ class VuePartie < Vue
             end
         end
 
-        # Chrono et validation de la grille
+        # Chrono et bouton validation de la grille
         vboxJeuDroite = Box.new(:vertical, 30)
 
         @labelConseil = Label.new()
@@ -131,6 +138,7 @@ class VuePartie < Vue
         @temps = Label.new()
         @temps.set_markup("<big>00:00</big>")
 
+        # Thread qui permet de gerer le chrono indépendamment
         @threadChrono = Thread.new() {
             while(true)
                 if(@modele.chrono.estActif)
@@ -157,7 +165,7 @@ class VuePartie < Vue
         @boxJeu.add(vboxJeuDroite)
         @boxJeu.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Menu du bas
+        # Menu du bas pour les actions en partie
         @boxFooter = Box.new(:horizontal)
         @boxFooter.set_homogeneous(true)
 
@@ -181,11 +189,11 @@ class VuePartie < Vue
         @boxFooter.add(@boutonRecommencer)
         @boxFooter.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        # Ajout dans la box principale des éléments
+        # Ajout dans la vbox principale des éléments
         vboxPrincipale = Box.new(:vertical,30)
         vboxPrincipale.add(boxNav)
         labelNiveau = Label.new()
-        labelNiveau.set_markup("<big>" + @controleur.getLangue[:niveau] + " " + @modele.niveau.difficulte.to_s + " - " + @tailleGrille.to_i.to_s + "x" + @tailleGrille.to_i.to_s + "</big>")
+        labelNiveau.set_markup("<big>" + @controleur.getLangue[:niveau] + " " + @modele.niveau.difficulte.to_s + " - " + @modele.grille.taille.to_i.to_s + "x" + @modele.grille.taille.to_i.to_s + "</big>")
         vboxPrincipale.add(labelNiveau)
         vboxPrincipale.add(@boxJeu) 
         vboxPrincipale.add(@boxFooter)
@@ -202,9 +210,14 @@ class VuePartie < Vue
     # =>    METHODES POUR L'AFFICHAGE    <= #
     #                                       #
     #########################################
+
+    ##
+    # Méthode qui actualise l'ensemble des images des tuiles de la grille en fonction de l'état dans le modèle
+    # ainsi que le nombre de tuiles à l'état 1/2 par ligne/colonne
+    #
     def actualiserGrille()
-        0.upto(@tailleGrille) do |x|
-            0.upto(@tailleGrille) do |y|
+        0.upto(@modele.grille.taille) do |x|
+            0.upto(@modele.grille.taille) do |y|
                 if(x == 0 && y == 0) 
                     @grille[x][y].set_label("")
                 elsif(x == 0)
@@ -220,6 +233,13 @@ class VuePartie < Vue
         end
     end
     
+    ##
+    # Méthode qui met à jour le nombre de tuiles à l'état 1/2 pour la ligne x et la colonne y
+    #
+    # Paramètres::
+    #   * _x_ - Coordonnée en x
+    #   * _y_ - Coordonnée en y 
+    #
     def nbLigneColonne(x,y)
         nbCasesColonne = @modele.compterCasesColonne(y)
         nbCasesLigne = @modele.compterCasesLigne(x)
@@ -227,10 +247,16 @@ class VuePartie < Vue
         @grille[x+1][0].set_markup(%Q[ <span foreground="#{@controleur.getCouleurTuile1}">#{nbCasesLigne[0]}</span> - <span foreground="#{@controleur.getCouleurTuile2}">#{nbCasesLigne[1]}</span> ])
     end
 
+    ##
+    # Méthode qui met en surbrillance une ligne en la faisant clignoter
+    #
+    # Paramètre::
+    #   * _ligne_ - Ligne à mettre en surbrillance
+    #
     def surbrillanceLigne(ligne)
         Thread.new {
             0.upto(@nbClignotements*2-1) do |n|
-                1.upto(@tailleGrille) do |x|
+                1.upto(@modele.grille.taille) do |x|
                     if(n%2 == 0) # Pair
                         @grille[ligne][x].set_sensitive(false)
                     else # Impair
@@ -242,10 +268,16 @@ class VuePartie < Vue
         }    
     end
 
+    ##
+    # Méthode qui met en surbrillance une colonne en la faisant clignoter
+    #
+    # Paramètre::
+    #   * _colonne_ - Colonne à mettre en surbrillance
+    #
     def surbrillanceColonne(colonne)
         Thread.new {
             0.upto(@nbClignotements*2-1) do |n|
-                1.upto(@tailleGrille) do |x|
+                1.upto(@modele.grille.taille) do |x|
                     if(n%2 == 0) # Pair
                         @grille[x][colonne].set_sensitive(false)
                     else # Impair
@@ -257,6 +289,13 @@ class VuePartie < Vue
         }    
     end
 
+    ##
+    # Méthode qui met en surbrillance la tuile de coordonnées x et y 
+    #
+    # Paramètres::
+    #   * _x_ - Coordonnée en x de la tuile
+    #   * _y_ - Coordonnée en y de la tuile
+    #
     def surbrillanceTuile(x,y)
         Thread.new {
             @boutonAide.set_sensitive(false)
@@ -273,22 +312,46 @@ class VuePartie < Vue
         }    
     end
 
+    ##
+    # Méthode qui met en pause le chrono, et cache le jeu ainsi que le menu d'actions (annuler, repeter ...)
+    #
     def cacherJeu()
         @modele.chrono.pause()
         @boxJeu.hide()
         @boxFooter.hide()
     end
 
+    ##
+    # Méthode qui remet en route le chrono, et montre le jeu ainsi que le menu d'actions (annuler, repeter ...)
+    #
     def montrerJeu()
         @modele.chrono.finPause()
         @boxJeu.show()
         @boxFooter.show()
     end
 
+    ##
+    # Méthode qui permet de limiter la chaine à une longueur maximale en ajoutant un retour chariot
+    # a chaque fois que la chaine dépasse la longueur maximale
+    #
+    # Paramètres::
+    #   * _chaine_ - Chaine à couper
+    #   * _longueurMax_ - Longueur maximale de la chaine après coupure
+    #
     def couperChaine(chaine, longueurMax)
         chaine.gsub(/\s+/, " ").gsub(/(.{1,#{longueurMax}})( |\Z)/, "\\1\n")
     end
 
+    ##
+    # Méthode de création d'un bouton contenant un label en dessous de l'image qui se situe en haut 
+    #
+    # Paramètres::
+    #   * _labelBouton_ - Label du bouton
+    #   * _image_ - Image du bouton
+    #
+    # Retour::
+    #   Le nouveau bouton
+    #
     def creerBoutonImage(labelBouton,image)
         bouton = Button.new(:label => @controleur.getLangue[labelBouton])
         bouton.set_always_show_image(true)
@@ -297,6 +360,15 @@ class VuePartie < Vue
         return bouton
     end
 
+    ##
+    # Méthode de création d'une boite de dialogue configurable (contenant une vbox) avec un titre et un bouton fermer
+    #
+    # Paramètre::
+    #   * _titre_ - Titre de la fenetre
+    #
+    # Retour::
+    #   La nouvelle boite de dialogue
+    #
     def creerDialogMessage(titre)
         dialog = Dialog.new(:parent => @@fenetre, :title => titre, :flags => :modal,:buttons => [[@controleur.getLangue[:fermer],ResponseType::CLOSE]])
         dialog.child.set_spacing(20)
@@ -305,15 +377,23 @@ class VuePartie < Vue
 
     protected :actualiserGrille, :couperChaine, :surbrillanceLigne, :surbrillanceColonne, :cacherJeu, :montrerJeu
 
-    ###################################
-    #                                 #
-    # =>    SIGNAUX DES BOUTONS    <= #
-    #                                 #
-    ###################################
+    ####################################
+    #                                  #
+    # =>    LISTENER DES BOUTONS    <= #
+    #                                  #
+    ####################################
 
     ##
-    # => Boutons du menu en haut
+    # => Listener des boutons du menu en haut
     ##
+
+    ##
+    # Listener sur le bouton pour sauvegarder une partie
+    # Affiche une boite de dialogue afin de confirmer la sauvegarde
+    # Si confirmation, affiche une entrée afin de renseigner la description de la sauvegarde
+    # Puis affichage d'un message pour indiquer que la sauvegarde a réussie
+    # Le jeu est cacher et le chrono est en pause pendant toute la durée des boites de dialogue
+    #
     def onBtnSauvegarderClicked 
         self.cacherJeu()
 
@@ -367,18 +447,31 @@ class VuePartie < Vue
         self.montrerJeu()
     end
 
+    ##
+    # Listener sur le bouton pour charger une partie
+    # Met en pause le chrono, ferme le cadre et ouvre la vue qui permet de charger une partie
+    #
     def onBtnChargerClicked 
         @modele.chrono.pause()
         fermerCadre()
         @controleur.charger()
     end
 
+    ##
+    # Listener sur le bouton options
+    # Met en pause le chrono, ferme le cadre et ouvre la vue qui permet de configurer les options de l'utilisateur
+    #
     def onBtnOptionsClicked
         @modele.chrono.pause()
         fermerCadre()
         @controleur.options()
     end
 
+    ##
+    # Listener sur le bouton pour afficher les règles
+    # Affichage des trois règles du jeu dans une boite de dialogue.
+    # Le jeu est cacher et le chrono est en pause pendant toute la durée de la boite de dialogue.
+    #
     def onBtnReglesClicked 
         self.cacherJeu()
 
@@ -395,6 +488,12 @@ class VuePartie < Vue
         self.montrerJeu()
     end
 
+    ##
+    # Listener sur le bouton pour quitter le jeu
+    # Affiche une boite de dialogue afin de confirmer ou non.
+    # Si confirmation, alors on retourne au menu principal sinon on continue la partie
+    # Le jeu est cacher et le chrono est en pause pendant toute la durée de la boite de dialogue.
+    #
     def onBtnQuitterClicked
         self.cacherJeu()
         confirmation = false
@@ -425,6 +524,12 @@ class VuePartie < Vue
     ##
     # => Boutons du mode hypothèse
     ##
+
+    ##
+    # Listener sur le bouton pour lancer le mode hypothèse
+    # Met le label indiquant que le mode hypothèse est activé et affiche les boutons pour valider ou annuler
+    # Cache le bouton pour activer le mode hypothèse et active l'hypothèse dans le modèle partie
+    #
     def onBtnHypoClicked
         @labelHypothese.set_label(@controleur.getLangue[:hypotheseActive])
         @boutonValiderHypothese.show()
@@ -433,6 +538,12 @@ class VuePartie < Vue
         @modele.activerModeHypothese()
     end
 
+    ##
+    # Listener sur le bouton pour valider les hypothèses
+    # Enlève le label indiquant que le mode hypothèse est activé et affiche le bouton pour activer le mode hypothèse
+    # Cache les boutons pour valider ou annuler 
+    # Puis valide l'hypothèse au niveau du modèle et actualisation de la grille (les tuiles moins opaques deviennent totalement opaques)
+    #
     def onBtnValiderHypotheseClicked
         @labelHypothese.set_label("")
         @boutonValiderHypothese.hide()
@@ -442,6 +553,12 @@ class VuePartie < Vue
         self.actualiserGrille()
     end
 
+    ##
+    # Listener sur le bouton pour annuler les hypothèses
+    # Enlève le label indiquant que le mode hypothèse est activé et affiche le bouton pour activer le mode hypothèse
+    # Cache les boutons pour valider ou annuler 
+    # Puis annule l'hypothèse au niveau du modèle et actualisation de la grille (les tuiles ajoutées pendant l'hypothèse deviennent vides)
+    #
     def onBtnAnnulerHypotheseClicked
         @labelHypothese.set_label("")
         @boutonValiderHypothese.hide()
@@ -452,8 +569,19 @@ class VuePartie < Vue
     end
 
     ##
-    # => Boutons de la grille et validation
+    # => Tuiles de la grille et bouton de validation
     ##
+
+    ##
+    # Listener sur les tuiles de la grille
+    # Si la tuile est valide (non vérouillée) alors on joue le coup dans le modèle
+    # puis on actualise l'image de la tuile en fonction du nouvel état
+    # ainsi que le nombre de tuiles à l'état 1/2 de la ligne et colonne ou se situe cette tuile
+    # Si la grille est remplie, le bouton pour valider la grille devient actif
+    #
+    # Paramètre::
+    #   * _tuileGtk_ - Tuile qui a été cliquée
+    #
     def onTuileGtkClicked(tuileGtk)
         if( @modele.niveau.tuileValide?(tuileGtk.x,tuileGtk.y) )
             @modele.jouerCoup(tuileGtk.x,tuileGtk.y)
@@ -466,6 +594,11 @@ class VuePartie < Vue
         end
     end
 
+    ##
+    # Listener sur le bouton pour valider la grille
+    # Si la grille est invalide, on affiche un message signalant de bien vérifier que l'ensemble des règles sont appliquées
+    # Sinon on ferme le cadre et on ouvre la vue affichant le résultat de cette partie
+    #
     def onBtnValiderGrilleClicked
         if(!@modele.valider())
             dialogValidationGrille = creerDialogMessage(@controleur.getLangue[:grilleInvalide])
@@ -483,8 +616,14 @@ class VuePartie < Vue
     end
 
     ##
-    # => Boutons du menu en bas
+    # => Boutons du menu des actions en bas
     ##
+
+    ##
+    # Listener sur le bouton pour annuler le coup
+    # Annule un coup au niveau du modèle puis on actualise l'image de la tuile en fonction du nouvel état
+    # ainsi que le nombre de tuiles à l'état 1/2 de la ligne et colonne ou se situe cette tuile
+    # 
     def onBtnUndoClicked
         tabCoord = @modele.historiqueUndo()
         if(tabCoord)
@@ -493,6 +632,11 @@ class VuePartie < Vue
         end 
     end
 
+    ##
+    # Listener sur le bouton pour répéter le coup
+    # Répéte le coup au niveau du modèle puis on actualise l'image de la tuile en fonction du nouvel état
+    # ainsi que le nombre de tuiles à l'état 1/2 de la ligne et colonne ou se situe cette tuile
+    # 
     def onBtnRedoClicked
         tabCoord = @modele.historiqueRedo()
         if(tabCoord)
@@ -501,6 +645,13 @@ class VuePartie < Vue
         end
     end
 
+    ##
+    # Listener sur le bouton conseil
+    # Si un conseil est disponible (au moins une règle doit être enfreinte), 
+    # alors on met en surbrillance la ou les ligne(s)/colonne(s) concernée(s) puis on affiche la règle à appliquer sur la droite
+    # Sinon on affiche une boite de dialogue indiquant que l'ensemble des règles sont respectées et qu'il faut utiliser l'aide
+    # ou le mode hypothèse si on est bloqué. Le jeu est cacher et le chrono est en pause pendant toute la durée de la boite de dialogue.
+    # 
     def onBtnConseilClicked
         conseil = @modele.appliquerRegles()
 
@@ -554,6 +705,12 @@ class VuePartie < Vue
         end
     end
 
+    ##
+    # Listener sur le bouton aide
+    # Si une aide est disponible, alors on modifie l'état d'une tuile par rapport à la solution pour aider le joueur
+    # puis on actualise l'image de la tuile en fonction du nouvel état
+    # ainsi que le nombre de tuiles à l'état 1/2 de la ligne et colonne ou se situe cette tuile
+    # 
     def onBtnAideClicked
         aide = @modele.demanderAide() 
 
@@ -564,6 +721,13 @@ class VuePartie < Vue
         end
     end
 
+    ##
+    # Listener sur le bouton pour recommencer la partie
+    # Affiche une boite de dialogue afin de confirmer ou non
+    # Si confirmation, on ferme le cadre et on retourne au menu principal
+    # Sinon on ferme la boite de dialogue pour continuer la partie
+    # Le jeu est cacher et le chrono est en pause pendant toute la durée de la boite de dialogue
+    #
     def onBtnRecommencerClicked
         self.cacherJeu()
 
