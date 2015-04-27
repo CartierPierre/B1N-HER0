@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 12
+# Version 1
 #
 class GestionnaireUtilisateur
 	
@@ -51,13 +51,11 @@ class GestionnaireUtilisateur
 	def hydraterUtilisateur(args)
 		return Utilisateur.creer(
 			args[0], # id
-			args[1], # uuid
-			args[2], # version
-			args[3], # nom
-			args[4], # motDePasse
-			args[5], # dateInscription
-			Option.deserialiser( args[6] ), # option
-			args[7]  # type
+			args[1], # version
+			args[2], # nom
+			args[3], # motDePasse
+			args[4], # dateInscription
+			args[5]  # option
 		)
 	end
 	private :hydraterUtilisateur
@@ -138,17 +136,14 @@ class GestionnaireUtilisateur
 			INSERT INTO utilisateur
 			VALUES (
 				null,
-				null,
-				1,
+				#{ u.version },
 				'#{ u.nom }',
 				'#{ u.motDePasse }',
 				#{ u.dateInscription },
-				'#{ Option.serialiser( u.option ) }',
-				#{ u.type }
+				'#{ Option.serialiser( u.option ) }'
 			);
 		")
 		u.id = @stockage.dernierId()
-		u.version = 1
 	end
 	private :insert
 	
@@ -162,13 +157,11 @@ class GestionnaireUtilisateur
 		@stockage.executer("
 			UPDATE utilisateur
 			SET
-				uuid = #{ (u.uuid==nil)?"null":u.uuid },
-				version = version + 1,
+				version = #{ u.version },
 				nom = '#{ u.nom }',
 				mot_de_passe = '#{ u.motDePasse }',
 				date_inscription = #{ u.dateInscription },
-				options = '#{ Option.serialiser( u.option ) }',
-				type = #{ u.type }
+				options = '#{ Option.serialiser( u.option ) }'
 			WHERE id = #{ u.id };
 		")
 	end

@@ -2,9 +2,7 @@
 # La classe GestionnaireSauvegarde permet d'intéragir avec entitées Sauvegarde
 # Utilise le DP Singleton
 #
-# Version 6
-#
-# Repenser attributs (insert/update non opérationnels)
+# Version 1
 #
 class GestionnaireSauvegarde
 	
@@ -53,13 +51,12 @@ class GestionnaireSauvegarde
 	def hydraterSauvegarde(args)
 		return Sauvegarde.creer(
 			args[0], # id
-			args[1], # uuid
-			args[2], # version
-			args[3], # description
-			args[4], # date création
-			args[5], # contenu
-			args[6], # identifiant utilisateur
-			args[7]  # identifiant niveau
+			args[1], # version
+			args[2], # description
+			args[3], # date création
+			args[4], # contenu
+			args[5], # identifiant utilisateur
+			args[6]  # identifiant niveau
 		)
 	end
 	private :hydraterSauvegarde
@@ -201,8 +198,7 @@ class GestionnaireSauvegarde
 			INSERT INTO sauvegarde
 			VALUES (
 				null,
-				null,
-				1,
+				#{ s.version },
 				'#{ s.description }',
 				#{ s.dateCreation },
 				'#{ s.contenu }',
@@ -211,7 +207,6 @@ class GestionnaireSauvegarde
 			);
 		")
 		s.id = @stockage.dernierId()
-		s.version = 1
 	end
 	private :insert
 	
@@ -225,8 +220,7 @@ class GestionnaireSauvegarde
 		@stockage.executer("
 			UPDATE sauvegarde
 			SET
-				uuid = #{ (s.uuid==nil)?"null":u.uuid },
-				version = version + 1,
+				version = #{ s.version },
 				description = '#{ s.description }',
 				date_creation = #{ s.dateCreation },
 				contenu = #{ s.contenu },

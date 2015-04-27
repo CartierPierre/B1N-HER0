@@ -1,7 +1,7 @@
 ##
 # Classe Score
 #
-# Version 7
+# Version 1
 #
 class Score
 
@@ -10,10 +10,6 @@ class Score
 	# int
 	# Identifiant du score
 	@id
-
-	# int
-	# Identifiant universel unique du score
-	@uuid
 
 	# int
 	# Version de l'entitée
@@ -43,7 +39,7 @@ class Score
 	# Identifiant du niveau sur lequel porte le score
 	@idNiveau
 
-	attr_accessor :id, :uuid, :version, :tempsTotal, :nbCoups, :nbConseils, :nbAides, :idUtilisateur, :idNiveau
+	attr_accessor :id, :version, :tempsTotal, :nbCoups, :nbConseils, :nbAides, :idUtilisateur, :idNiveau
 
     ### Méthodes de classe
 
@@ -53,13 +49,11 @@ class Score
     def Score.creer(*args)
         case args.size
             when 0 # Vide
-                new(nil, nil, nil, nil, nil, nil, nil, nil, nil)
-            when 6 # Utilisateur
-                new(nil, nil, nil, args[0], args[1], args[2], args[3], args[4], args[5])
-            when 9 # Gestionnaire
-                new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
+                new(nil, nil, nil, nil, nil, nil, nil, nil)
+            when 8 # Gestionnaire
+                new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7])
             else
-                puts "Score.creer n'accepte que O, 6 ou 9 arguments"
+                puts "Score.creer n'accepte que O ou 8 arguments"
         end
     end
 
@@ -67,9 +61,8 @@ class Score
     # Constructeur
     #
     private_class_method :new
-    def initialize(id, uuid, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau)
+    def initialize(id, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau)
 		@id = id
-		@uuid = uuid
 		@version = version;
 		@tempsTotal = tempsTotal
 		@nbCoups = nbCoups

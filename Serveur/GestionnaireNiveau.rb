@@ -2,7 +2,7 @@
 # La classe GestionnaireNiveau permet d'intéragir avec entitées Niveau
 # Utilise le DP Singleton
 #
-# Version 6
+# Version 1
 #
 class GestionnaireNiveau
 	
@@ -51,8 +51,8 @@ class GestionnaireNiveau
 	def hydraterNiveau(args)
 		return Niveau.creer(
 			args[0], # id
-			Grille.charger(args[1].delete("\n") ), # probleme
-			Grille.charger(args[2].delete("\n") ), # solution
+			args[1], # probleme
+			args[2], # solution
 			args[3], # difficulte
 			args[4]  # dimention
 		)
@@ -191,18 +191,18 @@ class GestionnaireNiveau
 	##
 	# Temporaire, pas utiliser sauf buddies
 	#
-	# def insert(n)
-		# @stockage.executer("
-			# INSERT INTO niveau
-			# VALUES (
-				# null,
-				# '#{ n.probleme.sauvegarder() }',
-				# '#{ n.solution.sauvegarder() }',
-				# '#{ n.difficulte }',
-				# '#{ n.dimention }'
-			# );
-		# ")
-		# n.id = @stockage.dernierId()
-	# end
+	def insert(n)
+		@stockage.executer("
+			INSERT INTO niveau
+			VALUES (
+				null,
+				'#{ n.probleme.sauvegarder() }',
+				'#{ n.solution.sauvegarder() }',
+				'#{ n.difficulte }',
+				'#{ n.dimention }'
+			);
+		")
+		n.id = @stockage.dernierId()
+	end
 	
 end
