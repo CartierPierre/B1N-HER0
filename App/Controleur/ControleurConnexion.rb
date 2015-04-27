@@ -7,7 +7,6 @@ class ControleurConnexion < Controleur
 
 
     def valider(pseudo,passe)
-        puts connexion = testConnexion
         if (@@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,passe)) == nil
             if connexion > -1
                 @vue.utilisateurInexistant()
@@ -23,7 +22,6 @@ class ControleurConnexion < Controleur
                     @vue.mauvaisPasse
                 end
             else
-                puts  @@utilisateur.type
                 if @@utilisateur.type == Utilisateur::ONLINE
                     @vue.pasInternet("online")
                 else
