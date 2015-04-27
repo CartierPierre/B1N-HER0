@@ -7,6 +7,7 @@ class ControleurConnexion < Controleur
 
 
     def valider(pseudo,passe)
+        connexion = testConnexion
         if (@@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,passe)) == nil
             if connexion > -1
                 @vue.utilisateurInexistant()
