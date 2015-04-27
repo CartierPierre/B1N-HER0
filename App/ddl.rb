@@ -113,7 +113,7 @@ begin
 			`id_utilisateur`				INTEGER NOT NULL,
 			`id_niveau`						INTEGER NOT NULL,
 			FOREIGN KEY(`id_utilisateur`) REFERENCES `utilisateur`(`id`),
-			FOREIGN KEY(`id_niveau`) REFERENCES `grille`(`niveau`)
+			FOREIGN KEY(`id_niveau`) REFERENCES `grille`(`id`)
 		);
 	")
 	rescue SQLite3::Exception => err
