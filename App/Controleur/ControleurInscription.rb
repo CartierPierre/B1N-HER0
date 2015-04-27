@@ -9,16 +9,16 @@ class ControleurInscription < Controleur
 
 
     def valider(pseudo,password,statut)
-        if testConnexion
+        if  statut == Utilisateur::OFFLINE || testConnexion > -1
             @@utilisateur = Utilisateur.creer(pseudo,password,statut)
             begin
                 @gestionnaireUtilisateur.sauvegarderUtilisateur(@@utilisateur)
-                rescue SQLite3::ConstraintException => erreur
+                rescue Exception => erreur
                     @vue.utilisateurExistant(pseudo)
             end
             changerControleur(ControleurMenuPrincipal.new(@jeu))
         else
-            @vue.pasInternet
+            @vue.pasInternet(pseudo)
         end
     end
 

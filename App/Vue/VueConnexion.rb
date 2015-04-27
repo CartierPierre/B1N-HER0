@@ -49,12 +49,12 @@ class VueConnexion < Vue
 
 
         boutonValider.signal_connect('clicked')     {
-            fermerCadre()
+            #fermerCadre()
             onBtnValiderClicked
         }
 
         boutonAnnuler.signal_connect('clicked')     {
-            fermerCadre()
+           # fermerCadre()
             onBtnAnnulerClicked
         }
 
@@ -88,15 +88,6 @@ class VueConnexion < Vue
             end
         }
 
-        @entryPseudo.signal_connect('activate')     {
-            fermerCadre()
-            onBtnValiderClicked
-        }
-        @entryPassword.signal_connect('activate')   {
-            fermerCadre()
-            onBtnValiderClicked
-        }
-
         self.actualiser()
     end
 
@@ -110,6 +101,7 @@ class VueConnexion < Vue
 
 	def onBtnOuiClicked
         @popup.destroy
+        fermerCadre
         @controleur.oui(@entryPseudo.text())
 
 	end
@@ -152,12 +144,15 @@ class VueConnexion < Vue
     end
 
     def pasInternet(statut)
+        puts statut
         if statut == "online"
-            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOnline])
-        elsif statut == "offline"
-            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOffline])
+            @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOnline])
+        else
+            @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOffline])
         end
-        popup.run
-        popup.destroy
+        @popup.run
+        fermerCadre
+        @popup.destroy
+        @controleur.non()
     end
 end

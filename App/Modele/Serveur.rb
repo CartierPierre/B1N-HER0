@@ -79,9 +79,9 @@ class Serveur
 		t = Time.now
 		reponse = envoyerRequete( Requete.creer( 'ping' ) )
 		if( !reponse || reponse.contenu != 'pong' )
-			return false
+			return -1
 		end
-		return ( Time.now - t ) * 1000
+		return  ( Time.now - t ) * 1000
 	end
 	
 	##

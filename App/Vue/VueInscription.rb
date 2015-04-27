@@ -120,8 +120,8 @@ class VueInscription < Vue
         @controleur.retour(pseudo)
     end
 
-    def pasInternet
-        @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:lUtilisateur]+pseudo+@controleur.getLangue[:pasInternetInscription])
+    def pasInternet(pseudo)
+        @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetInscription])
         @popup.run
         fermerCadre()
         @popup.destroy
