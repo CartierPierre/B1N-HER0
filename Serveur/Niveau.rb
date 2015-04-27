@@ -1,7 +1,7 @@
 ##
 # Classe Niveau
 #
-# Version 1
+# Version 2
 #
 class Niveau
 
@@ -34,12 +34,12 @@ class Niveau
 	##
 	# Instancie une niveau
 	#
-	def Niveau.creer(*args)
+	def Niveau.creer( *args )
 		case args.size
 			when 4
-				new(nil, args[0], args[1], args[2], args[3])
+				new( nil, args[0], args[1], args[2], args[3] )
 			when 5
-				new(args[0], args[1], args[2], args[3], args[4])
+				new( args[0], args[1], args[2], args[3], args[4] )
 			else
 				puts "Niveau.creer n'accepte que 4 ou 5 arguments"
         end

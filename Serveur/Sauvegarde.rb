@@ -1,7 +1,7 @@
 ##
 # Classe Sauvegarde
 #
-# Version 1
+# Version 2
 #
 class Sauvegarde
 
@@ -42,14 +42,21 @@ class Sauvegarde
 	##
 	# Instancie une sauvegarde
 	#
-    def Sauvegarde.creer( id, uuid, version, description, dateCreation, contenu, idUtilisateur, idNiveau )
-		new( id, uuid, version, description, dateCreation, contenu, idUtilisateur, idNiveau )
+    def Sauvegarde.creer( *args )
+		case args.size
+			when 6
+				new( nil, args[0], args[1], args[2], args[3], args[4], args[5] )
+			when 7
+				new( args[0], args[1], args[2], args[3], args[4], args[5], args[6] )
+			else
+				puts "Sauvegarde.creer n'accepte que 6 ou 7 arguments"
+        end
     end
 	
 	##
 	# Constructeur
 	#
-    def initialize( id, uuid, version, description, dateCreation, contenu, idUtilisateur, idNiveau )
+    def initialize( id, version, description, dateCreation, contenu, idUtilisateur, idNiveau )
 		@id = id
 		@version = version
 		@description = description

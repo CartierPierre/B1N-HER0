@@ -1,7 +1,7 @@
 ##
 # Classe Utilisateur
 #
-# Version 1
+# Version 2
 #
 class Utilisateur
 	
@@ -38,8 +38,15 @@ class Utilisateur
 	##
 	# Instancie un utilisateur
 	#
-    def Utilisateur.creer(id, version, nom, motDePasse, dateInscription, option)
-		new( id, version, nom, motDePasse, dateInscription, option )
+    def Utilisateur.creer( *args )
+		case args.size
+			when 5
+				new( nil, args[0], args[1], args[2], args[3], args[4] )
+			when 6
+				new( args[0], args[1], args[2], args[3], args[4], args[5] )
+			else
+				puts "Utilisateur.creer n'accepte que 5 ou 6 arguments"
+        end
     end
 	
 	##

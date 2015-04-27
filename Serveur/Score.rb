@@ -1,7 +1,7 @@
 ##
 # Classe Score
 #
-# Version 1
+# Version 2
 #
 class Score
 
@@ -46,8 +46,15 @@ class Score
     ##
     # Instancie un score
     #
-    def Score.creer( id, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau )
-		new( id, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau )
+    def Score.creer( *args )
+		case args.size
+			when 7
+				new( nil, args[0], args[1], args[2], args[3], args[4], args[5], args[6] )
+			when 8
+				new( args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7] )
+			else
+				puts "Score.creer n'accepte que 7 ou 8 arguments"
+        end
     end
 
     ##
