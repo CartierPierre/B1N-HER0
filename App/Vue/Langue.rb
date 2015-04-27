@@ -86,8 +86,8 @@ class Langue
             partiesTermines: "parties terminées",
             pasDeCompte: "Il n'existe pas de compte associé à ce pseudo.",
             pasInternetInscription: "Vous n'avez pas Internet, "
-            pasInternetOnline: ""
-            pasInternetOffline: "Vous n'avez pas Internet, "
+            pasInternetOnline: "La connection avec le serveur n'a pu être établie. Il est donc impossible de vous connecter sur un compte online. Dans le cas échéant, nous vous invitons à créer un compte local temporaire. Les statistiques de se dernier pourront être fusionné ultérieurement avec votre compte online."
+            pasInternetOffline: "La connection avec le serveur n'a pu être établie. Il est donc impossible de synchroniser vos données dans l'imadiat. Vous pourrez les synchroniser manuellement ultérieurement."
             passeAncien: "Ancien mot de passe.",
             passeChange: "Votre mot de passe à été changé",
             passeDifferent: "Le nouveau mot de passe doit être différent de l'ancien.",
