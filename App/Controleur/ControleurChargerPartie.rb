@@ -4,6 +4,8 @@ class ControleurChargerPartie < Controleur
 
     @partie
 
+    attr_reader :partie
+
     ##
     # Méthode de création du controleur qui est responsable du chargement d'une partie
     #

@@ -203,6 +203,11 @@ class VuePartie < Vue
         self.actualiser()
         @boutonValiderHypothese.hide()
         @boutonAnnulerHypothese.hide() 
+
+        @@fenetre.signal_connect('destroy') {
+            @controleur.sauvegardeAutomatique()
+            Gtk.main_quit
+        }
     end
 
     #########################################
@@ -514,6 +519,7 @@ class VuePartie < Vue
         dialogConfirmation.destroy()
 
         if(confirmation)
+            @controleur.sauvegardeAutomatique()
             fermerCadre()
             @controleur.quitter()
         end

@@ -155,6 +155,13 @@ class VueOptions < Vue
 
         @cadre.add(vboxPrincipale)
         self.actualiser()
+
+        if(@controleur.partie != nil)
+            @@fenetre.signal_connect('destroy') {
+                @controleur.sauvegardeAutomatique()
+                Gtk.main_quit
+            }
+        end
     end
 
     ##

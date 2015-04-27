@@ -120,6 +120,13 @@ class VueChargerPartie < Vue
         @fenetreScroll.hide()
         @boutonCharger.set_sensitive(false)
         @boutonSupprimer.set_sensitive(false)
+
+        if(@controleur.partie != nil)
+            @@fenetre.signal_connect('destroy') {
+                @controleur.sauvegardeAutomatique()
+                Gtk.main_quit
+            }
+        end
     end
 
     ##

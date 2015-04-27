@@ -4,6 +4,8 @@ class ControleurOptions < Controleur
 
     @partie
 
+    attr_reader :partie
+
     ##
     # Méthode de création du controleur qui gère la vue crédits
     #

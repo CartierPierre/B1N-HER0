@@ -57,6 +57,15 @@ class Controleur
     def quitterJeu
     	Gtk.main_quit
     end
+    
+    ##
+    # Méthode qui permet de sauvegarder automatiquement la partie courante lorsque la fenetre se ferme en partie
+    # ou qu'on quitte la partie pour retourner au menu principal
+    #
+    def sauvegardeAutomatique()
+        sauvegarde = Sauvegarde.creer("Sauvegarde automatique " + (self.getNombreSauvegardes+1).to_s,@modele)      
+        @gestionnaireSauvegarde.sauvegarderSauvegarde(sauvegarde)
+    end
 
     def testConnexion
         Serveur.instance.testConnexion
