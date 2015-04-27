@@ -18,7 +18,7 @@ class ControleurResultatPartie < Controleur
         super(jeu)
         @modele = partie
 
-        @gestionnaireSauvegarde.supprimerSauvegardeNiveau(partie.niveau.id)
+        @gestionnaireSauvegarde.supprimerSauvegardeUtilisateurNiveau(@@utilisateur,partie.niveau.id)
 
         # Création du score puis enregistrement dans la base de données et récupèration des succès déverrouillés grâce à cette partie
         @score = Score.creer(@modele.chrono.tempsFin.to_i, @modele.nbCoups, @modele.nbConseils, @modele.nbAides, @@utilisateur.id, @modele.niveau.id)
