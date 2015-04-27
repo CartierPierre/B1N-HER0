@@ -63,28 +63,32 @@ class VueInscription < Vue
         @entryPseudo.signal_connect("key-release-event")     {
             if @entryPseudo.text() == "" || @entryPseudo.text() =~ /\W/
                     boutonValider.set_sensitive(false)
+                    @entryPseudo.signal_connect('activate')     {}
             else
                 if @entryPassword.text() == "" || @entryPassword.text() =~ /\W/
                     boutonValider.set_sensitive(false)
+                    @entryPseudo.signal_connect('activate')     {}
                 else
                     boutonValider.set_sensitive(true)
+                    @entryPseudo.signal_connect('activate')     {onBtnValiderClicked}
                 end
             end
         }
-        @entryPseudo.signal_connect('activate')     {onBtnValiderClicked}
 
         @entryPassword.signal_connect("key-release-event")     {
             if @entryPassword.text() == "" || @entryPassword.text() =~ /\W/
                     boutonValider.set_sensitive(false)
+                    @entryPassword.signal_connect('activate')     {}
             else
                 if @entryPseudo.text() == "" || @entryPseudo.text() =~ /\W/
                     boutonValider.set_sensitive(false)
+                    @entryPassword.signal_connect('activate')     {}
                 else
                     boutonValider.set_sensitive(true)
+                    @entryPassword.signal_connect('activate')   {onBtnValiderClicked}
                 end
             end
         }
-        @entryPassword.signal_connect('activate')   {onBtnValiderClicked}
 
         actualiser()
     end

@@ -230,10 +230,6 @@ class VueProfil < Vue
         @controleur.retour()
 	end
 
-	def onBtnPseudoClicked
-        #@controleur.ValiderPasse(@entry.text)
-	end
-
 	def onBtnValiderPasseClicked(passe,ancienPasse)
         @entryPasse = Entry.new
         @entryAncienPasse = Entry.new
@@ -294,29 +290,33 @@ class VueProfil < Vue
 
         @entryPasse.signal_connect("key-release-event")     {
             if @entryPasse.text() == "" || @entryPasse.text() =~ /\W/
-                    boutonValider.set_sensitive(false)
+                boutonValider.set_sensitive(false)
+                @entryPasse.signal_connect('activate')   {}
             else
                 if @entryAncienPasse.text() == "" || @entryAncienPasse.text() =~ /\W/
                     boutonValider.set_sensitive(false)
+                    @entryPasse.signal_connect('activate')   {}
                 else
                     boutonValider.set_sensitive(true)
+                    @entryPasse.signal_connect('activate')   {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
                 end
             end
         }
-        @entryPasse.signal_connect('activate')   {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
 
         @entryAncienPasse.signal_connect("key-release-event")     {
             if @entryAncienPasse.text() == "" || @entryAncienPasse.text() =~ /\W/
                     boutonValider.set_sensitive(false)
+                    @entryAncienPasse.signal_connect('activate')   {}
             else
                 if @entryPasse.text() == "" || @entryPasse.text() =~ /\W/
                     boutonValider.set_sensitive(false)
+                    @entryAncienPasse.signal_connect('activate')   {}
                 else
                     boutonValider.set_sensitive(true)
+                    @entryAncienPasse.signal_connect('activate')   {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
                 end
             end
         }
-        @entryAncienPasse.signal_connect('activate')   {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
 
 
         vboxLabel = Box.new(:vertical,25)

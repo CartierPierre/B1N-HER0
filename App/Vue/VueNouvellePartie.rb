@@ -44,6 +44,9 @@ class VueNouvellePartie < Vue
 	def initialize(modele,titre,controleur)
 		super(modele,titre,controleur)
 
+        @cadre.set_size_request(420,410)
+        @@fenetre.set_size_request(420,410).show_all
+
 		# Box et boutons pour choisir la taille de la grille
 		hboxTaille = Box.new(:horizontal, 10)
 

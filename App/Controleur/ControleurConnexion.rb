@@ -9,8 +9,8 @@ class ControleurConnexion < Controleur
     def valider(pseudo,passe)
         if (@@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,passe)) == nil
             @vue.utilisateurInexistant()
-        end
-        if @@utilisateur.motDePasse == passe
+        elsif
+            @@utilisateur.motDePasse == passe
             changerControleur(ControleurMenuPrincipal.new(@jeu))
         else
             @vue.mauvaisPasse

@@ -15,7 +15,7 @@ class ControleurProfil < Controleur
             "nbCoups" => @@utilisateur.statistique.nbCoups.to_s,
             "nbConseils" => @@utilisateur.statistique.nbConseils.to_s,
             "nbAides" => @@utilisateur.statistique.nbAides.to_s,
-            "tempsTotal" => Time.at(@@utilisateur.statistique.tempsTotal).strftime("%T"),
+            "tempsTotal" =>"%02d:%02d:%02d" % [(@@utilisateur.statistique.tempsTotal/3600),(@@utilisateur.statistique.tempsTotal%3600/60),(@@utilisateur.statistique.tempsTotal%60)],
             "nbGrillesReso" => @@utilisateur.statistique.nbGrillesReso,
             "nbPartiesParfaites" => @@utilisateur.statistique.partieParfaites,
             "succes" => @@utilisateur.statistique.succes.size.to_s
