@@ -1,7 +1,7 @@
 ##
 # Classe Serveur
 #
-# Version 1
+# Version 2
 #
 class Serveur
 
@@ -17,7 +17,7 @@ class Serveur
 	# Constructeur
 	#
 	def initialize()
-		@thread = nil
+		# @thread = nil
 	end
 	
 	##
@@ -51,11 +51,11 @@ class Serveur
 				Thread.start(server.accept) do | client |
 					
 					# Réception de la requête du client
-					str = client.gets()
+					str = client.read()
 					requete = Marshal.load( str )
 					
 					# Traitement de la requête et construction d'une réponse
-					puts "IP: #{ client.peeraddr[3] }:#{ client.peeraddr[1] }, cmd: #{ requete.methode }, attr: #{ requete.arguments }"
+					puts "IP: #{ client.peeraddr[3] }:#{ client.peeraddr[1] }, cmd: #{ requete.methode }"
 					reponse = Traitement.instance().send( requete.methode )
 					
 					# Envoi de la réponse au client
