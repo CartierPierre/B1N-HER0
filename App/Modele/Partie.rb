@@ -132,7 +132,7 @@ class Partie
     #   * _x_ - La coordonnée x du Coup.
     #   * _y_ - La coordonnée y du Coup.
     #
-    def jouerCoup(x, y)#TODO signale un coup invalide
+    def jouerCoup(x, y)
         if(!(@grille.getTuile(x, y).etat == Etat.lock_1) && !(@grille.getTuile(x, y).etat == Etat.lock_2))
             historiqueAjouter(Coup.creer(x, y, @grille.getTuile(x, y).etat()))
             t = Etat.suivant(@grille.getTuile(x, y).etat())
@@ -140,8 +140,6 @@ class Partie
 
             @nbCoups += 1
         end
-
-        self
     end
 
     ##

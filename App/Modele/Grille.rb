@@ -98,6 +98,23 @@ class Grille
         return newColonne
     end
 
+    ##
+    # Détermine si la grille est remplie ou non
+    #
+    # Retour::
+    #   Vrai si la grille est remplie, faux sinon
+    #
+    def estRemplie?()
+        0.upto(self.taille() - 1) do |i|
+            0.upto(self.taille() - 1) do |j|
+                if(self.getTuile(i,j).estVide?())
+                    return false
+                end
+            end
+        end
+        return true
+    end
+
 
 
 
@@ -244,22 +261,5 @@ class Grille
         n += "───┴"*(self.taille()) + "───┘\n"
 
         return n
-    end
-
-    ##
-    # Détermine si la grille est remplie ou non
-    #
-    # Retour::
-    #   Vrai si la grille est remplie, faux sinon
-    #
-    def estRemplie?()
-        0.upto(self.taille() - 1) do |i|
-            0.upto(self.taille() - 1) do |j|
-                if(self.getTuile(i,j).estVide?())
-                    return false
-                end
-            end
-        end
-        return true
     end
 end
