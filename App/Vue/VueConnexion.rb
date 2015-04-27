@@ -127,7 +127,7 @@ class VueConnexion < Vue
 	end
 
     def utilisateurInexistant
-        @popup = Window.new("Utilisateur Inexistant")
+        @popup = Window.new(@controleur.getLangue[:utilisateurInexistant])
     	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
     	@popup.set_resizable(false)
         @popup.set_size_request(500,100)
@@ -149,5 +149,16 @@ class VueConnexion < Vue
 
         @popup.add(vbox)
         @popup.show_all()
+    end
+
+    def @vue.pasInternet(statut)
+        if statut == "online"
+            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOnline])
+        elsif statut == "offline"
+            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOffline])
+        end
+        popup.run
+        popup.destroy
+        @popup.present
     end
 end

@@ -57,4 +57,8 @@ class Controleur
     def quitterJeu
     	Gtk.main_quit
     end
+
+    def testConnexion
+        Serveur.instance.testConnexion
+    end
 end

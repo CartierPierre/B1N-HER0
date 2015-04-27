@@ -85,6 +85,9 @@ class Langue
             partiesParfaites: "parties parfaites",
             partiesTermines: "parties terminées",
             pasDeCompte: "Il n'existe pas de compte associé à ce pseudo.",
+            pasInternetInscription: "Vous n'avez pas Internet, "
+            pasInternetOnline: ""
+            pasInternetOffline: "Vous n'avez pas Internet, "
             passeAncien: "Ancien mot de passe.",
             passeChange: "Votre mot de passe à été changé",
             passeDifferent: "Le nouveau mot de passe doit être différent de l'ancien.",
@@ -118,6 +121,7 @@ class Langue
             tailleGrille: "Taille de la grille",
             temps: "Temps",
             tempsDeJeu: "Temps de jeu total",
+            utilisateurInexistant: "Utilisateur inexistant",
             valider: "Valider",
             validerGrille: "Valider la grille"
         }
@@ -218,6 +222,7 @@ class Langue
             tailleGrille: "Grid size",
             temps: "Time",
             tempsDeJeu: "Total play time",
+            utilisateurInexistant: "Unknown user",
             valider: "Confirm",
             validerGrille: "Check the grid"
         }
