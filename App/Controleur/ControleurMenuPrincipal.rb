@@ -54,4 +54,15 @@ class ControleurMenuPrincipal < Controleur
         changerControleur(ControleurCredits.new(@jeu))
     end
 
+    ##
+    # Méthode qui permet de reprendre la dernière partie sauvegardée
+    #
+    def reprendrePartie()
+        offset = @gestionnaireSauvegarde.recupererNombreSauvegardeUtilisateur(@@utilisateur)
+        sauvegarde = @gestionnaireSauvegarde.recupererSauvegardeUtilisateur(@@utilisateur, offset-1, 1)
+        niveau = @gestionnaireNiveau.recupererNiveau(sauvegarde[0].idNiveau)
+        partie = Partie.charger(@@utilisateur, niveau, sauvegarde[0])
+        changerControleur(ControleurPartie.new(@jeu,nil,partie))
+    end
+
 end

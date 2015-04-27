@@ -61,6 +61,29 @@ class VueMenuPrincipal < Vue
         @boutonProfil.signal_connect('clicked') { onBtnProfilClicked }        
         @boutonCredits.signal_connect('clicked') { onBtnCreditsClicked }
         @boutonQuitter.signal_connect('clicked') { Gtk.main_quit }
+
+        # Boite de dialogue qui propose de reprendre la dernière partie
+        confirmation = false
+        dialogReprendrePartie = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:reprendrePartie], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
+        
+        labelReprendrePartie = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationReprendrePartie])
+        dialogReprendrePartie.child.set_spacing(20)
+        dialogReprendrePartie.child.add(labelReprendrePartie)
+
+        dialogReprendrePartie.show_all()
+        dialogReprendrePartie.run do |reponse|
+            if(reponse == ResponseType::YES)
+                confirmation = true
+            else
+                confirmation = false
+            end             
+        end
+        dialogReprendrePartie.destroy()
+
+        if(confirmation)
+            fermerCadre()
+            @controleur.reprendrePartie()
+        end
       
         self.actualiser()
 	end
