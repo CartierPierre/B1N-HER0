@@ -85,9 +85,9 @@ class Langue
             partiesParfaites: "parties parfaites",
             partiesTermines: "parties terminées",
             pasDeCompte: "Il n'existe pas de compte associé à ce pseudo.",
-            pasInternetInscription: "Vous n'avez pas Internet, "
-            pasInternetOnline: "La connection avec le serveur n'a pu être établie. Il est donc impossible de vous connecter sur un compte online. Dans le cas échéant, nous vous invitons à créer un compte local temporaire. Les statistiques de se dernier pourront être fusionné ultérieurement avec votre compte online."
-            pasInternetOffline: "La connection avec le serveur n'a pu être établie. Il est donc impossible de synchroniser vos données dans l'imadiat. Vous pourrez les synchroniser manuellement ultérieurement."
+            pasInternetInscription: "La connexion avec le serveur n'a pu être établie. Il est donc impossible de vous inscrire avec un compte en ligne. Dans le cas échéant, nous vous invitons à créer un compte local temporaire. Les statistiques de se dernier pourront être fusionnées ultérieurement avec votre compte en ligne.",
+            pasInternetOnline: "La connexion avec le serveur n'a pu être établie. Il est donc impossible de vous connecter sur un compte en ligne. Dans le cas échéant, nous vous invitons à créer un compte local temporaire. Les statistiques de se dernier pourront être fusionnées ultérieurement avec votre compte en ligne.",
+            pasInternetOffline: "La connexion avec le serveur n'a pu être établie. Il est donc impossible de synchroniser vos données dans l'immédiat. Vous pourrez les synchroniser manuellement ultérieurement.",
             passeAncien: "Ancien mot de passe.",
             passeChange: "Votre mot de passe à été changé",
             passeDifferent: "Le nouveau mot de passe doit être différent de l'ancien.",
@@ -189,6 +189,9 @@ class Langue
             partiesParfaites: "completed games",
             partiesTermines: "perfect games",
             pasDeCompte: "There is no account associated with this username.",
+            pasInternetInscription: "A connection with the server couldn't be established so you can't sign up with an online account. If needed, you can create a temporary offline account, the statistics of this account can be merged with an online account later.",
+            pasInternetOnline: "A connection to with the server couldn't be established so you can't sign in with an online account. If needed, you can create a temporary offline account, the statistics of this account can be merged with an online account later.",
+            pasInternetOffline: "A connection to with the server couldn't be established so you can't synchronise your data for now. You will be able to at a later time.",
             passeDifferent: "The new password must differ from the old one.",
             passeNouveau: "New password.",
             passeNouveau: "Old password.",
