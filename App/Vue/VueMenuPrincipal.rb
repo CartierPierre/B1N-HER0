@@ -29,7 +29,7 @@ class VueMenuPrincipal < Vue
 		vboxPrincipale = Box.new(:vertical, 20)
 
         # Boite de dialogue qui propose de reprendre la dernière partie si on visite le menu principal pour la première fois
-        if(@@premiereFois)
+        if(@@premiereFois && @controleur.getNombreSauvegardes() > 0)
             @@premiereFois = false
             confirmation = false
             dialogReprendrePartie = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:reprendrePartie], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])

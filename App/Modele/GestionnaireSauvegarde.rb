@@ -79,6 +79,25 @@ class GestionnaireSauvegarde
 		")
 		return resultat[0][0];
 	end
+
+	##
+	# Compte le nombre de sauvegardes automatiques d'un utilisateur
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont l'on veut connaitre le nombre de sauvegardes automatiques
+	#
+	# ==== Retour
+	# Renvoi le nombre de sauvegardes automatiques d'un utilisateur
+	#
+	def recupererNombreSauvegardeAutomatiqueUtilisateur(u)
+		resultat = @stockage.executer("
+			SELECT COUNT(id)
+			FROM sauvegarde
+			WHERE id_utilisateur = #{ u.id }
+			AND description LIKE 'Sauvegarde automatique%';
+		")
+		return resultat[0][0];
+	end
 	
 	##
 	# Liste les sauvegardes d'un utilisateur

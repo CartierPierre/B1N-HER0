@@ -63,8 +63,17 @@ class Controleur
     # ou qu'on quitte la partie pour retourner au menu principal
     #
     def sauvegardeAutomatique()
-        sauvegarde = Sauvegarde.creer("Sauvegarde automatique " + (self.getNombreSauvegardes+1).to_s,@modele)      
+        nbSauvegardesAuto = @gestionnaireSauvegarde.recupererNombreSauvegardeAutomatiqueUtilisateur(@@utilisateur)
+        sauvegarde = Sauvegarde.creer("Sauvegarde automatique " + (nbSauvegardesAuto+1).to_s,@modele)      
         @gestionnaireSauvegarde.sauvegarderSauvegarde(sauvegarde)
+    end
+
+    ##
+    # Retour::
+    #   Nombre de sauvegardes qye possède l'utilisateur connecté
+    #
+    def getNombreSauvegardes()
+        return @gestionnaireSauvegarde.recupererNombreSauvegardeUtilisateur(@@utilisateur)
     end
 
     def testConnexion

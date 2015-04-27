@@ -101,14 +101,6 @@ class ControleurPartie < Controleur
     end
 
     ##
-    # Retour::
-    #   Nombre de sauvegardes qye possède l'utilisateur connecté
-    #
-    def getNombreSauvegardes()
-        return @gestionnaireSauvegarde.recupererNombreSauvegardeUtilisateur(@@utilisateur)
-    end
-
-    ##
     # Méthode qui permet de sauvegarder la partie courante dans la base de données
     #
     # Paramètre::
