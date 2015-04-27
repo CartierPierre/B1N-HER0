@@ -10,6 +10,10 @@ class VueMenuPrincipal < Vue
     @boutonCredits
 	@boutonQuitter
 
+    ### Attribut de classe
+
+    @@premiereFois = true # Indique si c'est la première fois qu'on visite le menu principal ou non
+
     ##
     # Méthode de création de la vue menu principal qui permet de sélectionner 
     # les différents éléments et fonctionnalités du jeu
@@ -23,6 +27,32 @@ class VueMenuPrincipal < Vue
 		super(modele,titre,controleur)
 
 		vboxPrincipale = Box.new(:vertical, 20)
+
+        # Boite de dialogue qui propose de reprendre la dernière partie si on visite le menu principal pour la première fois
+        if(@@premiereFois)
+            @@premiereFois = false
+            confirmation = false
+            dialogReprendrePartie = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:reprendrePartie], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
+            
+            labelReprendrePartie = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationReprendrePartie])
+            dialogReprendrePartie.child.set_spacing(20)
+            dialogReprendrePartie.child.add(labelReprendrePartie)
+
+            dialogReprendrePartie.show_all()
+            dialogReprendrePartie.run do |reponse|
+                if(reponse == ResponseType::YES)
+                    confirmation = true
+                else
+                    confirmation = false
+                end             
+            end
+            dialogReprendrePartie.destroy()
+
+            if(confirmation)
+                fermerCadre()
+                @controleur.reprendrePartie()
+            end
+        end
 
         # Création des boutons
 		@boutonNouvellePartie = Button.new(:label => @controleur.getLangue[:nouvellePartie])
@@ -61,30 +91,7 @@ class VueMenuPrincipal < Vue
         @boutonProfil.signal_connect('clicked') { onBtnProfilClicked }        
         @boutonCredits.signal_connect('clicked') { onBtnCreditsClicked }
         @boutonQuitter.signal_connect('clicked') { Gtk.main_quit }
-
-        # Boite de dialogue qui propose de reprendre la dernière partie
-        confirmation = false
-        dialogReprendrePartie = Dialog.new(:parent => @@fenetre, :title => @controleur.getLangue[:reprendrePartie], :flags => :modal,:buttons => [[@controleur.getLangue[:oui],ResponseType::YES],[@controleur.getLangue[:non],ResponseType::NO]])
-        
-        labelReprendrePartie = creerLabelTailleMoyenne(@controleur.getLangue[:confirmationReprendrePartie])
-        dialogReprendrePartie.child.set_spacing(20)
-        dialogReprendrePartie.child.add(labelReprendrePartie)
-
-        dialogReprendrePartie.show_all()
-        dialogReprendrePartie.run do |reponse|
-            if(reponse == ResponseType::YES)
-                confirmation = true
-            else
-                confirmation = false
-            end             
-        end
-        dialogReprendrePartie.destroy()
-
-        if(confirmation)
-            fermerCadre()
-            @controleur.reprendrePartie()
-        end
-      
+     
         self.actualiser()
 	end
 	
