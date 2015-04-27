@@ -140,6 +140,8 @@ class Partie
 
             @nbCoups += 1
         end
+
+        self
     end
 
     ##
