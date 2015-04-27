@@ -192,11 +192,12 @@ class GestionnaireUtilisateur
 					raise "L'utilisateur existe déjà"
 				end
 			else
-			begin
-				insert( utilisateur ) # Insertion de l'utilisateur en local
-				rescue SQLite3::ConstraintException => erreur
-                raise "L'utilisateur existe déjà"
-            end
+				begin
+					insert( utilisateur ) # Insertion de l'utilisateur en local
+					rescue SQLite3::ConstraintException => erreur
+					raise "L'utilisateur existe déjà"
+				end
+			end
 		else # Sinon c'est un utilisateur du type hors ligne
 			begin
 				insert( utilisateur ) # Insertion de l'utilisateur en local
