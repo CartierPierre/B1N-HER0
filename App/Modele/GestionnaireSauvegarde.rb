@@ -280,5 +280,21 @@ class GestionnaireSauvegarde
 			WHERE id = #{ s.id };
 		")
 	end
+
+	##
+	# Supprime les sauvegardes du niveau et de l'utilisateur passé en paramètre
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont l'on veut supprimer les sauvegardes de ce niveau
+	# * +idNiveau+ - (int) Id du niveau
+	#
+	def supprimerSauvegardeUtilisateurNiveau(u,idNiveau)
+		@stockage.executer("
+			DELETE FROM sauvegarde
+			WHERE
+				sauvegarde.id_utilisateur = #{ u.id }
+				AND sauvegarde.id_niveau = #{ idNiveau };
+		")
+	end
 	
 end

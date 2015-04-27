@@ -519,7 +519,6 @@ class VuePartie < Vue
         dialogConfirmation.destroy()
 
         if(confirmation)
-            @controleur.sauvegardeAutomatique()
             fermerCadre()
             @controleur.quitter()
         end
