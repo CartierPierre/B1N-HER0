@@ -2,7 +2,7 @@
 # La classe Serveur permet de communiquer avec un serveur B1nHer0
 # Utilise le DP Singleton
 #
-# Version 2
+# Version 4
 #
 class Serveur
 
@@ -10,14 +10,15 @@ class Serveur
 	
 	@@instance = nil
 	@@port = 10101
-	@@hote = 'le-mans.kpw.ovh'
+	# @@hote = 'le-mans.kpw.ovh'
+	@@hote = 'localhost'
 	
 	### Méthodes de classe
 	
 	##
 	# Renvoi l'instance unique de la classe
 	#
-	def Serveur.instance
+	def Serveur.instance()
 		if(@@instance == nil)
 			@@instance = new
 		end
@@ -28,7 +29,7 @@ class Serveur
 	##
 	# Constructeur
 	#
-	def initialize
+	def initialize()
 	end
 	private_class_method :new
 	
@@ -55,6 +56,7 @@ class Serveur
 			
 			# Reception de données
 			str = socket.read
+			# str = socket.recv
 			reponse = Marshal.load( str )
 			
 			# Fermture connexion au serveur
@@ -86,10 +88,10 @@ class Serveur
 	# Demande les identifiants et version de toutes les ressources d'un utilisateur
 	#
 	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utlisateur dont l'on veut connaître les ressources et leurs versions
+	# * +utilisateur+ - (Utilisateur) Utlisateur dont l'on veut connaître les ressources et leurs versions
 	#
 	# ==== Retour
-	# Renvoi deux tableaux comportant des couple identifiant/version de la totalitée des ressources d'un utilisateur, le premier pour les sauvegardes et le second pour les scores
+	# Renvoi la version de l'utilisateur sur le serveur et deux tableaux comportant des couple identifiant/version de la totalitée des ressources d'un utilisateur, le premier pour les sauvegardes et le second pour les scores
 	#
 	def listeRessources( utilisateur )
 		reponse = envoyerRequete( Requete.creer( 'listeRessources', utilisateur.uuid ) )
@@ -103,15 +105,35 @@ class Serveur
 	# Demande une suite de ressources au serveur
 	#
 	# ==== Paramètres
-	# * +u+ - (scores) Liste d'uuid de score que l'on veux récupérer
-	# * +u+ - (sauvegardes) Utlisateur dont l'on veut connaître les ressources et leurs versions
+	# * +uuidUtilisateur - (int) uuid de l'utilisateur que l'on veut récupérer
+	# * +uuidScores+ - (array int) Liste d'uuid de score que l'on veux récupérer
+	# * +uuidSauvegardes+ - (array int) Liste d'uuid de sauvegarde que l'on veux récupérer
 	#
 	# ==== Retour
-	# Renvoi un tableau multi-dimentionnel comportant l'intégralité des ressources demandées
+	# Renvoi un tableau multi-dimentionnel comportant l'intégralité des ressources demandées, false si une erreur c'est produite
 	#
-	def recupererRessources( scores, sauvegardes )
-		reponse = envoyerRequete( Requete.creer( 'recupererRessources', scores, sauvegardes ) )
+	def recupererRessources( uuidUtilisateur, uuidScores, uuidSauvegardes )
+		reponse = envoyerRequete( Requete.creer( 'recupererRessources', uuidUtilisateur, uuidScores, uuidSauvegardes ) )
 		if( !reponse)
+			return false
+		end
+		return reponse.contenu
+	end
+	
+	##
+	# Envoi une suite de ressources au serveur
+	#
+	# ==== Paramètres
+	# * +inserts+ - (scores) Liste d'uuid de score que l'on veux récupérer
+	# * +updates+ - (sauvegardes) Utlisateur dont l'on veut connaître les ressources et leurs versions
+	#
+	# ==== Retour
+	# Renvoi true si tout c'est bien passé, false si non
+	#
+	# def envoyerRessources( utilisateur, insertsScoresinsertsScores )
+	def envoyerRessources( utilisateur, insertsScores, updatesScores, insertsSauvegardes, updatesSauvegardes )
+		reponse = envoyerRequete( Requete.creer( 'envoyerRessources', utilisateur, insertsScores, updatesScores, insertsSauvegardes, updatesSauvegardes ) )
+		if( !reponse || reponse.contenu != 'succes' )
 			return false
 		end
 		return reponse.contenu

@@ -14,7 +14,12 @@ gu = GestionnaireUtilisateur.instance()
 stockage = Stockage.instance()
 
 # On récupère un utilisateur
-utilisateur = gu.recupererUtilisateur(1)
+utilisateur = gu.recupererUtilisateur( 7 )
 
 # On test la synchronisation des données d'un utilisateur
-stockage.syncroniser( utilisateur )
+puts "Synchronosation des données de #{ utilisateur.nom }"
+if( stockage.syncroniser( utilisateur ) )
+	puts "Ok"
+else
+	puts "Erreur"
+end

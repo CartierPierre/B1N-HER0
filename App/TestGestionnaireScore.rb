@@ -8,7 +8,7 @@
 require_relative "./requireTout.rb"
 
 # On récupère l'instance du gestionnaire de score
-gsc= GestionnaireScore.instance()
+gsc = GestionnaireScore.instance()
 
 # On récupère l'instance du gestionnaire d'utilisateur
 gu = GestionnaireUtilisateur.instance()
