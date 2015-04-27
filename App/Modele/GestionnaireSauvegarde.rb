@@ -2,9 +2,7 @@
 # La classe GestionnaireSauvegarde permet d'intéragir avec entitées Sauvegarde
 # Utilise le DP Singleton
 #
-# Version 6
-#
-# Repenser attributs (insert/update non opérationnels)
+# Version 7
 #
 class GestionnaireSauvegarde
 	
