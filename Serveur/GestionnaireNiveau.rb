@@ -196,8 +196,8 @@ class GestionnaireNiveau
 			INSERT INTO niveau
 			VALUES (
 				null,
-				'#{ n.probleme.sauvegarder() }',
-				'#{ n.solution.sauvegarder() }',
+				'#{ n.probleme }',
+				'#{ n.solution }',
 				'#{ n.difficulte }',
 				'#{ n.dimention }'
 			);
