@@ -178,13 +178,31 @@ class GestionnaireUtilisateur
 	# Met à jour un utilisateur
 	#
 	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utilisateur dont il faut mettre à jour les informations
+	# * +utilisateur+ - (Utilisateur) Utilisateur dont il faut mettre à jour les informations
 	#
-	def sauvegarderUtilisateur(u)
-		if (u.id == nil)
-			insert(u)
-		else
-			update(u)
+	def sauvegarderUtilisateur( utilisateur )
+		if( utilisateur.id == nil ) # Si c'est un nouvel utilisateur
+			if( utilisateur.type == Utilisateur::ONLINE ) # Si c'est un utilisateur du type en ligne
+				reponse = Serveur.instance().envoyerRessources( utilisateur ) # On envoi le nouvel utilisateur au serveur
+				if( !reponse ) # S'il y un problème de connexion
+					raise "Problème de connexion"
+				end
+				uuidUtilisateur = reponse.arguments[O]
+				if( uuidUtilisateur == false ) # Si l'utilisateur existe déjà
+					raise "L'utilisateur existe déjà"
+				end
+			else
+			begin
+				insert( utilisateur ) # Insertion de l'utilisateur en local
+				rescue SQLite3::ConstraintException => erreur
+                raise "L'utilisateur existe déjà"
+            end
+		else # Sinon c'est un utilisateur du type hors ligne
+			begin
+				insert( utilisateur ) # Insertion de l'utilisateur en local
+				rescue SQLite3::ConstraintException => erreur
+                raise "L'utilisateur existe déjà"
+            end
 		end
 	end
 	
