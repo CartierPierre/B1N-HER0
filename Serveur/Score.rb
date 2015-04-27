@@ -46,22 +46,14 @@ class Score
     ##
     # Instancie un score
     #
-    def Score.creer(*args)
-        case args.size
-            when 0 # Vide
-                new(nil, nil, nil, nil, nil, nil, nil, nil)
-            when 8 # Gestionnaire
-                new(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7])
-            else
-                puts "Score.creer n'accepte que O ou 8 arguments"
-        end
+    def Score.creer( id, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau )
+		new( id, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau )
     end
 
     ##
     # Constructeur
     #
-    private_class_method :new
-    def initialize(id, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau)
+    def initialize( id, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau )
 		@id = id
 		@version = version;
 		@tempsTotal = tempsTotal
@@ -71,16 +63,6 @@ class Score
 		@idUtilisateur = idUtilisateur
 		@idNiveau = idNiveau
     end
-
-    ### Méthodes d'instances
-
-    ##
-    # Renvoi le nombre de point du score
-    #
-    def nbPoints(niveau)
-        return (
-            ( (niveau.dimention**2) * (niveau.difficulte**2) * 10000 ) / ( @tempsTotal + ( 2 ** @nbConseils) * 10 - 39 + ( 2 ** @nbAides ) * 30 + ( @nbCoups / 10 ) ** 2 )
-        )
-    end
+	private_class_method :new
 
 end

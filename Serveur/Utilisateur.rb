@@ -38,15 +38,8 @@ class Utilisateur
 	##
 	# Instancie un utilisateur
 	#
-    def Utilisateur.creer(*args)
-		case args.size
-			when 0 # Vide
-				new(nil, nil, nil, nil, nil, nil, nil, nil, nil)
-			when 6 # Gestionnaire
-				new(args[0], args[1], args[2], args[3], args[4], args[5])
-			else
-				puts "Utilisateur.creer n'accepte que O ou 6 arguments"
-        end
+    def Utilisateur.creer(id, version, nom, motDePasse, dateInscription, option)
+		new( id, version, nom, motDePasse, dateInscription, option )
     end
 	
 	##
@@ -54,24 +47,12 @@ class Utilisateur
 	#
 	private_class_method :new
     def initialize(id, version, nom, motDePasse, dateInscription, option)
-		
 		@id = id
 		@version = version;
 		@nom = nom
 		@motDePasse = motDePasse
-		
-		if( dateInscription == nil )
-			@dateInscription = Time.now.to_i
-		else
-			@dateInscription = dateInscription
-		end
-		
-		if( option == nil )
-			@option = Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR)
-		else
-			@option = option
-		end
-		
+		@dateInscription = dateInscription
+		@option = option
     end
 	
 end

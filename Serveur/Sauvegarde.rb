@@ -42,29 +42,22 @@ class Sauvegarde
 	##
 	# Instancie une sauvegarde
 	#
-    def Sauvegarde.creer(*args)
-		case args.size
-			when 0 # Vide
-				new( nil, nil, nil, nil, nil, nil, nil )
-			when 7 # Gestionnaire
-				new( args[0], args[1], args[2], args[3], args[4], args[5], args[6] )
-			else
-				puts "Sauvegarde.creer n'accepte que 0 ou 7 arguments"
-        end
+    def Sauvegarde.creer( id, uuid, version, description, dateCreation, contenu, idUtilisateur, idNiveau )
+		new( id, uuid, version, description, dateCreation, contenu, idUtilisateur, idNiveau )
     end
 	
 	##
 	# Constructeur
 	#
-	private_class_method :new
     def initialize( id, uuid, version, description, dateCreation, contenu, idUtilisateur, idNiveau )
 		@id = id
 		@version = version
 		@description = description
-		@dateCreation = (dateCreation==nil) ? Time.now.to_i : dateCreation
+		@dateCreation = dateCreation
 		@contenu = contenu
 		@idUtilisateur = idUtilisateur
 		@idNiveau = idNiveau
     end
+	private_class_method :new
 	
 end
