@@ -142,16 +142,10 @@ class VueConnexion < Vue
         @popup.show_all()
     end
 
-    def pasInternet(statut)
-        puts statut
-        if statut == "online"
-            @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOnline])
-        else
-            @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOffline])
-        end
+    def pasInternet
+        @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOnline])
         @popup.run
         fermerCadre
         @popup.destroy
-        @controleur.non()
     end
 end

@@ -14,7 +14,7 @@ class ControleurConnexion < Controleur
                 @vue.utilisateurInexistant()
             else
                 if @@utilisateur.type == Utilisateur::ONLINE
-                    @vue.pasInternet("online")
+                    @vue.pasInternet
                 end
                 if @@utilisateur.motDePasse == passe
                     @vue.fermerCadre
