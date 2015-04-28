@@ -2,7 +2,7 @@
 # La classe Serveur permet de communiquer avec un serveur B1nHer0
 # Utilise le DP Singleton
 #
-# Version 5
+# Version 6
 #
 class Serveur
 
@@ -152,7 +152,12 @@ class Serveur
 	# Pour chaque objet (Utilisateur, Score, Sauvegarde), renvoi l'id local transmit et le uuid correspondant, ou -1 si une erreur est survenu sur la ressource
 	#
 	def envoyerRessources( utilisateur, scores, sauvegardes )
-		reponse = envoyerRequete( Requete.creer( 'envoyerRessources', utilisateur, scores, sauvegardes ) )
+		
+		utilServ = utilisateur.clone()
+		utilServ.option = Option.serialiser( utilisateur.option )
+		utilServ.statistique = nil
+
+		reponse = envoyerRequete( Requete.creer( 'envoyerRessources', utilServ, scores, sauvegardes ) )
 		if( !reponse )
 			return false
 		end

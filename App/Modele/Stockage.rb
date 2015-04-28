@@ -50,7 +50,7 @@ class Stockage
 	# Execute une requête SQL sur la base de données locale
 	#
 	def executer(requete)
-		# puts requete
+		puts requete
 		return @bddLocal.execute(requete)
 	end
 	
@@ -164,6 +164,40 @@ class Stockage
 	# Inscrit un joueur au jeu
 	#
 	def inscription( utilisateur )
+		# Si c'est un utilisateur du type hors ligne
+		if( utilisateur.type == Utilisateur::OFFLINE )
+			begin
+				GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+			rescue SQLite3::ConstraintException => erreur
+				raise "L'utilisateur existe déjà !"
+			end
+		# Sinon c'est un utilisateur du type en ligne
+		elsif( utilisateur.type == Utilisateur::ONLINE )
+			begin
+				# Insertion de l'utilisateur en local
+				begin
+					GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+				rescue SQLite3::ConstraintException => erreur
+					raise "L'utilisateur existe déjà"
+				end
+				
+				# On envoi le nouvel utilisateur au serveur
+				reponse = Serveur.instance().envoyerRessources( utilisateur, nil, nil )
+				uuidUtilisateur = reponse[0]
+				if( uuidUtilisateur == -1 )
+					GestionnaireUtilisateur.instance().supprimerUtilisateur( utilisateur )
+					raise "L'utilisateur existe déjà !"
+				end
+				utilisateur.uuid = uuidUtilisateur
+				GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+			rescue Exception => e
+				GestionnaireUtilisateur.instance().supprimerUtilisateur( utilisateur )
+				raise "Erreur de connexion !"
+			end
+		# Sinon mauvais type
+		else
+			raise "Mauvais type utilisateur !"
+		end
 	end
 	
 	##
