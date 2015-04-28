@@ -123,8 +123,8 @@ class VueConnexion < Vue
     	@popup.set_resizable(false)
         @popup.set_size_request(500,100)
 
-		boutonOui = Button.new(:label => "Oui")
-		boutonNon = Button.new(:label => "Non")
+		boutonOui = Button.new(@controleur.getLangue[:oui])
+		boutonNon = Button.new(@controleur.getLangue[:non])
 
         hbox = Box.new(:horizontal,30)
         hbox.pack_start(boutonOui)
@@ -147,9 +147,9 @@ class VueConnexion < Vue
             @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOnline])
         elsif statut == "Offline"
             @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetOffline])
+        fermerCadre
         end
         @popup.run
-        fermerCadre
         @popup.destroy
     end
 end
