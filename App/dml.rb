@@ -12,28 +12,28 @@ gsa = GestionnaireSauvegarde.instance()
 gsc= GestionnaireScore.instance()
 
 # Insertion d'utilisateurs
-puts "Insertion d'utilisateurs ..."
-user1 = Utilisateur.creer('Test', 'azerty', Utilisateur::OFFLINE)
-begin
-	gut.sauvegarderUtilisateur(user1)
-	rescue SQLite3::ConstraintException => err
-		puts "L'utilisateur #{ user1.nom } (id:#{ user1.id }) existe déjà !"
-end
+# puts "Insertion d'utilisateurs ..."
+# user1 = Utilisateur.creer('Test', 'azerty', Utilisateur::OFFLINE)
+# begin
+	# gut.sauvegarderUtilisateur(user1)
+	# rescue SQLite3::ConstraintException => err
+		# puts "L'utilisateur #{ user1.nom } (id:#{ user1.id }) existe déjà !"
+# end
 
-user2 = Utilisateur.creer('Toto', 'azerty', Utilisateur::OFFLINE)
-begin
-	gut.sauvegarderUtilisateur(user2)
-	rescue SQLite3::ConstraintException => err
-		puts "L'utilisateur #{ user2.nom } (id:#{ user2.id }) existe déjà !"
-end
+# user2 = Utilisateur.creer('Toto', 'azerty', Utilisateur::OFFLINE)
+# begin
+	# gut.sauvegarderUtilisateur(user2)
+	# rescue SQLite3::ConstraintException => err
+		# puts "L'utilisateur #{ user2.nom } (id:#{ user2.id }) existe déjà !"
+# end
 
-user3 = Utilisateur.creer('Buddies', 'azerty', Utilisateur::OFFLINE)
-begin
-	gut.sauvegarderUtilisateur(user3)
-	rescue SQLite3::ConstraintException => err
-		puts "L'utilisateur #{ user3.nom } (id:#{ user3.id }) existe déjà !"
-end
-puts "Ok"
+# user3 = Utilisateur.creer('Buddies', 'azerty', Utilisateur::OFFLINE)
+# begin
+	# gut.sauvegarderUtilisateur(user3)
+	# rescue SQLite3::ConstraintException => err
+		# puts "L'utilisateur #{ user3.nom } (id:#{ user3.id }) existe déjà !"
+# end
+# puts "Ok"
 
 # Insertion de niveaux
 puts "Insertion de niveau ..."
@@ -90,29 +90,29 @@ puts "Ok"
 
 # Insertion de scores
 
-puts "Insertion de scores ..."
+# puts "Insertion de scores ..."
 
-score1 = Score.creer(3600, 10, 10, 10, 1, 1)
-score2 = Score.creer(3600, 10, 10, 10, 1, 2)
-score3 = Score.creer(3600, 10, 10, 10, 2, 3)
+# score1 = Score.creer(3600, 10, 10, 10, 1, 1)
+# score2 = Score.creer(3600, 10, 10, 10, 1, 2)
+# score3 = Score.creer(3600, 10, 10, 10, 2, 3)
 
-gsc.sauvegarderScore(score1)
-gsc.sauvegarderScore(score2)
-gsc.sauvegarderScore(score3)
+# gsc.sauvegarderScore(score1)
+# gsc.sauvegarderScore(score2)
+# gsc.sauvegarderScore(score3)
 
-puts "Ok"
+# puts "Ok"
 
 # Insertion de sauvegardes
 
-puts "Insertion de sauvegardes ..."
+# puts "Insertion de sauvegardes ..."
 
-sauvegarde1 = Sauvegarde.creer( "Description 0", Partie.creer( user1, niveau1 ) )
-sauvegarde2 = Sauvegarde.creer( "Description 1", Partie.creer( user2, niveau2 ) )
-sauvegarde3 = Sauvegarde.creer( "Description 2", Partie.creer( user3, niveau3 ) )
+# sauvegarde1 = Sauvegarde.creer( "Description 0", Partie.creer( user1, niveau1 ) )
+# sauvegarde2 = Sauvegarde.creer( "Description 1", Partie.creer( user2, niveau2 ) )
+# sauvegarde3 = Sauvegarde.creer( "Description 2", Partie.creer( user3, niveau3 ) )
 
-gsa.sauvegarderSauvegarde(sauvegarde1)
-gsa.sauvegarderSauvegarde(sauvegarde2)
-gsa.sauvegarderSauvegarde(sauvegarde3)
+# gsa.sauvegarderSauvegarde(sauvegarde1)
+# gsa.sauvegarderSauvegarde(sauvegarde2)
+# gsa.sauvegarderSauvegarde(sauvegarde3)
 
-puts "Ok"
+# puts "Ok"
 
