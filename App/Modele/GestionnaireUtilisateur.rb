@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 14
+# Version 15
 #
 class GestionnaireUtilisateur
 	
@@ -138,7 +138,7 @@ class GestionnaireUtilisateur
 			INSERT INTO utilisateur
 			VALUES (
 				null,
-				#{ u.uuid },
+				#{ ( u.uuid == nil ) ? "null" : u.uuid },
 				#{ u.version },
 				'#{ u.nom }',
 				'#{ u.motDePasse }',
@@ -162,7 +162,7 @@ class GestionnaireUtilisateur
 		@stockage.executer("
 			UPDATE utilisateur
 			SET
-				uuid = #{ (u.uuid==nil)?"null":u.uuid },
+				uuid = #{ ( u.uuid == nil ) ? "null" : u.uuid },
 				version = version + 1,
 				nom = '#{ u.nom }',
 				mot_de_passe = '#{ u.motDePasse }',

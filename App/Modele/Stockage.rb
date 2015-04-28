@@ -2,7 +2,7 @@
 # La classe Stockage permet d'utiliser le base de données local et de la syncroniser avec la base de données distante
 # Utilise le DP Singleton
 #
-# Version 8
+# Version 9
 #
 class Stockage
 

@@ -2,7 +2,7 @@
 # La classe GestionnaireScore permet d'intéragir avec entitées Score
 # Utilise le DP Singleton
 #
-# Version 7
+# Version 8
 #
 class GestionnaireScore
 	
@@ -299,7 +299,7 @@ class GestionnaireScore
 			INSERT INTO score
 			VALUES (
 				null,
-				#{ s.uuid },
+				#{ ( u.uuid == nil ) ? "null" : u.uuid },
 				#{ s.version },
 				#{ s.tempsTotal },
 				#{ s.nbCoups },
@@ -324,7 +324,7 @@ class GestionnaireScore
 		@stockage.executer("
 			UPDATE score
 			SET
-				uuid = #{ (s.uuid==nil)?"null":s.uuid },
+				uuid = #{ ( u.uuid == nil ) ? "null" : u.uuid },
 				version = version + 1
 				temps_total = #{ s.tempsTotal },
 				nb_coups = #{ s.nbCoups },

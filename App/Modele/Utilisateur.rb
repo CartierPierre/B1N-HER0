@@ -1,7 +1,7 @@
 ##
 # Classe Utilisateur
 #
-# Version 9
+# Version 10
 #
 class Utilisateur
 	
@@ -76,22 +76,11 @@ class Utilisateur
 		
 		@id = id
 		@uuid = uuid
-		@version = version;
+		@version = ( version == nil ) ? 1 : version
 		@nom = nom
 		@motDePasse = motDePasse
-		
-		if( dateInscription == nil )
-			@dateInscription = Time.now.to_i
-		else
-			@dateInscription = dateInscription
-		end
-		
-		if( option == nil )
-			@option = Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR)
-		else
-			@option = option
-		end
-		
+		@dateInscription = ( dateInscription == nil ) ? Time.now.to_i : dateInscription
+		@option = ( option == nil) ? Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR) : option
 		@type = type
 		@statistique = Statistique.creer(self)
 		

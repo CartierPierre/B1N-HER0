@@ -1,7 +1,7 @@
 ##
 # Classe Score
 #
-# Version 7
+# Version 8
 #
 class Score
 
@@ -70,7 +70,7 @@ class Score
     def initialize(id, uuid, version, tempsTotal, nbCoups, nbConseils, nbAides, idUtilisateur, idNiveau)
 		@id = id
 		@uuid = uuid
-		@version = version;
+		@version = ( version == nil ) ? 1 : version
 		@tempsTotal = tempsTotal
 		@nbCoups = nbCoups
 		@nbConseils = nbConseils

@@ -1,7 +1,7 @@
 ##
 # Classe Sauvegarde
 #
-# Version 7
+# Version 8
 #
 class Sauvegarde
 
@@ -64,9 +64,9 @@ class Sauvegarde
     def initialize( id, uuid, version, description, dateCreation, contenu, idUtilisateur, idNiveau )
 		@id = id
 		@uuid = uuid
-		@version = version;
+		@version = ( version == nil ) ? 1 : version
 		@description = description
-		@dateCreation = (dateCreation==nil) ? Time.now.to_i : dateCreation;
+		@dateCreation = ( dateCreation == nil ) ? Time.now.to_i : dateCreation
 		@contenu = contenu
 		@idUtilisateur = idUtilisateur
 		@idNiveau = idNiveau
