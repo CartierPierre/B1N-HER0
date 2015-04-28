@@ -38,15 +38,16 @@ class VueProfil < Vue
         imagePartie1000     = Image.new(:file => './Ressources/S_1000_PARTIES.png')
         imagePartie1000Gris = Image.new(:file => './Ressources/S_1000_PARTIES_GRIS.png')
 
+        labelConfig     = Label.new(@controleur.getLangue[:config])
+        labelDate       = Label.new(@controleur.getLangue[:inscrit] + " : " + @statistiques["dateInscription"])
+        labelGrilleReso = Label.new(@controleur.getLangue[:nbPartiesTermines] + " : " + @statistiques["nbGrillesReso"].to_s)
+        labelNbAide     = Label.new(@controleur.getLangue[:nbAides] + " : " + @statistiques["nbAides"])
+        labelNbConseil  = Label.new(@controleur.getLangue[:nbConseils] + " : " + @statistiques["nbConseils"])
+        labelNbCoup     = Label.new(@controleur.getLangue[:nbCoups] + " : " + @statistiques["nbCoups"])
+        labelPseudo     = Label.new(@controleur.getLangue[:pseudo]  + " : " + @statistiques["pseudo"])
         labelStats      = Label.new(@controleur.getLangue[:statistiques])
         labelSucces     = Label.new(@controleur.getLangue[:succes]  + " : " + @statistiques["succes"]+"/10")
-        labelPseudo     = Label.new(@controleur.getLangue[:pseudo]  + " : " + @statistiques["pseudo"])
-        labelDate       = Label.new(@controleur.getLangue[:inscrit] + " : " + @statistiques["dateInscription"])
-        labelNbCoup     = Label.new(@controleur.getLangue[:nbCoups] + " : " + @statistiques["nbCoups"])
-        labelNbConseil  = Label.new(@controleur.getLangue[:nbConseils] + " : " + @statistiques["nbConseils"])
-        labelNbAide     = Label.new(@controleur.getLangue[:nbAides] + " : " + @statistiques["nbAides"])
         labelTpsTotal   = Label.new(@controleur.getLangue[:tempsDeJeu] + " : " + @statistiques["tempsTotal"])
-        labelGrilleReso = Label.new(@controleur.getLangue[:nbPartiesTermines] + " : " + @statistiques["nbGrillesReso"].to_s)
 
         barreProgressionParfait10   = ProgressBar.new
         barreProgressionParfait50   = ProgressBar.new
@@ -178,12 +179,6 @@ class VueProfil < Vue
         vboxSuccesDroite.add(hboxSuccesParfait1000)
         vboxSuccesDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        hboxSucces = Box.new(:horizontal,30)
-        hboxSucces.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
-        hboxSucces.add(vboxSuccesGauche)
-        hboxSucces.add(vboxSuccesDroite)
-        hboxSucces.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
-
         vboxStatsGauche = Box.new(:vertical, 10)
         vboxStatsGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxStatsGauche.add(labelPseudo)
@@ -201,14 +196,35 @@ class VueProfil < Vue
         vboxStatsDroite.add(labelNbConseil)
         vboxStatsDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
+        vboxConfigGauche = Box.new(:vertical, 10)
+        vboxConfigGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxConfigGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        vboxConfigDroite = Box.new(:vertical, 10)
+        vboxConfigDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxConfigDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        hboxSucces = Box.new(:horizontal,30)
+        hboxSucces.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
+        hboxSucces.add(vboxSuccesGauche)
+        hboxSucces.add(vboxSuccesDroite)
+        hboxSucces.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
+
         hboxStats = Box.new(:horizontal,30)
         hboxStats.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
         hboxStats.add(vboxStatsGauche)
         hboxStats.add(vboxStatsDroite)
         hboxStats.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
 
+        hboxConfig = Box.new(:horizontal,30)
+        hboxConfig.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
+        hboxConfig.add(vboxConfigGauche)
+        hboxConfig.add(vboxConfigDroite)
+        hboxConfig.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
+
         carnet.append_page(hboxStats,labelStats)
         carnet.append_page(hboxSucces,labelSucces)
+        carnet.append_page(hboxConfig,labelConfig)
 
 		hboxRetour = Box.new(:horizontal)
         hboxRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)

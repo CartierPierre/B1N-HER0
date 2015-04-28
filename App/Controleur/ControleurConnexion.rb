@@ -8,40 +8,30 @@ class ControleurConnexion < Controleur
 
 
     def valider(pseudo,passe)
-	
-		resultat = Stockage.instance().authentification( pseudo, passe )
-		p resultat
-		# Voilà il y a 7 cas, la réponse de authentification est un tableau à 2 dimention. Je t'invite à aller voir dans la classe Stockage
-		
-		
-        # connexion = testConnexion
+		validation = Stockage.instance().authentification( pseudo, passe )
+        @@utilisateur = validation[1]
+        case validation[0]
+        when 0..2
+            validerPasse(passe)
+        when 3
+            @vue.pasInternet("Offline")
+        when 4
+            validerPasse(passe)
+        when 5
+            @vue.pasInternet("Online")
+            @vue.utilisateurInexistant()
+        when 6
+            @vue.utilisateurInexistant()
+        end
+    end
 
-        # if connexion == -1
-            # if (@@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,passe)) == nil
-                # @vue.utilisateurInexistant()
-            # else
-                # if @@utilisateur.type == Utilisateur::ONLINE
-                    # @vue.pasInternet
-                # end
-                # if @@utilisateur.motDePasse == passe
-                    # @vue.fermerCadre
-                    # changerControleur(ControleurMenuPrincipal.new(@jeu))
-                # else
-                    # @vue.mauvaisPasse
-                # end
-            # end
-        # elsif connexion > -1
-            # if (@@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,passe)) == nil
-                # @vue.utilisateurInexistant()
-            # else
-                # if @@utilisateur.motDePasse == passe
-                    # @vue.fermerCadre
-                    # changerControleur(ControleurMenuPrincipal.new(@jeu))
-                # else
-                    # @vue.mauvaisPasse
-                # end
-            # end
-        # end
+    def validerPasse(passe)
+        if @@utilisateur.motDePasse == passe
+            @vue.fermerCadre
+            changerControleur(ControleurMenuPrincipal.new(@jeu))
+        else
+            @vue.mauvaisPasse
+        end
     end
 
     def annuler()
