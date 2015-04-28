@@ -2,7 +2,7 @@
 # La classe GestionnaireScore permet d'intéragir avec entitées Score
 # Utilise le DP Singleton
 #
-# Version 1
+# Version 2
 #
 class GestionnaireScore
 	
@@ -63,6 +63,30 @@ class GestionnaireScore
 	private :hydraterScore
 	
 	##
+	# Recherche un ensemble de scores selon une liste d'ids
+	#
+	# ==== Paramètres
+	# * +ids+ - (array int) Liste d'ids
+	#
+	# ==== Retour
+	# Renvoi une liste d'objets score
+	#
+	def recupererEnsembleScore( ids )
+		resultat = @stockage.executer("
+			SELECT *
+			FROM score
+			WHERE id IN (#{ ids.join(',') });
+		")
+		
+		liste = Array.new
+		resultat.each do | el |
+			liste.push( hydraterScore( el ) )
+		end
+		
+		return liste;
+	end
+	
+	##
 	# Recherche un score selon son id
 	#
 	# ==== Paramètres
@@ -71,61 +95,20 @@ class GestionnaireScore
 	# ==== Retour
 	# Renvoi un objets score si se dernier a été trouvé. Nil si non
 	#
-	def recupererScore(id)
-		resultat = @stockage.executer("
-			SELECT *
-			FROM score
-			WHERE id = #{ id }
-			LIMIT 1;
-		")
+	# def recupererScore(id)
+		# resultat = @stockage.executer("
+			# SELECT *
+			# FROM score
+			# WHERE id = #{ id }
+			# LIMIT 1;
+		# ")
 		
-		if ( resultat.count == 0 )
-			return nil
-		end
+		# if ( resultat.count == 0 )
+			# return nil
+		# end
 		
-		return hydraterScore( resultat[0] )
-	end
-	
-	##
-	# Compte le nombre de scores
-	#
-	# ==== Retour
-	# Renvoi le nombre de score
-	#
-	def recupererNombreScore
-		resultat = @stockage.executer("
-			SELECT COUNT(id)
-			FROM score;
-		")
-		return resultat[0][0];
-	end
-	
-	##
-	# Liste les scores
-	#
-	# ==== Paramètres
-	# * +o+ - (int) Début de la liste
-	# * +l+ - (int) Fin de la liste
-	#
-	# ==== Retour
-	# Renvoi une liste d'objets scores
-	#
-	def recupererListeScore(o, l)
-	
-		resultat = @stockage.executer("
-			SELECT *
-			FROM score
-			LIMIT #{ l }
-			OFFSET #{ o };
-		")
-		
-		liste = Array.new
-		resultat.each do |el|
-			liste.push( hydraterScore( el ) )
-		end
-		
-		return liste;
-	end
+		# return hydraterScore( resultat[0] )
+	# end
 	
 	##
 	# Compte le nombre de scores d'un utilisateur
@@ -161,115 +144,6 @@ class GestionnaireScore
 			SELECT *
 			FROM score
 			WHERE id_utilisateur = #{ u.id }
-			ORDER BY
-				temps_total,
-				nb_coups DESC,
-				nb_conseils DESC,
-				nb_aides DESC
-			LIMIT #{ l }
-			OFFSET #{ o };
-		")
-		
-		liste = Array.new
-		resultat.each do |el|
-			liste.push( hydraterScore( el ) )
-		end
-		
-		return liste;
-	end
-	
-	##
-	# Compte le nombre de scores d'un utilisateur sur un niveau
-	#
-	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utilisateur dont l'on veut connaitre le nombre de score
-	# * +n+ - (Niveau) Niveau dont l'on veut récupérer les scores
-	#
-	# ==== Retour
-	# Renvoi le nombre de score d'un utilisateur sur le niveau
-	#
-	def recupererNombreScoreUtilisateurNiveau(u, n)
-		resultat = @stockage.executer("
-			SELECT COUNT(id)
-			FROM score
-			WHERE
-				id_utilisateur = #{ u.id }
-				AND id_niveau = #{ n.id };
-		")
-		return resultat[0][0];
-	end
-	
-	##
-	# Liste les scores d'un utilisateur sur un niveau
-	#
-	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utilisateur dont l'on veut récupérer les scores
-	# * +n+ - (Niveau) Niveau dont l'on veut récupérer les scores
-	# * +o+ - (int) Début de la liste
-	# * +l+ - (int) Fin de la liste
-	#
-	# ==== Retour
-	# Renvoi une liste d'objets score d'un utilisateur sur le niveau
-	#
-	def recupererListeScoreUtilisateurNiveau(u, n, o, l)
-		resultat = @stockage.executer("
-			SELECT *
-			FROM score
-			WHERE
-				id_utilisateur = #{ u.id }
-				AND id_niveau = #{ n.id }
-			ORDER BY
-				temps_total,
-				nb_coups DESC,
-				nb_conseils DESC,
-				nb_aides DESC
-			LIMIT #{ l }
-			OFFSET #{ o };
-		")
-		
-		liste = Array.new
-		resultat.each do |el|
-			liste.push( hydraterScore( el ) )
-		end
-		
-		return liste;
-	end
-	
-	##
-	# Compte le nombre de scores d'un niveau
-	#
-	# ==== Paramètres
-	# * +n+ - (Niveay) Niveau dont l'on veut connaitre le nombre de score
-	#
-	# ==== Retour
-	# Renvoi le nombre de score d'un niveau
-	#
-	def recupererNombreScoreNiveau(n)
-		resultat = @stockage.executer("
-			SELECT COUNT(id)
-			FROM score
-			WHERE id_niveau = #{ n.id };
-		")
-		return resultat[0][0];
-	end
-	
-	##
-	# Liste les scores d'un niveau
-	#
-	# ==== Paramètres
-	# * +n+ - (Niveau) Niveau dont l'on veut récupérer les scores
-	# * +o+ - (int) Début de la liste
-	# * +l+ - (int) Fin de la liste
-	#
-	# ==== Retour
-	# Renvoi une liste d'objets score d'un utilisateur
-	#
-	def recupererListeScoreNiveau(n, o, l)
-		resultat = @stockage.executer("
-			SELECT *
-			FROM score
-			WHERE
-				id_niveau = #{ n.id }
 			ORDER BY
 				temps_total,
 				nb_coups DESC,

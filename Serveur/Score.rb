@@ -39,7 +39,7 @@ class Score
 	# Identifiant du niveau sur lequel porte le score
 	@idNiveau
 
-	attr_accessor :id, :version, :tempsTotal, :nbCoups, :nbConseils, :nbAides, :idUtilisateur, :idNiveau
+	attr_accessor :id, :uuid, :version, :tempsTotal, :nbCoups, :nbConseils, :nbAides, :idUtilisateur, :idNiveau
 
     ### Méthodes de classe
 

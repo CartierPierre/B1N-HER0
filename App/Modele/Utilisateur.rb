@@ -1,7 +1,7 @@
 ##
 # Classe Utilisateur
 #
-# Version 7
+# Version 9
 #
 class Utilisateur
 	
@@ -48,8 +48,7 @@ class Utilisateur
 	# Statistiques de l'utilisateur
 	@statistique
 	
-	attr_accessor :id, :uuid, :version, :nom, :motDePasse, :dateInscription, :option, :type
-	attr_reader :statistique
+	attr_accessor :id, :uuid, :version, :nom, :motDePasse, :dateInscription, :option, :type, :statistique
 	
 	### Méthodes de classe
 	

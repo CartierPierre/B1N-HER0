@@ -35,7 +35,7 @@ class Sauvegarde
 	# Identifiant du niveau sur lequel porte cette sauvegarde
 	@idNiveau
 
-    attr_accessor :id, :version, :description, :dateCreation, :contenu, :idUtilisateur, :idNiveau
+    attr_accessor :id, :uuid, :version, :description, :dateCreation, :contenu, :idUtilisateur, :idNiveau
 	
 	### Méthodes de classe
 	

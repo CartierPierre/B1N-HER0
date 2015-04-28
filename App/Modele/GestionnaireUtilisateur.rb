@@ -187,14 +187,14 @@ class GestionnaireUtilisateur
 				if( !reponse ) # S'il y un problème de connexion
 					raise "Problème de connexion"
 				end
-				uuidUtilisateur = reponse.arguments[O]
-				if( uuidUtilisateur == false ) # Si l'utilisateur existe déjà
+				uuidUtilisateur = reponse.arguments[0][1]
+				if( uuidUtilisateur == -1 ) # Si l'utilisateur existe déjà
 					raise "L'utilisateur existe déjà"
 				end
 			else
 				begin
 					insert( utilisateur ) # Insertion de l'utilisateur en local
-					rescue SQLite3::ConstraintException => erreur
+				rescue SQLite3::ConstraintException => erreur
 					raise "L'utilisateur existe déjà"
 				end
 			end
@@ -226,13 +226,13 @@ class GestionnaireUtilisateur
 	# ==== Retour
 	# Renvoi un object utilisateur si ce dernier à été trouvé, nil si non
 	#
-	def connexionUtilisateur(n, m)
+	def connexionUtilisateur( nom, motDePasse )
 		resultat = @stockage.executer("
 			SELECT *
 			FROM utilisateur
 			WHERE
-				nom = '#{n}'
-				AND mot_de_passe = '#{m}'
+				nom = '#{ nom }'
+				AND mot_de_passe = '#{ motDePasse }'
 			LIMIT 1;
 		")
 		

@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 1
+# Version 2
 #
 class GestionnaireUtilisateur
 	
@@ -61,47 +61,6 @@ class GestionnaireUtilisateur
 	private :hydraterUtilisateur
 	
 	##
-	# Compte le nombre d'utilisateurs
-	#
-	# ==== Retour
-	# Renvoi le nombre l'utilisateurs
-	#
-	def recupererNombreUtilisateur
-		resultat = @stockage.executer("
-			SELECT COUNT(id)
-			FROM utilisateur;
-		")
-		return resultat[0][0];
-	end
-	
-	##
-	# Liste les utilisateurs
-	#
-	# ==== Paramètres
-	# * +o+ - (int) Début de la liste
-	# * +l+ - (int) Fin de la liste
-	#
-	# ==== Retour
-	# Renvoi un liste d'objets utilisateurs
-	#
-	def recupererListeUtilisateur(o, l)
-	
-		resultat = @stockage.executer("
-			SELECT *
-			FROM utilisateur
-			LIMIT #{ l }
-			OFFSET #{ o };
-		")
-		
-		liste = Array.new
-		resultat.each do |el|
-			liste.push( hydraterUtilisateur( el ) )
-		end
-		
-		return liste;
-	end
-	
-	##
 	# Recherche un utilisateur selon son id
 	#
 	# ==== Paramètres
@@ -140,7 +99,7 @@ class GestionnaireUtilisateur
 				'#{ u.nom }',
 				'#{ u.motDePasse }',
 				#{ u.dateInscription },
-				'#{ Option.serialiser( u.option ) }'
+				'#{ u.option }'
 			);
 		")
 		u.id = @stockage.dernierId()
@@ -161,7 +120,7 @@ class GestionnaireUtilisateur
 				nom = '#{ u.nom }',
 				mot_de_passe = '#{ u.motDePasse }',
 				date_inscription = #{ u.dateInscription },
-				options = '#{ Option.serialiser( u.option ) }'
+				options = '#{ u.option }'
 			WHERE id = #{ u.id };
 		")
 	end
@@ -173,11 +132,11 @@ class GestionnaireUtilisateur
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut mettre à jour les informations
 	#
-	def sauvegarderUtilisateur(u)
-		if (u.id == nil)
-			insert(u)
+	def sauvegarderUtilisateur( u )
+		if( u.id == nil )
+			insert( u )
 		else
-			update(u)
+			update( u )
 		end
 	end
 	

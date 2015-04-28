@@ -1,20 +1,24 @@
 ##
 # Script de test pour la classe Serveur
 #
-# Version 2
+# Version 4
 #
 
 # Dépendances
 require_relative "./requireTout.rb"
 
-# On récupère l'instance du gestionnaire d'utilisateur
-gu = GestionnaireUtilisateur.instance()
+# On récupère des instance de gestionnaires
+gut = GestionnaireUtilisateur.instance()
+gsa = GestionnaireSauvegarde.instance()
+gsc = GestionnaireScore.instance()
 
 # On récupère l'instance du serveur
 serveur = Serveur.instance()
 
-# On récupère un utilisateur
-utilisateur = gu.recupererUtilisateur(1)
+# On récupère des données de test
+utilisateur = gut.recupererUtilisateur( 1 )
+score = gsc.recupererScore( 1 )
+sauvegarde = gsa.recupererSauvegarde( 6 )
 
 # Test temps de réponse
 puts "Test de la connexion ..."
@@ -24,12 +28,12 @@ essais = 0
 while( essais < 10 )
 	t = serveur.testConnexion()
 	print "#{ essais } -> "
-	if( !t )
-		puts "Erreur"
-	else
+	if( t > -1 )
 		puts "#{ t } ms"
 		moy = moy + t
 		succes = succes + 1
+	else
+		puts "Erreur"
 	end
 	essais = essais + 1
 end
@@ -41,21 +45,25 @@ if( succes != 0)
 end
 puts
 
+# Test connexion utilisateur
+puts "Test connexion utilisateur ..."
+con = serveur.connexionUtilisateur( "Buddies", "azerty" )
+p con
+
 # Test liste ressources
 puts "Test liste ressources ..."
-listeRessources = serveur.listeRessources( utilisateur )
-puts listeRessources
+listeRessources = serveur.listeRessources( Utilisateur.creer( nil, 10, nil, nil, nil, nil, nil, nil ) )
+p listeRessources
 
 # Test récupération de ressources
 puts "Test récupération de ressources ..."
-ressources = serveur.recupererRessources( false, [1, 2, 3], [1, 2, 3] )
-puts ressources
+ressources = serveur.recupererRessources( 1, [1, 2, 3], [1, 2, 3] )
+p ressources
 
 # Test envoi de ressources
 puts "Test envoi de ressources ..."
-reponse = serveur.envoyerRessources( false, [1,2,3,4,5,6], [12,54,97,5,12], [100,212,45,2], [1545,289,97,2] )
-if( reponse )
-	puts "Envoi ok"
-else
-	puts "Envoi erreur"
-end
+utilServ = utilisateur.clone()
+utilServ.option = Option.serialiser( utilisateur.option ) # Moche à revoir
+utilServ.statistique = nil # Moche à revoir
+reponse = serveur.envoyerRessources( utilServ, [ score ], [ sauvegarde ] )
+p reponse

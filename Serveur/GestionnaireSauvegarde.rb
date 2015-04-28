@@ -2,7 +2,7 @@
 # La classe GestionnaireSauvegarde permet d'intéragir avec entitées Sauvegarde
 # Utilise le DP Singleton
 #
-# Version 1
+# Version 2
 #
 class GestionnaireSauvegarde
 	
@@ -62,6 +62,30 @@ class GestionnaireSauvegarde
 	private :hydraterSauvegarde
 	
 	##
+	# Recherche un ensemble de sauvegardes selon une liste d'ids
+	#
+	# ==== Paramètres
+	# * +ids+ - (array int) Liste d'ids
+	#
+	# ==== Retour
+	# Renvoi une liste d'objets sauvegardes
+	#
+	def recupererEnsembleSauvegardes( ids )
+		resultat = @stockage.executer("
+			SELECT *
+			FROM sauvegarde
+			WHERE id IN (#{ ids.join(',') });
+		")
+		
+		liste = Array.new
+		resultat.each do | el |
+			liste.push( hydraterSauvegarde( el ) )
+		end
+		
+		return liste;
+	end
+	
+	##
 	# Compte le nombre de sauvegardes d'un utilisateur
 	#
 	# ==== Paramètres
@@ -108,62 +132,6 @@ class GestionnaireSauvegarde
 	end
 	
 	##
-	# Compte le nombre de sauvegardes d'un utilisateur et d'un dimention de grille donnée
-	#
-	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utilisateur dont l'on veut connaitre le nombre de sauvegardes
-	# * +d+ - (int) Dimention des grilles
-	#
-	# ==== Retour
-	# Renvoi le nombre de sauvegardes
-	#
-	def recupererNombreSauvegardeUtilisateurDimention(u, d)
-		resultat = @stockage.executer("
-			SELECT COUNT(id)
-			FROM sauvegarde
-			INNER JOIN niveau
-				ON niveau.id = sauvegarde.niveau
-			WHERE
-				sauvegarde.id_utilisateur = #{ u.id }
-				AND niveau.dimention = #{ d };
-		")
-		return resultat[0][0];
-	end
-	
-	##
-	# Liste les sauvegardes d'un utilisateur selon une dimention de grille
-	#
-	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utilisateur dont l'on veut récupérer les sauvegardes
-	# * +o+ - (int) Début de la liste
-	# * +l+ - (int) Fin de la liste
-	# * +d+ - (int) Dimention des grilles
-	#
-	# ==== Retour
-	# Renvoi une liste d'objets sauvegarde
-	#
-	def recupererSauvegardeUtilisateurDimention(u, d, o, l)
-		resultat = @stockage.executer("
-			SELECT *
-			FROM sauvegarde
-			INNER JOIN niveau
-				ON niveau.id = sauvegarde.id_niveau
-			WHERE
-				sauvegarde.id_utilisateur = #{ u.id }
-				AND niveau.dimention = #{ d }
-			LIMIT #{ l }
-			OFFSET #{ o };
-		")
-		
-		liste = Array.new
-		resultat.each do |el|
-			liste.push( hydraterSauvegarde( el ) )
-		end
-		
-		return liste;
-	end
-	
-	##
 	# Recherche une sauvegarde selon son id
 	#
 	# ==== Paramètres
@@ -172,20 +140,20 @@ class GestionnaireSauvegarde
 	# ==== Retour
 	# Renvoi un objets sauvegarde si se dernier a été trouvé. Nil si non
 	#
-	def recupererSauvegarde(id)
-		resultat = @stockage.executer("
-			SELECT *
-			FROM sauvegarde
-			WHERE id = #{ id }
-			LIMIT 1;
-		")
+	# def recupererSauvegarde(id)
+		# resultat = @stockage.executer("
+			# SELECT *
+			# FROM sauvegarde
+			# WHERE id = #{ id }
+			# LIMIT 1;
+		# ")
 		
-		if ( resultat.count == 0 )
-			return nil
-		end
+		# if ( resultat.count == 0 )
+			# return nil
+		# end
 		
-		return hydraterSauvegarde( resultat[0] )
-	end
+		# return hydraterSauvegarde( resultat[0] )
+	# end
 	
 	
 	# Fait persister les données d'un sauvegarde
@@ -255,6 +223,19 @@ class GestionnaireSauvegarde
 		@stockage.executer("
 			DELETE FROM sauvegarde
 			WHERE id = #{ s.id };
+		")
+	end
+	
+	##
+	# Supprimer toutes les sauvegardes d'un utilisateur
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont il faut supprimer toutes les sauvegardes
+	#
+	def supprimerSauvegardeUtilisateur(u)
+		@stockage.executer("
+			DELETE FROM sauvegarde
+			WHERE id_utilisateur = #{ u.id };
 		")
 	end
 	

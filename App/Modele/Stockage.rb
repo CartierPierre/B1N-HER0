@@ -2,7 +2,7 @@
 # La classe Stockage permet d'utiliser le base de données local et de la syncroniser avec la base de données distante
 # Utilise le DP Singleton
 #
-# Version 7
+# Version 8
 #
 class Stockage
 
@@ -65,6 +65,102 @@ class Stockage
 	end
 	
 	##
+	# Gère l'inscription d'un utilisateur dans la base locale et le serveur selon les cas
+	#
+	def insciption( nouvelutilisateur )
+		if( nouvelutilisateur.type == Utilisateur::ONLINE )
+			# Sauvegarde serveur
+			reponse = envoyerRessources( nouvelutilisateur )
+			puts "Insert sur le serveur, uuid : #{ reponse[0] }"
+			# Sauvegarde local
+			nouvelUtil.uuid = reponse[0]
+			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( nouvelUtil )
+			puts "Insert dans la bdd"
+		elsif( nouvelutilisateur.type == Utilisateur::OFFLINE )
+			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( nouvelUtil )
+		else
+			raise "Mauvais type utilisateur !"
+		end
+	end
+	
+	##
+	# Test si les identifiants sont correctes et l'authentifie. Synchronise la ressource utilisateur dans le cas d'un compte online.
+	# La synchronisation des ressources n'est réalisé par cette fonction.
+	#
+	# ==== Paramètres
+	# * +nom+ - (string) Nom de l'utilisateur
+	# * +motDePasse+ - (string) Mot de passe de l'utilisateur
+	#
+	# ==== Retour
+	# Renvoi un object utilisateur si ce dernier à été trouvé, nil si non
+	#
+	def authentification( nom, motDePasse )
+	
+		# Lecture locale
+		utilLocal = GestionnaireUtilisateur.instance().connexionUtilisateur( nom, motDePasse )
+		
+		# Si l'utilisateur est trouvé en local et que c'est un compte du type hors ligne
+		if( utilLocal != nil && utilLocal.type == Utilisateur::OFFLINE )
+			puts "Utilisateur hors ligne trouvé en local -> jeu"
+			return [ 0, utilLocal ]
+		end
+		
+		# Si l'utilisateur est trouvé en local et que c'est un compte du type en ligne
+		if( utilLocal != nil && utilLocal.type == Utilisateur::ONLINE )
+			begin
+				# On test la présence du compte sur le serveur
+				utilServeur = Serveur.instance().connexionUtilisateur( nom, motDePasse )
+				
+				# S'il n'est pas trouvé sur le serveur
+				if( utilServeur == nil )
+					utilLocal.type = Utilisateur::OFFLINE
+					GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilLocal )
+					puts "Le compte local est du type ONLINE mais pas de compte trouve sur le serveur, donc compte local passe en OFFLINE -> jeu"
+					return [ 1, utilLocal ]
+				end
+				
+				puts "Utilisateur en ligne trouve en local et verifie sur le serveur (tout ok)"
+				return [ 2, utilLocal ]
+			rescue
+				puts "Utilisateur en ligne trouve en local mais non verifie sur le serveur -> message sync plus tard -> jeu"
+				return [ 3, utilLocal ]
+			end
+		end
+		
+		# Lecture serveur
+		begin
+			utilServeur = Serveur.instance().connexionUtilisateur( nom, motDePasse )
+			# Si l'utilisateur est trouvé sur le serveur
+			if( utilServeur != nil )
+				# On crée un nouvel utilisateur selon les données du serveur
+				nouvelUtil = Utilisateur.creer(
+					nil,
+					utilServeur.id,
+					utilServeur.version,
+					utilServeur.nom,
+					utilServeur.motDePasse,
+					utilServeur.dateInscription,
+					Option.deserialiser( utilServeur.option ),
+					utilServeur.type
+				)
+				# On sauvegarde se dernier dans la bdd locale
+				# GestionnaireUtilisateur.instance().sauvegarderUtilisateur( nouvelUtil )
+				puts "Utilisateur ONLINE trouve sur le serveur et copie faite en local -> jeu"
+				p nouvelUtil
+				return [ 4, nouvelUtil ]
+			end
+			
+		rescue
+			puts "Utilisateur non trouve en local et impossible de se connecter au serveur -> message compte temporaire -> page inscription"
+			return [ 5, nil ]
+		end
+		
+		# Aucun utilisateur trouvé
+		puts "Utilisateur non trouve, ni en local ni sur le serveur -> page inscription"
+		return [ 6, nil ]
+	end
+	
+	##
 	# Synchronise les données d'un utilisateur avec serveur (WIP)
 	#
 	# ==== Paramètres
@@ -72,9 +168,9 @@ class Stockage
 	#
 	def syncroniser( utilisateurLocal )
 	
-		# Si c'est un compte offline, on ne va pas plus loin
+		# Si c'est un compte hors ligne, on ne va pas plus loin
 		if( utilisateurLocal.type == 0 )
-			return false
+			raise "Un compte hors ligne ne peut etre synchronise !"
 		end
 		
 		## Variables
@@ -169,7 +265,7 @@ class Stockage
 		
 		# On demande les ressources que l'on veux mettre à jour en locale
 		serveur.recupererRessources(
-			(versionUtilisateurServeur > utilisateurLocal.version),
+			(versionUtilisateurServeur > utilisateurLocal.version) ? utilisateurLocal.uuid : false,
 			listeScoresSelectServeur,
 			listeSauvegardesSelectServeur
 		)
@@ -181,14 +277,23 @@ class Stockage
 		# On met à jour les sauvegardes
 		
 		# Envoi des ressources à inserts/updates au serveur
-		reponse = serveur.envoyerRessources(
-			(versionUtilisateurServeur < utilisateurLocal.version),
-			listeScoresInsertServeur,
-			listeScoresUpdateServeur,
-			listeSauvegardesInsertServeur,
-			listeSauvegardesUpdateServeur
-		)
+		# reponse = serveur.envoyerRessources(
+			# (versionUtilisateurServeur < utilisateurLocal.version) ? utilisateurLocal : false,
+			# listeScoresInsertServeur,
+			# listeScoresUpdateServeur,
+			# listeSauvegardesInsertServeur,
+			# listeSauvegardesUpdateServeur
+		# )
 		
+		if( !reponse )
+			return false
+		end
+		
+		uuidScores, uuidSauvegardes = reponse
+		
+		# Maj des ressources locales
+		
+		# Fin
 		return true
 	end
 end

@@ -2,7 +2,7 @@
 # La classe Serveur permet de communiquer avec un serveur B1nHer0
 # Utilise le DP Singleton
 #
-# Version 4
+# Version 5
 #
 class Serveur
 
@@ -62,9 +62,11 @@ class Serveur
 			# Fermture connexion au serveur
 			socket.close
 			
+			# Renvoi de la réponse serveur
 			return reponse
 		rescue
 			return false
+			# raise "Erreur connexion !"
 		end
 	end
 	private :envoyerRequete
@@ -85,6 +87,24 @@ class Serveur
 	end
 	
 	##
+	# Test si un utilisateur existe selon un pseudo et un mot de passe
+	#
+	# ==== Paramètres
+	# * +nom+ - (string) Nom de l'utilisateur
+	# * +motDePasse+ - (string) Mot de passe de l'utilisateur
+	#
+	# ==== Retour
+	# Renvoi un object utilisateur si ce dernier à été trouvé sur le serveur, nil si non
+	#
+	def connexionUtilisateur( nom, motDePasse )
+		reponse = envoyerRequete( Requete.creer( 'connexionUtilisateur', nom, motDePasse ) )
+		if( !reponse )
+			return false
+		end
+		return reponse.contenu
+	end
+	
+	##
 	# Demande les identifiants et version de toutes les ressources d'un utilisateur
 	#
 	# ==== Paramètres
@@ -95,14 +115,14 @@ class Serveur
 	#
 	def listeRessources( utilisateur )
 		reponse = envoyerRequete( Requete.creer( 'listeRessources', utilisateur.uuid ) )
-		if( !reponse)
+		if( !reponse )
 			return false
 		end
 		return reponse.contenu
 	end
 	
 	##
-	# Demande une suite de ressources au serveur
+	# Demande une suite de ressources au serveur. Pour tous les paramètres qui suivent, mettre à nil si inutile.
 	#
 	# ==== Paramètres
 	# * +uuidUtilisateur - (int) uuid de l'utilisateur que l'on veut récupérer
@@ -114,26 +134,26 @@ class Serveur
 	#
 	def recupererRessources( uuidUtilisateur, uuidScores, uuidSauvegardes )
 		reponse = envoyerRequete( Requete.creer( 'recupererRessources', uuidUtilisateur, uuidScores, uuidSauvegardes ) )
-		if( !reponse)
+		if( !reponse )
 			return false
 		end
 		return reponse.contenu
 	end
 	
 	##
-	# Envoi une suite de ressources au serveur
+	# Envoi une suite de ressources au serveur. Pour tous les paramètres qui suivent, mettre à nil si inutile.
 	#
 	# ==== Paramètres
-	# * +inserts+ - (scores) Liste d'uuid de score que l'on veux récupérer
-	# * +updates+ - (sauvegardes) Utlisateur dont l'on veut connaître les ressources et leurs versions
+	# * +utilisateur+ - (Utilisateur) Utilisateur à insérer ou à mettre à jour
+	# * +scores+ - (array Score) Tableaux d'objets Score à ajouter ou à mettre à jour sur le serveur
+	# * +sauvegardes+ - (array Score) Tableaux d'objets Sauvegardes à ajouter ou à mettre à jour sur le serveur
 	#
 	# ==== Retour
-	# Renvoi true si tout c'est bien passé, false si non
+	# Pour chaque objet (Utilisateur, Score, Sauvegarde), renvoi l'id local transmit et le uuid correspondant, ou -1 si une erreur est survenu sur la ressource
 	#
-	# def envoyerRessources( utilisateur, insertsScoresinsertsScores )
-	def envoyerRessources( utilisateur, insertsScores, updatesScores, insertsSauvegardes, updatesSauvegardes )
-		reponse = envoyerRequete( Requete.creer( 'envoyerRessources', utilisateur, insertsScores, updatesScores, insertsSauvegardes, updatesSauvegardes ) )
-		if( !reponse || reponse.contenu != 'succes' )
+	def envoyerRessources( utilisateur, scores, sauvegardes )
+		reponse = envoyerRequete( Requete.creer( 'envoyerRessources', utilisateur, scores, sauvegardes ) )
+		if( !reponse )
 			return false
 		end
 		return reponse.contenu

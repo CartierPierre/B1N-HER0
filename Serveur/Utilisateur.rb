@@ -31,7 +31,7 @@ class Utilisateur
 	# Options de l'utilisateur
 	@option
 	
-	attr_accessor :id, :version, :nom, :motDePasse, :dateInscription, :option
+	attr_accessor :id, :uuid, :version, :nom, :motDePasse, :dateInscription, :option
 	
 	### Méthodes de classe
 	
