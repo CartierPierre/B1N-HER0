@@ -297,4 +297,17 @@ class GestionnaireSauvegarde
 		")
 	end
 	
+	##
+	# Supprimer toutes les sauvegardes d'un utilisateur
+	#
+	# ==== Paramètres
+	# * +u+ - (Utilisateur) Utilisateur dont il faut supprimer toutes les sauvegardes
+	#
+	def supprimerSauvegardeUtilisateur(u)
+		@stockage.executer("
+			DELETE FROM sauvegarde
+			WHERE id_utilisateur = #{ u.id };
+		")
+	end
+	
 end
