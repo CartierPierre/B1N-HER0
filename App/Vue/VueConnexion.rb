@@ -108,7 +108,6 @@ class VueConnexion < Vue
 
 	def onBtnNonClicked
         @popup.destroy
-        @controleur.non()
 	end
 
 	def mauvaisPasse

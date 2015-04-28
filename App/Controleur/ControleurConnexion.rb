@@ -8,30 +8,30 @@ class ControleurConnexion < Controleur
 
     def valider(pseudo,passe)
         connexion = testConnexion
-        if (@@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,passe)) == nil
-            if connexion > -1
+
+        if connexion == -1
+            if (@@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,passe)) == nil
                 @vue.utilisateurInexistant()
             else
-                @vue.pasInternet("offline")
-            end
-        else
-            if connexion > -1
+                if @@utilisateur.type == Utilisateur::ONLINE
+                    @vue.pasInternet("online")
+                end
                 if @@utilisateur.motDePasse == passe
                     @vue.fermerCadre
                     changerControleur(ControleurMenuPrincipal.new(@jeu))
                 else
                     @vue.mauvaisPasse
                 end
+            end
+        elsif connexion > -1
+            if (@@utilisateur = @gestionnaireUtilisateur.connexionUtilisateur(pseudo,passe)) == nil
+                @vue.utilisateurInexistant()
             else
-                if @@utilisateur.type == Utilisateur::ONLINE
-                    @vue.pasInternet("online")
+                if @@utilisateur.motDePasse == passe
+                    @vue.fermerCadre
+                    changerControleur(ControleurMenuPrincipal.new(@jeu))
                 else
-                    if @@utilisateur.motDePasse == passe
-                        @vue.fermerCadre
-                        changerControleur(ControleurMenuPrincipal.new(@jeu))
-                    else
-                        @vue.mauvaisPasse
-                    end
+                    @vue.mauvaisPasse
                 end
             end
         end
