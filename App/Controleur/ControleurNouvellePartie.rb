@@ -29,7 +29,7 @@ class ControleurNouvellePartie < Controleur
     ##
     # Retourne au menu principal
     #
-    def annuler()
+    def retour()
         changerControleur(ControleurMenuPrincipal.new(@jeu))
     end
 

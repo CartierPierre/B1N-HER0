@@ -66,7 +66,7 @@ class ControleurChargerPartie < Controleur
     ##
     # Retourne au menu principal ou alors en partie selon la vue précédente
     #
-    def annuler()
+    def retour()
         if(@partie == nil)
             changerControleur(ControleurMenuPrincipal.new(@jeu))
         else

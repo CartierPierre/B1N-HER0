@@ -14,7 +14,7 @@ class VueNouvellePartie < Vue
 	@labelDifficulte
     @boutonsDifficulte
 
-	@boutonAnnuler
+	@boutonRetour
 
     # Taille et difficulté sélectionnée
 	@taille
@@ -82,18 +82,18 @@ class VueNouvellePartie < Vue
         hboxDifficulte.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Boutons pour valider et annuler
-        hboxValiderAnnuler = Box.new(:horizontal, 10)
+        hboxValiderRetour = Box.new(:horizontal, 10)
 
         @boutonValider = Button.new(:label => @controleur.getLangue[:appliquer])
         @boutonValider.signal_connect('clicked')  { onBtnValiderClicked }
 
-		@boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
-        @boutonAnnuler.signal_connect('clicked')  { onBtnAnnulerClicked }
+		@boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
+        @boutonRetour.signal_connect('clicked')  { onBtnRetourClicked }
 
-        hboxValiderAnnuler.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxValiderAnnuler.add(@boutonValider)
-        hboxValiderAnnuler.add(@boutonAnnuler)
-        hboxValiderAnnuler.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxValiderRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxValiderRetour.add(@boutonValider)
+        hboxValiderRetour.add(@boutonRetour)
+        hboxValiderRetour.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Ajout dans la vbox principale        		
 		vboxPrincipale = Box.new(:vertical, 20)
@@ -103,7 +103,7 @@ class VueNouvellePartie < Vue
         vboxPrincipale.add(hboxTaille)
         vboxPrincipale.add(@labelDifficulte)
         vboxPrincipale.add(hboxDifficulte)
-        vboxPrincipale.add(hboxValiderAnnuler)
+        vboxPrincipale.add(hboxValiderRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Actualisation et masquage des boutons de choix de difficultés
@@ -190,12 +190,12 @@ class VueNouvellePartie < Vue
 	end
 
     ##
-    # Listener sur le bouton annuler
+    # Listener sur le bouton retour
     # Ferme le cadre et retourne au menu principal
     #
-	def onBtnAnnulerClicked
+	def onBtnRetourClicked
         fermerCadre()
-        @controleur.annuler
+        @controleur.retour()
 	end
 
 end

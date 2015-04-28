@@ -8,7 +8,7 @@ class VueChargerPartie < Vue
     @bouton10x10
     @bouton12x12
 
-    @boutonAnnuler
+    @boutonRetour
 
     @taille
     @partie
@@ -85,23 +85,23 @@ class VueChargerPartie < Vue
         hboxScroll.pack_end(Alignment.new(1, 0, 0.1, 0), :expand => true)
         hboxScroll.set_size_request(300,200)
 
-        # Boutons valider et annuler
-        hboxChargerAnnuler = Box.new(:horizontal, 10)
+        # Boutons valider et retour
+        hboxChargerRetour = Box.new(:horizontal, 10)
 
         @boutonCharger = Button.new(:label => @controleur.getLangue[:charger])
         @boutonCharger.signal_connect('clicked') { onBtnChargerClicked }
 
-        @boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
-        @boutonAnnuler.signal_connect('clicked') { onBtnAnnulerClicked }
+        @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
+        @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
 
         @boutonSupprimer = Button.new(:label => @controleur.getLangue[:supprimer])
         @boutonSupprimer.signal_connect('clicked') { onBtnSupprimerClicked }
 
-        hboxChargerAnnuler.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxChargerAnnuler.add(@boutonCharger)
-        hboxChargerAnnuler.add(@boutonSupprimer)
-        hboxChargerAnnuler.add(@boutonAnnuler)
-        hboxChargerAnnuler.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxChargerRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxChargerRetour.add(@boutonCharger)
+        hboxChargerRetour.add(@boutonSupprimer)
+        hboxChargerRetour.add(@boutonRetour)
+        hboxChargerRetour.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Ajout dans la vbox principale             
         vboxPrincipale = Box.new(:vertical, 20)
@@ -110,7 +110,7 @@ class VueChargerPartie < Vue
         vboxPrincipale.add(creerLabelTailleGrosse(@controleur.getLangue[:tailleGrille]))
         vboxPrincipale.add(hboxTaille)
         vboxPrincipale.add(hboxScroll)
-        vboxPrincipale.add(hboxChargerAnnuler)
+        vboxPrincipale.add(hboxChargerRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
         # Actualisation et masquage des boutons de choix de difficultés
@@ -230,12 +230,12 @@ class VueChargerPartie < Vue
     end
 
     ##
-    # Listener sur le bouton annuler
+    # Listener sur le bouton retour
     # Ferme le cadre et retourne au menu principal ou en partie selon la vue précédente
     #
-    def onBtnAnnulerClicked
+    def onBtnRetourClicked
         fermerCadre()
-        @controleur.annuler
+        @controleur.retour()
     end
 
 end
