@@ -299,8 +299,8 @@ class GestionnaireScore
 			INSERT INTO score
 			VALUES (
 				null,
-				null,
-				1,
+				#{ s.uuid },
+				#{ s.version },
 				#{ s.tempsTotal },
 				#{ s.nbCoups },
 				#{ s.nbConseils },

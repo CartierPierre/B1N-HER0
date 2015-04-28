@@ -3,5 +3,7 @@
 - Classements (online?) (Kevin et Loic)
 - Profil (fini?) (Kevin et Loic)
 
+(loic)
 - Re-traduire texte des popup d'erreurs connexion en anglais
 - pasInternetOffline devrai plutôt s'appeler utilisateurInconnupasInternet car le compte n'est effectivement pas trouvé et l'absence de connexion nous empêche de savoir si le compte pourrait être présent sur le serveur
+- Lors de la connexion, la popup du cas 5 mene sur une fenetre blanche

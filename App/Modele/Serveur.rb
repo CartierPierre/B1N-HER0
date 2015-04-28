@@ -2,7 +2,7 @@
 # La classe Serveur permet de communiquer avec un serveur B1nHer0
 # Utilise le DP Singleton
 #
-# Version 6
+# Version 8
 #
 class Serveur
 
@@ -10,7 +10,6 @@ class Serveur
 	
 	@@instance = nil
 	@@port = 10101
-	# @@hote = 'le-mans.kpw.ovh'
 	@@hote = 'localhost'
 	
 	### Méthodes de classe
@@ -65,8 +64,7 @@ class Serveur
 			# Renvoi de la réponse serveur
 			return reponse
 		rescue
-			return false
-			# raise "Erreur connexion !"
+			raise "Erreur connexion !"
 		end
 	end
 	private :envoyerRequete
@@ -79,10 +77,7 @@ class Serveur
 	#
 	def testConnexion()
 		t = Time.now
-		reponse = envoyerRequete( Requete.creer( 'ping' ) )
-		if( !reponse || reponse.contenu != 'pong' )
-			return -1
-		end
+		envoyerRequete( Requete.creer( 'ping' ) )
 		return  ( Time.now - t ) * 1000
 	end
 	
@@ -98,9 +93,6 @@ class Serveur
 	#
 	def connexionUtilisateur( nom, motDePasse )
 		reponse = envoyerRequete( Requete.creer( 'connexionUtilisateur', nom, motDePasse ) )
-		if( !reponse )
-			return false
-		end
 		return reponse.contenu
 	end
 	
@@ -115,9 +107,6 @@ class Serveur
 	#
 	def listeRessources( utilisateur )
 		reponse = envoyerRequete( Requete.creer( 'listeRessources', utilisateur.uuid ) )
-		if( !reponse )
-			return false
-		end
 		return reponse.contenu
 	end
 	
@@ -134,9 +123,6 @@ class Serveur
 	#
 	def recupererRessources( uuidUtilisateur, uuidScores, uuidSauvegardes )
 		reponse = envoyerRequete( Requete.creer( 'recupererRessources', uuidUtilisateur, uuidScores, uuidSauvegardes ) )
-		if( !reponse )
-			return false
-		end
 		return reponse.contenu
 	end
 	
@@ -158,9 +144,6 @@ class Serveur
 		utilServ.statistique = nil
 
 		reponse = envoyerRequete( Requete.creer( 'envoyerRessources', utilServ, scores, sauvegardes ) )
-		if( !reponse )
-			return false
-		end
 		return reponse.contenu
 	end
 	

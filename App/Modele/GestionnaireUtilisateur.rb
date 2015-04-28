@@ -138,8 +138,8 @@ class GestionnaireUtilisateur
 			INSERT INTO utilisateur
 			VALUES (
 				null,
-				null,
-				1,
+				#{ u.uuid },
+				#{ u.version },
 				'#{ u.nom }',
 				'#{ u.motDePasse }',
 				#{ u.dateInscription },

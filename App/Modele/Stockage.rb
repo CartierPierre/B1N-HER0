@@ -50,7 +50,7 @@ class Stockage
 	# Execute une requête SQL sur la base de données locale
 	#
 	def executer(requete)
-		puts requete
+		# puts requete
 		return @bddLocal.execute(requete)
 	end
 	
@@ -141,12 +141,11 @@ class Stockage
 					utilServeur.motDePasse,
 					utilServeur.dateInscription,
 					Option.deserialiser( utilServeur.option ),
-					utilServeur.type
+					Utilisateur::ONLINE
 				)
 				# On sauvegarde se dernier dans la bdd locale
-				# GestionnaireUtilisateur.instance().sauvegarderUtilisateur( nouvelUtil )
+				GestionnaireUtilisateur.instance().sauvegarderUtilisateur( nouvelUtil )
 				puts "Utilisateur ONLINE trouve sur le serveur et copie faite en local -> jeu"
-				p nouvelUtil
 				return [ 4, nouvelUtil ]
 			end
 			

@@ -218,8 +218,8 @@ class GestionnaireSauvegarde
 			INSERT INTO sauvegarde
 			VALUES (
 				null,
-				null,
-				1,
+				#{ s.uuid },
+				#{ s.version },
 				'#{ s.description }',
 				#{ s.dateCreation },
 				'#{ s.contenu }',
