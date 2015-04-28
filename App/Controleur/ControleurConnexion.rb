@@ -14,11 +14,11 @@ class ControleurConnexion < Controleur
         when 0..2
             validerPasse(passe)
         when 3
-            @vue.pasInternet("Offline")
+			@vue.pasInternet("Online")
         when 4
             validerPasse(passe)
         when 5
-            @vue.pasInternet("Online")
+            @vue.pasInternet("Offline")
             @vue.utilisateurInexistant()
         when 6
             @vue.utilisateurInexistant()

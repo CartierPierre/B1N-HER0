@@ -479,7 +479,7 @@ class VueProfil < Vue
 
         hboxNouveauPseudo = Box.new(:horizontal,30)
         hboxNouveauPseudo.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxNouveauPseudo.add(Label.new(@controleur.getLangue[:pseudo]))
+        hboxNouveauPseudo.add(Label.new(@controleur.getLangue[:nouveauPseudo]))
         hboxNouveauPseudo.add(@entryFusionPseudo3)
         hboxNouveauPseudo.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
