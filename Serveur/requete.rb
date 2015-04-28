@@ -22,16 +22,16 @@ class Requete
 	##
 	# Instancie une Requete
 	#
-	def Requete.creer(methode, *arguments)
-		new(methode, arguments)
+	def Requete.creer( methode, *arguments )
+		new( methode, arguments )
     end
 	
 	##
 	# Constructeur
 	#
-	private_class_method :new
-	def initialize(methode, arguments)
+	def initialize( methode, arguments )
 		@methode, @arguments = methode, arguments
 	end
-
+	private_class_method :new
+	
 end
