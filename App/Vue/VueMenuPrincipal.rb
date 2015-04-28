@@ -7,6 +7,7 @@ class VueMenuPrincipal < Vue
 	@boutonClassement
 	@boutonOptions
 	@boutonProfil
+    @boutonRegles
     @boutonCredits
 	@boutonQuitter
 
@@ -65,6 +66,8 @@ class VueMenuPrincipal < Vue
         @boutonOptions.set_size_request(100,35)
 		@boutonProfil = Button.new(:label => @controleur.getLangue[:profil])
         @boutonProfil.set_size_request(100,35)
+        @boutonRegles = Button.new(:label => @controleur.getLangue[:regles])
+        @boutonRegles.set_size_request(100,35)
         @boutonCredits = Button.new(:label => @controleur.getLangue[:credits])
         @boutonCredits.set_size_request(100,35)
 		@boutonQuitter = Button.new(:label => @controleur.getLangue[:quitter])
@@ -77,6 +80,7 @@ class VueMenuPrincipal < Vue
         creerAlignBouton(vboxPrincipale,@boutonClassement)
         creerAlignBouton(vboxPrincipale,@boutonOptions)
         creerAlignBouton(vboxPrincipale,@boutonProfil)
+        creerAlignBouton(vboxPrincipale,@boutonRegles)
         creerAlignBouton(vboxPrincipale,@boutonCredits)
         creerAlignBouton(vboxPrincipale,@boutonQuitter)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
@@ -88,7 +92,8 @@ class VueMenuPrincipal < Vue
         @boutonChargerPartie.signal_connect('clicked') { onBtnChargerPartieClicked }
         @boutonClassement.signal_connect('clicked') { onBtnClassementClicked }
         @boutonOptions.signal_connect('clicked') { onBtnOptionsClicked }        
-        @boutonProfil.signal_connect('clicked') { onBtnProfilClicked }        
+        @boutonProfil.signal_connect('clicked') { onBtnProfilClicked }  
+        @boutonRegles.signal_connect('clicked') { onBtnReglesClicked }      
         @boutonCredits.signal_connect('clicked') { onBtnCreditsClicked }
         @boutonQuitter.signal_connect('clicked') { Gtk.main_quit }
      
@@ -138,6 +143,15 @@ class VueMenuPrincipal < Vue
     def onBtnProfilClicked
         fermerCadre()
         @controleur.profil()
+    end
+
+    ##
+    # Listener sur le bouton règles du jeu
+    # Ferme le cadre et ouvre la vue qui affiche les règles du jeu
+    #
+    def onBtnReglesClicked
+        fermerCadre()
+        @controleur.regles()
     end
 
     ##

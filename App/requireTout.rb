@@ -41,6 +41,7 @@ require_relative "./Vue/VueNouvellePartie"
 require_relative "./Vue/VueOptions"
 require_relative "./Vue/VuePartie"
 require_relative "./Vue/VueProfil"
+require_relative "./Vue/VueRegles"
 require_relative "./Vue/VueResultatPartie"
 
 ##
@@ -95,4 +96,5 @@ require_relative "./Controleur/ControleurNouvellePartie"
 require_relative "./Controleur/ControleurOptions"
 require_relative "./Controleur/ControleurPartie"
 require_relative "./Controleur/ControleurProfil"
+require_relative "./Controleur/ControleurRegles"
 require_relative "./Controleur/ControleurResultatPartie"

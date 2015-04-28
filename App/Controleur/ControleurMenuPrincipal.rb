@@ -48,6 +48,13 @@ class ControleurMenuPrincipal < Controleur
     end
 
     ##
+    # Change de controleur pour aller dans la vue règles du jeu
+    #
+    def regles()
+        changerControleur(ControleurRegles.new(@jeu))
+    end
+
+    ##
     # Change de controleur pour aller dans la vue crédits
     #
     def credits()
