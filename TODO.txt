@@ -2,3 +2,6 @@
 - Manuel utilisateur(fait) et DDC(a finir) (Pierre)
 - Classements (online?) (Kevin et Loic)
 - Profil (fini?) (Kevin et Loic)
+
+- Re-traduire texte des popup d'erreurs connexion en anglais
+- pasInternetOffline devrai plutôt s'appeler utilisateurInconnupasInternet car le compte n'est effectivement pas trouvé et l'absence de connexion nous empêche de savoir si le compte pourrait être présent sur le serveur
