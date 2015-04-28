@@ -84,7 +84,7 @@ class Stockage
 	end
 	
 	##
-	# Test si les identifiants sont correctes et l'authentifie. Synchronise la ressource utilisateur dans le cas d'un compte online.
+	# Test si les identifiants sont correctes et authentifie un utilisateur. Synchronise la ressource utilisateur dans le cas d'un compte online.
 	# La synchronisation des ressources n'est réalisé par cette fonction.
 	#
 	# ==== Paramètres
@@ -92,7 +92,7 @@ class Stockage
 	# * +motDePasse+ - (string) Mot de passe de l'utilisateur
 	#
 	# ==== Retour
-	# Renvoi un object utilisateur si ce dernier à été trouvé, nil si non
+	# Renvoi un tableau à deux cases, la première contient le code de retour, le second un objet utilisateur ou nil selon code
 	#
 	def authentification( nom, motDePasse )
 	
@@ -158,6 +158,12 @@ class Stockage
 		# Aucun utilisateur trouvé
 		puts "Utilisateur non trouve, ni en local ni sur le serveur -> page inscription"
 		return [ 6, nil ]
+	end
+	
+	##
+	# Inscrit un joueur au jeu
+	#
+	def inscription( utilisateur )
 	end
 	
 	##
