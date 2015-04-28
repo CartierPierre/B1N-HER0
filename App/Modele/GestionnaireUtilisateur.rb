@@ -2,7 +2,7 @@
 # La classe GestionnaireUtilisateur permet d'intéragir avec entitées Utilisateurs
 # Utilise le DP Singleton
 #
-# Version 12
+# Version 14
 #
 class GestionnaireUtilisateur
 	
@@ -199,11 +199,7 @@ class GestionnaireUtilisateur
 				end
 			end
 		else # Sinon c'est un utilisateur du type hors ligne
-			begin
-				insert( utilisateur ) # Insertion de l'utilisateur en local
-				rescue SQLite3::ConstraintException => erreur
-                raise "L'utilisateur existe déjà"
-            end
+			update( utilisateur ) # Insertion de l'utilisateur en local
 		end
 	end
 	
