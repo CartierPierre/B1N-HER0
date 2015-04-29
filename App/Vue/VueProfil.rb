@@ -13,12 +13,14 @@ class VueProfil < Vue
         @boutonPasse = Button.new(:label => @controleur.getLangue[:changerPasse])
         @boutonFusion = Button.new(:label => @controleur.getLangue[:fusion])
         @boutonReset = Button.new(:label => @controleur.getLangue[:reset])
+        @boutonSuppr = Button.new(:label => @controleur.getLangue[:supprimerCompte])
 
         @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
         @boutonPseudo.signal_connect('clicked') { onBtnPseudoClicked }
         @boutonPasse.signal_connect('clicked') { onBtnPasseClicked }
         @boutonFusion.signal_connect('clicked') { onBtnFusionClicked }
         @boutonReset.signal_connect('clicked') { onBtnResetClicked }
+        @boutonSuppr.signal_connect('clicked') { onBtnSupprClicked }
 
         @entryPasse = Entry.new
         @entryAncienPasse = Entry.new
@@ -58,7 +60,7 @@ class VueProfil < Vue
         imagePartie1000     = Image.new(:file => './Ressources/S_1000_PARTIES.png')
         imagePartie1000Gris = Image.new(:file => './Ressources/S_1000_PARTIES_GRIS.png')
 
-        labelConfig     = Label.new(@controleur.getLangue[:config])
+        labelGestion     = Label.new(@controleur.getLangue[:gestion])
         labelDate       = Label.new(@controleur.getLangue[:inscrit] + " : " + @statistiques["dateInscription"])
         labelGrilleReso = Label.new(@controleur.getLangue[:nbPartiesTermines] + " : " + @statistiques["nbGrillesReso"].to_s)
         labelNbAide     = Label.new(@controleur.getLangue[:nbAides] + " : " + @statistiques["nbAides"])
@@ -218,6 +220,7 @@ class VueProfil < Vue
         vboxConfigGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxConfigGauche.add(@boutonPseudo)
         vboxConfigGauche.add(@boutonPasse)
+        vboxConfigGauche.add(@boutonSuppr)
         vboxConfigGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
         vboxConfigDroite = Box.new(:vertical, 30)
@@ -244,20 +247,21 @@ class VueProfil < Vue
         hboxConfig.add(vboxConfigDroite)
         hboxConfig.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
 
-        carnet.append_page(hboxStats,labelStats)
-        carnet.append_page(hboxSucces,labelSucces)
-        carnet.append_page(hboxConfig,labelConfig)
-
 		hboxRetour = Box.new(:horizontal)
         hboxRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxRetour.add(@boutonRetour)
         hboxRetour.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        carnet.append_page(hboxStats,labelStats)
+        carnet.append_page(hboxSucces,labelSucces)
+        carnet.append_page(hboxConfig,labelGestion)
 
         vboxPrincipale = Box.new(:vertical, 10)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(carnet)
         vboxPrincipale.add(hboxRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+
 
         @cadre.add(vboxPrincipale)
         self.actualiser()
@@ -537,6 +541,10 @@ class VueProfil < Vue
         @popup.show_all()
     end
 
-    def OnBtnResetClicked
+    def onBtnResetClicked
+    end
+
+    def onBtnSupprClicked
+        @controleur.supprimerUtilisateur
     end
 end
