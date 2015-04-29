@@ -228,7 +228,6 @@ class GestionnaireSauvegarde
 			);
 		")
 		s.id = @stockage.dernierId()
-		s.version = 1
 	end
 	private :insert
 	
