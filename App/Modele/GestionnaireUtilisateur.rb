@@ -171,6 +171,7 @@ class GestionnaireUtilisateur
 				type = #{ u.type }
 			WHERE id = #{ u.id };
 		")
+		u.version = u.version + 1
 	end
 	private :update
 	

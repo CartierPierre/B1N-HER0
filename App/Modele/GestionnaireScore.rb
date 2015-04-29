@@ -334,6 +334,7 @@ class GestionnaireScore
 				id_niveau = #{ s.idNiveau }
 			WHERE id = #{ s.id };
 		")
+		s.version = s.version + 1
 	end
 	private :update
 	
