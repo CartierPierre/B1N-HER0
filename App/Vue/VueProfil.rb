@@ -12,11 +12,15 @@ class VueProfil < Vue
         @boutonPseudo = Button.new(:label => @controleur.getLangue[:changerPseudo])
         @boutonPasse = Button.new(:label => @controleur.getLangue[:changerPasse])
         @boutonFusion = Button.new(:label => @controleur.getLangue[:fusion])
+        @boutonReset = Button.new(:label => @controleur.getLangue[:reset])
+        @boutonSuppr = Button.new(:label => @controleur.getLangue[:supprimerCompte])
 
         @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
         @boutonPseudo.signal_connect('clicked') { onBtnPseudoClicked }
         @boutonPasse.signal_connect('clicked') { onBtnPasseClicked }
         @boutonFusion.signal_connect('clicked') { onBtnFusionClicked }
+        @boutonReset.signal_connect('clicked') { onBtnResetClicked }
+        @boutonSuppr.signal_connect('clicked') { onBtnSupprClicked }
 
         @entryPasse = Entry.new
         @entryAncienPasse = Entry.new
@@ -25,11 +29,13 @@ class VueProfil < Vue
         @entryFusionPseudo2 = Entry.new
         @entryFusionPasse2 = Entry.new
         @entryFusionPseudo3 = Entry.new
+        @entryFusionPasse3 = Entry.new
 
         @entryPasse.visibility=(false)
         @entryAncienPasse.visibility=(false)
         @entryFusionPasse1.visibility=(false)
         @entryFusionPasse2.visibility=(false)
+        @entryFusionPasse3.visibility=(false)
 
         imageParfait10       = Image.new(:file => './Ressources/S_10_PARFAIT.png')
         imageParfait10Gris   = Image.new(:file => './Ressources/S_10_PARFAIT_GRIS.png')
@@ -54,7 +60,7 @@ class VueProfil < Vue
         imagePartie1000     = Image.new(:file => './Ressources/S_1000_PARTIES.png')
         imagePartie1000Gris = Image.new(:file => './Ressources/S_1000_PARTIES_GRIS.png')
 
-        labelConfig     = Label.new(@controleur.getLangue[:config])
+        labelGestion     = Label.new(@controleur.getLangue[:gestion])
         labelDate       = Label.new(@controleur.getLangue[:inscrit] + " : " + @statistiques["dateInscription"])
         labelGrilleReso = Label.new(@controleur.getLangue[:nbPartiesTermines] + " : " + @statistiques["nbGrillesReso"].to_s)
         labelNbAide     = Label.new(@controleur.getLangue[:nbAides] + " : " + @statistiques["nbAides"])
@@ -195,30 +201,32 @@ class VueProfil < Vue
         vboxSuccesDroite.add(hboxSuccesParfait1000)
         vboxSuccesDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vboxStatsGauche = Box.new(:vertical, 10)
+        vboxStatsGauche = Box.new(:vertical, 30)
         vboxStatsGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxStatsGauche.add(labelPseudo)
-        vboxStatsGauche.add(labelDate)
         vboxStatsGauche.add(labelGrilleReso)
         vboxStatsGauche.add(labelNbCoup)
         vboxStatsGauche.add(labelNbAide)
         vboxStatsGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vboxStatsDroite = Box.new(:vertical, 10)
+        vboxStatsDroite = Box.new(:vertical, 30)
         vboxStatsDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxStatsDroite.add(@boutonPseudo)
-        vboxStatsDroite.add(@boutonPasse)
+        vboxStatsDroite.add(labelDate)
         vboxStatsDroite.add(labelTpsTotal)
         vboxStatsDroite.add(labelNbConseil)
         vboxStatsDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vboxConfigGauche = Box.new(:vertical, 10)
+        vboxConfigGauche = Box.new(:vertical, 30)
         vboxConfigGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxConfigGauche.add(@boutonFusion)
+        vboxConfigGauche.add(@boutonPseudo)
+        vboxConfigGauche.add(@boutonPasse)
+        vboxConfigGauche.add(@boutonSuppr)
         vboxConfigGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vboxConfigDroite = Box.new(:vertical, 10)
+        vboxConfigDroite = Box.new(:vertical, 30)
         vboxConfigDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxConfigDroite.add(@boutonFusion)
+        vboxConfigDroite.add(@boutonReset)
         vboxConfigDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
         hboxSucces = Box.new(:horizontal,30)
@@ -239,20 +247,21 @@ class VueProfil < Vue
         hboxConfig.add(vboxConfigDroite)
         hboxConfig.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
 
-        carnet.append_page(hboxStats,labelStats)
-        carnet.append_page(hboxSucces,labelSucces)
-        carnet.append_page(hboxConfig,labelConfig)
-
 		hboxRetour = Box.new(:horizontal)
         hboxRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxRetour.add(@boutonRetour)
         hboxRetour.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        carnet.append_page(hboxStats,labelStats)
+        carnet.append_page(hboxSucces,labelSucces)
+        carnet.append_page(hboxConfig,labelGestion)
 
         vboxPrincipale = Box.new(:vertical, 10)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(carnet)
         vboxPrincipale.add(hboxRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+
 
         @cadre.add(vboxPrincipale)
         self.actualiser()
@@ -300,7 +309,6 @@ class VueProfil < Vue
             popup.run
             popup.destroy
         end
-        fermerCadre()
         @controleur.actualiser
 	end
 
@@ -425,7 +433,6 @@ class VueProfil < Vue
     	@popup.set_resizable(false)
         @popup.set_size_request(500,100)
 
-
         @entryFusionPseudo1 = Entry.new
         @entryFusionPasse1 = Entry.new
         @entryFusionPseudo2 = Entry.new
@@ -435,29 +442,41 @@ class VueProfil < Vue
 		boutonValider = Button.new(:label => @controleur.getLangue[:valider])
 		boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
 
-        vboxFusionEntry1 = Box.new(:vertical)
+        vboxFusionEntry1 = Box.new(:vertical,10)
         vboxFusionEntry1.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxFusionEntry1.add(@entryFusionPseudo1)
-        vboxFusionEntry1.add(@entryFusionPasse2)
+        vboxFusionEntry1.add(@entryFusionPasse1)
         vboxFusionEntry1.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vboxFusionEntry2 = Box.new(:vertical)
+        vboxFusionEntry2 = Box.new(:vertical,10)
         vboxFusionEntry2.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxFusionEntry2.add(@entryFusionPseudo2)
         vboxFusionEntry2.add(@entryFusionPasse2)
         vboxFusionEntry2.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vboxFusionLabel1 = Box.new(:vertical,15)
+        vboxFusionEntry3 = Box.new(:vertical,10)
+        vboxFusionEntry3.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxFusionEntry3.add(@entryFusionPseudo3)
+        vboxFusionEntry3.add(@entryFusionPasse3)
+        vboxFusionEntry3.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        vboxFusionLabel1 = Box.new(:vertical,25)
         vboxFusionLabel1.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxFusionLabel1.add(Label.new(@controleur.getLangue[:pseudo]))
         vboxFusionLabel1.add(Label.new(@controleur.getLangue[:motDePasse]))
         vboxFusionLabel1.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vboxFusionLabel2 = Box.new(:vertical,15)
+        vboxFusionLabel2 = Box.new(:vertical,25)
         vboxFusionLabel2.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxFusionLabel2.add(Label.new(@controleur.getLangue[:pseudo]))
         vboxFusionLabel2.add(Label.new(@controleur.getLangue[:motDePasse]))
         vboxFusionLabel2.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        vboxFusionLabel3 = Box.new(:vertical,25)
+        vboxFusionLabel3.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxFusionLabel3.add(Label.new(@controleur.getLangue[:pseudo]))
+        vboxFusionLabel3.add(Label.new(@controleur.getLangue[:motDePasse]))
+        vboxFusionLabel3.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         hboxFusionForm1 = Box.new(:horizontal,30)
         hboxFusionForm1.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
@@ -471,17 +490,35 @@ class VueProfil < Vue
         hboxFusionForm2.add(vboxFusionEntry2)
         hboxFusionForm2.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        hboxFusionForm = Box.new(:horizontal,30)
-        hboxFusionForm.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxFusionForm.add(hboxFusionForm1)
-        hboxFusionForm.add(hboxFusionForm2)
-        hboxFusionForm.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxFusionForm3 = Box.new(:horizontal,30)
+        hboxFusionForm3.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxFusionForm3.add(vboxFusionLabel3)
+        hboxFusionForm3.add(vboxFusionEntry3)
+        hboxFusionForm3.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        hboxNouveauPseudo = Box.new(:horizontal,30)
-        hboxNouveauPseudo.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxNouveauPseudo.add(Label.new(@controleur.getLangue[:nouveauPseudo]))
-        hboxNouveauPseudo.add(@entryFusionPseudo3)
-        hboxNouveauPseudo.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxFusionForm1 = Box.new(:vertical,10)
+        vboxFusionForm1.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxFusionForm1.add(Label.new(@controleur.getLangue[:compte]+"n°1"))
+        vboxFusionForm1.add(hboxFusionForm1)
+        vboxFusionForm1.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        vboxFusionForm2 = Box.new(:vertical,10)
+        vboxFusionForm2.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxFusionForm2.add(Label.new(@controleur.getLangue[:compte]+"n°2"))
+        vboxFusionForm2.add(hboxFusionForm2)
+        vboxFusionForm2.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        vboxFusionForm3 = Box.new(:vertical,10)
+        vboxFusionForm3.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        vboxFusionForm3.add(Label.new(@controleur.getLangue[:compteNouveau]))
+        vboxFusionForm3.add(hboxFusionForm3)
+        vboxFusionForm3.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
+        hboxFusionFormHaut = Box.new(:horizontal,30)
+        hboxFusionFormHaut.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxFusionFormHaut.add(vboxFusionForm1)
+        hboxFusionFormHaut.add(vboxFusionForm2)
+        hboxFusionFormHaut.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         hboxValiderFusion = Box.new(:horizontal,30)
         hboxValiderFusion.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
@@ -491,8 +528,8 @@ class VueProfil < Vue
 
         boxPrincipaleFusion = Box.new(:vertical,30)
         boxPrincipaleFusion.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        boxPrincipaleFusion.add(hboxFusionForm)
-        boxPrincipaleFusion.add(hboxNouveauPseudo)
+        boxPrincipaleFusion.add(hboxFusionFormHaut)
+        boxPrincipaleFusion.add(vboxFusionForm3)
         boxPrincipaleFusion.add(hboxValiderFusion)
         boxPrincipaleFusion.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
@@ -501,5 +538,13 @@ class VueProfil < Vue
 
         @popup.add(boxPrincipaleFusion)
         @popup.show_all()
+    end
+
+    def onBtnResetClicked
+        @controleur.reset
+    end
+
+    def onBtnSupprClicked
+        @controleur.supprimerUtilisateur
     end
 end

@@ -33,7 +33,6 @@ class VueConnexion < Vue
         boxConnexion.add(boxEntree)
         boxConnexion.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-
         boxValidation.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         boxValidation.add(boutonValider)
         boxValidation.add(boutonAnnuler)
@@ -47,14 +46,11 @@ class VueConnexion < Vue
 
         @cadre.add(boxPrincipale)
 
-
         boutonValider.signal_connect('clicked')     {
-            #fermerCadre()
             onBtnValiderClicked
         }
 
         boutonAnnuler.signal_connect('clicked')     {
-           # fermerCadre()
             onBtnAnnulerClicked
         }
 

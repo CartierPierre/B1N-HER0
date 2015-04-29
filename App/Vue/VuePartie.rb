@@ -34,7 +34,6 @@ class VuePartie < Vue
     @nbClignotements        # Fait varier le nombre de clignotements
     @vitesseClignotement    # Fait varier la vitesse du clignotement (petit = rapide)
 
-    @dureeConseils          # Durée des conseils en secondes
     @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
 
     ##
@@ -589,6 +588,7 @@ class VuePartie < Vue
     #
     def onTuileGtkClicked(tuileGtk)
         if( @modele.niveau.tuileValide?(tuileGtk.x,tuileGtk.y) )
+            @labelConseil.hide()
             @modele.jouerCoup(tuileGtk.x,tuileGtk.y)
             tuileGtk.setImageTuile(@modele.grille.getTuile(tuileGtk.x,tuileGtk.y).etat())
             self.nbLigneColonne(tuileGtk.x,tuileGtk.y)          
@@ -695,8 +695,6 @@ class VuePartie < Vue
             Thread.new {
                 @boutonConseil.set_sensitive(false)
                 @labelConseil.show()
-                sleep(@dureeConseils)
-                @labelConseil.hide()
                 sleep(@delaiReactivation)
                 @boutonConseil.set_sensitive(true)
             }

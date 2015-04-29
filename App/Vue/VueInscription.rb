@@ -15,6 +15,7 @@ class VueInscription < Vue
 		boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
         @boutonOnline  = RadioButton.new(@controleur.getLangue[:modeDeJeuEnLigne])
         @boutonOffline  = RadioButton.new(@boutonOnline,@controleur.getLangue[:modeDeJeuHorsLigne],true)
+        @boutonOffline.set_active(true)
 
         @entryPseudo = Entry.new
         @entryPseudo.text = pseudo
@@ -36,18 +37,15 @@ class VueInscription < Vue
         boxInscription.add(boxEntree)
         boxInscription.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-
         boxMode.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         boxMode.add(@boutonOnline)
         boxMode.add(@boutonOffline)
         boxMode.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-
         boxValidation.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         boxValidation.add(boutonValider)
         boxValidation.add(boutonAnnuler)
         boxValidation.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
-
 
         boxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         boxPrincipale.add(boxInscription)

@@ -55,6 +55,19 @@ class ControleurProfil < Controleur
     end
 
     def actualiser
+        @vue.fermerCadre
         changerControleur(ControleurProfil.new(@jeu))
+    end
+
+    def reset
+        @@utilisateur.statistique = Statistique.creer(@@utilisateur)
+        actualiser
+    end
+
+    def supprimerUtilisateur
+        @vue.fermerCadre
+        @gestionnaireSauvegarde.supprimerSauvegardeUtilisateur(@@utilisateur)
+        @gestionnaireUtilisateur.supprimerUtilisateur(@@utilisateur)
+        changerControleur(ControleurDemarrage.new(@jeu))
     end
 end
