@@ -1,7 +1,7 @@
 ##
 # Script de test pour la classe GestionnaireNiveau
 #
-# Version 3
+# Version 4
 #
 
 # Dépendances
@@ -9,6 +9,7 @@ require_relative "./requireTout.rb"
 
 # On récupère l'instance du gestionnaire de niveau
 gn = GestionnaireNiveau.instance()
+gu = GestionnaireUtilisateur.instance()
 
 # Nombre de niveaux
 nbNiveaux = gn.recupererNombreNiveau()
@@ -37,3 +38,8 @@ niveau = gn.recupererNiveauAleaSelonDimDiff(12, 2)
 if ( niveau != nil )
 	puts "Un niveau avec une difficultée de 2 et une dimention de 12 a été trouvé : id = #{ niveau.id }"
 end
+
+# Premier niveau non terminé
+utilisateur = gu.recupererUtilisateur( 1 )
+niveau = gn.recupererNiveauSuivant( utilisateur, 12, 2 )
+puts "Le premier niveau dispo est le #{ niveau.id }"

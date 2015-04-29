@@ -189,6 +189,37 @@ class GestionnaireNiveau
 	end
 	
 	##
+	# Renvoi le prochain niveau non terminé du certaine difficultée et dimention
+	#
+	# ==== Paramètres
+	# * +utilisateur+ - (Utilisateur) Utilisateur
+	# * +dimention+ - (int) Dimention du niveau
+	# * +difficulte+ - (int) Difficultée du niveau
+	#
+	# ==== Retour
+	# Renvoi un objets niveau si se dernier a été trouvé. Nil si non
+	#
+	def recupererNiveauSuivant( utilisateur, dimention, difficulte )
+		resultat = @stockage.executer("
+			SELECT niveau.*
+			FROM niveau
+			LEFT JOIN score
+				ON score.id_niveau = niveau.id
+					AND score.id_utilisateur = #{ utilisateur.id }
+			WHERE
+				niveau.dimention = #{ dimention }
+				AND niveau.difficulte = #{ difficulte }
+			LIMIT 1;
+		")
+		
+		if ( resultat.count == 0 )
+			return nil
+		end
+		
+		return hydraterNiveau( resultat[0] )
+	end
+	
+	##
 	# Temporaire, pas utiliser sauf buddies
 	#
 	# def insert(n)
