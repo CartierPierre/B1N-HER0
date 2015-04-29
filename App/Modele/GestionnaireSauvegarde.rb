@@ -218,7 +218,7 @@ class GestionnaireSauvegarde
 			INSERT INTO sauvegarde
 			VALUES (
 				null,
-				#{ ( u.uuid == nil ) ? "null" : u.uuid },
+				#{ ( s.uuid == nil ) ? "null" : s.uuid },
 				#{ s.version },
 				'#{ s.description }',
 				#{ s.dateCreation },
@@ -242,7 +242,7 @@ class GestionnaireSauvegarde
 		@stockage.executer("
 			UPDATE sauvegarde
 			SET
-				uuid = #{ ( u.uuid == nil ) ? "null" : u.uuid },
+				uuid = #{ ( s.uuid == nil ) ? "null" : s.uuid },
 				version = version + 1,
 				description = '#{ s.description }',
 				date_creation = #{ s.dateCreation },

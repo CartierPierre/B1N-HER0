@@ -299,7 +299,7 @@ class GestionnaireScore
 			INSERT INTO score
 			VALUES (
 				null,
-				#{ ( u.uuid == nil ) ? "null" : u.uuid },
+				#{ ( s.uuid == nil ) ? "null" : s.uuid },
 				#{ s.version },
 				#{ s.tempsTotal },
 				#{ s.nbCoups },
@@ -324,7 +324,7 @@ class GestionnaireScore
 		@stockage.executer("
 			UPDATE score
 			SET
-				uuid = #{ ( u.uuid == nil ) ? "null" : u.uuid },
+				uuid = #{ ( s.uuid == nil ) ? "null" : s.uuid },
 				version = version + 1
 				temps_total = #{ s.tempsTotal },
 				nb_coups = #{ s.nbCoups },
