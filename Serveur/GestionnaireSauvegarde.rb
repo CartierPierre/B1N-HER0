@@ -230,12 +230,12 @@ class GestionnaireSauvegarde
 	# Supprimer toutes les sauvegardes d'un utilisateur
 	#
 	# ==== Paramètres
-	# * +uuid+ - (int) Uuid de l'utilisateur dont on veux supprimer les sauvegardes
+	# * +id+ - (int) Id de l'utilisateur dont on veux supprimer les sauvegardes
 	#
-	def supprimerSauvegardeUtilisateur( uuid )
+	def supprimerSauvegardeUtilisateur( id )
 		@stockage.executer("
 			DELETE FROM sauvegarde
-			WHERE id_utilisateur = #{ uuid };
+			WHERE id_utilisateur = #{ id };
 		")
 	end
 	
@@ -249,6 +249,23 @@ class GestionnaireSauvegarde
 		resultat = @stockage.executer("
 			DELETE FROM sauvegarde
 			WHERE id IN (#{ ids.join(',') });
+		")
+	end
+	
+	##
+	# Change l'utilisateur des sauvegardes
+	#
+	# ==== Paramètres
+	# * +id1+ - (int) ID de l'ancien utilisateur
+	# * +id2+ - (int) ID du nouvel utilisateur
+	#
+	def changerUtilisateurSauvegarde( id1, id2 )
+		@stockage.executer("
+			UPDATE sauvegarde
+			SET
+				version = version + 1,
+				id_utilisateur = #{ id2 }
+			WHERE id_utilisateur = #{ id1 };
 		")
 	end
 	

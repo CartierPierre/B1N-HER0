@@ -324,7 +324,7 @@ class GestionnaireScore
 			UPDATE score
 			SET
 				uuid = #{ ( s.uuid == nil ) ? "null" : s.uuid },
-				version = version + 1
+				version = version + 1,
 				temps_total = #{ s.tempsTotal },
 				nb_coups = #{ s.nbCoups },
 				nb_conseils = #{ s.nbConseils },
@@ -374,6 +374,39 @@ class GestionnaireScore
 		@stockage.executer("
 			DELETE FROM score
 			WHERE id_utilisateur = #{ u.id };
+		")
+	end
+	
+	##
+	# Change l'utilisateur des scores
+	#
+	# ==== Paramètres
+	# * +u1+ - (Utilisateur) Ancien utilisateur
+	# * +u2+ - (Utilisateur) Nouvel utilisateur
+	#
+	def changerUtilisateurScore( u1, u2 )
+		@stockage.executer("
+			UPDATE score
+			SET
+				version = version + 1,
+				id_utilisateur = #{ u2.id }
+			WHERE id_utilisateur = #{ u1.id };
+		")
+	end
+	
+	##
+	# Supprime les uuid de toutes les scores d'un utilisateur
+	#
+	# ==== Paramètres
+	# * +utilisateur+ - (Utilisateur) Utilisateur dont l'on veux supprimer les uuid de ses scores
+	#
+	def supprimerUuidScoreUtilisateur( utilisateur )
+		@stockage.executer("
+			UPDATE score
+			SET
+				uuid = null,
+				version = version + 1
+			WHERE id_utilisateur = #{ utilisateur.id };
 		")
 	end
 	

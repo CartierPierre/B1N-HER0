@@ -238,12 +238,12 @@ class GestionnaireScore
 	# Supprimer tous les scores d'un utilisateur
 	#
 	# ==== Paramètres
-	# * +uuid+ - (int) Uuid de l'utilisateur dont on veux supprimer les scores
+	# * +id+ - (int) ID de l'utilisateur dont on veux supprimer les scores
 	#
-	def supprimerScoreUtilisateur( uuid )
+	def supprimerScoreUtilisateur( id )
 		@stockage.executer("
 			DELETE FROM score
-			WHERE id_utilisateur = #{ uuid };
+			WHERE id_utilisateur = #{ id };
 		")
 	end
 	
@@ -257,6 +257,23 @@ class GestionnaireScore
 		resultat = @stockage.executer("
 			DELETE FROM score
 			WHERE id IN (#{ ids.join(',') });
+		")
+	end
+	
+	##
+	# Change l'utilisateur des scores
+	#
+	# ==== Paramètres
+	# * +id1+ - (int) ID de l'ancien utilisateur
+	# * +id2+ - (int) ID du nouvel utilisateur
+	#
+	def changerUtilisateurScores( id1, id2 )
+		@stockage.executer("
+			UPDATE sauvegarde
+			SET
+				version = version + 1,
+				id_utilisateur = #{ id2 }
+			WHERE id_utilisateur = #{ id1 };
 		")
 	end
 	

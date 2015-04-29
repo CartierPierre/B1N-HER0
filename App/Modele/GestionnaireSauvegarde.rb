@@ -310,4 +310,37 @@ class GestionnaireSauvegarde
 		")
 	end
 	
+	##
+	# Change l'utilisateur des sauvegardes
+	#
+	# ==== Paramètres
+	# * +u1+ - (Utilisateur) Ancien utilisateur
+	# * +u2+ - (Utilisateur) Nouvel utilisateur
+	#
+	def changerUtilisateurSauvegarde( u1, u2 )
+		@stockage.executer("
+			UPDATE sauvegarde
+			SET
+				version = version + 1,
+				id_utilisateur = #{ u2.id }
+			WHERE id_utilisateur = #{ u1.id };
+		")
+	end
+	
+	##
+	# Supprime les uuid de toutes les sauvegardes d'un utilisateur
+	#
+	# ==== Paramètres
+	# * +utilisateur+ - (Utilisateur) Utilisateur dont l'on veux supprimer les uuid de ses sauvegardes
+	#
+	def supprimerUuidSauvegardeUtilisateur( utilisateur )
+		@stockage.executer("
+			UPDATE sauvegarde
+			SET
+				uuid = null,
+				version = version + 1
+			WHERE id_utilisateur = #{ utilisateur.id };
+		")
+	end
+	
 end

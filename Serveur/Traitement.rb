@@ -253,4 +253,26 @@ class Traitement
 		return Reponse.creer( "ok" )
 	end
 	
+	##
+	# Fusionne deux utilisateur
+	#
+	def fusion( arguments )
+		# Lecture des arguments
+		uuidUtilisateur1, uuidUtilisateur2 = arguments
+		
+		# Debug
+		puts "uuidUtilisateur1 : #{ uuidUtilisateur1 }"
+		puts "uuidUtilisateur2 : #{ uuidUtilisateur2 }"
+		
+		# Changement utilisateurs des scores et sauvegardes
+		GestionnaireScore.instance().changerUtilisateurScores( uuidUtilisateur1, uuidUtilisateur2 )
+		GestionnaireSauvegarde.instance().changerUtilisateurSauvegarde( uuidUtilisateur2, uuidUtilisateur2 )
+		
+		# Suppression ancien utilisateur
+		GestionnaireUtilisateur.instance().supprimerUtilisateur( uuidUtilisateur )
+		
+		# Renvoi réponse au client
+		return Reponse.creer( "ok" )
+	end
+	
 end

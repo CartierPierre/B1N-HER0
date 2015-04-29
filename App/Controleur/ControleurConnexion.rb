@@ -11,7 +11,7 @@ class ControleurConnexion < Controleur
 		validation = Stockage.instance().authentification( pseudo, passe )
         @@utilisateur = validation[1]
         case validation[0]
-        when 0
+        when 0..1
             validerPasse(passe)
 		when 2
 			validerPasse(passe)

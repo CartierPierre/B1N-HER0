@@ -470,7 +470,7 @@ class Stockage
 	# Fusionne deux compte en un seul
 	#
 	# ==== Paramètres
-	# * +utilisateur+ - (Utilisateur) Premier compte à fusionner
+	# * +utilisateur1+ - (Utilisateur) Premier compte à fusionner
 	# * +nom+ - (string) Nom du second compte à fusionner
 	# * +motDePasse+ - (string) Mot de passe du second compte à fusionner
 	# * +sortie+ - (boolean) true : le premier dans le second, false : le second dans le premier
@@ -478,9 +478,84 @@ class Stockage
 	# ==== Retour
 	# Renvoi un objet utilisateur fusion des deux précèdents
 	#
-	def fusionUtilisateurs( utilisateur, nom, motDePasse, sortie )
-		raise "wip"
-		# arf et si un compte offline bloque le passage à un compte online ?
+	def fusionUtilisateurs( utilisateur1, nom, motDePasse, sortie )
+	
+		# On récupère le second utilisateur
+		resultat = authentification( nom, motDePasse )
+		
+		case resultat[0]
+		when 3
+			raise "Le second compte doit etre verifie avec internet !"
+		when 0..4
+			# ok
+		when 5..6
+			raise "Le second compte n'a pas ete trouve !"
+        end
+		
+		utilisateur2 = resultat[1]
+		
+		# Si c'est le même utilisateur
+		if( utilisateur1.id == utilisateur2.id || utilisateur1.uuid == utilisateur2.uuid )
+			raise "Les utilisateurs sont identiques !"
+		end
+		
+		# utilisateurMange -> utilsateurFinal
+		if( sortie )
+			utilisateurMange = utilisateur1
+			utilsateurFinal = utilisateur2
+		else
+			utilisateurMange = utilisateur2
+			utilsateurFinal = utilisateur1
+		end
+		
+		# Fusion
+		if( utilisateurMange.type == Utilisateur::ONLINE && utilsateurFinal.type == Utilisateur::ONLINE )
+		
+			# On fusionne sur le serveur
+			Serveur.instance().fusion( utilisateurMange, utilsateurFinal )
+			
+			# On fusionne en local
+			GestionnaireSauvegarde.instance().changerUtilisateurSauvegarde( utilisateurMange, utilsateurFinal )
+			GestionnaireScore.instance().changerUtilisateurScore( utilisateurMange, utilsateurFinal )
+			GestionnaireUtilisateur.instance().supprimerUtilisateur( utilisateurMange )
+			
+		elsif( utilisateurMange.type == Utilisateur::ONLINE && utilsateurFinal.type == Utilisateur::OFFLINE )
+			
+			# On supprime l'ancien utilisateur et toutes ses ressources du serveur
+			Serveur.instance().supprimerTracesUtilisateur( utilisateur )
+			
+			# On change le propriétaire des scores et sauvegardes locales
+			GestionnaireSauvegarde.instance().changerUtilisateurSauvegarde( utilisateurMange, utilsateurFinal )
+			GestionnaireScore.instance().changerUtilisateurScore( utilisateurMange, utilsateurFinal )
+			
+			# On supprime les uuids des scores et sauvegardes locales
+			GestionnaireSauvegarde.instance().supprimerUuidSauvegardeUtilisateur( utilsateurFinal )
+			GestionnaireScore.instance().supprimerUuidScoreUtilisateur( utilsateurFinal )
+			
+			# On supprime l'ancien utilisateur locale
+			GestionnaireUtilisateur.instance().supprimerUtilisateur( utilisateurMange )
+			
+		elsif( utilisateurMange.type == Utilisateur::OFFLINE && utilsateurFinal.type == Utilisateur::ONLINE )
+		
+			# On fusionne en local
+			GestionnaireSauvegarde.instance().changerUtilisateurSauvegarde( utilisateurMange, utilsateurFinal )
+			GestionnaireScore.instance().changerUtilisateurScore( utilisateurMange, utilsateurFinal )
+			GestionnaireUtilisateur.instance().supprimerUtilisateur( utilisateurMange )
+			
+			# On synchronise
+			self.synchronisation( utilsateurFinal )
+			
+		elsif( utilisateurMange.type == Utilisateur::OFFLINE && utilsateurFinal.type == Utilisateur::OFFLINE )
+		
+			# On fusionne en local
+			GestionnaireSauvegarde.instance().changerUtilisateurSauvegarde( utilisateurMange, utilsateurFinal )
+			GestionnaireScore.instance().changerUtilisateurScore( utilisateurMange, utilsateurFinal )
+			GestionnaireUtilisateur.instance().supprimerUtilisateur( utilisateurMange )
+			
+		end
+		
+		# On renvoi l'utilisateur final
+		return utilsateurFinal
 	end
 	
 	##
@@ -490,26 +565,42 @@ class Stockage
 	# * +utilisateur+ - (Utilisateur) Compte dont il faut changer le type
 	#
 	def changerTypeUtilisateur( utilisateur )
+	
+		# Si l'utilisateur est du type en ligne
 		if( utilisateur.type == Utilisateur::ONLINE )
+		
 			# On supprime l'utilisateur et toutes ses ressources du serveur
 			Serveur.instance().supprimerTracesUtilisateur( utilisateur )
-			# On change le type local
+			
+			# On met à jour l'utilisateur local
+			utilisateur.uuid = nil
 			utilisateur.type = Utilisateur::OFFLINE
 			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+			
+			# On supprime les uuid des scores et des sauvegardes locales
+			GestionnaireSauvegarde.instance().supprimerUuidSauvegardeUtilisateur( utilisateur )
+			GestionnaireScore.instance().supprimerUuidScoreUtilisateur( utilisateur )
+		
+		# Sinon si  l'utilisateur est du type hors ligne ligne
 		elsif( utilisateur.type == Utilisateur::OFFLINE )
+		
 			# On envoi l'utilisateur au serveur
 			reponse = Serveur.instance().envoyerRessources( utilisateur, [], [] )
 			uuidUtilisateur = reponse[0]
+			
 			# Si il existe déjà sur le serveur
 			if( uuidUtilisateur == -1 )
 				raise "L'utilisateur existe déjà sur le serveur!"
 			end
-			# On change le type local
+			
+			# On met à jour l'utilisateur local
 			utilisateur.uuid = uuidUtilisateur
 			utilisateur.type = Utilisateur::ONLINE
 			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+			
 			# On synchronise
-			syncroniser( utilisateur, true )
+			self.syncroniser( utilisateur, true )
+			
 		else
 			raise "Mauvais type utilisateur !"
 		end
