@@ -153,4 +153,17 @@ class Serveur
 		return reponse.contenu
 	end
 	
+	##
+	# Supprimer des ressources sur le serveur. Pour tous les paramètres qui suivent, mettre à nil si inutile.
+	#
+	# ==== Paramètres
+	# * +uuidUtilisateur - (int) uuid de l'utilisateur que l'on veut supprimer
+	# * +uuidScores+ - (array int) Liste d'uuid de score que l'on veux supprimer
+	# * +uuidSauvegardes+ - (array int) Liste d'uuid de sauvegarde que l'on veux supprimer
+	#
+	def supprimerRessources( uuidUtilisateur, uuidScores, uuidSauvegardes )
+		reponse = envoyerRequete( Requete.creer( 'supprimerRessources', uuidUtilisateur, uuidScores, uuidSauvegardes ) )
+		return reponse.contenu
+	end
+	
 end

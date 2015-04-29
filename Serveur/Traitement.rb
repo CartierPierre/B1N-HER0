@@ -1,7 +1,7 @@
 ##
 # Classe Traitement	
 #
-# Version 6
+# Version 7
 #
 class Traitement
 
@@ -116,9 +116,9 @@ class Traitement
 		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = arguments
 		
 		# Debug
-		puts "uuidUtilisateur : #{ uuidUtilisateur }"
-		puts "listeUuidScores : #{ listeUuidScores.count }"
-		puts "listeUuidSauvegardes : #{ listeUuidSauvegardes.count }"
+		# puts "uuidUtilisateur : #{ uuidUtilisateur }"
+		# puts "listeUuidScores : #{ listeUuidScores.count }"
+		# puts "listeUuidSauvegardes : #{ listeUuidSauvegardes.count }"
 		
 		# Variables
 		gut = GestionnaireUtilisateur.instance()
@@ -146,9 +146,9 @@ class Traitement
 		utilisateur, scores, sauvegardes = arguments
 		
 		# Debug
-		puts "utilisateur : #{ utilisateur.nom }"
-		puts "scores : #{ scores.count }"
-		puts "sauvegardes : #{ sauvegardes.count }"
+		# puts "utilisateur : #{ utilisateur.nom }"
+		# puts "scores : #{ scores.count }"
+		# puts "sauvegardes : #{ sauvegardes.count }"
 		
 		# Variables
 		uuidUtilisateur = nil
@@ -195,6 +195,35 @@ class Traitement
 		
 		# Renvoi réponse au client
 		return Reponse.creer([ uuidUtilisateur, listeUuidScores, listeUuidSauvegardes ])
+	end
+	
+	##
+	# Supprime des ressources
+	#
+	def supprimerRessources( arguments )
+		# Lecture des arguments
+		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = arguments
+		
+		# Debug
+		puts "uuidUtilisateur : #{ uuidUtilisateur }"
+		puts "listeUuidScores : #{ listeUuidScores.count }"
+		puts "listeUuidSauvegardes : #{ listeUuidSauvegardes.count }"
+		
+		# Suppressions
+		if( uuidUtilisateur != nil )
+			GestionnaireUtilisateur.instance().supprimerUtilisateur( uuidUtilisateur )
+		end
+		
+		if( listeUuidSauvegardes != nil )
+			GestionnaireScore.instance().supprimerEnsembleScores( listeUuidScores )
+		end
+		
+		if( listeUuidSauvegardes != nil )
+			GestionnaireSauvegarde.instance().supprimerEnsembleSauvegardes( listeUuidSauvegardes )
+		end
+		
+		# Renvoi réponse au client
+		return Reponse.creer( "ok" )
 	end
 	
 end

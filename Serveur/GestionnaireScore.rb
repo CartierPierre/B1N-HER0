@@ -227,12 +227,12 @@ class GestionnaireScore
 	# ==== Paramètres
 	# * +s+ - (Score) Score à supprimer
 	#
-	def supprimerScore(s)
-		@stockage.executer("
-			DELETE FROM score
-			WHERE id = #{ s.id };
-		")
-	end
+	# def supprimerScore(s)
+		# @stockage.executer("
+			# DELETE FROM score
+			# WHERE id = #{ s.id };
+		# ")
+	# end
 	
 	##
 	# Supprimer tous les scores d'un utilisateur
@@ -240,10 +240,23 @@ class GestionnaireScore
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut supprimer tous les scores
 	#
-	def supprimerScoreUtilisateur(u)
-		@stockage.executer("
+	# def supprimerScoreUtilisateur(u)
+		# @stockage.executer("
+			# DELETE FROM score
+			# WHERE id_utilisateur = #{ u.id };
+		# ")
+	# end
+	
+	##
+	# Supprime un ensemble de scores selon une liste d'ids
+	#
+	# ==== Paramètres
+	# * +ids+ - (array int) Liste d'ids
+	#
+	def supprimerEnsembleScores( ids )
+		resultat = @stockage.executer("
 			DELETE FROM score
-			WHERE id_utilisateur = #{ u.id };
+			WHERE id IN (#{ ids.join(',') });
 		")
 	end
 	

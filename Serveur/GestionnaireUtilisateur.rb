@@ -144,12 +144,12 @@ class GestionnaireUtilisateur
 	# Supprime un utilisateur
 	#
 	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utilisateur à supprimer
+	# * +id+ - (int) Id de l'utilisateur à supprimer
 	#
-	def supprimerUtilisateur(u)
+	def supprimerUtilisateur( id )
 		@stockage.executer("
 			DELETE FROM utilisateur
-			WHERE id = #{ u.id };
+			WHERE id = #{ id };
 		")
 	end
 	

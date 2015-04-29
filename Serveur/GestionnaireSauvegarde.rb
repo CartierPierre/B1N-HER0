@@ -219,12 +219,12 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +s+ - (Sauvegarde) sauvegarde à supprimer
 	#
-	def supprimerSauvegarde(s)
-		@stockage.executer("
-			DELETE FROM sauvegarde
-			WHERE id = #{ s.id };
-		")
-	end
+	# def supprimerSauvegarde(s)
+		# @stockage.executer("
+			# DELETE FROM sauvegarde
+			# WHERE id = #{ s.id };
+		# ")
+	# end
 	
 	##
 	# Supprimer toutes les sauvegardes d'un utilisateur
@@ -232,10 +232,23 @@ class GestionnaireSauvegarde
 	# ==== Paramètres
 	# * +u+ - (Utilisateur) Utilisateur dont il faut supprimer toutes les sauvegardes
 	#
-	def supprimerSauvegardeUtilisateur(u)
-		@stockage.executer("
+	# def supprimerSauvegardeUtilisateur(u)
+		# @stockage.executer("
+			# DELETE FROM sauvegarde
+			# WHERE id_utilisateur = #{ u.id };
+		# ")
+	# end
+	
+	##
+	# Supprime un ensemble de sauvegardes selon une liste d'ids
+	#
+	# ==== Paramètres
+	# * +ids+ - (array int) Liste d'ids
+	#
+	def supprimerEnsembleSauvegardes( ids )
+		resultat = @stockage.executer("
 			DELETE FROM sauvegarde
-			WHERE id_utilisateur = #{ u.id };
+			WHERE id IN (#{ ids.join(',') });
 		")
 	end
 	

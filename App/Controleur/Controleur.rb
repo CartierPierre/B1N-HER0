@@ -57,7 +57,7 @@ class Controleur
     def quitterJeu
 		puts "exit"
 		if( @@utilisateur != nil && @@utilisateur.type == Utilisateur::ONLINE )
-			Stockage.instance().syncroniser( @@utilisateur )
+			Stockage.instance().syncroniser( @@utilisateur, false )
 		end
 		@@utilisateur = nil
     	Gtk.main_quit

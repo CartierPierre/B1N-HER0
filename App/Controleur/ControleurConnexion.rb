@@ -15,12 +15,12 @@ class ControleurConnexion < Controleur
             validerPasse(passe)
 		when 2
 			validerPasse(passe)
-			Stockage.instance().syncroniser( @@utilisateur )
+			Stockage.instance().syncroniser( @@utilisateur, true )
         when 3
 			@vue.pasInternet("Online")
         when 4
             validerPasse(passe)
-			Stockage.instance().syncroniser( @@utilisateur )
+			Stockage.instance().syncroniser( @@utilisateur, true )
         when 5
             @vue.pasInternet("Offline")
             @vue.utilisateurInexistant()

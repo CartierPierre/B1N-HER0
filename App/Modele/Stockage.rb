@@ -181,12 +181,13 @@ class Stockage
 	end
 	
 	##
-	# Synchronise les données d'un utilisateur avec serveur (WIP)
+	# Synchronise les données d'un utilisateur avec serveur
 	#
 	# ==== Paramètres
-	# * +utilisateurLocal+ - (Utilisateur) Utilisateur dont l'on veux synchroniser les données
+	# * +utilisateurLocal+ - (Utilisateur) Utilisateur auquel il faut synchroniser les données
+	# * +mode+ - (boolean) true : synchronisation à la connexion, false : synchronisation à la dé-connexion
 	#
-	def syncroniser( utilisateurLocal )
+	def syncroniser( utilisateurLocal, mode )
 	
 		# Si c'est un compte hors ligne, on ne va pas plus loin
 		if( utilisateurLocal.type == Utilisateur::OFFLINE )
@@ -201,16 +202,19 @@ class Stockage
 		#
 		#
 		
-		listeScoresEnvoiServeur = Array.new() # Liste d'objets socres à envoyer au serveur
-		listeScoresRecupererServeur = Array.new() # Liste d'uuid de scores à récupérer sur le serveur
-		listeSauvegardesEnvoiServeur = Array.new()
-		listeSauvegardesRecupererServeur = Array.new()
+		listeEnvoiScoreServeur = Array.new() # Liste d'objets scores à envoyer au serveur
+		listeRecupererScoreServeur = Array.new() # Liste d'uuid de scores à récupérer sur le serveur
+		listeEnvoiSauvegardeServeur = Array.new()
+		listeRecupererSauvegardeServeur = Array.new()
 		
-		compareScores = Hash.new() # Table d'objets scores à comparer avec les version du serveur
+		compareScores = Hash.new() # Table d'objets scores, diminue au fur et a mesure du script, les scores restants sont finnalements supprimé de la bdd locale
 		compareSauvegardes = Hash.new()
 		
-		hashScoreLocalNouveau = Hash.new()
-		hashSauvegardeLocalNouveau = Hash.new()
+		hashNouveauScoreServeur = Hash.new() # Liste des nouveaux scores synchronisés du client vers le serveur
+		hashNouvelleSauvegardeServeur = Hash.new()
+		
+		listeScorePasLocal = Array.new() # Liste de scores non trouvées en local mais présents sur le serveur
+		listeSauvegardePasLocal = Array.new()
 		
 		serveur = Serveur.instance()
 		gsc = GestionnaireScore.instance()
@@ -236,9 +240,9 @@ class Stockage
 			# Sinon elle ne possède pas de uuid (jamais synchronisé pour le moment)
 			else
 				# On ajoute la rsc à la liste des rsc à envoyer au serveur
-				listeScoresEnvoiServeur.push( scoreL )
+				listeEnvoiScoreServeur.push( scoreL )
 				# On met la rsc dans une table de hashage selon id locale (pour maj des uuid client)
-				hashScoreLocalNouveau[ scoreL.id ] = scoreL
+				hashNouveauScoreServeur[ scoreL.id ] = scoreL
 			end
 		end
 		
@@ -248,8 +252,8 @@ class Stockage
 			if( sauvegardeL.uuid != nil )
 				compareSauvegardes[ sauvegardeL.uuid ] = sauvegardeL
 			else
-				listeSauvegardesEnvoiServeur.push( sauvegardeL )
-				hashSauvegardeLocalNouveau[ sauvegardeL.id ] = sauvegardeL
+				listeEnvoiSauvegardeServeur.push( sauvegardeL )
+				hashNouvelleSauvegardeServeur[ sauvegardeL.id ] = sauvegardeL
 			end
 		end
 		
@@ -268,16 +272,18 @@ class Stockage
 		listeCoupleScoresServeur.each do | scoreS |
 			# Si score pas trouvé en locale
 			if( !compareScores.has_key?( scoreS[0] ) )
-				listeScoresRecupererServeur.push( scoreS[0] )
+				# listeRecupererScoreServeur.push( scoreS[0] )
+				# Dans le cas d'une connexion il y a ajout sur client, et lors de la déconnexion il y a suppression serveur
+				listeScorePasLocal.push( scoreS[0] )
 			# Sinon score trouvé en locale
 			else
 				scoreL = compareScores[ scoreS[0] ]
 				# Si version serveur supérieure
 				if( scoreS[1] > scoreL.version )
-					listeScoresRecupererServeur.push( scoreS[0] )
+					listeRecupererScoreServeur.push( scoreS[0] )
 				# Sinon version locale supérieur
 				elsif( scoreS[1] < scoreL.version )
-					listeScoresEnvoiServeur.push( scoreL )
+					listeEnvoiScoreServeur.push( scoreL )
 					compareScores.delete( scoreL.uuid )
 				# Sinon rien à faire sur rcs
 				else
@@ -289,13 +295,13 @@ class Stockage
 		# Sauvegardes
 		listeCoupleSauvegardesServeur.each do | sauvegardeS |
 			if( !compareSauvegardes.has_key?( sauvegardeS[0] ) )
-				listeSauvegardesRecupererServeur.push( sauvegardeS[0] )
+				listeSauvegardePasLocal.push( sauvegardeS[0] )
 			else
 				sauvegardeL = compareSauvegardes[ sauvegardeS[0] ]
 				if( sauvegardeS[1] > sauvegardeL.version )
-					listeSauvegardesRecupererServeur.push( sauvegardeS[0] )
+					listeRecupererSauvegardeServeur.push( sauvegardeS[0] )
 				elsif( sauvegardeS[1] < sauvegardeL.version )
-					listeSauvegardesEnvoiServeur.push( sauvegardeL )
+					listeEnvoiSauvegardeServeur.push( sauvegardeL )
 					compareSauvegardes.delete( sauvegardeL.uuid )
 				else
 					compareSauvegardes.delete( sauvegardeS[0] )
@@ -304,23 +310,32 @@ class Stockage
 		end
 		
 		# Debug
-		puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
-		puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
-		puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
-		puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
+		puts "listeRecupererScoreServeur : #{ listeRecupererScoreServeur }"
+		puts "listeRecupererSauvegardeServeur : #{ listeRecupererSauvegardeServeur }"
+		puts "listeEnvoiScoreServeur : #{ listeEnvoiScoreServeur }"
+		puts "listeEnvoiSauvegardeServeur : #{ listeEnvoiSauvegardeServeur }"
+		puts "listeScorePasLocal : #{ listeScorePasLocal }"
+		puts "listeSauvegardePasLocal : #{ listeSauvegardePasLocal }"
 		
 		#
 		#
 		# Serveur -> local
-		# Insert/Update/Remove rsc client
+		# Insert/Update/Delete rsc client
 		#
 		#
+		
+		# Si on est en mode connexion
+		if( mode )
+			# Les rcs non présententes en locale seront demandées au serveur
+			listeRecupererScoreServeur = listeRecupererScoreServeur + listeScorePasLocal
+			listeRecupererSauvegardeServeur = listeRecupererSauvegardeServeur + listeSauvegardePasLocal
+		end
 		
 		# On demande les ressources que l'on veux mettre à jour en locale
 		reponse = serveur.recupererRessources(
 			(versionUtilisateurServeur > utilisateurLocal.version) ? utilisateurLocal.uuid : nil,
-			listeScoresRecupererServeur,
-			listeSauvegardesRecupererServeur
+			listeRecupererScoreServeur,
+			listeRecupererSauvegardeServeur
 		)
 		puts "recupererRessources, reponse : #{ reponse }"
 		utilisateur, listeScores, listeSauvegardes = reponse
@@ -400,31 +415,37 @@ class Stockage
 		#
 		#
 		# Local -> serveur
-		# Update/Insert rsc serveur
+		# Update/Insert/Delete rsc serveur
 		# Update uuid client
 		#
 		#
 		
 		# Envoi des rsc au serveur
-		reponse = serveur.envoyerRessources( utilisateurLocal, listeScoresEnvoiServeur, listeSauvegardesEnvoiServeur )
+		reponse = serveur.envoyerRessources( utilisateurLocal, listeEnvoiScoreServeur, listeEnvoiSauvegardeServeur )
 		puts "envoyerRessources, reponse : #{ reponse }"
 		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = reponse
 		
-		# Maj des uuid de rsc locales selon valeur renvoyé par le serveur
+		# Maj des uuid de rsc locales selon valeurs renvoyées par le serveur
 		listeUuidScores.each do | couple |
-			if( hashScoreLocalNouveau.has_key?( couple[0] ) )
-				scoreL = hashScoreLocalNouveau[ couple[0] ]
+			if( hashNouveauScoreServeur.has_key?( couple[0] ) )
+				scoreL = hashNouveauScoreServeur[ couple[0] ]
 				scoreL.uuid = couple[1]
 				gsc.sauvegarderScore( scoreL )
 			end
 		end
 		
 		listeUuidSauvegardes.each do | couple |
-			if( hashSauvegardeLocalNouveau.has_key?( couple[0] ) )
-				sauvegardeL = hashSauvegardeLocalNouveau[ couple[0] ]
+			if( hashNouvelleSauvegardeServeur.has_key?( couple[0] ) )
+				sauvegardeL = hashNouvelleSauvegardeServeur[ couple[0] ]
 				sauvegardeL.uuid = couple[1]
 				gsa.sauvegarderSauvegarde( sauvegardeL )
 			end
+		end
+		
+		# Si on est en mode dé-connexion
+		if ( !mode )
+			# Les rcs non présentes en locale seront supprimées sur le serveur
+			serveur.supprimerRessources( nil, listeScorePasLocal, listeSauvegardePasLocal )
 		end
 		
 	end
