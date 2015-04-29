@@ -195,7 +195,11 @@ class Stockage
 		
 		# Sinon c'est un compte online, donc au procède à la synchronisation
 		
-		## Variables
+		#
+		#
+		# Variables
+		#
+		#
 		
 		listeScoresEnvoiServeur = Array.new() # Liste d'objets socres à envoyer au serveur
 		listeScoresRecupererServeur = Array.new() # Liste d'uuid de scores à récupérer sur le serveur
@@ -211,26 +215,34 @@ class Stockage
 		serveur = Serveur.instance()
 		gsc = GestionnaireScore.instance()
 		gsa = GestionnaireSauvegarde.instance()
+		gut = GestionnaireUtilisateur.instance()
+		
 		tmp = nil
+		couple = nil
 		
-		## Lecture
+		#
+		#
+		# Lecture
+		#
+		#
 		
-		# On récupère les scores locaux
+		# Score
 		tmp = gsc.recupererListeScoreUtilisateur( utilisateurLocal, 0, gsc.recupererNombreScoreUtilisateur( utilisateurLocal ) )
 		tmp.each_with_index do | scoreL, index |
-			# Si le score possède un uuid
+			# Si la rsc possède un uuid (donc présence sur le serveur)
 			if( scoreL.uuid != nil )
-				# On le met dans une table de hashage pour procéder aux calculs de différences
+				# On met la rsc dans une table de hashage selon uuid
 				compareScores[ scoreL.uuid ] = scoreL
-			# Sinon il ne possède pas de uuid
+			# Sinon elle ne possède pas de uuid (jamais synchronisé pour le moment)
 			else
-				# On l'ajoute à la liste des envois serveur
-				listeScoresEnvoiServeur.push( scoreL ) # Pour la requete
-				hashScoreLocalNouveau[ scoreL.id ] = scoreL # Pour la maj uuid locale
+				# On ajoute la rsc à la liste des rsc à envoyer au serveur
+				listeScoresEnvoiServeur.push( scoreL )
+				# On met la rsc dans une table de hashage selon id locale (pour maj des uuid client)
+				hashScoreLocalNouveau[ scoreL.id ] = scoreL
 			end
 		end
 		
-		# On récupère les sauvegardes locales
+		# Sauvegarde
 		tmp = gsa.recupererSauvegardeUtilisateur( utilisateurLocal, 0, gsa.recupererNombreSauvegardeUtilisateur( utilisateurLocal ) )
 		tmp.each_with_index do | sauvegardeL, index |
 			if( sauvegardeL.uuid != nil )
@@ -244,11 +256,15 @@ class Stockage
 		# On demande la liste de toutes les ressource de l'utilisateur au serveur
 		reponse = serveur.listeRessources( utilisateurLocal )
 		versionUtilisateurServeur, listeCoupleScoresServeur, listeCoupleSauvegardesServeur = reponse
-		puts "listeRessources, reponse : #{ reponse }"
+		# puts "listeRessources, reponse : #{ reponse }"
 		
-		## Calcul des différences
+		#
+		#
+		# Calcul des différences
+		#
+		#
 		
-		# Comparaison scores
+		# Scores
 		listeCoupleScoresServeur.each do | scoreS |
 			# Si score pas trouvé en locale
 			if( !compareScores.has_key?( scoreS[0] ) )
@@ -267,7 +283,7 @@ class Stockage
 			# compareScores.delete( scoreS[0] )
 		end
 		
-		# Comparaison sauvegardes
+		# Sauvegardes
 		listeCoupleSauvegardesServeur.each do | sauvegardeS |
 			# Si sauvegarde pas trouvé en locale
 			if( !compareSauvegardes.has_key?( sauvegardeS[0] ) )
@@ -286,17 +302,18 @@ class Stockage
 			# compareSauvegardes.delete( sauvegardeS[0] )
 		end
 		
-		# Supprimer les ressources locales avec uuid si pas trouvé sur serveur
-		
-		## Maj client
-		
 		# Debug
-		# puts "versionUtilisateurServeur : #{ versionUtilisateurServeur }"
-		# puts "utilisateurLocal.version : #{ utilisateurLocal.version }"
-		# puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
-		# puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
-		# puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
-		# puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
+		puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
+		puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
+		puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
+		puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
+		
+		#
+		#
+		# Serveur -> local
+		# Insert/Update rsc client
+		#
+		#
 		
 		# On demande les ressources que l'on veux mettre à jour en locale
 		reponse = serveur.recupererRessources(
@@ -304,56 +321,86 @@ class Stockage
 			listeScoresRecupererServeur,
 			listeSauvegardesRecupererServeur
 		)
-		puts "recupererRessources, reponse : #{ reponse }"
+		# puts "recupererRessources, reponse : #{ reponse }"
 		utilisateur, listeScores, listeSauvegardes = reponse
 		
-		# On met à jour l'utilisateur
+		# Debug
+		puts "versionUtilisateurServeur : #{ versionUtilisateurServeur }"
+		puts "utilisateurLocal.version : #{ utilisateurLocal.version }"
+		
+		# Utilisateur
 		if( versionUtilisateurServeur > utilisateurLocal.version )
-			puts "utilisateur : #{ utilisateur } -> utilisateurLocal : #{ utilisateurLocal }"
 			utilisateurLocal.version = utilisateur.version
 			utilisateurLocal.nom = utilisateur.nom
 			utilisateurLocal.motDePasse = utilisateur.motDePasse
-			utilisateurLocal.option = utilisateur.dateInscription
-			Option.deserialiser( utilisateur.option )
+			utilisateurLocal.dateInscription = utilisateur.dateInscription
+			utilisateurLocal.option = Option.deserialiser( utilisateur.option )
+			puts "sync maj user"
 			# GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateurLocal )
 		end
 		
-		# On met à jour les scores
+		# Scores
 		listeScores.each do | scoreS |
+			
+			# On essai de lire la rsc depuis la bdd locale
 			scoreL = compareScores[ scoreS.id ]
-			puts "scoreS : #{ scoreS } -> scoreL : #{ scoreL }"
-			scoreL.version = scoreS.version
-			scoreL.version = scoreS.tempsTotal
-			scoreL.version = scoreS.nbCoups
-			scoreL.version = scoreS.nbConseils
-			scoreL.version = scoreS.nbAides
-			# GestionnaireScore.instance().sauvegarderScore( scoreL )
+			
+			# Si une version de la rsc existe dans la bdd local
+			if( scoreL != nil ) 
+				# On met à jour la rsc
+				scoreL.version = scoreS.version
+				scoreL.tempsTotal = scoreS.tempsTotal
+				scoreL.nbCoups = scoreS.nbCoups
+				scoreL.nbConseils = scoreS.nbConseils
+				scoreL.nbAides = scoreS.nbAides
+				
+			# Sinon elle n'existe pas en locale
+			elsif
+				# On adapte la rsc du serveur pour l'ajouter à la bdd locale
+				scoreL = scoreS
+				scoreL.uuid = scoreS.id
+				scoreL.id = nil
+				scoreL.idUtilisateur = utilisateurLocal.id
+			end
+			
+			# On met à jour la bdd locale
+			GestionnaireScore.instance().sauvegarderScore( scoreL )
 		end
 		
-		# On met à jour les sauvegardes
+		# Sauvegardes
 		listeSauvegardes.each do | sauvegardeS |
+			
 			sauvegardeL = compareSauvegardes[ sauvegardeS.id ]
-			puts "sauvegardeS : #{ sauvegardeS } -> sauvegardeL : #{ sauvegardeL }"
-			sauvegardeL.version = sauvegardeS.version
-			sauvegardeL.description = sauvegardeS.description
-			sauvegardeL.dateCreation = sauvegardeS.dateCreation
-			sauvegardeL.contenu = sauvegardeS.contenu
-			# GestionnaireSauvegarde.instance().sauvegarderSauvegarde( sauvegardeL )
+			
+			if( sauvegardeL != nil ) 
+				sauvegardeL.version = sauvegardeS.version
+				sauvegardeL.description = sauvegardeS.description
+				sauvegardeL.dateCreation = sauvegardeS.dateCreation
+				sauvegardeL.contenu = sauvegardeS.contenu
+			elsif
+				sauvegardeL = sauvegardeS
+				sauvegardeL.uuid = sauvegardeL.id
+				sauvegardeL.id = nil
+				sauvegardeL.idUtilisateur = utilisateurLocal.id
+			end
+			
+			GestionnaireSauvegarde.instance().sauvegarderSauvegarde( sauvegardeL )
 		end
 		
-		## Envoi ressources au serveur
+		#
+		#
+		# Local -> serveur
+		# Update/Insert rsc serveur
+		# Update uuid client
+		#
+		#
 		
-		# Envoi des ressources à inserts/updates au serveur
-		reponse = serveur.envoyerRessources(
-			utilisateurLocal,
-			listeScoresEnvoiServeur,
-			listeSauvegardesEnvoiServeur
-		)
-		puts "envoyerRessources, reponse : #{ reponse }"
+		# Envoi des rsc au serveur
+		reponse = serveur.envoyerRessources( utilisateurLocal, listeScoresEnvoiServeur, listeSauvegardesEnvoiServeur )
+		# puts "envoyerRessources, reponse : #{ reponse }"
 		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = reponse
 		
-		# Maj des uuid locaux des nouvelles ressources précèdement transmisent au serveur
-		
+		# Maj des uuid de rsc locales selon valeur renvoyé par le serveur
 		listeUuidScores.each do | couple |
 			scoreL = hashScoreLocalNouveau[ couple[0] ]
 			scoreL.uuid = couple[1]

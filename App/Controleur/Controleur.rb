@@ -57,7 +57,6 @@ class Controleur
     def quitterJeu
 		puts "exit"
 		if( @@utilisateur != nil && @@utilisateur.type == Utilisateur::ONLINE )
-			puts "sync"
 			Stockage.instance().syncroniser( @@utilisateur )
 		end
 		@@utilisateur = nil

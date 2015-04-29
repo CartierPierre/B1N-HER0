@@ -139,7 +139,7 @@ class Serveur
 	#
 	def envoyerRessources( utilisateur, scores, sauvegardes )
 		
-		# On l'adapte utilisateur pour la sérialisation
+		# On l'adapte utilisateur pour le serveur
 		utilServ = utilisateur.clone()
 		utilServ.option = Option.serialiser( utilisateur.option )
 		utilServ.statistique = nil
