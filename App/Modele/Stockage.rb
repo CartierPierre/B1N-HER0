@@ -303,10 +303,10 @@ class Stockage
 		end
 		
 		# Debug
-		puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
-		puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
-		puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
-		puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
+		# puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
+		# puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
+		# puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
+		# puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
 		
 		#
 		#
@@ -325,8 +325,8 @@ class Stockage
 		utilisateur, listeScores, listeSauvegardes = reponse
 		
 		# Debug
-		puts "versionUtilisateurServeur : #{ versionUtilisateurServeur }"
-		puts "utilisateurLocal.version : #{ utilisateurLocal.version }"
+		# puts "versionUtilisateurServeur : #{ versionUtilisateurServeur }"
+		# puts "utilisateurLocal.version : #{ utilisateurLocal.version }"
 		
 		# Utilisateur
 		if( versionUtilisateurServeur > utilisateurLocal.version )
@@ -335,8 +335,7 @@ class Stockage
 			utilisateurLocal.motDePasse = utilisateur.motDePasse
 			utilisateurLocal.dateInscription = utilisateur.dateInscription
 			utilisateurLocal.option = Option.deserialiser( utilisateur.option )
-			puts "sync maj user"
-			# GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateurLocal )
+			gut.sauvegarderUtilisateur( utilisateurLocal )
 		end
 		
 		# Scores
@@ -364,7 +363,7 @@ class Stockage
 			end
 			
 			# On met à jour la bdd locale
-			GestionnaireScore.instance().sauvegarderScore( scoreL )
+			gsc.sauvegarderScore( scoreL )
 		end
 		
 		# Sauvegardes
@@ -384,7 +383,7 @@ class Stockage
 				sauvegardeL.idUtilisateur = utilisateurLocal.id
 			end
 			
-			GestionnaireSauvegarde.instance().sauvegarderSauvegarde( sauvegardeL )
+			gsa.sauvegarderSauvegarde( sauvegardeL )
 		end
 		
 		#
@@ -404,13 +403,13 @@ class Stockage
 		listeUuidScores.each do | couple |
 			scoreL = hashScoreLocalNouveau[ couple[0] ]
 			scoreL.uuid = couple[1]
-			GestionnaireScore.instance().sauvegarderScore( scoreL )
+			gsc.sauvegarderScore( scoreL )
 		end
 		
 		listeUuidSauvegardes.each do | couple |
 			sauvegardeL = hashSauvegardeLocalNouveau[ couple[0] ]
 			sauvegardeL.uuid = couple[1]
-			GestionnaireSauvegarde.instance().sauvegarderSauvegarde( sauvegardeL )
+			gsa.sauvegarderSauvegarde( sauvegardeL )
 		end
 		
 	end
