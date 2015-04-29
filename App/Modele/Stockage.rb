@@ -462,7 +462,7 @@ class Stockage
 	def miseAZeroUtilisateur( utilisateur )
 		GestionnaireSauvegarde.instance().supprimerSauvegardeUtilisateur( utilisateur )
 		GestionnaireScore.instance().supprimerScoreUtilisateur( utilisateur )
-		utilisateur.Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR)
+		utilisateur.option = Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR)
 		GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
 	end
 	
