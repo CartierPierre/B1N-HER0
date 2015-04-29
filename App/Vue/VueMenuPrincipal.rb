@@ -95,7 +95,7 @@ class VueMenuPrincipal < Vue
         @boutonProfil.signal_connect('clicked') { onBtnProfilClicked }  
         @boutonRegles.signal_connect('clicked') { onBtnReglesClicked }      
         @boutonCredits.signal_connect('clicked') { onBtnCreditsClicked }
-        @boutonQuitter.signal_connect('clicked') { Gtk.main_quit }
+        @boutonQuitter.signal_connect('clicked') { @controleur.quitterJeu }
      
         self.actualiser()
 	end

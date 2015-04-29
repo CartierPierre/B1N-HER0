@@ -29,7 +29,7 @@ class Vue
         @controleur=controleur
 
         @@fenetre.signal_connect('destroy') {
-            Gtk.main_quit
+            @controleur.quitterJeu
         }
     end
 
