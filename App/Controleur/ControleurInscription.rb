@@ -21,7 +21,7 @@ class ControleurInscription < Controleur
     #   * _pseudo_ - Le pseudo à vérifier
     #   * _statut_ - Le mode de jeu choisi lors de l'inscription
     #
-    def valider(pseudo,password,)
+    def valider(pseudo,password,statut)
 		utilisateur = Utilisateur.creer( pseudo, password, statut )
 		begin
 			Stockage.instance().inscription( utilisateur )

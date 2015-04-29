@@ -394,7 +394,7 @@ class VueProfil < Vue
                     @entryPasse.signal_connect('activate')   {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
                 end
             end
-
+        }
 
         @entryAncienPasse.signal_connect("key-release-event")     {
             if @entryAncienPasse.text() == "" || @entryAncienPasse.text() =~ /\W/
