@@ -8,34 +8,43 @@ class VueProfil < Vue
         progressionPartie  = @statistiques["nbGrillesReso"]
         progressionParfait = @statistiques["nbPartiesParfaites"]
 
-        @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
-        @boutonPseudo = Button.new(:label => @controleur.getLangue[:changerPseudo])
-        @boutonPasse = Button.new(:label => @controleur.getLangue[:changerPasse])
-        @boutonFusion = Button.new(:label => @controleur.getLangue[:fusion])
-        @boutonReset = Button.new(:label => @controleur.getLangue[:reset])
-        @boutonSuppr = Button.new(:label => @controleur.getLangue[:supprimerCompte])
+        @boutonRetour        = Button.new(:label => @controleur.getLangue[:retour])
+        @boutonPseudo        = Button.new(:label => @controleur.getLangue[:changerPseudo])
+        @boutonPasse         = Button.new(:label => @controleur.getLangue[:changerPasse])
+        @boutonFusion        = Button.new(:label => @controleur.getLangue[:fusion])
+        @boutonReset         = Button.new(:label => @controleur.getLangue[:reset])
+        @boutonSuppr         = Button.new(:label => @controleur.getLangue[:supprimerCompte])
+		@boutonValiderFusion = Button.new(:label => @controleur.getLangue[:valider])
+		@boutonAnnulerFusion = Button.new(:label => @controleur.getLangue[:annuler])
+        @boutonValiderFusion.set_sensitive(false)
 
         @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
         @boutonPseudo.signal_connect('clicked') { onBtnPseudoClicked }
-        @boutonPasse.signal_connect('clicked') { onBtnPasseClicked }
+        @boutonPasse.signal_connect('clicked')  { onBtnPasseClicked }
         @boutonFusion.signal_connect('clicked') { onBtnFusionClicked }
-        @boutonReset.signal_connect('clicked') { onBtnResetClicked }
-        @boutonSuppr.signal_connect('clicked') { onBtnSupprClicked }
+        @boutonReset.signal_connect('clicked')  { onBtnResetClicked }
+        @boutonSuppr.signal_connect('clicked')  { onBtnSupprClicked }
 
-        @entryPasse = Entry.new
-        @entryAncienPasse = Entry.new
+        @entryPasse         = Entry.new
+        @entryAncienPasse   = Entry.new
         @entryFusionPseudo1 = Entry.new
-        @entryFusionPasse1 = Entry.new
+        @entryFusionPasse1  = Entry.new
         @entryFusionPseudo2 = Entry.new
-        @entryFusionPasse2 = Entry.new
+        @entryFusionPasse2  = Entry.new
         @entryFusionPseudo3 = Entry.new
-        @entryFusionPasse3 = Entry.new
+        @entryFusionPasse3  = Entry.new
 
-        @entryPasse.visibility=(false)
-        @entryAncienPasse.visibility=(false)
-        @entryFusionPasse1.visibility=(false)
-        @entryFusionPasse2.visibility=(false)
-        @entryFusionPasse3.visibility=(false)
+        @entryPasse.visibility        = (false)
+        @entryAncienPasse.visibility  = (false)
+        @entryFusionPasse1.visibility = (false)
+        @entryFusionPasse2.visibility = (false)
+        @entryFusionPasse3.visibility = (false)
+
+        @entryFusionPseudo1.signal_connect("key-release-event") {entryVerification}
+        @entryFusionPasse1.signal_connect("key-release-event")  {entryVerification}
+        @entryFusionPseudo2.signal_connect("key-release-event") {entryVerification}
+        @entryFusionPasse2.signal_connect("key-release-event")  {entryVerification}
+        @entryFusionPseudo3.signal_connect("key-release-event") {entryVerification}
 
         imageParfait10       = Image.new(:file => './Ressources/S_10_PARFAIT.png')
         imageParfait10Gris   = Image.new(:file => './Ressources/S_10_PARFAIT_GRIS.png')
@@ -60,7 +69,7 @@ class VueProfil < Vue
         imagePartie1000     = Image.new(:file => './Ressources/S_1000_PARTIES.png')
         imagePartie1000Gris = Image.new(:file => './Ressources/S_1000_PARTIES_GRIS.png')
 
-        labelGestion     = Label.new(@controleur.getLangue[:gestion])
+        labelGestion    = Label.new(@controleur.getLangue[:gestion])
         labelDate       = Label.new(@controleur.getLangue[:inscrit] + " : " + @statistiques["dateInscription"])
         labelGrilleReso = Label.new(@controleur.getLangue[:nbPartiesTermines] + " : " + @statistiques["nbGrillesReso"].to_s)
         labelNbAide     = Label.new(@controleur.getLangue[:nbAides] + " : " + @statistiques["nbAides"])
@@ -433,15 +442,6 @@ class VueProfil < Vue
     	@popup.set_resizable(false)
         @popup.set_size_request(500,100)
 
-        @entryFusionPseudo1 = Entry.new
-        @entryFusionPasse1 = Entry.new
-        @entryFusionPseudo2 = Entry.new
-        @entryFusionPasse2 = Entry.new
-        @entryFusionPseudo3 = Entry.new
-
-		boutonValider = Button.new(:label => @controleur.getLangue[:valider])
-		boutonAnnuler = Button.new(:label => @controleur.getLangue[:annuler])
-
         vboxFusionEntry1 = Box.new(:vertical,10)
         vboxFusionEntry1.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxFusionEntry1.add(@entryFusionPseudo1)
@@ -522,8 +522,8 @@ class VueProfil < Vue
 
         hboxValiderFusion = Box.new(:horizontal,30)
         hboxValiderFusion.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxValiderFusion.add(boutonValider)
-        hboxValiderFusion.add(boutonAnnuler)
+        hboxValiderFusion.add(@boutonValiderFusion)
+        hboxValiderFusion.add(@boutonAnnulerFusion)
         hboxValiderFusion.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         boxPrincipaleFusion = Box.new(:vertical,30)
@@ -533,8 +533,8 @@ class VueProfil < Vue
         boxPrincipaleFusion.add(hboxValiderFusion)
         boxPrincipaleFusion.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        boutonValider.signal_connect('clicked')     {onBtnValiderClicked}
-        boutonAnnuler.signal_connect('clicked')     {onBtnAnnulerClicked}
+        @boutonValiderFusion.signal_connect('clicked')     {onBtnValiderFusionClicked}
+        @boutonAnnulerFusion.signal_connect('clicked')     {onBtnAnnulerClicked}
 
         @popup.add(boxPrincipaleFusion)
         @popup.show_all()
@@ -546,5 +546,76 @@ class VueProfil < Vue
 
     def onBtnSupprClicked
         @controleur.supprimerUtilisateur
+    end
+
+    def onBtnValiderFusionClicked
+
+    end
+
+    def entryVerification
+        @boutonValiderFusion.set_sensitive(true)
+
+        @entryFusionPseudo1.signal_connect('activate') {onBtnValiderFusionClicked}
+        @entryFusionPseudo2.signal_connect('activate') {onBtnValiderFusionClicked}
+        @entryFusionPseudo3.signal_connect('activate') {onBtnValiderFusionClicked}
+        @entryFusionPasse1.signal_connect('activate') {onBtnValiderFusionClicked}
+        @entryFusionPasse2.signal_connect('activate') {onBtnValiderFusionClicked}
+        @entryFusionPasse3.signal_connect('activate') {onBtnValiderFusionClicked}
+
+        if @entryFusionPseudo1.text() == "" || @entryFusionPseudo1.text() =~ /\W/
+            @boutonValiderFusion.set_sensitive(false)
+            @entryFusionPseudo1.signal_connect('activate') {}
+            @entryFusionPseudo2.signal_connect('activate') {}
+            @entryFusionPseudo3.signal_connect('activate') {}
+            @entryFusionPasse1.signal_connect('activate') {}
+            @entryFusionPasse2.signal_connect('activate') {}
+            @entryFusionPasse3.signal_connect('activate') {}
+        end
+        if @entryFusionPseudo2.text() == "" || @entryFusionPseudo2.text() =~ /\W/
+            @boutonValiderFusion.set_sensitive(false)
+            @entryFusionPseudo1.signal_connect('activate') {}
+            @entryFusionPseudo2.signal_connect('activate') {}
+            @entryFusionPseudo3.signal_connect('activate') {}
+            @entryFusionPasse1.signal_connect('activate') {}
+            @entryFusionPasse2.signal_connect('activate') {}
+            @entryFusionPasse3.signal_connect('activate') {}
+        end
+        if @entryFusionPseudo3.text() == "" || @entryFusionPseudo3.text() =~ /\W/
+            @boutonValiderFusion.set_sensitive(false)
+            @entryFusionPseudo1.signal_connect('activate') {}
+            @entryFusionPseudo2.signal_connect('activate') {}
+            @entryFusionPseudo3.signal_connect('activate') {}
+            @entryFusionPasse1.signal_connect('activate') {}
+            @entryFusionPasse2.signal_connect('activate') {}
+            @entryFusionPasse3.signal_connect('activate') {}
+        end
+
+        if @entryFusionPasse1.text() == "" || @entryFusionPasse1 =~ /\W/
+            @boutonValiderFusion.set_sensitive(false)
+            @entryFusionPseudo1.signal_connect('activate') {}
+            @entryFusionPseudo2.signal_connect('activate') {}
+            @entryFusionPseudo3.signal_connect('activate') {}
+            @entryFusionPasse1.signal_connect('activate') {}
+            @entryFusionPasse2.signal_connect('activate') {}
+            @entryFusionPasse3.signal_connect('activate') {}
+        end
+        if @entryFusionPasse2.text() == "" || @entryFusionPasse2.text() =~ /\W/
+            @boutonValiderFusion.set_sensitive(false)
+            @entryFusionPseudo1.signal_connect('activate') {}
+            @entryFusionPseudo2.signal_connect('activate') {}
+            @entryFusionPseudo3.signal_connect('activate') {}
+            @entryFusionPasse1.signal_connect('activate') {}
+            @entryFusionPasse2.signal_connect('activate') {}
+            @entryFusionPasse3.signal_connect('activate') {}
+        end
+        if @entryFusionPasse3.text() == "" || @entryFusionPasse3.text() =~ /\W/
+            @boutonValiderFusion.set_sensitive(false)
+            @entryFusionPseudo1.signal_connect('activate') {}
+            @entryFusionPseudo2.signal_connect('activate') {}
+            @entryFusionPseudo3.signal_connect('activate') {}
+            @entryFusionPasse1.signal_connect('activate') {}
+            @entryFusionPasse2.signal_connect('activate') {}
+            @entryFusionPasse3.signal_connect('activate') {}
+        end
     end
 end
