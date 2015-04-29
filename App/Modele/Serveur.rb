@@ -2,7 +2,7 @@
 # La classe Serveur permet de communiquer avec un serveur B1nHer0
 # Utilise le DP Singleton
 #
-# Version 9
+# Version 10
 #
 class Serveur
 
@@ -163,6 +163,17 @@ class Serveur
 	#
 	def supprimerRessources( uuidUtilisateur, uuidScores, uuidSauvegardes )
 		reponse = envoyerRequete( Requete.creer( 'supprimerRessources', uuidUtilisateur, uuidScores, uuidSauvegardes ) )
+		return reponse.contenu
+	end
+	
+	##
+	# Supprimer toutes les ressources liées à un utilisateur du serveur
+	#
+	# ==== Paramètres
+	# * +utilisateur - (Utilisateur) dont ont veux supprimer les traces
+	#
+	def supprimerTracesUtilisateur( utilisateur )
+		reponse = envoyerRequete( Requete.creer( 'supprimerTracesUtilisateur', utilisateur.uuid ) )
 		return reponse.contenu
 	end
 	

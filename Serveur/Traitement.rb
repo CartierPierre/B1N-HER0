@@ -1,7 +1,7 @@
 ##
 # Classe Traitement	
 #
-# Version 7
+# Version 8
 #
 class Traitement
 
@@ -220,6 +220,33 @@ class Traitement
 		
 		if( listeUuidSauvegardes != nil )
 			GestionnaireSauvegarde.instance().supprimerEnsembleSauvegardes( listeUuidSauvegardes )
+		end
+		
+		# Renvoi réponse au client
+		return Reponse.creer( "ok" )
+	end
+	
+	##
+	# Supprimer toutes les ressources liées à un utilisateur du serveur
+	#
+	def supprimerTracesUtilisateur( arguments )
+		# Lecture des arguments
+		uuidUtilisateur = arguments
+		
+		# Debug
+		puts "uuidUtilisateur : #{ uuidUtilisateur }"
+		
+		# Suppressions
+		if( uuidUtilisateur != nil )
+			GestionnaireUtilisateur.instance().supprimerUtilisateur( uuidUtilisateur )
+		end
+		
+		if( listeUuidSauvegardes != nil )
+			GestionnaireScore.instance().supprimerScoreUtilisateur( uuidUtilisateur )
+		end
+		
+		if( listeUuidSauvegardes != nil )
+			GestionnaireSauvegarde.instance().supprimerSauvegardeUtilisateur( uuidUtilisateur )
 		end
 		
 		# Renvoi réponse au client

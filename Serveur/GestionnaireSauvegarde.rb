@@ -2,7 +2,7 @@
 # La classe GestionnaireSauvegarde permet d'intéragir avec entitées Sauvegarde
 # Utilise le DP Singleton
 #
-# Version 2
+# Version 3
 #
 class GestionnaireSauvegarde
 	
@@ -230,14 +230,14 @@ class GestionnaireSauvegarde
 	# Supprimer toutes les sauvegardes d'un utilisateur
 	#
 	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utilisateur dont il faut supprimer toutes les sauvegardes
+	# * +uuid+ - (int) Uuid de l'utilisateur dont on veux supprimer les sauvegardes
 	#
-	# def supprimerSauvegardeUtilisateur(u)
-		# @stockage.executer("
-			# DELETE FROM sauvegarde
-			# WHERE id_utilisateur = #{ u.id };
-		# ")
-	# end
+	def supprimerSauvegardeUtilisateur( uuid )
+		@stockage.executer("
+			DELETE FROM sauvegarde
+			WHERE id_utilisateur = #{ uuid };
+		")
+	end
 	
 	##
 	# Supprime un ensemble de sauvegardes selon une liste d'ids

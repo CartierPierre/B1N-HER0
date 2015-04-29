@@ -2,7 +2,7 @@
 # La classe GestionnaireScore permet d'intéragir avec entitées Score
 # Utilise le DP Singleton
 #
-# Version 2
+# Version 3
 #
 class GestionnaireScore
 	
@@ -238,14 +238,14 @@ class GestionnaireScore
 	# Supprimer tous les scores d'un utilisateur
 	#
 	# ==== Paramètres
-	# * +u+ - (Utilisateur) Utilisateur dont il faut supprimer tous les scores
+	# * +uuid+ - (int) Uuid de l'utilisateur dont on veux supprimer les scores
 	#
-	# def supprimerScoreUtilisateur(u)
-		# @stockage.executer("
-			# DELETE FROM score
-			# WHERE id_utilisateur = #{ u.id };
-		# ")
-	# end
+	def supprimerScoreUtilisateur( uuid )
+		@stockage.executer("
+			DELETE FROM score
+			WHERE id_utilisateur = #{ uuid };
+		")
+	end
 	
 	##
 	# Supprime un ensemble de scores selon une liste d'ids

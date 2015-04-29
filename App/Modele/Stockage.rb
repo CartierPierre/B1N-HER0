@@ -490,7 +490,29 @@ class Stockage
 	# * +utilisateur+ - (Utilisateur) Compte dont il faut changer le type
 	#
 	def changerTypeUtilisateur( utilisateur )
-		raise "wip"
+		if( utilisateur.type == Utilisateur::ONLINE )
+			# On supprime l'utilisateur et toutes ses ressources du serveur
+			Serveur.instance().supprimerTracesUtilisateur( utilisateur )
+			# On change le type local
+			utilisateur.type = Utilisateur::OFFLINE
+			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+		elsif( utilisateur.type == Utilisateur::OFFLINE )
+			# On envoi l'utilisateur au serveur
+			reponse = Serveur.instance().envoyerRessources( utilisateur, [], [] )
+			uuidUtilisateur = reponse[0]
+			# Si il existe déjà sur le serveur
+			if( uuidUtilisateur == -1 )
+				raise "L'utilisateur existe déjà sur le serveur!"
+			end
+			# On change le type local
+			utilisateur.uuid = uuidUtilisateur
+			utilisateur.type = Utilisateur::ONLINE
+			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+			# On synchronise
+			syncroniser( utilisateur, true )
+		else
+			raise "Mauvais type utilisateur !"
+		end
 	end
 	
 end
