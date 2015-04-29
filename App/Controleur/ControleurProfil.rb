@@ -18,7 +18,8 @@ class ControleurProfil < Controleur
             "tempsTotal" =>"%02d:%02d:%02d" % [(@@utilisateur.statistique.tempsTotal/3600),(@@utilisateur.statistique.tempsTotal%3600/60),(@@utilisateur.statistique.tempsTotal%60)],
             "nbGrillesReso" => @@utilisateur.statistique.nbGrillesReso,
             "nbPartiesParfaites" => @@utilisateur.statistique.partieParfaites,
-            "succes" => @@utilisateur.statistique.succes.size.to_s
+            "succes" => @@utilisateur.statistique.succes.size.to_s,
+            "statut" => @@utilisateur.type
         }
     end
 
@@ -60,7 +61,7 @@ class ControleurProfil < Controleur
     end
 
     def reset
-        @@utilisateur.statistique = Statistique.creer(@@utilisateur)
+        Stockage.instance().miseAZeroUtilisateur( @@utilisateur )
         actualiser
     end
 
@@ -69,5 +70,9 @@ class ControleurProfil < Controleur
         @gestionnaireSauvegarde.supprimerSauvegardeUtilisateur(@@utilisateur)
         @gestionnaireUtilisateur.supprimerUtilisateur(@@utilisateur)
         changerControleur(ControleurDemarrage.new(@jeu))
+    end
+
+    def changerType
+        Stockage.instance().changerTypeUtilisateur( @@utilisateur )
     end
 end

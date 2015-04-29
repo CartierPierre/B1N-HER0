@@ -8,6 +8,8 @@ class VueProfil < Vue
         progressionPartie  = @statistiques["nbGrillesReso"]
         progressionParfait = @statistiques["nbPartiesParfaites"]
 
+        @boutonOnline        = RadioButton.new(@controleur.getLangue[:modeDeJeuEnLigne])
+        @boutonOffline       = RadioButton.new(@boutonOnline,@controleur.getLangue[:modeDeJeuHorsLigne],true)
         @boutonRetour        = Button.new(:label => @controleur.getLangue[:retour])
         @boutonPseudo        = Button.new(:label => @controleur.getLangue[:changerPseudo])
         @boutonPasse         = Button.new(:label => @controleur.getLangue[:changerPasse])
@@ -16,8 +18,11 @@ class VueProfil < Vue
         @boutonSuppr         = Button.new(:label => @controleur.getLangue[:supprimerCompte])
 		@boutonValiderFusion = Button.new(:label => @controleur.getLangue[:valider])
 		@boutonAnnulerFusion = Button.new(:label => @controleur.getLangue[:annuler])
-        @boutonValiderFusion.set_sensitive(false)
 
+        @boutonValiderFusion.set_sensitive(false)
+        @statistiques["statut"] == Utilisateur::OFFLINE ? @boutonOffline.set_active(true) : @boutonOffline.set_active(false)
+
+        @boutonOffline.signal_connect('toggled'){ @controleur.changerType }
         @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
         @boutonPseudo.signal_connect('clicked') { onBtnPseudoClicked }
         @boutonPasse.signal_connect('clicked')  { onBtnPasseClicked }
@@ -56,7 +61,6 @@ class VueProfil < Vue
         imageParfait500Gris  = Image.new(:file => './Ressources/S_500_PARFAIT_GRIS.png')
         imageParfait1000     = Image.new(:file => './Ressources/S_1000_PARFAIT.png')
         imageParfait1000Gris = Image.new(:file => './Ressources/S_1000_PARFAIT_GRIS.png')
-
 
         imagePartie10       = Image.new(:file => './Ressources/S_10_PARTIES.png')
         imagePartie10Gris   = Image.new(:file => './Ressources/S_10_PARTIES_GRIS.png')
@@ -250,18 +254,30 @@ class VueProfil < Vue
         hboxStats.add(vboxStatsDroite)
         hboxStats.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
 
+        hboxStatut = Box.new(:horizontal,30)
+        hboxStatut.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
+        hboxStatut.add(@boutonOnline)
+        hboxStatut.add(@boutonOffline)
+        hboxStatut.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
+
         hboxConfig = Box.new(:horizontal,30)
         hboxConfig.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
         hboxConfig.add(vboxConfigGauche)
         hboxConfig.add(vboxConfigDroite)
         hboxConfig.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
 
+        vboxStats = Box.new(:vertical,30)
+        vboxStats.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
+        vboxStats.add(hboxStats)
+        vboxStats.add(hboxStatut)
+        vboxStats.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
+
 		hboxRetour = Box.new(:horizontal)
         hboxRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxRetour.add(@boutonRetour)
         hboxRetour.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        carnet.append_page(hboxStats,labelStats)
+        carnet.append_page(vboxStats,labelStats)
         carnet.append_page(hboxSucces,labelSucces)
         carnet.append_page(hboxConfig,labelGestion)
 
