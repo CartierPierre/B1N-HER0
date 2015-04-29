@@ -11,12 +11,16 @@ class ControleurConnexion < Controleur
 		validation = Stockage.instance().authentification( pseudo, passe )
         @@utilisateur = validation[1]
         case validation[0]
-        when 0..2
+        when 0
             validerPasse(passe)
+		when 2
+			validerPasse(passe)
+			Stockage.instance().syncroniser( @@utilisateur )
         when 3
 			@vue.pasInternet("Online")
         when 4
             validerPasse(passe)
+			Stockage.instance().syncroniser( @@utilisateur )
         when 5
             @vue.pasInternet("Offline")
             @vue.utilisateurInexistant()

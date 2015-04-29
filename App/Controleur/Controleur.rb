@@ -55,7 +55,14 @@ class Controleur
     # Méthode qui permet de quitter le jeu et fermer l'application
     #
     def quitterJeu
+		puts "exit"
+		if( @@utilisateur != nil && @@utilisateur.type == Utilisateur::ONLINE )
+			puts "sync"
+			Stockage.instance().syncroniser( @@utilisateur )
+		end
+		@@utilisateur = nil
     	Gtk.main_quit
+		# abort
     end
     
     ##
