@@ -3,7 +3,14 @@
 #
 
 class Chrono
-    attr_accessor :estActif, :tempsDebut, :tempsPause, :tempsFin
+    # Un booléen indiquant si le Chrono est actif.
+    attr_accessor :estActif
+    # Un Time marquant le temps de début du Chrono.
+    attr_accessor :tempsDebut
+    # Un Time marquant le temps de pause du Chrono.
+    attr_accessor :tempsPause
+    # Un entier indiquant le temps écoulé entre le temps de début et la fin du Chrono.
+    attr_accessor :tempsFin
 
     private_class_method :new
     ##
@@ -12,7 +19,7 @@ class Chrono
         new()
     end
 
-    def initialize()
+    def initialize() #:notnew:
         @tempsDebut=Time.now
         @estActif = false
     end
@@ -102,7 +109,7 @@ class Chrono
 
         donnee = String.new()
 
-        # Sauvegarde le bouléen qui indique si le chrono est actif.
+        # Sauvegarde le booléen qui indique si le chrono est actif.
         donnee += "#{estActif.to_s};"
 
         # Sauvegarde du temps de début.
@@ -160,7 +167,7 @@ class Chrono
 
         donnees = donnee.split(';')
 
-        # On remet le bouléen indiquant si le chrono est actif.
+        # On remet le booléen indiquant si le chrono est actif.
         chrono.estActif = (donnees[0] == 'true')?true:false
 
         # On remet le temps de début.

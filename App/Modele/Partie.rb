@@ -4,10 +4,29 @@
 #
 
 class Partie
-    attr_reader :grille, :niveau, :utilisateur, :chrono, :modeHypothese, :nbCoups, :nbConseils, :nbAides
+    # La Grille utilisé par la Partie pour jouer.
+    attr_reader :grille
+    # Le Niveau sur lequel ce base la Partie.
+    attr_reader :niveau
+    # L'Utilisateur qui joue la Partie.
+    attr_reader :utilisateur
+    # Le Chrono de la Partie.
+    attr_reader :chrono
+    # Un booléen qui indique si la Partie est en mode hypothése.
+    attr_reader :modeHypothese
+    # Un entier qui représente le nombre de coups joués.
+    attr_reader :nbCoups
+    # Un entier qui représente le nombre de conseils utilisés.
+    attr_reader :nbConseils
+    # Un entier qui représente le nombre d'aides utilisées.
+    attr_reader :nbAides
+    # Un tableau de Coup qui représente la liste des Coup joués.
     @listeUndo
+    # Un tableau de Coup qui représente la liste des Coup défaits.
     @listeRedo
+    # Un tableau contenant la liste de Regle à appliquées à la Partie.
     @regles
+    # Une chaine de caractéres contenant une sauvegarde de la Partie lors de l'activation du mode hypothése.
     @partieHypothese
 
     ##
@@ -22,7 +41,7 @@ class Partie
         new(utilisateur, niveau)
     end
 
-    def initialize(utilisateur, niveau)
+    def initialize(utilisateur, niveau) #:notnew:
         @utilisateur = utilisateur
         @niveau = niveau
         @grille = Grille.creer(niveau.dimention).copier(niveau.probleme)
@@ -237,7 +256,7 @@ class Partie
     # Retour::
     #   Un tableau de coordonées de la case solution choisie aléatoirement selon les meilleurs aides possibles, sinon nil si aucune aide n'est possible. Array[x, y]
     #
-    def demanderAide() #TODO améliorer pour donnée une case qui débloque une régle
+    def demanderAide()
         casesPossible = Array.new()
         meilleurCases = Array[-1, -1, 10]
 
@@ -318,7 +337,7 @@ class Partie
     #   - *liste_redo* : une liste de Coup séparer par des ';'. Aller voir Coup.sauvegarder.
     #        self.sauvegarder.split('|')[3] #=> "1,3,2;1,3,_"
     #
-    #   - *donnees_hypothese* : un bouléen indiquant si le mode hypothése est activé, suivit par un '#', puis la sérialisation de la Partie avec les '|' remplacer pas des '/'.
+    #   - *donnees_hypothese* : un booléen indiquant si le mode hypothése est activé, suivit par un '#', puis la sérialisation de la Partie avec les '|' remplacer pas des '/'.
     #        self.sauvegarder.split('|')[4] #=> "true#true;40:55:17:20:4:2015:1:110:true:CEST;;/003________1____0__2112______0_0_1__/0,2,_;0,2,2;3,4,_;3,1,_//false"
     #
     def sauvegarder()
@@ -385,7 +404,7 @@ class Partie
     # Paramétres::
     #   * _utilisateur_ - Utilisateur de la Partie.
     #   * _niveau_ - Le Niveau sur lequel ce base la Partie.
-    #   * _donnee_ - Une chaine de caractère correspondant à la sérialisation de la Partie. Aller voir Partie.sauvegarder
+    #   * _donnee_ - Une chaine de caractère correspondant à la sérialisation de la Partie. Aller voir Partie.sauvegarder.
     #
     # Retour::
     #   Une nouvelle partie construite à partir des paramètres donnés.
@@ -437,14 +456,28 @@ class Partie
         return partie
     end
 
-    def chargerUndo(donnee)
+    ##
+    # Charge la liste des undo dans la Partie.
+    #
+    # Paramétre::
+    #   * _donnee_- Un chaine de caractères représentant la liste des undo. Aller voir Partie.sauvegarder.
+    #
+    def chargerUndo(donnee) #:nodoc:
         donnee.split(";").reverse.each do |coupDonnee|
             @listeUndo.unshift(Coup.charger(coupDonnee))
         end
+
+        self
     end
     #protected :chargerUndo
 
-    def chargerRedo(donnee)
+    ##
+    # Charge la liste des redo dans la Partie.
+    #
+    # Paramétre::
+    #   * _donnee_- Un chaine de caractères représentant la liste des redo. Aller voir Partie.sauvegarder.
+    #
+    def chargerRedo(donnee) #:nodoc:
         donnee.split(";").reverse.each do |coupDonnee|
             @listeRedo.unshift(Coup.charger(coupDonnee))
         end
@@ -453,45 +486,96 @@ class Partie
     end
     #protected :chargerRedo
 
-    def setChrono(chrono)
+    ##
+    # Applique un Chrono donné à la partie.
+    #
+    # Paramétre::
+    #   * _chrono_ - Le Chrono à appliquer à la Partie.
+    #
+    def setChrono(chrono) #:nodoc:
         @chrono = chrono
 
         self
     end
     #protected :setChrono
 
-    def setGrille(grille)
+    ##
+    # Applique une Grille donné à la partie.
+    #
+    # Paramétre::
+    #   * _grille_ - La Grille à appliquer à la Partie.
+    #
+    def setGrille(grille) #:nodoc:
         @grille = grille
 
         self
     end
     #protected :setGrille
 
-    def setModeHypothese(bool)
+    ##
+    # Active ou désactive le mode hypothése à la partie.
+    #
+    # Paramétre::
+    #   * _bool_ - Un booléen qui indique si le mode hypothése est activé sur la Partie.
+    #
+    def setModeHypothese(bool) #:nodoc:
         @modeHypothese = bool
 
         self
     end
     #protected :setModeHypothese
 
-    def setPartieHypothese(donnee)
+    ##
+    # Affecte la sauvegarde de la Partie avec le mode hypothése.
+    #
+    # Paramétre::
+    #   * _donnee_ - Une chaine de caractères représentant la sauvegarde de la Partie. Aller voir Partie.sauvegarder.
+    #
+    def setPartieHypothese(donnee) #:nodoc:
         @partieHypothese = donnee
 
         self
     end
+    #protected :setPartieHypothese
 
-    def setNbCoups(nb)
+    ##
+    # Affecte le nombre de Coup de la Partie.
+    #
+    # Paramétres::
+    #   * _nb_ - Le nombre de Coup joués.
+    #
+    def setNbCoups(nb) #:nodoc:
         @nbCoups = nb
-    end
 
-    def setNbAides(nb)
+        self
+    end
+    #protected :setNbCoups
+
+    ##
+    # Affecte le nombre d'aides de la Partie.
+    #
+    # Paramétres::
+    #   * _nb_ - Le nombre d'aides utilisées.
+    #
+    def setNbAides(nb) #:nodoc:
         @nbAides = nb
+
+        self
     end
+    #protected :setNbAides
 
-
-    def setNbConseils(nb)
+    ##
+    # Affecte le nombre de conseils de la Partie.
+    #
+    # Paramétres::
+    #   * _nb_ - Le nombre de conseils utilisés.
+    #
+    def setNbConseils(nb) #:nodoc:
         @nbConseils = nb
+
+        self
     end
+    #protected :setNbConseils
 
 
 
@@ -570,13 +654,21 @@ class Partie
         self
     end
 
-    @cpttest
-    def monitor
+    ##
+    # Méthode qui permet d'avoir un afficher terminale de la partie en cours et donnant le contenu de certaine variable.
+    #
+    @cpttest #Donne le nombre de cycle effectué.
+    def monitor #:nodoc:
         @cpttest += 1
+        # Affichage du numéro de cycle et indique si la mode hypothése est activé.
         print "N° ", @cpttest, "#{(@modeHypothese ? ' (Mode Hypothése)' : '')}\n"
+        # Affiche la grille.
         @grille.afficher()
+        # Affiche la liste des undo.
         puts "Liste des undo :", @listeUndo, "\n"
+        # Affiche la liste des redo.
         puts "Liste des redo :", @listeRedo, "\n"
+        # Indique la taille des deux listes.
         print "Size Undo = ", @listeUndo.size(), "| Size Redo = ", @listeRedo.size(), "\n"
         print "\n"
 

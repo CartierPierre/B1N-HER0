@@ -4,7 +4,9 @@
 #
 
 class Grille
+    # Une matrice de Tuile représentant la Grille de jeu.
     @grille
+    # Un entier qui détermine la taille de la Grille.
     attr_reader :taille
 
     private_class_method :new
@@ -18,7 +20,7 @@ class Grille
         new(taille)
     end
 
-    def initialize(taille)
+    def initialize(taille) #:notnew:
         @taille = taille
 
         #Création d'un tableau de tableau de tuile
@@ -38,8 +40,9 @@ class Grille
     def getTuile(x, y)
         if(0 <= x && x < @taille && 0 <= y && y < @taille)
             return @grille[x][y]
-            return nil
         end
+
+        return nil
     end
 
     ##

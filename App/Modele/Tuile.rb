@@ -3,6 +3,7 @@
 #
 
 class Tuile
+    # Etat de la Tuile.
     attr_accessor :etat
 
     private_class_method :new
@@ -13,7 +14,7 @@ class Tuile
         new()
     end
 
-    def initialize()
+    def initialize() #:notnew:
         @etat = Etat.vide
     end
 
@@ -21,7 +22,7 @@ class Tuile
     # Indique si une tuile est vide.
     #
     # Retour::
-    #   Un bouléen qui indique si la case est vide.
+    #   Un booléen qui indique si la case est vide.
     #
     def estVide?()
         return etat == Etat.vide

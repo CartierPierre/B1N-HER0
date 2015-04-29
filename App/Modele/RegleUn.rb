@@ -4,6 +4,7 @@
 #
 
 class RegleUn
+    # L'instance de la RegleUn.
     @@instance = nil
 
     private_class_method :new

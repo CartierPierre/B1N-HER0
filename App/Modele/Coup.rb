@@ -3,7 +3,11 @@
 #
 
 class Coup
-    attr_reader :x, :y
+    # Un entier représentant la coordonnée _x_ du Coup.
+    attr_reader :x
+    # Un entier représentant la coordonnée _y_ du Coup.
+    attr_reader :y
+    # Etat de la Tuile avant le Coup.
     attr_accessor :etat
 
     ##
@@ -18,7 +22,7 @@ class Coup
         new(x, y, etat)
     end
 
-    def initialize(x, y, etat)
+    def initialize(x, y, etat) #:notnew:
         @x, @y, @etat = x, y, etat
     end
 

@@ -4,7 +4,7 @@
 #
 
 class RegleDeux
-
+    # L'instance de la RegleDeux.
     @@instance = nil
 
     private_class_method :new

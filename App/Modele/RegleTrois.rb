@@ -5,7 +5,7 @@
 
 
 class RegleTrois
-
+    # L'instance de la RegleTrois.
     @@instance = nil
 
     private_class_method :new
@@ -67,7 +67,7 @@ class RegleTrois
     #   * _ligne2_ - L'autre ligne a vérifier.
     #
     # Retour::
-    #   Un bouléen qui indique si les lignes sont identique.
+    #   Un booléen qui indique si les lignes sont identique.
     #
     def ligneIdentique(ligne1, ligne2)
         0.upto(ligne1.size - 1) do |i|

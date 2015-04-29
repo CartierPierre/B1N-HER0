@@ -90,7 +90,7 @@ class Etat
     #   * _etat2_ - L'état à vérifier.
     #
     # Retour::
-    #   Un bouléen indiquand si les deux états sont égaux.
+    #   Un booléen indiquand si les deux états sont égaux.
     #
     def Etat.egale?(etat1, etat2)
         if etat1 == etat2 #&& etat1 != Etat.vide && etat2 != Etat.vide
