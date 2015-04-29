@@ -191,7 +191,7 @@ class GestionnaireSauvegarde
 				version = #{ s.version },
 				description = '#{ s.description }',
 				date_creation = #{ s.dateCreation },
-				contenu = #{ s.contenu },
+				contenu = '#{ s.contenu }',
 				id_utilisateur = '#{ s.idUtilisateur }',
 				id_niveau = #{ s.idNiveau }
 			WHERE id = #{ s.id };
