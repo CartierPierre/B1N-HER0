@@ -94,10 +94,19 @@ class Stockage
 				
 				# S'il n'est pas trouvé sur le serveur
 				if( utilServeur == nil )
+					
+					# On met à jour l'utilisateur locale
 					utilLocal.type = Utilisateur::OFFLINE
+					utilLocal.uuid = nil
 					GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilLocal )
+					
+					# On supprime les uuids des scores et sauvegardes locales
+					GestionnaireSauvegarde.instance().supprimerUuidSauvegardeUtilisateur( utilLocal )
+					GestionnaireScore.instance().supprimerUuidScoreUtilisateur( utilLocal )
+					
 					# puts "Le compte local est du type ONLINE mais pas de compte trouve sur le serveur, donc compte local passe en OFFLINE -> jeu"
 					return [ 1, utilLocal ]
+					
 				end
 				
 				# puts "Utilisateur en ligne trouve en local et verifie sur le serveur (tout ok)"
