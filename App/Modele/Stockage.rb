@@ -466,4 +466,21 @@ class Stockage
 		GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
 	end
 	
+	##
+	# Fusionne deux compte en un seul
+	#
+	# ==== Paramètres
+	# * +utilisateur+ - (Utilisateur) Premier compte à fusionner
+	# * +nom+ - (string) Nom du second compte à fusionner
+	# * +motDePasse+ - (string) Mot de passe du second compte à fusionner
+	# * +sortie+ - (boolean) true : le premier dans le second, false : le second dans le premier
+	#
+	# ==== Retour
+	# Renvoi un objet utilisateur fusion des deux précèdents
+	#
+	def fusion( utilisateur, nom, motDePasse, sortie )
+		raise "wip"
+		# arf et si un compte offline bloque le passage à un compte online ?
+	end
+	
 end
