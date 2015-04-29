@@ -139,13 +139,15 @@ class Serveur
 	#
 	def envoyerRessources( utilisateur, scores, sauvegardes )
 		
-		# Si un utilisateur est transmit
-		if( utilisateur != nil )
-			# On l'adapte pour la sérialisation
-			utilServ = utilisateur.clone()
-			utilServ.option = Option.serialiser( utilisateur.option )
-			utilServ.statistique = nil
-		end
+		# On l'adapte utilisateur pour la sérialisation
+		utilServ = utilisateur.clone()
+		utilServ.option = Option.serialiser( utilisateur.option )
+		utilServ.statistique = nil
+		
+		# Debug
+		# p utilServ
+		# p scores
+		# p sauvegardes
 		
 		reponse = envoyerRequete( Requete.creer( 'envoyerRessources', utilServ, scores, sauvegardes ) )
 		return reponse.contenu

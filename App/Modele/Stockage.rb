@@ -65,25 +65,6 @@ class Stockage
 	end
 	
 	##
-	# Gère l'inscription d'un utilisateur dans la base locale et le serveur selon les cas
-	#
-	def insciption( nouvelutilisateur )
-		if( nouvelutilisateur.type == Utilisateur::ONLINE )
-			# Sauvegarde serveur
-			reponse = envoyerRessources( nouvelutilisateur )
-			puts "Insert sur le serveur, uuid : #{ reponse[0] }"
-			# Sauvegarde local
-			nouvelUtil.uuid = reponse[0]
-			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( nouvelUtil )
-			puts "Insert dans la bdd"
-		elsif( nouvelutilisateur.type == Utilisateur::OFFLINE )
-			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( nouvelUtil )
-		else
-			raise "Mauvais type utilisateur !"
-		end
-	end
-	
-	##
 	# Test si les identifiants sont correctes et authentifie un utilisateur. Synchronise la ressource utilisateur dans le cas d'un compte online.
 	# La synchronisation des ressources n'est réalisé par cette fonction.
 	#
@@ -101,7 +82,7 @@ class Stockage
 		
 		# Si l'utilisateur est trouvé en local et que c'est un compte du type hors ligne
 		if( utilLocal != nil && utilLocal.type == Utilisateur::OFFLINE )
-			puts "Utilisateur hors ligne trouvé en local -> jeu"
+			# puts "Utilisateur hors ligne trouvé en local -> jeu"
 			return [ 0, utilLocal ]
 		end
 		
@@ -115,14 +96,14 @@ class Stockage
 				if( utilServeur == nil )
 					utilLocal.type = Utilisateur::OFFLINE
 					GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilLocal )
-					puts "Le compte local est du type ONLINE mais pas de compte trouve sur le serveur, donc compte local passe en OFFLINE -> jeu"
+					# puts "Le compte local est du type ONLINE mais pas de compte trouve sur le serveur, donc compte local passe en OFFLINE -> jeu"
 					return [ 1, utilLocal ]
 				end
 				
-				puts "Utilisateur en ligne trouve en local et verifie sur le serveur (tout ok)"
+				# puts "Utilisateur en ligne trouve en local et verifie sur le serveur (tout ok)"
 				return [ 2, utilLocal ]
 			rescue
-				puts "Utilisateur en ligne trouve en local mais non verifie sur le serveur -> message sync plus tard -> jeu"
+				# puts "Utilisateur en ligne trouve en local mais non verifie sur le serveur -> message sync plus tard -> jeu"
 				return [ 3, utilLocal ]
 			end
 		end
@@ -145,17 +126,17 @@ class Stockage
 				)
 				# On sauvegarde se dernier dans la bdd locale
 				GestionnaireUtilisateur.instance().sauvegarderUtilisateur( nouvelUtil )
-				puts "Utilisateur ONLINE trouve sur le serveur et copie faite en local -> jeu"
+				# puts "Utilisateur ONLINE trouve sur le serveur et copie faite en local -> jeu"
 				return [ 4, nouvelUtil ]
 			end
 			
 		rescue
-			puts "Utilisateur non trouve en local et impossible de se connecter au serveur -> message compte temporaire -> page inscription"
+			# puts "Utilisateur non trouve en local et impossible de se connecter au serveur -> message compte temporaire -> page inscription"
 			return [ 5, nil ]
 		end
 		
 		# Aucun utilisateur trouvé
-		puts "Utilisateur non trouve, ni en local ni sur le serveur -> page inscription"
+		# puts "Utilisateur non trouve, ni en local ni sur le serveur -> page inscription"
 		return [ 6, nil ]
 	end
 	
@@ -181,7 +162,7 @@ class Stockage
 				end
 				
 				# On envoi le nouvel utilisateur au serveur
-				reponse = Serveur.instance().envoyerRessources( utilisateur, nil, nil )
+				reponse = Serveur.instance().envoyerRessources( utilisateur, [], [] )
 				uuidUtilisateur = reponse[0]
 				if( uuidUtilisateur == -1 )
 					GestionnaireUtilisateur.instance().supprimerUtilisateur( utilisateur )
@@ -214,17 +195,25 @@ class Stockage
 		
 		# Sinon c'est un compte online, donc au procède à la synchronisation
 		
-		# Variables
+		## Variables
+		
 		listeScoresEnvoiServeur = Array.new() # Liste d'objets socres à envoyer au serveur
 		listeScoresRecupererServeur = Array.new() # Liste d'uuid de scores à récupérer sur le serveur
 		listeSauvegardesEnvoiServeur = Array.new()
 		listeSauvegardesRecupererServeur = Array.new()
+		
 		compareScores = Hash.new() # Table d'objets scores à comparer avec les version du serveur
 		compareSauvegardes = Hash.new()
+		
+		hashScoreLocalNouveau = Hash.new()
+		hashSauvegardeLocalNouveau = Hash.new()
+		
 		serveur = Serveur.instance()
 		gsc = GestionnaireScore.instance()
 		gsa = GestionnaireSauvegarde.instance()
 		tmp = nil
+		
+		## Lecture
 		
 		# On récupère les scores locaux
 		tmp = gsc.recupererListeScoreUtilisateur( utilisateurLocal, 0, gsc.recupererNombreScoreUtilisateur( utilisateurLocal ) )
@@ -236,7 +225,8 @@ class Stockage
 			# Sinon il ne possède pas de uuid
 			else
 				# On l'ajoute à la liste des envois serveur
-				listeScoresEnvoiServeur.push( scoreL )
+				listeScoresEnvoiServeur.push( scoreL ) # Pour la requete
+				hashScoreLocalNouveau[ scoreL.id ] = scoreL # Pour la maj uuid locale
 			end
 		end
 		
@@ -247,15 +237,19 @@ class Stockage
 				compareSauvegardes[ sauvegardeL.uuid ] = sauvegardeL
 			else
 				listeSauvegardesEnvoiServeur.push( sauvegardeL )
+				hashSauvegardeLocalNouveau[ sauvegardeL.id ] = sauvegardeL
 			end
 		end
 		
 		# On demande la liste de toutes les ressource de l'utilisateur au serveur
 		reponse = serveur.listeRessources( utilisateurLocal )
-		versionUtilisateurServeur, versionScoresServeur, versionSauvegardesServeur = reponse
+		versionUtilisateurServeur, listeCoupleScoresServeur, listeCoupleSauvegardesServeur = reponse
+		puts "listeRessources, reponse : #{ reponse }"
+		
+		## Calcul des différences
 		
 		# Comparaison scores
-		versionScoresServeur.each do | scoreS |
+		listeCoupleScoresServeur.each do | scoreS |
 			# Si score pas trouvé en locale
 			if( !compareScores.has_key?( scoreS[0] ) )
 				listeScoresRecupererServeur.push( scoreS[0] )
@@ -266,7 +260,7 @@ class Stockage
 				if( scoreS[1] > scoreL.version )
 					listeScoresRecupererServeur.push( scoreS[0] )
 				# Sinon version locale supérieur
-				else
+				elsif( scoreS[1] < scoreL.version )
 					listeScoresEnvoiServeur.push( scoreL )
 				end
 			end
@@ -274,7 +268,7 @@ class Stockage
 		end
 		
 		# Comparaison sauvegardes
-		versionSauvegardesServeur.each do | sauvegardeS |
+		listeCoupleSauvegardesServeur.each do | sauvegardeS |
 			# Si sauvegarde pas trouvé en locale
 			if( !compareSauvegardes.has_key?( sauvegardeS[0] ) )
 				listeSauvegardesRecupererServeur.push( sauvegardeS[0] )
@@ -285,20 +279,24 @@ class Stockage
 				if( sauvegardeS[1] > sauvegardeL.version )
 					listeSauvegardesRecupererServeur.push( sauvegardeS[0] )
 				# Sinon version locale supérieur
-				else
+				elsif( sauvegardeS[1] < sauvegardeL.version )
 					listeSauvegardesEnvoiServeur.push( sauvegardeL )
 				end
 			end
 			# compareSauvegardes.delete( sauvegardeS[0] )
 		end
 		
+		# Supprimer les ressources locales avec uuid si pas trouvé sur serveur
+		
+		## Maj client
+		
 		# Debug
-		puts "versionUtilisateurServeur : #{ versionUtilisateurServeur }"
-		puts "utilisateurLocal.version : #{ utilisateurLocal.version }"
-		puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
-		puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
-		puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
-		puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
+		# puts "versionUtilisateurServeur : #{ versionUtilisateurServeur }"
+		# puts "utilisateurLocal.version : #{ utilisateurLocal.version }"
+		# puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
+		# puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
+		# puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
+		# puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
 		
 		# On demande les ressources que l'on veux mettre à jour en locale
 		reponse = serveur.recupererRessources(
@@ -316,7 +314,7 @@ class Stockage
 			utilisateurLocal.nom = utilisateur.nom
 			utilisateurLocal.motDePasse = utilisateur.motDePasse
 			utilisateurLocal.option = utilisateur.dateInscription
-			Option.deserialiser( utilServeur.option )
+			Option.deserialiser( utilisateur.option )
 			# GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateurLocal )
 		end
 		
@@ -334,7 +332,7 @@ class Stockage
 		
 		# On met à jour les sauvegardes
 		listeSauvegardes.each do | sauvegardeS |
-			scoreL = compareScores[ sauvegardeS.id ]
+			sauvegardeL = compareSauvegardes[ sauvegardeS.id ]
 			puts "sauvegardeS : #{ sauvegardeS } -> sauvegardeL : #{ sauvegardeL }"
 			sauvegardeL.version = sauvegardeS.version
 			sauvegardeL.description = sauvegardeS.description
@@ -343,14 +341,30 @@ class Stockage
 			# GestionnaireSauvegarde.instance().sauvegarderSauvegarde( sauvegardeL )
 		end
 		
+		## Envoi ressources au serveur
+		
 		# Envoi des ressources à inserts/updates au serveur
 		reponse = serveur.envoyerRessources(
-			(versionUtilisateurServeur < utilisateurLocal.version) ? utilisateurLocal : nil,
+			utilisateurLocal,
 			listeScoresEnvoiServeur,
 			listeSauvegardesEnvoiServeur
 		)
 		puts "envoyerRessources, reponse : #{ reponse }"
 		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = reponse
+		
+		# Maj des uuid locaux des nouvelles ressources précèdement transmisent au serveur
+		
+		listeUuidScores.each do | couple |
+			scoreL = hashScoreLocalNouveau[ couple[0] ]
+			scoreL.uuid = couple[1]
+			GestionnaireScore.instance().sauvegarderScore( scoreL )
+		end
+		
+		listeUuidSauvegardes.each do | couple |
+			sauvegardeL = hashSauvegardeLocalNouveau[ couple[0] ]
+			sauvegardeL.uuid = couple[1]
+			GestionnaireSauvegarde.instance().sauvegarderSauvegarde( sauvegardeL )
+		end
 		
 	end
 end

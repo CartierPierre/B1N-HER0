@@ -1,7 +1,7 @@
 ##
 # Classe Traitement	
 #
-# Version 4
+# Version 6
 #
 class Traitement
 
@@ -73,9 +73,9 @@ class Traitement
 		gsa = GestionnaireSauvegarde.instance()
 		versionUtilisateur = nil
 		listeScores = nil
-		listeUuidScores = Array.new()
+		listeCoupleScore = Array.new()
 		listeSauvegardes = nil
-		listeUuidSauvegardes = Array.new()
+		listeCoupleSauvegarde = Array.new()
 		
 		# Recherche de l'utilisateur
 		utilisateur = gut.recupererUtilisateur( uuidUtilisateur )
@@ -86,19 +86,26 @@ class Traitement
 		
 		# Recherche des scores
 		listeScores = gsc.recupererListeScoreUtilisateur( utilisateur, 0, gsc.recupererNombreScoreUtilisateur( utilisateur ) )
+		# puts "#{ listeScores.count } scores trouvées pour l'utilisateur #{ utilisateur.nom }"
 		listeScores.each do | score |
-			listeUuidScores.push( Array.new( score.id, score.version ) )
+			couple = Array.new( 2 )
+			couple[0] = score.id
+			couple[1] = score.version
+			listeCoupleScore.push( couple )
 		end
 		
 		# Recherche des sauvegardes
 		listeSauvegardes = gsa.recupererSauvegardeUtilisateur( utilisateur, 0, gsa.recupererNombreSauvegardeUtilisateur( utilisateur ) )
+		# puts "#{ listeSauvegardes.count } sauvegardes trouvées pour l'utilisateur #{ utilisateur.nom }"
 		listeSauvegardes.each do | sauvegarde |
-			listeUuidScores.push( Array.new( sauvegarde.id, sauvegarde.version ) )
+			couple = Array.new( 2 )
+			couple[0] = sauvegarde.id
+			couple[1] = sauvegarde.version
+			listeCoupleSauvegarde.push( couple )
 		end
 		
-		
 		# Renvoi réponse au client
-		return Reponse.creer([ versionUtilisateur, listeUuidScores, listeUuidSauvegardes ])
+		return Reponse.creer([ versionUtilisateur, listeCoupleScore, listeCoupleSauvegarde ])
 	end
 	
 	##
@@ -109,9 +116,9 @@ class Traitement
 		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = arguments
 		
 		# Debug
-		# puts "uuidUtilisateur = #{ uuidUtilisateur }"
-		# puts "listeUuidScores = #{ listeUuidScores }"
-		# puts "listeUuidSauvegardes = #{ listeUuidSauvegardes }"
+		puts "uuidUtilisateur : #{ uuidUtilisateur }"
+		puts "listeUuidScores : #{ listeUuidScores.count }"
+		puts "listeUuidSauvegardes : #{ listeUuidSauvegardes.count }"
 		
 		# Variables
 		gut = GestionnaireUtilisateur.instance()
@@ -139,51 +146,51 @@ class Traitement
 		utilisateur, scores, sauvegardes = arguments
 		
 		# Debug
-		puts "utilisateur = #{ utilisateur }"
-		puts "scores = #{ scores }"
-		puts "sauvegardes = #{ sauvegardes }"
+		puts "utilisateur : #{ utilisateur.nom }"
+		puts "scores : #{ scores.count }"
+		puts "sauvegardes : #{ sauvegardes.count }"
 		
 		# Variables
 		uuidUtilisateur = nil
 		listeUuidScores = nil
 		listeUuidSauvegardes = nil
-		tmp = nil
+		couple = nil
 		
-		# Si un utilisateur est transmit
-		if( utilisateur != nil )
-			utilisateur.id = utilisateur.uuid
-			begin
-				GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
-				uuidUtilisateur = utilisateur.id # Sauvegarde de l'id serveur de la ressource (uuid)
-			rescue SQLite3::ConstraintException => erreur
-				uuidUtilisateur = -1 # On indique l'erreur au client
-			end
+		## Utilisateur
+		
+		# Adaptation
+		utilisateur.id = utilisateur.uuid
+		
+		# Sauvegarde
+		begin
+			GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+			uuidUtilisateur = utilisateur.id
+		rescue SQLite3::ConstraintException => erreur
+			uuidUtilisateur = -1
 		end
 		
-		# Si des scores sont transmits
-		if( scores != nil )
-			listeUuidScores = Array.new()
-			tmp = Array.new( 2 )
-			scores.each do | score |
-				tmp[0] = score.id
-				score.id = score.uuid
-				GestionnaireScore.instance().sauvegarderScore( score )
-				tmp[1] = score.id
-				listeUuidScores.push( tmp )
-			end
+		## Score
+		listeUuidScores = Array.new()
+		couple = Array.new( 2 )
+		scores.each do | score |
+			couple[0] = score.id # id client
+			score.id = score.uuid
+			score.idUtilisateur = utilisateur.id
+			GestionnaireScore.instance().sauvegarderScore( score )
+			couple[1] = score.id # id serveur (uuid)
+			listeUuidScores.push( couple )
 		end
 		
-		# Si des sauvegardes sont transmises
-		if( sauvegardes != nil )
-			listeUuidSauvegardes = Array.new()
-			tmp = Array.new( 2 )
-			sauvegardes.each do | sauvegarde |
-				tmp[0] = sauvegarde.id
-				sauvegarde.id = sauvegarde.uuid
-				GestionnaireSauvegarde.instance().sauvegarderSauvegarde( sauvegarde )
-				tmp[1] = sauvegarde.id
-				listeUuidSauvegardes.push( tmp )
-			end
+		## Sauvegardes
+		listeUuidSauvegardes = Array.new()
+		couple = Array.new( 2 )
+		sauvegardes.each do | sauvegarde |
+			couple[0] = sauvegarde.id
+			sauvegarde.id = sauvegarde.uuid
+			sauvegarde.idUtilisateur = utilisateur.id
+			GestionnaireSauvegarde.instance().sauvegarderSauvegarde( sauvegarde )
+			couple[1] = sauvegarde.id
+			listeUuidSauvegardes.push( couple )
 		end
 		
 		# Renvoi réponse au client
