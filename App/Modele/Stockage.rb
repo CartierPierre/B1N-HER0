@@ -459,7 +459,7 @@ class Stockage
 	# ==== Paramètres
 	# * +utilisateur+ - (Utilisateur) Utilisateur à ré-initialiser
 	#
-	def miseAZero( utilisateur )
+	def miseAZeroUtilisateur( utilisateur )
 		GestionnaireSauvegarde.instance().supprimerSauvegardeUtilisateur( utilisateur )
 		GestionnaireScore.instance().supprimerScoreUtilisateur( utilisateur )
 		utilisateur.Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR)
@@ -478,9 +478,19 @@ class Stockage
 	# ==== Retour
 	# Renvoi un objet utilisateur fusion des deux précèdents
 	#
-	def fusion( utilisateur, nom, motDePasse, sortie )
+	def fusionUtilisateurs( utilisateur, nom, motDePasse, sortie )
 		raise "wip"
 		# arf et si un compte offline bloque le passage à un compte online ?
+	end
+	
+	##
+	# Change le type d'un compte
+	#
+	# ==== Paramètres
+	# * +utilisateur+ - (Utilisateur) Compte dont il faut changer le type
+	#
+	def changerTypeUtilisateur( utilisateur )
+		raise "wip"
 	end
 	
 end
