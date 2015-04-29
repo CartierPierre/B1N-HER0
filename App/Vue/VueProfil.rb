@@ -322,7 +322,7 @@ class VueProfil < Vue
 	end
 
 	def onBtnPasseClicked
-        @popup = Window.new(@controleur.getLangue[:passeChange])
+        @popup = Window.new(@controleur.getLangue[:passeChanger])
     	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
     	@popup.set_resizable(false)
         @popup.set_size_request(500,100)
@@ -401,7 +401,7 @@ class VueProfil < Vue
 
     def onBtnPseudoClicked
 
-        @popup = Window.new(@controleur.getLangue[:pseudoChange])
+        @popup = Window.new(@controleur.getLangue[:pseudoChanger])
     	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
     	@popup.set_resizable(false)
         @popup.set_size_request(500,100)
