@@ -231,23 +231,15 @@ class Traitement
 	#
 	def supprimerTracesUtilisateur( arguments )
 		# Lecture des arguments
-		uuidUtilisateur = arguments
+		uuidUtilisateur = arguments[0]
 		
 		# Debug
 		puts "uuidUtilisateur : #{ uuidUtilisateur }"
 		
 		# Suppressions
-		if( uuidUtilisateur != nil )
-			GestionnaireUtilisateur.instance().supprimerUtilisateur( uuidUtilisateur )
-		end
-		
-		if( listeUuidSauvegardes != nil )
-			GestionnaireScore.instance().supprimerScoreUtilisateur( uuidUtilisateur )
-		end
-		
-		if( listeUuidSauvegardes != nil )
-			GestionnaireSauvegarde.instance().supprimerSauvegardeUtilisateur( uuidUtilisateur )
-		end
+		GestionnaireUtilisateur.instance().supprimerUtilisateur( uuidUtilisateur )
+		GestionnaireScore.instance().supprimerScoreUtilisateur( uuidUtilisateur )
+		GestionnaireSauvegarde.instance().supprimerSauvegardeUtilisateur( uuidUtilisateur )
 		
 		# Renvoi réponse au client
 		return Reponse.creer( "ok" )
