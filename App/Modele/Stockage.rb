@@ -256,7 +256,7 @@ class Stockage
 		# On demande la liste de toutes les ressource de l'utilisateur au serveur
 		reponse = serveur.listeRessources( utilisateurLocal )
 		versionUtilisateurServeur, listeCoupleScoresServeur, listeCoupleSauvegardesServeur = reponse
-		# puts "listeRessources, reponse : #{ reponse }"
+		puts "listeRessources, reponse : #{ reponse }"
 		
 		#
 		#
@@ -278,40 +278,41 @@ class Stockage
 				# Sinon version locale supérieur
 				elsif( scoreS[1] < scoreL.version )
 					listeScoresEnvoiServeur.push( scoreL )
+					compareScores.delete( scoreL.uuid )
+				# Sinon rien à faire sur rcs
+				else
+					compareScores.delete( scoreS[0] )
 				end
 			end
-			# compareScores.delete( scoreS[0] )
 		end
 		
 		# Sauvegardes
 		listeCoupleSauvegardesServeur.each do | sauvegardeS |
-			# Si sauvegarde pas trouvé en locale
 			if( !compareSauvegardes.has_key?( sauvegardeS[0] ) )
 				listeSauvegardesRecupererServeur.push( sauvegardeS[0] )
-			# Sinon sauvegarde trouvé en locale
 			else
 				sauvegardeL = compareSauvegardes[ sauvegardeS[0] ]
-				# Si version serveur supérieure
 				if( sauvegardeS[1] > sauvegardeL.version )
 					listeSauvegardesRecupererServeur.push( sauvegardeS[0] )
-				# Sinon version locale supérieur
 				elsif( sauvegardeS[1] < sauvegardeL.version )
 					listeSauvegardesEnvoiServeur.push( sauvegardeL )
+					compareSauvegardes.delete( sauvegardeL.uuid )
+				else
+					compareSauvegardes.delete( sauvegardeS[0] )
 				end
 			end
-			# compareSauvegardes.delete( sauvegardeS[0] )
 		end
 		
 		# Debug
-		# puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
-		# puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
-		# puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
-		# puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
+		puts "listeScoresRecupererServeur : #{ listeScoresRecupererServeur }"
+		puts "listeSauvegardesRecupererServeur : #{ listeSauvegardesRecupererServeur }"
+		puts "listeScoresEnvoiServeur : #{ listeScoresEnvoiServeur }"
+		puts "listeSauvegardesEnvoiServeur : #{ listeSauvegardesEnvoiServeur }"
 		
 		#
 		#
 		# Serveur -> local
-		# Insert/Update rsc client
+		# Insert/Update/Remove rsc client
 		#
 		#
 		
@@ -321,7 +322,7 @@ class Stockage
 			listeScoresRecupererServeur,
 			listeSauvegardesRecupererServeur
 		)
-		# puts "recupererRessources, reponse : #{ reponse }"
+		puts "recupererRessources, reponse : #{ reponse }"
 		utilisateur, listeScores, listeSauvegardes = reponse
 		
 		# Debug
@@ -352,7 +353,7 @@ class Stockage
 				scoreL.nbCoups = scoreS.nbCoups
 				scoreL.nbConseils = scoreS.nbConseils
 				scoreL.nbAides = scoreS.nbAides
-				
+				compareScores.delete( scoreS.id )
 			# Sinon elle n'existe pas en locale
 			elsif
 				# On adapte la rsc du serveur pour l'ajouter à la bdd locale
@@ -366,6 +367,11 @@ class Stockage
 			gsc.sauvegarderScore( scoreL )
 		end
 		
+		# On supprime toutes les rsc locales qui restes dans la liste (n'existe plus sur le serveur)
+		compareScores.each do | key, scoreL |
+			gsc.supprimerScore( scoreL )
+		end
+		
 		# Sauvegardes
 		listeSauvegardes.each do | sauvegardeS |
 			
@@ -376,6 +382,7 @@ class Stockage
 				sauvegardeL.description = sauvegardeS.description
 				sauvegardeL.dateCreation = sauvegardeS.dateCreation
 				sauvegardeL.contenu = sauvegardeS.contenu
+				compareSauvegardes.delete( sauvegardeS.id )
 			elsif
 				sauvegardeL = sauvegardeS
 				sauvegardeL.uuid = sauvegardeL.id
@@ -384,6 +391,10 @@ class Stockage
 			end
 			
 			gsa.sauvegarderSauvegarde( sauvegardeL )
+		end
+		
+		compareSauvegardes.each do | key, sauvegardeL |
+			gsa.supprimerSauvegarde( sauvegardeL )
 		end
 		
 		#
@@ -396,20 +407,24 @@ class Stockage
 		
 		# Envoi des rsc au serveur
 		reponse = serveur.envoyerRessources( utilisateurLocal, listeScoresEnvoiServeur, listeSauvegardesEnvoiServeur )
-		# puts "envoyerRessources, reponse : #{ reponse }"
+		puts "envoyerRessources, reponse : #{ reponse }"
 		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = reponse
 		
 		# Maj des uuid de rsc locales selon valeur renvoyé par le serveur
 		listeUuidScores.each do | couple |
-			scoreL = hashScoreLocalNouveau[ couple[0] ]
-			scoreL.uuid = couple[1]
-			gsc.sauvegarderScore( scoreL )
+			if( hashScoreLocalNouveau.has_key?( couple[0] ) )
+				scoreL = hashScoreLocalNouveau[ couple[0] ]
+				scoreL.uuid = couple[1]
+				gsc.sauvegarderScore( scoreL )
+			end
 		end
 		
 		listeUuidSauvegardes.each do | couple |
-			sauvegardeL = hashSauvegardeLocalNouveau[ couple[0] ]
-			sauvegardeL.uuid = couple[1]
-			gsa.sauvegarderSauvegarde( sauvegardeL )
+			if( hashSauvegardeLocalNouveau.has_key?( couple[0] ) )
+				sauvegardeL = hashSauvegardeLocalNouveau[ couple[0] ]
+				sauvegardeL.uuid = couple[1]
+				gsa.sauvegarderSauvegarde( sauvegardeL )
+			end
 		end
 		
 	end
