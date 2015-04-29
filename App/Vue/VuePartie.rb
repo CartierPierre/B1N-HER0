@@ -34,7 +34,6 @@ class VuePartie < Vue
     @nbClignotements        # Fait varier le nombre de clignotements
     @vitesseClignotement    # Fait varier la vitesse du clignotement (petit = rapide)
 
-    @dureeConseils          # Durée des conseils en secondes
     @delaiReactivation      # Délai en secondes avant de pouvoir réactiver les aides ou conseils
 
     ##
