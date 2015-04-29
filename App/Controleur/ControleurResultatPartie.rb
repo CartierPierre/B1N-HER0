@@ -18,7 +18,7 @@ class ControleurResultatPartie < Controleur
         super(jeu)
         @modele = partie
 
-        @gestionnaireSauvegarde.supprimerSauvegardeUtilisateurNiveau(@@utilisateur,partie.niveau.id)
+        # @gestionnaireSauvegarde.supprimerSauvegardeUtilisateurNiveau(@@utilisateur,partie.niveau.id)
 
         # Création du score puis enregistrement dans la base de données et récupèration des succès déverrouillés grâce à cette partie
         @score = Score.creer(@modele.chrono.tempsFin.to_i, @modele.nbCoups, @modele.nbConseils, @modele.nbAides, @@utilisateur.id, @modele.niveau.id)
@@ -42,6 +42,25 @@ class ControleurResultatPartie < Controleur
     #
     def retour()
         changerControleur(ControleurMenuPrincipal.new(@jeu))
+    end
+
+    ##
+    # Méthode qui permet de récupèrer le classement du niveau
+    #
+    # Retour::
+    #   Le tableau des scores
+    #
+    def getClassement()
+        score = Array.new()
+
+        listeScores = @gestionnaireScore.recupererListeScoreNiveau(@modele.niveau,0,@gestionnaireScore.recupererNombreScoreNiveau(@modele.niveau))
+
+        listeScores.each do |x|
+            score << {"points" =>     x.nbPoints(@modele.niveau),
+                      "pseudo" =>     @gestionnaireUtilisateur.recupererUtilisateur(x.idUtilisateur).nom}
+        end
+
+        return score
     end
 
 end

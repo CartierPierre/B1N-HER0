@@ -56,6 +56,7 @@ class VueResultatPartie < Vue
         labelNbCoups = creerLabelTailleMoyenne(@controleur.getLangue[:nbCoups] + " : " + @modele.nbCoups.to_s)
         labelConseils = creerLabelTailleMoyenne(@controleur.getLangue[:nbConseils] + " : " + @modele.nbConseils.to_s)
         labelAides = creerLabelTailleMoyenne(@controleur.getLangue[:nbAides] + " : " + @modele.nbAides.to_s)
+        labelClassement = creerLabelTailleMoyenne(@controleur.getLangue[:classement])
 
         # Ajout des succès dévérouillés
         vboxSucces = Box.new(:vertical, 20)
@@ -79,6 +80,66 @@ class VueResultatPartie < Vue
             end
         end
 
+        # Classement du niveau
+        scores = @controleur.getClassement()
+
+        fenetreScrollClassement = ScrolledWindow.new()
+        fenetreScrollClassement.set_policy(:never,:automatic)
+        fenetreScrollClassement.set_size_request(300,200)
+
+        liste = ListStore.new(Integer,String,Integer)
+        renderer = CellRendererText.new()
+
+        colonneRang = Gtk::TreeViewColumn.new(@controleur.getLangue[:rang],renderer,:text => 0)
+        colonneRang.sort_indicator = true
+        colonneRang.sort_column_id = 0
+        colonneRang.signal_connect('clicked') do |x|
+            x.sort_order =
+            x.sort_order == :ascending ? :descending : :ascending
+        end
+
+        colonnePseudo = Gtk::TreeViewColumn.new(@controleur.getLangue[:pseudo],renderer,:text => 1)
+        colonnePseudo.sort_indicator = true
+        colonnePseudo.sort_column_id = 1
+        colonnePseudo.signal_connect('clicked') do |x|
+            x.sort_order =
+            x.sort_order == :ascending ? :descending : :ascending
+        end
+
+        colonneScore = Gtk::TreeViewColumn.new(@controleur.getLangue[:score],renderer,:text => 2)
+        colonneScore.sort_indicator = true
+        colonneScore.sort_column_id = 2
+        colonneScore.signal_connect('clicked') do |x|
+            x.sort_order =
+            x.sort_order == :ascending ? :descending : :ascending
+        end
+
+        view = TreeView.new(liste)
+        view.append_column(colonneRang)
+        view.append_column(colonnePseudo)
+        view.append_column(colonneScore)
+        fenetreScrollClassement.add_with_viewport(view)
+
+        scores.each do |x|
+            iter = liste.append
+            iter[0] = 0
+            iter[1] = x["pseudo"]
+            iter[2] = x["points"]
+        end
+
+        liste.set_sort_column_id(2, :descending)
+
+        increment = 1
+        liste.each do |model, path, iter|
+            iter[0] = increment
+            increment =increment + 1
+        end
+
+        hboxClassement = Box.new(:horizontal, 10)
+        hboxClassement.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
+        hboxClassement.add(fenetreScrollClassement)
+        hboxClassement.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
+
         # Ajout dans la vbox principale
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(labelFelicitations)
@@ -88,6 +149,8 @@ class VueResultatPartie < Vue
         vboxPrincipale.add(labelConseils)
         vboxPrincipale.add(labelAides)
         vboxPrincipale.add(vboxSucces)
+        vboxPrincipale.add(labelClassement)
+        vboxPrincipale.add(hboxClassement)
         creerAlignBouton(vboxPrincipale,@boutonRetour)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
