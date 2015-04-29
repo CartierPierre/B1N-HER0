@@ -1,6 +1,15 @@
 class VueInscription < Vue
 
-    def initialize(modele,titre,controleur,pseudo)
+    ##
+    # Méthode de création de la vue du menu d'inscription qui permet de s'inscrire au jeu
+    #
+    #
+    # Paramètres::
+    #   * _modele_ - Modèle associé
+    #   * _titre_ - Titre de la fenetre
+    #   * _controleur_ - Controleur associé
+    #
+    def initialize(modele,titre,controleur,pseudo)   #:notnew:
         super(modele,titre,controleur)
 
         boxPrincipale = Box.new(:vertical,30)
@@ -120,14 +129,15 @@ class VueInscription < Vue
         @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:lUtilisateur]+pseudo+@controleur.getLangue[:existe])
         @popup.run
         @popup.destroy
+        @vue.fermerCadre
         @controleur.retour(pseudo)
     end
 
     def pasInternet(pseudo)
         @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pasInternetInscription])
         @popup.run
-        fermerCadre()
         @popup.destroy
+        fermerCadre()
         @controleur.retour(pseudo)
     end
 

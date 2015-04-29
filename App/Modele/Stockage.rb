@@ -504,7 +504,9 @@ class Stockage
 		utilisateur2 = resultat[1]
 		
 		# Si c'est le même utilisateur
-		if( utilisateur1.id == utilisateur2.id || utilisateur1.uuid == utilisateur2.uuid )
+        puts utilisateur1.nom
+        puts utilisateur2.nom
+		if( utilisateur1.id == utilisateur2.id || ((utilisateur1.uuid == utilisateur2.uuid) && (utilisateur1.uuid != nil) &&(utilisateur2.uuid != nil)))
 			raise "Les utilisateurs sont identiques !"
 		end
 		

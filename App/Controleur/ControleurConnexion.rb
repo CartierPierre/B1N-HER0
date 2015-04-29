@@ -1,13 +1,25 @@
 class ControleurConnexion < Controleur
 
+    ##
+    # Méthode de création du controleur qui est responsable de la vue du menu de connexion
+    #
+    # Paramètre::
+    #   * _jeu_ - Jeu associé (classe principale du BinHero qui charge GTK)
+    #
 	def initialize(jeu)
 		super(jeu)
 		@modele = nil
 		@vue = VueConnexion.new(@modele,self.getLangue[:connexion],self)
 	end
 
-
-    def valider(pseudo,passe)
+    ##
+    # Verifie le pseudo et le mot de passe en allant chercher dans la base de données
+    #
+    # Paramètre::
+    #   * _passe_ - Le mot de passe à vérifier
+    #   * _pseudo_ - Le pseudo à vérifier
+    #
+    def valider(pseudo,passe)                            #:notnew:
 		validation = Stockage.instance().authentification( pseudo, passe )
         @@utilisateur = validation[1]
         case validation[0]
@@ -29,6 +41,12 @@ class ControleurConnexion < Controleur
         end
     end
 
+    ##
+    # Verifie le mot de passe en le comparant à celui de l'utilisateur actuel
+    #
+    # Paramètre::
+    #   * _passe_ - Le mot de passe à vérifier
+    #
     def validerPasse(passe)
         if @@utilisateur.motDePasse == passe
             @vue.fermerCadre
@@ -38,15 +56,26 @@ class ControleurConnexion < Controleur
         end
     end
 
+    ##
+    # Change de controleur pour aller dans la vue Demarrage
+    #
     def annuler()
-        @vue.fermerCadre
         changerControleur(ControleurDemarrage.new(@jeu))
     end
 
+    ##
+    # Change de controleur pour aller dans la vue inscription
+    #
+    # Paramètre::
+    #   * _pseudo_ - Le pseudo à entrer dans le formulaire d'inscription
+    #
     def oui(pseudo)
         changerControleur(ControleurInscription.new(@jeu,pseudo))
     end
 
+    ##
+    # Change de controleur pour actualiser la vue nouvelle partie
+    #
     def non()
         changerControleur(ControleurConnexion.new(@jeu))
     end

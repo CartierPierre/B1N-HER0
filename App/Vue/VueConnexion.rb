@@ -1,6 +1,15 @@
 class VueConnexion < Vue
 
-    def initialize(modele,titre,controleur)
+    ##
+    # Méthode de création de la vue du menu de connexion qui permet de se connecter au jeu
+    #
+    #
+    # Paramètres::
+    #   * _modele_ - Modèle associé
+    #   * _titre_ - Titre de la fenetre
+    #   * _controleur_ - Controleur associé
+    #
+    def initialize(modele,titre,controleur)         #:notnew:
         super(modele,titre,controleur)
 
         boxPrincipale = Box.new(:vertical,30)
@@ -92,6 +101,7 @@ class VueConnexion < Vue
 	end
 
 	def onBtnAnnulerClicked
+        fermerCadre
         @controleur.annuler()
 	end
 

@@ -1,17 +1,62 @@
 class VueProfil < Vue
+    ### Attributs d'instances
 
-    def initialize(modele,titre,controleur)
+    #Les Statistique de l'Utilisateur
+    @statistiques
+
+    #Les boutons
+    @boutonOnline
+    @boutonOffline
+    @boutonCompteActuel
+    @boutonDeuxiemeCompte
+    @boutonRetour
+    @boutonPseudo
+    @boutonPasse
+    @boutonFusion
+    @boutonReset
+    @boutonSuppr
+	@boutonValiderFusion
+	@boutonAnnulerFusion
+
+
+    #Les champs de formulaires
+    @entryPasse
+    @entryAncienPasse
+    @entryFusionPseudo
+    @entryFusionPasse
+
+    #La fenêtre popup
+    @popup
+
+    ##
+    # Méthode de création de la vue du profil qui permet de consulter les informations
+    # relatives au profil, les succès et de gérer le profil
+    #
+    # Paramètres::
+    #   * _modele_ - Modèle associé
+    #   * _titre_ - Titre de la fenetre
+    #   * _controleur_ - Controleur associé
+    #
+    def initialize(modele,titre,controleur)    #:notnew:
         super(modele,titre,controleur)
 
+        #Récupération des statistiques depuis le controleur
         @statistiques = @controleur.getStatistiques
 
+        #Variables utilisées pour les succès
         progressionPartie  = @statistiques["nbGrillesReso"]
         progressionParfait = @statistiques["nbPartiesParfaites"]
 
+        #Le carnet de la vue profil
+        carnet = Notebook.new()
+
+        #Boutons radio
         @boutonOnline         = RadioButton.new(@controleur.getLangue[:modeDeJeuEnLigne])
         @boutonOffline        = RadioButton.new(@boutonOnline,@controleur.getLangue[:modeDeJeuHorsLigne],true)
         @boutonCompteActuel   = RadioButton.new(@controleur.getLangue[:compteActuel])
-        @boutonDeuxiemeCompte = RadioButton.new(@CompteActuel,@controleur.getLangue[:compte2],true)
+        @boutonDeuxiemeCompte = RadioButton.new(@boutonCompteActuel,@controleur.getLangue[:compte2],true)
+
+        #Boutons classiques
         @boutonRetour         = Button.new(:label => @controleur.getLangue[:retour])
         @boutonPseudo         = Button.new(:label => @controleur.getLangue[:changerPseudo])
         @boutonPasse          = Button.new(:label => @controleur.getLangue[:changerPasse])
@@ -21,29 +66,36 @@ class VueProfil < Vue
 		@boutonValiderFusion  = Button.new(:label => @controleur.getLangue[:valider])
 		@boutonAnnulerFusion  = Button.new(:label => @controleur.getLangue[:annuler])
 
-        @boutonValiderFusion.set_sensitive(false)
-        @statistiques["statut"] == Utilisateur::OFFLINE ? @boutonOffline.set_active(true) : @boutonOffline.set_active(false)
-
-        @boutonOffline.signal_connect('toggled'){ @controleur.changerType }
-        @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
-        @boutonPseudo.signal_connect('clicked') { onBtnPseudoClicked }
-        @boutonPasse.signal_connect('clicked')  { onBtnPasseClicked }
-        @boutonFusion.signal_connect('clicked') { onBtnFusionClicked }
-        @boutonReset.signal_connect('clicked')  { onBtnResetClicked }
-        @boutonSuppr.signal_connect('clicked')  { onBtnSupprClicked }
-
+        #Champs de formulaires
         @entryPasse         = Entry.new
         @entryAncienPasse   = Entry.new
         @entryFusionPseudo = Entry.new
         @entryFusionPasse  = Entry.new
 
+        #On cache le contenu des champs de mots de passe
         @entryPasse.visibility        = (false)
         @entryAncienPasse.visibility  = (false)
         @entryFusionPasse.visibility  = (false)
 
-        @entryFusionPseudo.signal_connect("key-release-event") {entryVerification}
-        @entryFusionPseudo.signal_connect("key-release-event") {entryVerification}
+        @boutonValiderFusion.set_sensitive(false)
+        @statistiques["statut"] == Utilisateur::OFFLINE ? @boutonOffline.set_active(true) : @boutonOffline.set_active(false)
 
+        #gestion des signaux sur les boutons
+        @boutonOffline.signal_connect('toggled')        { @controleur.changerType }
+        @boutonRetour.signal_connect('clicked')         { onBtnRetourClicked }
+        @boutonPseudo.signal_connect('clicked')         { onBtnPseudoClicked }
+        @boutonPasse.signal_connect('clicked')          { onBtnPasseClicked }
+        @boutonFusion.signal_connect('clicked')         { onBtnFusionClicked }
+        @boutonReset.signal_connect('clicked')          { onBtnResetClicked }
+        @boutonSuppr.signal_connect('clicked')          { onBtnSupprClicked }
+        @boutonValiderFusion.signal_connect('clicked')  { onBtnValiderFusionClicked }
+        @boutonAnnulerFusion.signal_connect('clicked')  { onBtnAnnulerClicked }
+
+        #gestion des signaux sur les formulaires
+        @entryFusionPseudo.signal_connect("key-release-event") {entryVerification}
+        @entryFusionPasse.signal_connect("key-release-event") {entryVerification}
+
+        #Récupération des images
         imageParfait10       = Image.new(:file => './Ressources/S_10_PARFAIT.png')
         imageParfait10Gris   = Image.new(:file => './Ressources/S_10_PARFAIT_GRIS.png')
         imageParfait50       = Image.new(:file => './Ressources/S_50_PARFAIT.png')
@@ -66,17 +118,22 @@ class VueProfil < Vue
         imagePartie1000     = Image.new(:file => './Ressources/S_1000_PARTIES.png')
         imagePartie1000Gris = Image.new(:file => './Ressources/S_1000_PARTIES_GRIS.png')
 
+
+        #Création des Labels des onglets
         labelGestion    = Label.new(@controleur.getLangue[:gestion])
+        labelStats      = Label.new(@controleur.getLangue[:statistiques])
+        labelSucces     = Label.new(@controleur.getLangue[:succes]  + " : " + @statistiques["succes"]+"/10")
+
+        #Création des Labels de l'onglet Stats
         labelDate       = Label.new(@controleur.getLangue[:inscrit] + " : " + @statistiques["dateInscription"])
         labelGrilleReso = Label.new(@controleur.getLangue[:nbPartiesTermines] + " : " + @statistiques["nbGrillesReso"].to_s)
         labelNbAide     = Label.new(@controleur.getLangue[:nbAides] + " : " + @statistiques["nbAides"])
         labelNbConseil  = Label.new(@controleur.getLangue[:nbConseils] + " : " + @statistiques["nbConseils"])
         labelNbCoup     = Label.new(@controleur.getLangue[:nbCoups] + " : " + @statistiques["nbCoups"])
         labelPseudo     = Label.new(@controleur.getLangue[:pseudo]  + " : " + @statistiques["pseudo"])
-        labelStats      = Label.new(@controleur.getLangue[:statistiques])
-        labelSucces     = Label.new(@controleur.getLangue[:succes]  + " : " + @statistiques["succes"]+"/10")
         labelTpsTotal   = Label.new(@controleur.getLangue[:tempsDeJeu] + " : " + @statistiques["tempsTotal"])
 
+        #Barres de progression pour les succès
         barreProgressionParfait10   = ProgressBar.new
         barreProgressionParfait50   = ProgressBar.new
         barreProgressionParfait100  = ProgressBar.new
@@ -125,8 +182,7 @@ class VueProfil < Vue
         barreProgressionPartie500.fraction  = progressionPartie < 500  ? progressionPartie / 500.0  : 1
         barreProgressionPartie1000.fraction = progressionPartie < 1000 ? progressionPartie / 1000.0 : 1
 
-        carnet = Notebook.new()
-
+        #Boxs des succès
         hboxSuccesPartie10 = Box.new(:horizontal,30)
         hboxSuccesPartie10.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
         hboxSuccesPartie10.add(barreProgressionPartie10)
@@ -207,6 +263,13 @@ class VueProfil < Vue
         vboxSuccesDroite.add(hboxSuccesParfait1000)
         vboxSuccesDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
+        hboxSucces = Box.new(:horizontal,30)
+        hboxSucces.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
+        hboxSucces.add(vboxSuccesGauche)
+        hboxSucces.add(vboxSuccesDroite)
+        hboxSucces.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
+
+        #Boxs des Stats
         vboxStatsGauche = Box.new(:vertical, 30)
         vboxStatsGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxStatsGauche.add(labelPseudo)
@@ -222,6 +285,25 @@ class VueProfil < Vue
         vboxStatsDroite.add(labelNbConseil)
         vboxStatsDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
+        hboxStats = Box.new(:horizontal,30)
+        hboxStats.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
+        hboxStats.add(vboxStatsGauche)
+        hboxStats.add(vboxStatsDroite)
+        hboxStats.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
+
+        hboxStatut = Box.new(:horizontal,30)
+        hboxStatut.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
+        hboxStatut.add(@boutonOnline)
+        hboxStatut.add(@boutonOffline)
+        hboxStatut.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
+
+        vboxStats = Box.new(:vertical,30)
+        vboxStats.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
+        vboxStats.add(hboxStats)
+        vboxStats.add(hboxStatut)
+        vboxStats.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
+
+        #Boxs de la Gestion
         vboxConfigGauche = Box.new(:vertical, 30)
         vboxConfigGauche.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxConfigGauche.add(@boutonPseudo)
@@ -235,45 +317,24 @@ class VueProfil < Vue
         vboxConfigDroite.add(@boutonReset)
         vboxConfigDroite.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        hboxSucces = Box.new(:horizontal,30)
-        hboxSucces.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
-        hboxSucces.add(vboxSuccesGauche)
-        hboxSucces.add(vboxSuccesDroite)
-        hboxSucces.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
-
-        hboxStats = Box.new(:horizontal,30)
-        hboxStats.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
-        hboxStats.add(vboxStatsGauche)
-        hboxStats.add(vboxStatsDroite)
-        hboxStats.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
-
-        hboxStatut = Box.new(:horizontal,30)
-        hboxStatut.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
-        hboxStatut.add(@boutonOnline)
-        hboxStatut.add(@boutonOffline)
-        hboxStatut.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
-
         hboxConfig = Box.new(:horizontal,30)
         hboxConfig.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
         hboxConfig.add(vboxConfigGauche)
         hboxConfig.add(vboxConfigDroite)
         hboxConfig.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
 
-        vboxStats = Box.new(:vertical,30)
-        vboxStats.pack_start(Alignment.new(0, 0, 0, 0),:expand => true)
-        vboxStats.add(hboxStats)
-        vboxStats.add(hboxStatut)
-        vboxStats.pack_end(Alignment.new(0, 0, 0, 0),:expand => true)
-
+        #Box pour le bouton retour
 		hboxRetour = Box.new(:horizontal)
         hboxRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxRetour.add(@boutonRetour)
         hboxRetour.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
+        #ajout des pages au carnet
         carnet.append_page(vboxStats,labelStats)
         carnet.append_page(hboxSucces,labelSucces)
         carnet.append_page(hboxConfig,labelGestion)
 
+        #Box principale de la Vue profil
         vboxPrincipale = Box.new(:vertical, 10)
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxPrincipale.add(carnet)
@@ -285,51 +346,31 @@ class VueProfil < Vue
         self.actualiser()
     end
 
+    ##
+    # Méthode de retour au menu principal
+    #
 	def onBtnRetourClicked
         fermerCadre()
         @controleur.retour()
 	end
 
-	def onBtnValiderPasseClicked(passe,ancienPasse)
-        if passe == ancienPasse
-            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:passeDifferent])
-            popup.run
-            popup.destroy
-                @popup.present
-        else
-            if @controleur.validerPasse(passe)
-                popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:passeChange])
-                popup.run
-                popup.destroy
-                @popup.destroy
-            else
-                popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:mauvaisPasse])
-                popup.run
-                popup.destroy
-                @popup.present
-            end
-        end
+    ##
+    # Méthode de remise à zéro du compte
+    #
+    def onBtnResetClicked
+        @controleur.reset
     end
 
-	def onBtnAnnulerClicked
-        @popup.destroy
-        @controleur.annuler
-	end
+    ##
+    # Méthode de suppression du compte
+    #
+    def onBtnSupprClicked
+        @controleur.supprimerUtilisateur
+    end
 
-    def onBtnValiderPseudoClicked(pseudo)
-        if @controleur.validerPseudo(@entryPseudo.text)
-            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pseudoChange])
-            popup.run
-            popup.destroy
-            @popup.destroy
-        else
-            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:lUtilisateur]+pseudo+@controleur.getLangue[:existe])
-            popup.run
-            popup.destroy
-        end
-        @controleur.actualiser
-	end
-
+    ##
+    # Méthode affichant la popup permettant le changement de mot de passe
+    #
 	def onBtnPasseClicked
         @popup = Window.new(@controleur.getLangue[:passeChanger])
     	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
@@ -353,7 +394,7 @@ class VueProfil < Vue
                     @entryPasse.signal_connect('activate')   {onBtnValiderPasseClicked(@entryPasse.text,@entryAncienPasse.text)}
                 end
             end
-        }
+
 
         @entryAncienPasse.signal_connect("key-release-event")     {
             if @entryAncienPasse.text() == "" || @entryAncienPasse.text() =~ /\W/
@@ -408,6 +449,33 @@ class VueProfil < Vue
         @popup.show_all()
 	end
 
+    ##
+    # Méthode de changement de mot de passe
+    #
+	def onBtnValiderPasseClicked(passe,ancienPasse)
+        if passe == ancienPasse
+            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:passeDifferent])
+            popup.run
+            popup.destroy
+            @popup.present
+        else
+            if @controleur.validerPasse(passe)
+                popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:passeChange])
+                popup.run
+                popup.destroy
+                @popup.destroy
+            else
+                popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:mauvaisPasse])
+                popup.run
+                popup.destroy
+                @popup.present
+            end
+        end
+    end
+
+    ##
+    # Méthode qui affiche la popup permettant le changement de pseudo
+    #
     def onBtnPseudoClicked
 
         @popup = Window.new(@controleur.getLangue[:pseudoChanger])
@@ -445,6 +513,26 @@ class VueProfil < Vue
         @popup.show_all()
 	end
 
+    ##
+    # Méthode de changement de pseudo
+    #
+    def onBtnValiderPseudoClicked(pseudo)
+        if @controleur.validerPseudo(@entryPseudo.text)
+            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:pseudoChange])
+            popup.run
+            popup.destroy
+            @popup.destroy
+        else
+            popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:lUtilisateur]+pseudo+@controleur.getLangue[:existe])
+            popup.run
+            popup.destroy
+        end
+        @controleur.actualiser
+	end
+
+    ##
+    # Méthode qui affiche la popup permettant la fusion de comptes
+    #
     def onBtnFusionClicked
         @popup = Window.new(@controleur.getLangue[:fusion])
     	@popup.set_window_position(Gtk::Window::Position::CENTER_ALWAYS)
@@ -453,8 +541,8 @@ class VueProfil < Vue
 
         vboxFusionEntry = Box.new(:vertical,10)
         vboxFusionEntry.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxFusionEntry.add(@entryFusionPseudo1)
-        vboxFusionEntry.add(@entryFusionPasse1)
+        vboxFusionEntry.add(@entryFusionPseudo)
+        vboxFusionEntry.add(@entryFusionPasse)
         vboxFusionEntry.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         vboxFusionLabel = Box.new(:vertical,25)
@@ -494,41 +582,42 @@ class VueProfil < Vue
         boxPrincipaleFusion.add(hboxValiderFusion)
         boxPrincipaleFusion.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        @boutonValiderFusion.signal_connect('clicked')     {onBtnValiderFusionClicked}
-        @boutonAnnulerFusion.signal_connect('clicked')     {onBtnAnnulerClicked}
-
         @popup.add(boxPrincipaleFusion)
         @popup.show_all()
     end
 
-    def onBtnResetClicked
-        @controleur.reset
-    end
-
-    def onBtnSupprClicked
-        @controleur.supprimerUtilisateur
-    end
-
+    ##
+    # Méthode permettant la fusion de comptes
+    #
     def onBtnValiderFusionClicked
         @controleur.fusion(@entryFusionPseudo.text,@entryFusionPasse.text,(@boutonCompteActuel.active? ? false : true))
+        @popup.destroy
+        @controleur.actualiser
     end
 
     def entryVerification
         @boutonValiderFusion.set_sensitive(true)
-
         @entryFusionPseudo.signal_connect('activate') {onBtnValiderFusionClicked}
         @entryFusionPasse.signal_connect('activate') {onBtnValiderFusionClicked}
 
-        if @entryFusionPseudo.text() == "" || @entryFusionPseudo1.text() =~ /\W/
+        if @entryFusionPseudo.text() == "" || @entryFusionPseudo.text() =~ /\W/
             @boutonValiderFusion.set_sensitive(false)
             @entryFusionPseudo.signal_connect('activate') {}
             @entryFusionPasse.signal_connect('activate') {}
         end
 
-        if @entryFusionPasse.text() == "" || @entryFusionPasse1 =~ /\W/
+        if @entryFusionPasse.text() == "" || @entryFusionPasse.text() =~ /\W/
             @boutonValiderFusion.set_sensitive(false)
             @entryFusionPseudo.signal_connect('activate') {}
             @entryFusionPasse.signal_connect('activate') {}
         end
     end
+
+    ##
+    # Méthode d'annulation depuis la popup
+    #
+	def onBtnAnnulerClicked
+        @popup.destroy
+        @controleur.annuler
+	end
 end

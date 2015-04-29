@@ -1,12 +1,27 @@
 class ControleurInscription < Controleur
 
-	def initialize(jeu,pseudo)
+    ##
+    # Méthode de création du controleur qui est responsable de la vue du menu d'inscription
+    #
+    # Paramètre::
+    #   * _jeu_ - Jeu associé (classe principale du BinHero qui charge GTK)
+    #   * _pseudo_ - Pseudo à rentrer dans le formulaire si besoin
+    #
+	def initialize(jeu,pseudo)             #:notnew:
 		super(jeu)
 		@modele = nil
 		@vue = VueInscription.new(@modele,self.getLangue[:inscription],self,pseudo)
 	end
 
-    def valider(pseudo,password,statut)
+    ##
+    # Valide le pseudo et le mot de passe en allant chercher dans la base de données
+    #
+    # Paramètre::
+    #   * _passe_ - Le mot de passe à vérifier
+    #   * _pseudo_ - Le pseudo à vérifier
+    #   * _statut_ - Le mode de jeu choisi lors de l'inscription
+    #
+    def valider(pseudo,password,)
 		utilisateur = Utilisateur.creer( pseudo, password, statut )
 		begin
 			Stockage.instance().inscription( utilisateur )
@@ -24,12 +39,18 @@ class ControleurInscription < Controleur
 		
     end
 
+    ##
+    # Change de controleur pour aller dans la vue Demarrage
+    #
     def annuler()
         changerControleur(ControleurDemarrage.new(@jeu))
     end
 
+
+    ##
+    # Change de controleur pour actualiser la vue Inscription
+    #
     def retour(pseudo)
-        @vue.fermerCadre
         changerControleur(ControleurInscription.new(@jeu,pseudo))
     end
 
