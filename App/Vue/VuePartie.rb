@@ -13,7 +13,7 @@ class VuePartie < Vue
     @boutonSauvegarder
     @boutonCharger
     @boutonOptions
-    @boutonRegles
+    @boutonPauseRegles
     @boutonQuitter
 
     # Boutons du menu des hypothèses
@@ -64,19 +64,24 @@ class VuePartie < Vue
         @boutonSauvegarder = creerBoutonImage(:sauvegarder,"save")
         @boutonCharger = creerBoutonImage(:charger,"load")
         @boutonOptions = creerBoutonImage(:options,"options")
-        @boutonRegles = creerBoutonImage(:regles,"regles")
+
+        @boutonPauseRegles = Button.new(:label => @controleur.getLangue[:pause] + " / " + @controleur.getLangue[:regles])
+        @boutonPauseRegles.set_always_show_image(true)
+        @boutonPauseRegles.set_image_position(:top)
+        @boutonPauseRegles.set_image(Image.new(:file => './Ressources/regles.png'))
+        
         @boutonQuitter = creerBoutonImage(:quitter,"exit")
 
         @boutonSauvegarder.signal_connect('clicked')  { onBtnSauvegarderClicked }
         @boutonCharger.signal_connect('clicked')  { onBtnChargerClicked }
         @boutonOptions.signal_connect('clicked')  { onBtnOptionsClicked }
-        @boutonRegles.signal_connect('clicked')  { onBtnReglesClicked }
+        @boutonPauseRegles.signal_connect('clicked')  { onBtnPauseReglesClicked }
         @boutonQuitter.signal_connect('clicked')  { onBtnQuitterClicked }
 
         boxNav.pack_start(@boutonSauvegarder, :expand => true, :fill => true)
         boxNav.pack_start(@boutonCharger)
         boxNav.pack_start(@boutonOptions)
-        boxNav.pack_start(@boutonRegles)
+        boxNav.pack_start(@boutonPauseRegles)
         boxNav.pack_start(@boutonQuitter)
 
         # Menu hypothèse
@@ -472,11 +477,11 @@ class VuePartie < Vue
     end
 
     ##
-    # Listener sur le bouton pour afficher les règles
+    # Listener sur le bouton pour afficher les règles et mettre en pause
     # Affichage des trois règles du jeu dans une boite de dialogue.
     # Le jeu est cacher et le chrono est en pause pendant toute la durée de la boite de dialogue.
     #
-    def onBtnReglesClicked 
+    def onBtnPauseReglesClicked 
         self.cacherJeu()
 
         dialogRegles = creerDialogMessage(@controleur.getLangue[:regles])
