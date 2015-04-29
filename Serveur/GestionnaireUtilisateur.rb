@@ -69,11 +69,11 @@ class GestionnaireUtilisateur
 	# ==== Retour
 	# Renvoi un objets utilisateur si se dernier a été trouvé. Nil si non
 	#
-	def recupererUtilisateur(id)
+	def recupererUtilisateur( id )
 		resultat = @stockage.executer("
 			SELECT *
 			FROM utilisateur
-			WHERE id = #{id}
+			WHERE id = #{ id }
 			LIMIT 1;
 		")
 		

@@ -119,13 +119,13 @@ class Traitement
 		gsa = GestionnaireSauvegarde.instance()
 		
 		# Lecture de l'utilisateur
-		utilisateur = gut.recupererUtilisateur( uuidUtilisateur )
+		utilisateur = ( uuidUtilisateur == nil ) ? nil : gut.recupererUtilisateur( uuidUtilisateur )
 		
 		# Lecture des scores
-		listeScores = gsc.recupererEnsembleScore( listeUuidScores )
+		listeScores = ( listeUuidScores == nil ) ? nil : gsc.recupererEnsembleScore( listeUuidScores )
 		
 		# Lecture des sauvegardes
-		listeSauvegardes = gsa.recupererEnsembleSauvegardes( listeUuidSauvegardes )
+		listeSauvegardes = ( listeUuidSauvegardes == nil ) ? nil : gsa.recupererEnsembleSauvegardes( listeUuidSauvegardes )
 		
 		# Renvoi réponse au client
 		return Reponse.creer([ utilisateur, listeScores, listeSauvegardes ])
@@ -139,11 +139,9 @@ class Traitement
 		utilisateur, scores, sauvegardes = arguments
 		
 		# Debug
-		# puts "utilisateur = #{ utilisateur }"
-		# puts "insertsScores = #{ insertsScores }"
-		# puts "updatesScores = #{ updatesScores }"
-		# puts "insertsSauvegardes = #{ insertsSauvegardes }"
-		# puts "updatesSauvegardes = #{ updatesSauvegardes }"
+		puts "utilisateur = #{ utilisateur }"
+		puts "scores = #{ scores }"
+		puts "sauvegardes = #{ sauvegardes }"
 		
 		# Variables
 		uuidUtilisateur = nil
