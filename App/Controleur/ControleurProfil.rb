@@ -57,4 +57,10 @@ class ControleurProfil < Controleur
     def actualiser
         changerControleur(ControleurProfil.new(@jeu))
     end
+
+    def supprimerUtilisateur
+        @vue.fermerCadre
+        @gestionnaireUtilisateur.supprimerUtilisateur(@@utilisateur)
+        changerControleur(ControleurDemarrage.new(@jeu))
+    end
 end
