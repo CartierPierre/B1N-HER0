@@ -51,7 +51,12 @@ class VueRegles < Vue
         super(modele,titre,controleur)
 
         vboxPrincipale = Box.new(:vertical, 10)
+
+        # Contient les règles du jeu sous forme d'onglets
         carnet = Notebook.new()
+        carnet.append_page(creerBoxRegle(:regles1,"1"),Label.new(@controleur.getLangue[:regle] + " 1"))
+        carnet.append_page(creerBoxRegle(:regles2,"2"),Label.new(@controleur.getLangue[:regle] + " 2"))
+        carnet.append_page(creerBoxRegle(:regles3,"3"),Label.new(@controleur.getLangue[:regle] + " 3"))
 
         # Hbox et bouton retour qui permet de retourner au menu principal
         @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
@@ -62,10 +67,6 @@ class VueRegles < Vue
         hboxRetour.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         hboxRetour.add(@boutonRetour)
         hboxRetour.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
-
-        carnet.append_page(creerBoxRegle(:regles1,"1"),Label.new(@controleur.getLangue[:regle] + " 1"))
-        carnet.append_page(creerBoxRegle(:regles2,"2"),Label.new(@controleur.getLangue[:regle] + " 2"))
-        carnet.append_page(creerBoxRegle(:regles3,"3"),Label.new(@controleur.getLangue[:regle] + " 3"))
 
         # Ajout dans la vbox principale
         vboxPrincipale.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
