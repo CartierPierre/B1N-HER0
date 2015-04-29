@@ -309,7 +309,6 @@ class VueProfil < Vue
             popup.run
             popup.destroy
         end
-        fermerCadre()
         @controleur.actualiser
 	end
 
@@ -542,6 +541,7 @@ class VueProfil < Vue
     end
 
     def onBtnResetClicked
+        @controleur.reset
     end
 
     def onBtnSupprClicked
