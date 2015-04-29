@@ -6,45 +6,21 @@ class ControleurInscription < Controleur
 		@vue = VueInscription.new(@modele,self.getLangue[:inscription],self,pseudo)
 	end
 
-
-
     def valider(pseudo,password,statut)
-		
 		utilisateur = Utilisateur.creer( pseudo, password, statut )
-		
 		begin
 			Stockage.instance().inscription( utilisateur )
 		rescue Exception => e
-			puts e.message
 			case( e.message )
 				when "L'utilisateur existe déjà !"
-					@vue.utilisateurExistant(pseudo)
+					return 0
 				when "Erreur de connexion !"
-					@vue.pasInternet(pseudo)
+					return 1
 			end
 		end
-		
 		@@utilisateur = utilisateur
-		
+        @vue.fermerCadre
 		changerControleur(ControleurMenuPrincipal.new(@jeu))
-		
-        
-		
-		
-		
-		
-		# if  statut == Utilisateur::OFFLINE || testConnexion > -1
-            # @@utilisateur = Utilisateur.creer(pseudo,password,statut)
-            # begin
-                # @gestionnaireUtilisateur.sauvegarderUtilisateur(@@utilisateur)
-                # rescue Exception => erreur
-                    # @vue.utilisateurExistant(pseudo)
-            # end
-            # changerControleur(ControleurMenuPrincipal.new(@jeu))
-        # else
-            # @vue.pasInternet(pseudo)
-        # end
-		
 		
     end
 
@@ -53,6 +29,7 @@ class ControleurInscription < Controleur
     end
 
     def retour(pseudo)
+        @vue.fermerCadre
         changerControleur(ControleurInscription.new(@jeu,pseudo))
     end
 

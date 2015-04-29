@@ -94,9 +94,15 @@ class VueInscription < Vue
 	def onBtnValiderClicked
         fermerCadre()
         if @boutonOnline.active?()
-            @controleur.valider(@entryPseudo.text(),@entryPassword.text(),Utilisateur::ONLINE)
+            resultat = @controleur.valider(@entryPseudo.text(),@entryPassword.text(),Utilisateur::ONLINE)
         else
-            @controleur.valider(@entryPseudo.text(),@entryPassword.text(),Utilisateur::OFFLINE)
+            resultat = @controleur.valider(@entryPseudo.text(),@entryPassword.text(),Utilisateur::OFFLINE)
+        end
+        if resultat == 0
+            utilisateurExistant(@entryPseudo.text())
+        end
+        if resultat == 1
+            pasInternet(@entryPseudo.text())
         end
 	end
 
@@ -113,7 +119,6 @@ class VueInscription < Vue
     def utilisateurExistant(pseudo)
         @popup = Gtk::MessageDialog.new(:parent => @@fenetre,:flags => :destroy_with_parent, :type => :info, :buttons_type => :close,:message => @controleur.getLangue[:lUtilisateur]+pseudo+@controleur.getLangue[:existe])
         @popup.run
-        fermerCadre()
         @popup.destroy
         @controleur.retour(pseudo)
     end
