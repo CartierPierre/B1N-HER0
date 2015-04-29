@@ -75,4 +75,8 @@ class ControleurProfil < Controleur
     def changerType
         Stockage.instance().changerTypeUtilisateur( @@utilisateur )
     end
+
+    def fusion(pseudo,passe,compte)
+        fusionUtilisateurs( @@utilisateur, pseudo, passe, compte )
+    end
 end

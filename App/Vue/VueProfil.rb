@@ -8,16 +8,18 @@ class VueProfil < Vue
         progressionPartie  = @statistiques["nbGrillesReso"]
         progressionParfait = @statistiques["nbPartiesParfaites"]
 
-        @boutonOnline        = RadioButton.new(@controleur.getLangue[:modeDeJeuEnLigne])
-        @boutonOffline       = RadioButton.new(@boutonOnline,@controleur.getLangue[:modeDeJeuHorsLigne],true)
-        @boutonRetour        = Button.new(:label => @controleur.getLangue[:retour])
-        @boutonPseudo        = Button.new(:label => @controleur.getLangue[:changerPseudo])
-        @boutonPasse         = Button.new(:label => @controleur.getLangue[:changerPasse])
-        @boutonFusion        = Button.new(:label => @controleur.getLangue[:fusion])
-        @boutonReset         = Button.new(:label => @controleur.getLangue[:reset])
-        @boutonSuppr         = Button.new(:label => @controleur.getLangue[:supprimerCompte])
-		@boutonValiderFusion = Button.new(:label => @controleur.getLangue[:valider])
-		@boutonAnnulerFusion = Button.new(:label => @controleur.getLangue[:annuler])
+        @boutonOnline         = RadioButton.new(@controleur.getLangue[:modeDeJeuEnLigne])
+        @boutonOffline        = RadioButton.new(@boutonOnline,@controleur.getLangue[:modeDeJeuHorsLigne],true)
+        @boutonCompteActuel   = RadioButton.new(@controleur.getLangue[:compteActuel])
+        @boutonDeuxiemeCompte = RadioButton.new(@CompteActuel,@controleur.getLangue[:Compte2],true)
+        @boutonRetour         = Button.new(:label => @controleur.getLangue[:retour])
+        @boutonPseudo         = Button.new(:label => @controleur.getLangue[:changerPseudo])
+        @boutonPasse          = Button.new(:label => @controleur.getLangue[:changerPasse])
+        @boutonFusion         = Button.new(:label => @controleur.getLangue[:fusion])
+        @boutonReset          = Button.new(:label => @controleur.getLangue[:reset])
+        @boutonSuppr          = Button.new(:label => @controleur.getLangue[:supprimerCompte])
+		@boutonValiderFusion  = Button.new(:label => @controleur.getLangue[:valider])
+		@boutonAnnulerFusion  = Button.new(:label => @controleur.getLangue[:annuler])
 
         @boutonValiderFusion.set_sensitive(false)
         @statistiques["statut"] == Utilisateur::OFFLINE ? @boutonOffline.set_active(true) : @boutonOffline.set_active(false)
@@ -36,20 +38,16 @@ class VueProfil < Vue
         @entryFusionPasse1  = Entry.new
         @entryFusionPseudo2 = Entry.new
         @entryFusionPasse2  = Entry.new
-        @entryFusionPseudo3 = Entry.new
-        @entryFusionPasse3  = Entry.new
 
         @entryPasse.visibility        = (false)
         @entryAncienPasse.visibility  = (false)
         @entryFusionPasse1.visibility = (false)
         @entryFusionPasse2.visibility = (false)
-        @entryFusionPasse3.visibility = (false)
 
         @entryFusionPseudo1.signal_connect("key-release-event") {entryVerification}
         @entryFusionPasse1.signal_connect("key-release-event")  {entryVerification}
         @entryFusionPseudo2.signal_connect("key-release-event") {entryVerification}
         @entryFusionPasse2.signal_connect("key-release-event")  {entryVerification}
-        @entryFusionPseudo3.signal_connect("key-release-event") {entryVerification}
 
         imageParfait10       = Image.new(:file => './Ressources/S_10_PARFAIT.png')
         imageParfait10Gris   = Image.new(:file => './Ressources/S_10_PARFAIT_GRIS.png')
@@ -470,12 +468,6 @@ class VueProfil < Vue
         vboxFusionEntry2.add(@entryFusionPasse2)
         vboxFusionEntry2.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
-        vboxFusionEntry3 = Box.new(:vertical,10)
-        vboxFusionEntry3.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxFusionEntry3.add(@entryFusionPseudo3)
-        vboxFusionEntry3.add(@entryFusionPasse3)
-        vboxFusionEntry3.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
-
         vboxFusionLabel1 = Box.new(:vertical,25)
         vboxFusionLabel1.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
         vboxFusionLabel1.add(Label.new(@controleur.getLangue[:pseudo]))
@@ -487,12 +479,6 @@ class VueProfil < Vue
         vboxFusionLabel2.add(Label.new(@controleur.getLangue[:pseudo]))
         vboxFusionLabel2.add(Label.new(@controleur.getLangue[:motDePasse]))
         vboxFusionLabel2.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
-
-        vboxFusionLabel3 = Box.new(:vertical,25)
-        vboxFusionLabel3.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxFusionLabel3.add(Label.new(@controleur.getLangue[:pseudo]))
-        vboxFusionLabel3.add(Label.new(@controleur.getLangue[:motDePasse]))
-        vboxFusionLabel3.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         hboxFusionForm1 = Box.new(:horizontal,30)
         hboxFusionForm1.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
@@ -508,25 +494,25 @@ class VueProfil < Vue
 
         hboxFusionForm3 = Box.new(:horizontal,30)
         hboxFusionForm3.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        hboxFusionForm3.add(vboxFusionLabel3)
-        hboxFusionForm3.add(vboxFusionEntry3)
+        hboxFusionForm3.add(@boutonCompteActuel)
+        hboxFusionForm3.add(@boutonDeuxiemeCompte)
         hboxFusionForm3.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         vboxFusionForm1 = Box.new(:vertical,10)
         vboxFusionForm1.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxFusionForm1.add(Label.new(@controleur.getLangue[:compte]+"n°1"))
+        vboxFusionForm1.add(Label.new(@controleur.getLangue[:compteActuel]))
         vboxFusionForm1.add(hboxFusionForm1)
         vboxFusionForm1.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         vboxFusionForm2 = Box.new(:vertical,10)
         vboxFusionForm2.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxFusionForm2.add(Label.new(@controleur.getLangue[:compte]+"n°2"))
+        vboxFusionForm2.add(Label.new(@controleur.getLangue[:compte2]))
         vboxFusionForm2.add(hboxFusionForm2)
         vboxFusionForm2.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
         vboxFusionForm3 = Box.new(:vertical,10)
         vboxFusionForm3.pack_start(Alignment.new(0, 0, 0, 0), :expand => true)
-        vboxFusionForm3.add(Label.new(@controleur.getLangue[:compteNouveau]))
+        vboxFusionForm3.add(Label.new(@controleur.getLangue[:compteGarde]))
         vboxFusionForm3.add(hboxFusionForm3)
         vboxFusionForm3.pack_end(Alignment.new(0, 0, 0, 0), :expand => true)
 
@@ -565,7 +551,7 @@ class VueProfil < Vue
     end
 
     def onBtnValiderFusionClicked
-
+         @controleur.fusion(pseudo,passe,compte)
     end
 
     def entryVerification
@@ -573,65 +559,51 @@ class VueProfil < Vue
 
         @entryFusionPseudo1.signal_connect('activate') {onBtnValiderFusionClicked}
         @entryFusionPseudo2.signal_connect('activate') {onBtnValiderFusionClicked}
-        @entryFusionPseudo3.signal_connect('activate') {onBtnValiderFusionClicked}
         @entryFusionPasse1.signal_connect('activate') {onBtnValiderFusionClicked}
         @entryFusionPasse2.signal_connect('activate') {onBtnValiderFusionClicked}
-        @entryFusionPasse3.signal_connect('activate') {onBtnValiderFusionClicked}
 
         if @entryFusionPseudo1.text() == "" || @entryFusionPseudo1.text() =~ /\W/
             @boutonValiderFusion.set_sensitive(false)
             @entryFusionPseudo1.signal_connect('activate') {}
             @entryFusionPseudo2.signal_connect('activate') {}
-            @entryFusionPseudo3.signal_connect('activate') {}
             @entryFusionPasse1.signal_connect('activate') {}
             @entryFusionPasse2.signal_connect('activate') {}
-            @entryFusionPasse3.signal_connect('activate') {}
         end
         if @entryFusionPseudo2.text() == "" || @entryFusionPseudo2.text() =~ /\W/
             @boutonValiderFusion.set_sensitive(false)
             @entryFusionPseudo1.signal_connect('activate') {}
             @entryFusionPseudo2.signal_connect('activate') {}
-            @entryFusionPseudo3.signal_connect('activate') {}
             @entryFusionPasse1.signal_connect('activate') {}
             @entryFusionPasse2.signal_connect('activate') {}
-            @entryFusionPasse3.signal_connect('activate') {}
         end
         if @entryFusionPseudo3.text() == "" || @entryFusionPseudo3.text() =~ /\W/
             @boutonValiderFusion.set_sensitive(false)
             @entryFusionPseudo1.signal_connect('activate') {}
             @entryFusionPseudo2.signal_connect('activate') {}
-            @entryFusionPseudo3.signal_connect('activate') {}
             @entryFusionPasse1.signal_connect('activate') {}
             @entryFusionPasse2.signal_connect('activate') {}
-            @entryFusionPasse3.signal_connect('activate') {}
         end
 
         if @entryFusionPasse1.text() == "" || @entryFusionPasse1 =~ /\W/
             @boutonValiderFusion.set_sensitive(false)
             @entryFusionPseudo1.signal_connect('activate') {}
             @entryFusionPseudo2.signal_connect('activate') {}
-            @entryFusionPseudo3.signal_connect('activate') {}
             @entryFusionPasse1.signal_connect('activate') {}
             @entryFusionPasse2.signal_connect('activate') {}
-            @entryFusionPasse3.signal_connect('activate') {}
         end
         if @entryFusionPasse2.text() == "" || @entryFusionPasse2.text() =~ /\W/
             @boutonValiderFusion.set_sensitive(false)
             @entryFusionPseudo1.signal_connect('activate') {}
             @entryFusionPseudo2.signal_connect('activate') {}
-            @entryFusionPseudo3.signal_connect('activate') {}
             @entryFusionPasse1.signal_connect('activate') {}
             @entryFusionPasse2.signal_connect('activate') {}
-            @entryFusionPasse3.signal_connect('activate') {}
         end
         if @entryFusionPasse3.text() == "" || @entryFusionPasse3.text() =~ /\W/
             @boutonValiderFusion.set_sensitive(false)
             @entryFusionPseudo1.signal_connect('activate') {}
             @entryFusionPseudo2.signal_connect('activate') {}
-            @entryFusionPseudo3.signal_connect('activate') {}
             @entryFusionPasse1.signal_connect('activate') {}
             @entryFusionPasse2.signal_connect('activate') {}
-            @entryFusionPasse3.signal_connect('activate') {}
         end
     end
 end
