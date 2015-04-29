@@ -2,7 +2,7 @@
 # La classe Stockage permet d'utiliser le base de données local et de la syncroniser avec la base de données distante
 # Utilise le DP Singleton
 #
-# Version 10
+# Version 11
 #
 class Stockage
 
@@ -142,6 +142,9 @@ class Stockage
 	
 	##
 	# Inscrit un joueur au jeu
+	#
+	# ==== Paramètres
+	# * +utilisateur+ - (Utilisateur) Utilisateur à inscrire
 	#
 	def inscription( utilisateur )
 		# Si c'est un utilisateur du type hors ligne
@@ -449,4 +452,18 @@ class Stockage
 		end
 		
 	end
+	
+	##
+	# Supprime tous les scores et sauvegardes d'un utilisateur. Remets les options par défaut.
+	#
+	# ==== Paramètres
+	# * +utilisateur+ - (Utilisateur) Utilisateur à ré-initialiser
+	#
+	def miseAZero( utilisateur )
+		GestionnaireSauvegarde.instance().supprimerSauvegardeUtilisateur( utilisateur )
+		GestionnaireScore.instance().supprimerScoreUtilisateur( utilisateur )
+		utilisateur.Option.creer(Option::TUILE_ROUGE, Option::TUILE_BLEUE, Langue::FR)
+		GestionnaireUtilisateur.instance().sauvegarderUtilisateur( utilisateur )
+	end
+	
 end
