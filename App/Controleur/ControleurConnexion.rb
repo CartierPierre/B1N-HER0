@@ -35,7 +35,6 @@ class ControleurConnexion < Controleur
 			Stockage.instance().syncroniser( @@utilisateur, true )
         when 5
             @vue.pasInternet("Offline")
-            @vue.utilisateurInexistant()
         when 6
             @vue.utilisateurInexistant()
         end

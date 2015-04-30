@@ -121,6 +121,6 @@ class ControleurProfil < Controleur
     # Méthode pour fusionner deux compte Utilisateur
     #
     def fusion(pseudo,passe,compte)
-        Stockage.instance().fusionUtilisateurs( @@utilisateur, pseudo, passe, compte )
+        @@Utilisateur = Stockage.instance().fusionUtilisateurs( @@utilisateur, pseudo, passe, compte )
     end
 end
