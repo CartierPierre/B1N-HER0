@@ -22,13 +22,7 @@ class ControleurNouvellePartie < Controleur
     #   * _difficulte_ - Difficulté du niveau
     #
     def jouer(taille,difficulte)
-        niveau = @gestionnaireNiveau.recupererNiveauSuivant(@@utilisateur, taille, difficulte)
-
-        # Si l'utilisateur a déjà résolue toutes les grilles de cette taille et diffculté alors niveau aléatoire
-        if(niveau == nil)
-            niveau = @gestionnaireNiveau.recupererNiveauAleaSelonDimDiff(taille, difficulte)
-        end
-
+        niveau = @gestionnaireNiveau.recupererNiveauAleaSelonDimDiff(taille, difficulte)
         changerControleur(ControleurPartie.new(@jeu,niveau,nil))
     end
 
