@@ -11,7 +11,7 @@ class VueClassement < Vue
     # Paramètres::
     #   * _modele_ - Modèle associé
     #   * _titre_ - Titre de la fenetre
-    #   * _controleur_ - Controleur associé
+    #   * _controleur_ - Controleur associ
     #
     def initialize(modele,titre,controleur)       #:notnew:
         super(modele,titre,controleur)
@@ -152,7 +152,8 @@ class VueClassement < Vue
             end
         }
 
-        view.set_model(@filtre)
+        @modelTemp = TreeModelSort.new(@filtre)
+        view.set_model(@modelTemp)
 
         @boutonRetour = Button.new(:label => @controleur.getLangue[:retour])
         @boutonRetour.signal_connect('clicked') { onBtnRetourClicked }
