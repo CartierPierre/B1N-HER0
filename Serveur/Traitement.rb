@@ -205,9 +205,9 @@ class Traitement
 		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = arguments
 		
 		# Debug
-		puts "uuidUtilisateur : #{ uuidUtilisateur }"
-		puts "listeUuidScores : #{ listeUuidScores.count }"
-		puts "listeUuidSauvegardes : #{ listeUuidSauvegardes.count }"
+		# puts "uuidUtilisateur : #{ uuidUtilisateur }"
+		# puts "listeUuidScores : #{ listeUuidScores.count }"
+		# puts "listeUuidSauvegardes : #{ listeUuidSauvegardes.count }"
 		
 		# Suppressions
 		if( uuidUtilisateur != nil )
@@ -234,7 +234,7 @@ class Traitement
 		uuidUtilisateur = arguments[0]
 		
 		# Debug
-		puts "uuidUtilisateur : #{ uuidUtilisateur }"
+		# puts "uuidUtilisateur : #{ uuidUtilisateur }"
 		
 		# Suppressions
 		GestionnaireUtilisateur.instance().supprimerUtilisateur( uuidUtilisateur )
@@ -253,8 +253,8 @@ class Traitement
 		uuidUtilisateur1, uuidUtilisateur2 = arguments
 		
 		# Debug
-		puts "uuidUtilisateur1 : #{ uuidUtilisateur1 }"
-		puts "uuidUtilisateur2 : #{ uuidUtilisateur2 }"
+		# puts "uuidUtilisateur1 : #{ uuidUtilisateur1 }"
+		# puts "uuidUtilisateur2 : #{ uuidUtilisateur2 }"
 		
 		# Changement utilisateurs des scores et sauvegardes
 		GestionnaireScore.instance().changerUtilisateurScores( uuidUtilisateur1, uuidUtilisateur2 )

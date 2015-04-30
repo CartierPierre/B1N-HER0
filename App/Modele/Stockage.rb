@@ -2,7 +2,7 @@
 # La classe Stockage permet d'utiliser le base de données local et de la syncroniser avec la base de données distante
 # Utilise le DP Singleton
 #
-# Version 11
+# Version 12
 #
 class Stockage
 
@@ -272,7 +272,7 @@ class Stockage
 		# On demande la liste de toutes les ressource de l'utilisateur au serveur
 		reponse = serveur.listeRessources( utilisateurLocal )
 		versionUtilisateurServeur, listeCoupleScoresServeur, listeCoupleSauvegardesServeur = reponse
-		puts "listeRessources, reponse : #{ reponse }"
+		# puts "listeRessources, reponse : #{ reponse }"
 		
 		#
 		#
@@ -322,12 +322,12 @@ class Stockage
 		end
 		
 		# Debug
-		puts "listeRecupererScoreServeur : #{ listeRecupererScoreServeur }"
-		puts "listeRecupererSauvegardeServeur : #{ listeRecupererSauvegardeServeur }"
-		puts "listeEnvoiScoreServeur : #{ listeEnvoiScoreServeur }"
-		puts "listeEnvoiSauvegardeServeur : #{ listeEnvoiSauvegardeServeur }"
-		puts "listeScorePasLocal : #{ listeScorePasLocal }"
-		puts "listeSauvegardePasLocal : #{ listeSauvegardePasLocal }"
+		# puts "listeRecupererScoreServeur : #{ listeRecupererScoreServeur }"
+		# puts "listeRecupererSauvegardeServeur : #{ listeRecupererSauvegardeServeur }"
+		# puts "listeEnvoiScoreServeur : #{ listeEnvoiScoreServeur }"
+		# puts "listeEnvoiSauvegardeServeur : #{ listeEnvoiSauvegardeServeur }"
+		# puts "listeScorePasLocal : #{ listeScorePasLocal }"
+		# puts "listeSauvegardePasLocal : #{ listeSauvegardePasLocal }"
 		
 		#
 		#
@@ -349,7 +349,7 @@ class Stockage
 			listeRecupererScoreServeur,
 			listeRecupererSauvegardeServeur
 		)
-		puts "recupererRessources, reponse : #{ reponse }"
+		# puts "recupererRessources, reponse : #{ reponse }"
 		utilisateur, listeScores, listeSauvegardes = reponse
 		
 		# Debug
@@ -434,7 +434,7 @@ class Stockage
 		
 		# Envoi des rsc au serveur
 		reponse = serveur.envoyerRessources( utilisateurLocal, listeEnvoiScoreServeur, listeEnvoiSauvegardeServeur )
-		puts "envoyerRessources, reponse : #{ reponse }"
+		# puts "envoyerRessources, reponse : #{ reponse }"
 		uuidUtilisateur, listeUuidScores, listeUuidSauvegardes = reponse
 		
 		# Maj des uuid de rsc locales selon valeurs renvoyées par le serveur
