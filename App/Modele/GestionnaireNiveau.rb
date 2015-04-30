@@ -203,12 +203,11 @@ class GestionnaireNiveau
 		resultat = @stockage.executer("
 			SELECT niveau.*
 			FROM niveau
-			LEFT JOIN score
-				ON score.id_niveau = niveau.id
-					AND score.id_utilisateur = #{ utilisateur.id }
 			WHERE
 				niveau.dimention = #{ dimention }
 				AND niveau.difficulte = #{ difficulte }
+				AND niveau.id != (SELECT id_niveau FROM score WHERE id_utilisateur = #{ utilisateur.id })
+			ORDER BY id
 			LIMIT 1;
 		")
 		
@@ -218,22 +217,5 @@ class GestionnaireNiveau
 		
 		return hydraterNiveau( resultat[0] )
 	end
-	
-	##
-	# Temporaire, pas utiliser sauf buddies
-	#
-	# def insert(n)
-		# @stockage.executer("
-			# INSERT INTO niveau
-			# VALUES (
-				# null,
-				# '#{ n.probleme.sauvegarder() }',
-				# '#{ n.solution.sauvegarder() }',
-				# '#{ n.difficulte }',
-				# '#{ n.dimention }'
-			# );
-		# ")
-		# n.id = @stockage.dernierId()
-	# end
 	
 end
